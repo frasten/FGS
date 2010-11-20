@@ -1,0 +1,13 @@
+Index: scripts/games/farmville.js
+===================================================================
+--- scripts/games/farmville.js	(revisione 12)
++++ scripts/games/farmville.js	(copia locale)
+@@ -65,7 +65,7 @@
+ 								gift: giftName,
+ 								destInt: giftRecipient,
+ 								destName: $('.giftFrom_name', data).text()
+-							
++							}
+ 							return false;
+ 						}
+ 					});

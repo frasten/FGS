@@ -1,0 +1,13 @@
+stack:
+restartBonuses()
+	startBonusesForGame()
+		checkBonuses() (loop ogni tot secondi)
+			ajax=>funzione
+				MIO
+
+Aggiunta nuovo bonus:
+background.html:
+database.addBonus()
+	sendView() ==>
+giftlist.html:
+addNewBonus()

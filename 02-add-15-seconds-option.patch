@@ -1,0 +1,26 @@
+Index: background.html
+===================================================================
+--- background.html	(revisione 10)
++++ background.html	(copia locale)
+@@ -802,6 +802,9 @@
+ 	
+ 	switch(parseInt(options.checkBonusesTimeout))
+ 	{
++		case 15:
++			num = 3;
++			break;
+ 		case 30:
+ 			num = 5;
+ 			break;
+Index: giftlist.html
+===================================================================
+--- giftlist.html	(revisione 10)
++++ giftlist.html	(copia locale)
+@@ -2150,6 +2150,7 @@
+ 		
+ 				<h4>Bonuses check timeout</h4>
+ 					<select id="checkBonusesTimeout">
++						<option value="15">15 seconds</option>
+ 						<option value="30">30 seconds</option>
+ 						<option value="60">1 minute</option>
+ 						<option value="120">2 minutes</option>

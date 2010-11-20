@@ -1,0 +1,138 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" href="css/popup.css" type="text/css">
+	<script src="scripts/jquery-1.4.2.min.js" type="text/javascript"></script>	
+	<script type="text/javascript" src="scripts/database.js"></script>
+	<script type="text/javascript">
+	var bkP = chrome.extension.getBackgroundPage();
+
+	function appendDB(gameID, num, name)
+	{
+		database.db.transaction(function(tx)
+		{
+			if(gameID == null)
+			{
+				tx.executeSql("SELECT COUNT(*) as count FROM "+name, [], function(tx2, res2)
+				{
+					$('#totals > tbody').append('<tr><td class="first">'+num+'.</td><td>'+name+'</td><td>'+res2.rows.item(0).count+'</td><td class="last"><a href="#" table="'+name+'" class="emptyDB">Empty</a></td></tr>');
+				}, database.onSuccess, database.onError);
+			}
+			else
+			{
+				tx.executeSql("SELECT COUNT(*) as count FROM "+name+ " where gameID = ?", [gameID], function(tx2, res2)
+				{
+					$('#'+gameID+' > tbody').append('<tr><td class="first">'+num+'.</td><td>'+name+'</td><td>'+res2.rows.item(0).count+'</td><td class="last"><a href="#" table="'+name+'" gameID="'+gameID+'" class="emptyDB">Empty</a></td></tr>');
+				}, database.onSuccess, database.onError);
+			}
+		});
+	}
+	
+	
+	function listDb()
+	{
+		database.db.transaction(function(tx)
+		{
+			tx.executeSql("SELECT * FROM sqlite_master where type = 'table'", [], function(tx, res)
+			{
+				$('body').prepend('<table id="totals" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>Your database usage for all games</caption><thead><tr><th scope="col" class="first"></th><th scope="col">Database name</th><th scope="col">Database count</th><th scope="col" class="last">Actions</th></tr></thead><tbody></tbody></table>');
+				
+				var cnt = 0;
+				for(var i = 0; i < res.rows.length; i++)
+				{
+					var re = new RegExp('(^__|sqlite)', "i");
+					var r = res.rows.item(i);
+					if(!re.test(r.name))
+					{
+						cnt++;
+						appendDB(null, cnt, r.name);
+					}					
+				}
+			
+				for(var idd in bkP.options.games)
+				{
+					$('body').append('<table id="'+idd+'" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>Your database usage for game: '+bkP.gamesData[idd].name+'</caption><thead><tr><th scope="col" class="first"></th><th scope="col">Database name</th><th scope="col">Database count</th><th scope="col" class="last">Actions</th></tr></thead><tbody></tbody></table>');
+					var cnt = 0;
+					for(var i = 0; i < res.rows.length; i++)
+					{
+						var re = new RegExp('(^__|sqlite)', "i");
+						var r = res.rows.item(i);
+						if(!re.test(r.name))
+						{
+							cnt++;
+							appendDB(idd, cnt, r.name);
+						}					
+					}
+				}
+			}, database.onSuccess, database.onError);
+		});
+	}
+	
+	$(function()
+	{
+		database.open(bkP.userID);
+		listDb();
+		
+		$('.emptyDB').live('click',function()
+		{
+			var gameID = $(this).attr('gameID');
+			var table = $(this).attr('table');
+			
+			if(typeof(gameID) == "undefined")
+			{
+				database.db.transaction(function(tx)
+				{
+					tx.executeSql('DELETE FROM '+table, [], database.onSuccess, database.onError);
+					bkP.newElements = 0;
+					bkP.updateIcon();
+					$('body').html('');
+					listDb();
+				});
+			}
+			else
+			{
+				database.db.transaction(function(tx)
+				{
+					tx.executeSql('DELETE FROM '+table+' where gameID = ?', [gameID], database.onSuccess, database.onError);
+					bkP.newElements = 0;
+					bkP.updateIcon();
+					$('body').html('');
+					listDb();
+				});
+			}
+			
+		});
+	});
+	</script>
+	<style>
+
+body
+{
+	padding-bottom: 15px;
+}
+	table {
+border-bottom: 3px solid #B2B2B2;
+margin: 0px 0px 2em;
+}
+caption {
+background: #EEE;
+border: solid #B2B2B2;
+border-width: 1px 0px 2px;
+font: normal normal normal 1.1em/normal Georgia, Times, serif;
+padding: 0.25em;
+}
+
+thead th {
+text-align: left;
+text-transform: uppercase;
+}
+th, td {
+border: solid #CCC;
+border-width: 0px 1px 1px;
+padding: 0.25em 0.5em;
+}
+</style>
+
+</head>
+<body>
+</body>
+</html>

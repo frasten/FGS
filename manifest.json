@@ -1,0 +1,26 @@
+{
+	"update_url":"http://clients2.google.com/service/update2/crx",
+	"name": "Facebook Games Simplifier",
+    "version": "3.8.1",
+	"description": "This extension allows you to collect bonuses and request from many Facebook games.",
+	"permissions": ["cookies", "tabs", "http://*.mafiawars.com/*", "http://*.farmville.com/*",  "http://*.frontier.zynga.com/*", "https://*.frontier.zynga.com/*", "http://*.treasure.zynga.com/*", "https://*.treasure.zynga.com/*", "http://*.facebook.com/*", "https://*.facebook.com/*", "http://rzadki.eu/*", "notifications", "unlimitedStorage" ],
+	"background_page": "background.html",
+	"icons": {
+		"48": "gfx/48px-icon.png"
+	},
+	"browser_action": {
+		"default_icon": "gfx/48px-icon-bw.png",
+		"default_title": "",
+		"name": "Facebook Games Simplifier",
+		"popup": "popup.html"
+	},
+	"content_scripts":
+	[
+		{
+			"js": ["scripts/jquery-1.4.2.min.js" , "dom.js" ],
+			"matches": [ "http://*.facebook.com/*", "https://*.facebook.com/*"],
+			"run_at": "document_end"
+		}
+	],
+	"minimum_chrome_version": "6"
+}

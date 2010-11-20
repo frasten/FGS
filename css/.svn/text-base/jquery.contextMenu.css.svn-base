@@ -1,0 +1,449 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,
+sub,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
+{
+	border:0;
+	margin:0;
+	outline:0;
+	padding:0;
+	vertical-align:baseline;
+}
+
+body
+{
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 10px;
+}
+
+table
+{
+	border-bottom: 3px solid #B2B2B2;
+	margin: 0px 0px 2em;
+	font-size: 10px;
+}
+
+caption 
+{
+	background: #EEE;
+	border: solid #B2B2B2;
+	border-width: 1px 0px 2px;
+	font: normal normal normal 1.1em/normal Georgia, Times, serif;
+	padding: 0.25em;
+}
+
+thead th
+{
+	text-align: left;
+	text-transform: uppercase;
+}
+
+th, td
+{
+	border: solid #CCC;
+	border-width: 0px 1px 1px;
+	padding: 0.25em 0.5em;
+}
+
+#gameSelector > label
+{
+	/*min-width: 100px;*/
+}
+
+.hideScreenLocked
+{
+	display: none;
+}
+
+.icon
+{
+	line-height: 32px;
+	background-repeat: no-repeat;
+	padding-left: 45px;
+}
+
+.hide
+{
+	display: none;
+}
+
+.notEnabledInfo
+{
+	font-size: 1.4em;
+}
+
+h1
+{
+	margin: 10px;
+}
+
+h1.title
+{
+	text-align:center;
+	margin: 0px;
+}
+
+.ui-state-active
+{
+	background: #FAFFAF;
+}
+
+.section
+{
+	background-color: #F8FAFF;
+	border: 1px solid #666;
+	border-bottom-left-radius: 10px 10px;
+	border-bottom-right-radius: 10px 10px;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
+	margin: 20px;
+	padding: 10px;
+}
+
+div.leftBox
+{
+	text-align: center;
+}
+
+.optionsMenu
+{
+	margin-top: 20px;
+	display: block;
+	text-align:center;
+}
+
+.submenu
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	display: block;
+	text-align:center;
+}
+
+
+/* CHAT */
+.shoutbox
+{
+	width: 60%;
+	height:300px;
+	overflow:auto;
+	float:left;
+}
+
+.shouts
+{
+	width: 100%;
+	text-align:left;
+}
+
+.onlinelist {
+	width: 39%;
+	overflow:auto;
+	height:300px;
+	border-left: 1px dashed #000;
+}
+
+.onlinelist > div.onlineText
+{
+	text-align: center;
+}
+
+.users {
+	width: 90%;
+	text-align: left;
+	text-indent: 5px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.username {
+	width: 95%;
+	font-size: 1.1em;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	line-height: 1.4em;
+}
+
+.username > a
+{
+	color: #105289;
+	text-decoration: none;
+}
+
+.username > a:hover
+{
+	text-decoration: underline;
+}
+
+.chatContent
+{
+	width: 45%;
+	border: 1px dotted #000;
+}
+.chatContent.left
+{
+	left: 0px;
+	float: left;
+}
+
+.chatContent.right
+{
+	float: right;
+	right: 0px;
+}
+
+.message
+{
+	color: #222;
+	font-size: 1.2em;
+	width: 80%;
+}
+
+.bg1, .bg2, .bg3, .bg4
+{
+	background-position: 100% 0px;
+	background-repeat: no-repeat;
+	margin-bottom: 4px;
+	padding: 0px 10px;
+}
+
+.bg1 {
+	background-color: #C3D2DF;
+}
+
+.bg2
+{
+	background-color: #B5BBCF;
+}
+
+.bg3
+{
+	background-color: #98F374;
+}
+
+.bg4
+{
+	background-color: #F8DCD4;
+}
+
+
+.font3, .font4
+{
+	color: #000;
+	font-weight: bold;
+}
+
+
+.badgeGames
+{
+	position: absolute;
+	bottom: 2px;
+	right:5px;
+	width: 20px;
+	height: 15px;
+	background-color: #435EE0;
+	/*border: 1px solid #000;*/
+	color: #fff;
+	border-radius: 6px 6px;
+	/*display: inline-block;*/
+}
+
+.bonusItem, .requestItem, .manualItem 
+{
+	overflow: hidden;
+	cursor:pointer;
+	border: 1px solid #000;
+	text-align: center;
+	width: 120px;
+	height: 170px;
+	max-height: 170px;
+	margin: 5px;
+	padding: 5px;
+	float: left;
+}
+
+.bonusItem > img, .requestItem > img, .manualItem > img
+{
+	width: 64px;
+	height:64px
+}
+
+.bonusItem > .timeAgo, .requestItem > .timeAgo, .manualItem > .timeAgo
+{
+	display: block;
+	height: 12px;
+}
+.bonusItem.disabled, .requestItem.disabled
+{
+	cursor: default !important;
+}
+
+
+.bonusError
+{
+	display: block;
+	height: 12px;
+}
+
+.bonusItem > .title, .requestItem > .title, .manualItem > .title
+{
+	font-weight: bolder;
+	font-size: 1.1em;
+	display: block;
+}
+
+
+/* Generic context menu styles */
+.contextMenu {
+	position: absolute;
+	width: auto;
+	z-index: 99999;
+	border: solid 1px #CCC;
+	background: #EEE;
+	padding: 0px;
+	margin: 0px;
+	display: none;
+}
+
+.contextMenu LI {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.contextMenu A {
+	color: #333;
+	text-decoration: none;
+	display: block;
+	line-height: 20px;
+	height: 20px;
+	background-position: 6px center;
+	background-repeat: no-repeat;
+	outline: none;
+	padding: 1px 5px;
+	padding-left: 28px;
+}
+
+.contextMenu LI.hover A {
+	color: #FFF;
+	background-color: #3399FF;
+}
+
+.contextMenu LI.disabled A {
+	color: #AAA;
+	cursor: default;
+}
+
+.contextMenu LI.hover.disabled A {
+	background-color: transparent;
+}
+
+.contextMenu LI.separator {
+	border-top: solid 1px #CCC;
+}
+
+/*
+	Adding Icons
+	
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+*/
+
+.contextMenu LI.receive A { background-image: url(../context/receive.png); }
+.contextMenu LI.delete A { background-image: url(../context/delete.png); }
+
+.bonusName
+{
+	font-weight: bolder;
+}
+
+h2.center, h3.center
+{
+	text-align: center;
+}
+
+.sendToFavouritesList, .sendToNeighboursList, .sendToGiftsList, .gameOptionsFiltersList
+{
+	border:1px solid #000;
+	padding: 20px;
+	margin: 20px;
+	/*text-align: center;*/
+}
+
+.addToSendFav, .isFavourite
+{
+	cursor: pointer;
+}
+
+.selectGiftToSend
+{
+	cursor:pointer;
+	overflow: hidden;
+	border: 1px solid #000;
+	text-align: center;
+	width: 59px;
+	height: 65px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	float: left;
+	text-align:center
+}
+
+.freegiftHistory
+{
+	overflow: hidden;
+	border: 1px solid #000;
+	text-align: center;
+	width: 120px;
+	height: 90px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	float: left;
+	text-align:center
+}
+
+.selectGiftToSend.selected
+{
+	background-color: #C6F284;
+}
+
+
+
+h1.title .input-text
+{
+	border:1px solid #3b6e22;
+	color:#666666;
+}
+
+h1.title label
+{
+	margin-top: 10px;
+	display:block;
+	width: 200px;
+	margin-bottom:10px;
+	color:#555555;
+	float: left;
+}
+
+h1.title label span
+{
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:150px;
+	text-align:right;
+	font-weight:bold;
+	font-size: 12px;
+}
+
+.fvBonusErr
+{
+	background: #fff;
+	border: 1px dashed red;
+	clear: both;
+	width: 50%;
+	margin: 10px auto;
+	font-size: 12px;
+	text-align: center;
+	color: red;
+	padding: 8px;
+}

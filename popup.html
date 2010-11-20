@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<link rel="stylesheet" href="css/popup.css" type="text/css">
+	<script src="scripts/jquery-1.4.2.min.js" type="text/javascript"></script>	
+	<script type="text/javascript">
+	var bkP = chrome.extension.getBackgroundPage();
+
+	function updateButton()
+	{
+		$('#wait, #login, #menu').hide();
+		if(bkP.FBloginError === null)
+		{
+			$("#wait").show();
+		}
+		else if(bkP.FBloginError === true)
+		{
+			$("#login").show();
+		}
+		else
+		{
+			$("#menu").show();
+			$("#giftlist > span > span").text("("+bkP.newElements+")");
+		}				
+		setTimeout(updateButton, 100);
+	}
+	
+	$(function()
+	{
+		$("#giftlist").click(function(){
+			bkP.openGiftList();
+		});
+		$("#panic").click(function(){
+			bkP.openRecovery();
+		});
+		
+		$('#login').click(function(){
+			bkP.openFacebook();
+		});
+
+		updateButton();
+	});
+	</script>
+</head>
+<body>
+	<div id="wait" style="display: none">
+		<div class="item" title="Wait for FGS to load">
+			<span>Wait for FGS to load</span>
+		</div>
+	</div>
+	
+	<div id="login" style="display: none">
+		<div class="item" title="Click to login to Facebook">
+			<span>Click to login to Facebook</span>
+		</div>
+	</div>
+	
+	<div id="menu" style="display: none">
+		<div id="giftlist" class="item" title="Open giftlist">
+			<span>Open giftlist <span></span></span>
+		</div>
+		<div id="separatorProxies" class="separator"></div>
+		<div id="panic" class="item" title="Open giftlist">
+			<span>Panic button (freezing...)</span>
+		</div>
+	</div>
+</body>
+</html>
