@@ -5,6 +5,14 @@ var giftsArray = {
 		"gift_mystery2": { name: 'Mystery Gift 2'},
 		"gift_mystery3": { name: 'Mystery Gift 3'},
 		"gift_mystery4": { name: 'Mystery Gift 4'},
+		"feast_roastturkey" : { name: 'Roast Turkey'},
+		"feast_cranberrysauce" : { name: 'Cranberry Sauce'},
+		"feast_gravyboat" : { name: 'Gravy Boat'},
+		"feast_pie" : { name: 'Pie'},
+		"feast_sweetpotatoes" : { name: 'Sweet potatoes'},
+		//"table_silverware" : { name: 'Silverware'},
+		
+		
 		
 		"meal1": { name: 'Light snack'},
 		"meal2": { name: 'Breakfast (lvl 15)'},

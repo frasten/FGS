@@ -2,18 +2,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.1" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.2" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.1"></script>
-<script type="text/javascript" src="scripts/time.js?version=3.8.1"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.1"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.1"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.2"></script>
+<script type="text/javascript" src="scripts/time.js?version=3.8.2"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.2"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.2"></script>
 <script type="text/javascript">
 
-// ?version=3.8.1
+// ?version=3.8.2
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -511,7 +511,10 @@
 	function bonusSuccess(id, data)
 	{
 		$('#'+id).find('img:last').attr('src', 'gfx/90px-check.png');
-		$('#'+id).find('.bonusError').text('');
+		
+		var error_text = (typeof(data.error_text) != 'undefined'  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
+		
+		$('#'+id).find('.bonusError').html(error_text);
 		
 		var gameID = $('#'+id).attr('gameID');
 		var game = gamesData[gameID].systemName;
@@ -752,11 +755,20 @@
 				"Delete all items": function()
 				{
 					var game = gamesData[gameID].systemName;
+					var delArr = [];
+
 					$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function()
 					{
-						database.deleteItem('bonuses', gameID, $(this).attr('id'), 0);
+						delArr.push($(this).attr('id'));
 						$(this).remove();
 					});
+					
+					if(delArr.length > 0)
+					{
+						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						database.deleteItemArray('bonuses', gameID, str, 0);
+					}
+					
 					updateCount(gameID);
 					
 					
@@ -779,6 +791,8 @@
 				{
 					var game = gamesData[gameID].systemName;
 		
+					var delArr = [];
+					
 					$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function()
 					{
 						var postData = $(this).attr('postData');
@@ -788,8 +802,14 @@
 						postData += '&actions[reject]=Ignore';
 						$(this).remove();
 						bkP.emptyUnwantedGifts(postData);
-						database.deleteItem('bonuses', gameID, $(this).attr('id'), 0);
+						delArr.push($(this).attr('id'));
 					});
+					
+					if(delArr.length > 0)
+					{
+						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						database.deleteItemArray('requests', gameID, str, 0);
+					}
 					
 					updateCount(gameID);
 
@@ -814,6 +834,43 @@
 					$('#'+game+'BonusesHistoryList').html('<br style="clear:both" />');
 					updateCount(gameID);
 					database.clearTable('bonuses', gameID, 1);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
+	function ClearPendingBonusesOtherError(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete other errors": function()
+				{
+					var game = gamesData[gameID].systemName;
+					
+					var delArr = [];
+					
+					
+					$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
+						if($(this).find('.bonusError').text().indexOf('other error') != -1)
+						{
+							delArr.push($(this).attr('id'));
+							$(this).remove();
+						}
+					});
+					
+					if(delArr.length > 0)
+					{
+						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						database.deleteItemArray('bonuses', gameID, str, 0);
+					}
+					updateCount(gameID);
+					
 					$( this ).dialog( "close" );
 				},
 				Cancel: function() {
@@ -1046,6 +1103,7 @@
 		
 		if(v.id == 0)
 		{
+			return;
 			v.id = '100001178615702';
 
 			var lastAt = lastSeen(new Date(v.time*1000));
@@ -1114,23 +1172,10 @@
 		});	
 		$('.shoutbox', '#chatUsers').scrollTop(10000);
 		
-		$(data.dataPrivate).each(function(k,v)
-		{
-			populateChat(v, '#chatDev');
-		});
-		
-		$('.shoutbox', '#chatDev').scrollTop(10000);
-
 		$('.users', '#chatUsers').html('');
 		$(data.onlinePublic).each(function(k,v)
 		{
 			populateOnline(v, '#chatUsers');
-		});
-		
-		$('.users', '#chatDev').html('');
-		$(data.onlinePrivate).each(function(k,v)
-		{
-			populateOnline(v, '#chatDev');
 		});
 	}
 
@@ -1443,7 +1488,7 @@
 	{
 		var error_text = (v.error_text != '' ? ' <img src="gfx/info.png" title="'+v.error_text+'" />' : '');		
 		
-		var err = (v.error == '' ? '' : '('+v.error+' error)'+error_text);
+		var err = (v.error == error_text ? '' : '('+v.error+' error)'+error_text);
 		var opt = 'BonusesHistoryList';	
 		
 		if(v.image == 'undefined' && err == '')
@@ -2433,25 +2478,6 @@
 		<div id="chat" class="section hide gameContent">
 			
 			<h1 class="title">Chat</h1>
-			
-				<div align="left" id="chatDev" class="chatContent left">
-					<h2 style="text-align:center;border-bottom:1px dashed #000;padding-bottom:5px;">Chat with developer</h2>
-					<div class="shoutbox">
-						<div class="shouts"></div>
-					</div>
-
-					<div class="onlinelist">
-						<div class="onlineText"><strong>Users online:</strong></div>
-						<div class="users"></div>
-					</div>
-					
-					<div style="border-top: 1px dashed #000;padding-top: 10px;text-align:center;">
-						<form method="post" action="javascript:void(0);" onsubmit="send(this)" id="privateChat" autocomplete="off">
-							Chat with developer is disabled. It will be removed next version.
-						</form>
-					</div>
-				</div>
-				
 				<div align="left" id="chatUsers" class="chatContent right">
 					<h2 style="text-align:center;border-bottom:1px dashed #000;padding-bottom:5px;">All users Chat</h2>
 					<div class="shoutbox">

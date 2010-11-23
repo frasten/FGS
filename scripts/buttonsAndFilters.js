@@ -5,7 +5,7 @@ var gamesData =
 						filter:		
 						{	
 							bonuses: ['Go see my gift', 'Go Play FrontierVille', 'Go to FrontierVille', 'Send items'],		
-							bonusesNewWindow: [],
+							bonusesNewWindow: ['Send Free Sauce', 'Send Free Potatoes', 'Send Free Pie', 'Send Free Turkey' ],
 							requests: ['r4r'],
 							requestsNewWindow: [],
 						},
@@ -15,6 +15,7 @@ var gamesData =
 													submenu: {
 																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
 																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+																'ClearPendingBonusesOtherError': { name: 'Clear bonuses with "Other error"' },
 															}
 												},
 							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',
@@ -69,6 +70,7 @@ var gamesData =
 													submenu: {
 																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
 																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+																'ClearPendingBonusesOtherError': { name: 'Clear bonuses with "Other error"' },
 															}
 												},
 							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',

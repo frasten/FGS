@@ -96,7 +96,6 @@ database.clearLimitErrors = function(gameID)
 	});
 }
 
-
 database.clearByGameID = function(gameID)
 {
 	database.db.transaction(function(tx)
@@ -113,6 +112,14 @@ database.deleteItem = function(table, gameID, id, status)
 	database.db.transaction(function(tx)
 	{
 		tx.executeSql('DELETE FROM '+table+' where status = ? and gameID = ? and id = ?', [status, gameID, id], database.onSuccess, database.onError);
+	});
+}
+
+database.deleteItemArray = function(table, gameID, query, status)
+{
+	database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM '+table+' '+query+' and status = ? and gameID = ?', [status, gameID], database.onSuccess, database.onError);
 	});
 }
 
@@ -178,7 +185,7 @@ database.updateItem = function(table, itemID, info)
 		var titleQry = '';
 		var imageQry = '';
 		var thanksQry = '';
-		
+		var errorQry = '';
 		
 		if(info.text !== '')
 		{
@@ -203,8 +210,14 @@ database.updateItem = function(table, itemID, info)
 			arrQry.push(JSON.stringify(info.thanks));
 		}
 
+		if(typeof(info.error_text) !== 'undefined')
+		{
+			errorQry = ', error_text = ?';
+			arrQry.push(info.error_text);
+		}
 
-		tx.executeSql('UPDATE '+table+' SET status = 1, time = ? '+textQry+' '+titleQry+' '+imageQry+' '+thanksQry+' where id = "'+itemID+'"', arrQry, database.onSuccess, database.onError);
+
+		tx.executeSql('UPDATE '+table+' SET status = 1, time = ? '+textQry+' '+titleQry+' '+imageQry+' '+thanksQry+' '+errorQry+' where id = "'+itemID+'"', arrQry, database.onSuccess, database.onError);
 	});
 }
 

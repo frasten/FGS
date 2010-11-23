@@ -1,7 +1,7 @@
 10
 
 dir
-27
+28
 http://fgs.googlecode.com/svn/trunk/gfx
 http://fgs.googlecode.com/svn
 
@@ -60,40 +60,6 @@ has-props
 
 1338
 
-loading.gif
-file
-
-
-
-
-2010-11-09T12:26:36.207467Z
-70d9629a406441c65499deabefc9eb7d
-2010-11-05T22:21:17.076838Z
-2
-a.rzadkowolski@gmail.com
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1844
-
 empty.png
 file
 
@@ -127,6 +93,40 @@ has-props
 
 
 13527
+
+loading.gif
+file
+
+
+
+
+2010-11-09T12:26:36.207467Z
+70d9629a406441c65499deabefc9eb7d
+2010-11-05T22:21:17.076838Z
+2
+a.rzadkowolski@gmail.com
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1844
 
 48px-icon-bw.png
 file
@@ -162,40 +162,6 @@ has-props
 
 4412
 
-comment.png
-file
-
-
-
-
-2010-11-09T12:26:36.211473Z
-b21bdcaa9bbfee81125624deaf352341
-2010-11-08T22:26:30.884588Z
-5
-a.rzadkowolski@gmail.com
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1391
-
 delete.png
 file
 
@@ -229,6 +195,40 @@ has-props
 
 
 536
+
+comment.png
+file
+
+
+
+
+2010-11-09T12:26:36.211473Z
+b21bdcaa9bbfee81125624deaf352341
+2010-11-08T22:26:30.884588Z
+5
+a.rzadkowolski@gmail.com
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1391
 
 corners_right.png
 file
@@ -298,16 +298,16 @@ has-props
 
 761
 
-sendback.png
+new.gif
 file
 
 
 
 
-2010-11-14T08:07:05.016822Z
-b6f97144c64fde2d9d42116b11f4cc50
-2010-11-14T00:09:20.017795Z
-12
+2010-11-09T12:26:36.215448Z
+fad5be9b865ff8418b2675b98f1e31a7
+2010-11-05T22:21:17.076838Z
+2
 a.rzadkowolski@gmail.com
 has-props
 
@@ -330,7 +330,7 @@ has-props
 
 
 
-1579
+297
 
 comment-off.png
 file
@@ -366,16 +366,16 @@ has-props
 
 1551
 
-new.gif
+sendback.png
 file
 
 
 
 
-2010-11-09T12:26:36.215448Z
-fad5be9b865ff8418b2675b98f1e31a7
-2010-11-05T22:21:17.076838Z
-2
+2010-11-14T08:07:05.016822Z
+b6f97144c64fde2d9d42116b11f4cc50
+2010-11-14T00:09:20.017795Z
+12
 a.rzadkowolski@gmail.com
 has-props
 
@@ -398,7 +398,7 @@ has-props
 
 
 
-297
+1579
 
 90px-check.png
 file
@@ -468,40 +468,6 @@ has-props
 
 494
 
-btn_donate_LG.gif
-file
-
-
-
-
-2010-11-09T12:26:36.215448Z
-6af1d16ff6e3e380016c8fedfa4d35bb
-2010-11-05T22:21:17.076838Z
-2
-a.rzadkowolski@gmail.com
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1714
-
 dl.gif
 file
 
@@ -535,6 +501,40 @@ has-props
 
 
 4030
+
+btn_donate_LG.gif
+file
+
+
+
+
+2010-11-09T12:26:36.215448Z
+6af1d16ff6e3e380016c8fedfa4d35bb
+2010-11-05T22:21:17.076838Z
+2
+a.rzadkowolski@gmail.com
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1714
 
 offline.png
 file

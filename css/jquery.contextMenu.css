@@ -122,7 +122,7 @@ div.leftBox
 /* CHAT */
 .shoutbox
 {
-	width: 60%;
+	width: 70%;
 	height:300px;
 	overflow:auto;
 	float:left;
@@ -135,7 +135,7 @@ div.leftBox
 }
 
 .onlinelist {
-	width: 39%;
+	width: 29%;
 	overflow:auto;
 	height:300px;
 	border-left: 1px dashed #000;
@@ -174,19 +174,9 @@ div.leftBox
 
 .chatContent
 {
-	width: 45%;
+	width: 95%;
+	margin: 0 auto;
 	border: 1px dotted #000;
-}
-.chatContent.left
-{
-	left: 0px;
-	float: left;
-}
-
-.chatContent.right
-{
-	float: right;
-	right: 0px;
 }
 
 .message

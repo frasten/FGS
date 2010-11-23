@@ -155,14 +155,28 @@ var frontiervilleBonuses =
 						{
 							if(d.indexOf('giftLimit') != -1)
 							{
-								info.error = 'other';
-								info.time = Math.round(new Date().getTime() / 1000);
-								
 								var i1 = d.indexOf('class="giftLimit')+18;
 								var i2 = d.indexOf('div>', i1)-2;
 								
 								info.error_text = jQuery.trim(d.slice(i1,i2));
-								sendView('bonusError', id, info);
+								
+								if(info.error_text.indexOf('your friend will still get their') != -1)
+								{
+									info.title = tempTitle;
+									info.image = tempImage;
+									info.text = '';
+									info.time = Math.round(new Date().getTime() / 1000);
+								
+									database.updateItem('bonuses', id, info);
+									sendView('bonusSuccess', id, info);
+								}
+								else
+								{
+									info.error = 'other';
+									info.time = Math.round(new Date().getTime() / 1000);
+								
+									sendView('bonusError', id, info);
+								}
 							}
 							else
 							{
