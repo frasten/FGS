@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 36
-/svn/!svn/ver/28/trunk/scripts/games
+/svn/!svn/ver/29/trunk/scripts/games
 END
 frontierville.js
 K 25
@@ -14,6 +14,12 @@ K 25
 svn:wc:ra_dav:version-url
 V 48
 /svn/!svn/ver/9/trunk/scripts/games/ravenwood.js
+END
+fishville.js
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/29/trunk/scripts/games/fishville.js
 END
 cafeworld.js
 K 25
@@ -50,4 +56,10 @@ K 25
 svn:wc:ra_dav:version-url
 V 49
 /svn/!svn/ver/26/trunk/scripts/games/farmville.js
+END
+yoville.js
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/!svn/ver/29/trunk/scripts/games/yoville.js
 END
