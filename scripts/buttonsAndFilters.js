@@ -5,11 +5,11 @@ var gamesData =
 						filter:		
 						{	
 							bonuses: ['Go see my gift', 'Go Play FrontierVille', 'Go to FrontierVille', 'Send items'],		
-							bonusesNewWindow: ['Send Free Sauce', 'Send Free Potatoes', 'Send Free Pie', 'Send Free Turkey' ],
+							bonusesNewWindow: ['Send Free Sauce', 'Send Free Potatoes', 'Send Free Pie', 'Send Free Turkey', 'Send RSVP' ],
 							requests: ['r4r'],
 							requestsNewWindow: [],
 						},
-						buttons:	
+						buttons:
 						{
 							'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
 													submenu: {
@@ -151,6 +151,17 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+															}
+												},
+							'SendFreeGifts':	{	name: 'Send free gifts',
+													submenu: {
+																'SelectFavourites': { name: 'Select favourites' },
+																'SendGifts': { name: 'Send free gifts' },
+															}
+												}, 
+							'SendFreeGiftsHistory':	{	name: 'Show free gifts history',
+													submenu: {
+																'ClearSentFreeGifts': { name: 'Clear send gifts history' },
 															}
 												},
 							'GameOptionsTab':	{	name: 'Filters',

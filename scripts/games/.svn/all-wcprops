@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 36
-/svn/!svn/ver/29/trunk/scripts/games
+/svn/!svn/ver/32/trunk/scripts/games
 END
 frontierville.js
 K 25
@@ -19,7 +19,7 @@ fishville.js
 K 25
 svn:wc:ra_dav:version-url
 V 49
-/svn/!svn/ver/29/trunk/scripts/games/fishville.js
+/svn/!svn/ver/31/trunk/scripts/games/fishville.js
 END
 cafeworld.js
 K 25
@@ -36,8 +36,8 @@ END
 mafiawars.js
 K 25
 svn:wc:ra_dav:version-url
-V 48
-/svn/!svn/ver/9/trunk/scripts/games/mafiawars.js
+V 49
+/svn/!svn/ver/32/trunk/scripts/games/mafiawars.js
 END
 treasure.js
 K 25
@@ -49,7 +49,7 @@ freegifts.js
 K 25
 svn:wc:ra_dav:version-url
 V 49
-/svn/!svn/ver/28/trunk/scripts/games/freegifts.js
+/svn/!svn/ver/32/trunk/scripts/games/freegifts.js
 END
 farmville.js
 K 25

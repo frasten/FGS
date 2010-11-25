@@ -3,30 +3,30 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/notices.js?version=3.8.3"></script>
+<script type="text/javascript" src="scripts/chat.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/notices.js?version=3.8.4"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.3"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.4"></script>
 
 
-<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.3"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.3"></script>
+<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.4"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=3.8.3
+// ?version=3.8.4
 
-var currentVersion = '3.8.3';
+var currentVersion = '3.8.4';
 var portsByName = {};
 
 var console2 =
@@ -927,12 +927,7 @@ function checkRequests()
 				
 				dataPost += '&'+escape($(el).find('input[type="submit"]:first').attr('name'))+'='+$(el).find('input[type="submit"]:first').attr('value');
 				
-				
-				if(APPID == 10979261223)
-				{
-					var searchStr = 'ztrack_category';
-				}
-				else if(APPID == 120563477996213)
+				if(APPID == 120563477996213)
 				{
 					var searchStr = 'item_id';
 				}
@@ -948,6 +943,7 @@ function checkRequests()
 				var typeText = unescape(typeText);
 				
 				var i1 = typeText.indexOf('&'+searchStr+'=');
+				
 				if(i1 == -1)
 				{
 					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1)
@@ -956,7 +952,26 @@ function checkRequests()
 					}
 					else
 					{
-						var type = 'unknown';
+						if(APPID == 10979261223)
+						{
+						
+							var typeText = unescape(typeText);
+							var i1 = typeText.indexOf('"item_id":"');
+							if(i1 == -1)
+							{
+								var type = 'unknown';
+							}
+							else
+							{
+								i1 += 11;
+								i2 = typeText.indexOf('"', i1);
+								var type = typeText.slice(i1, i2);
+							}
+						}
+						else
+						{
+							var type = 'unknown';
+						}
 					}
 				}
 				else
@@ -1372,6 +1387,7 @@ $(function()
 	chrome.browserAction.setTitle({title: "FGS is not yet loaded... Please wait..."});
 
 	startup();
+
 	
 	$(window).unload( function () 
 	{

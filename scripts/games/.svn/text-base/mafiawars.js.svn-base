@@ -1,3 +1,225 @@
+var mafiawarsFreegifts = 
+{
+	Click: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+		
+		$.get('http://apps.facebook.com/inthemafia/', params2, function(data)
+		{
+			try
+			{
+				i1          =   data.indexOf('post_form_id:"')
+				if (i1 == -1) throw {message:'Cannot post_form_id in page'}
+				i1			+=	14;
+				i2          =   data.indexOf('"',i1);
+				
+				params.post_form_id = data.slice(i1,i2);
+				
+				
+				i1          =   data.indexOf('fb_dtsg:"',i1)
+				if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
+				i1			+=	9;
+				i2          = data.indexOf('"',i1);
+				params.fb_dtsg		= data.slice(i1,i2);
+				
+				
+				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body'));
+				
+				var src = $('iframe[name="mafiawars"]', data).attr('src');
+				if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
+				
+				params.click2url = src;
+				
+				mafiawarsFreegifts.Click2(params);
+				
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					mafiawarsFreegifts.Click(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	},
+	Click2: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+
+		$.get(params.click2url, '', function(data)
+		{
+			var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body'));
+
+			try {
+				var i1, i2, strTemp, myUrl, myParms;
+
+				strTemp = data;
+
+				i1 = strTemp.indexOf('action="');
+				if (i1 == -1) throw {message:"Cannot find action= in page"}
+				
+				i1 += 8;
+				i2 = strTemp.indexOf('"',i1);
+				myUrl = strTemp.slice(i1,i2);
+
+				myParms = '';
+				i1 = strTemp.indexOf('<input',i1);
+				while (i1!=-1)
+				{
+					i1 = strTemp.indexOf('name="',i1)+6;
+					i2 = strTemp.indexOf('"',i1);
+					if (myParms=='')
+						myParms = strTemp.slice(i1,i2)+'='
+					else
+						myParms += '&'+strTemp.slice(i1,i2)+'=';
+					i1 = strTemp.indexOf('value="',i1)+7;
+					i2 = strTemp.indexOf('"',i1);
+					myParms += escape(strTemp.slice(i1,i2));
+
+					i1 = strTemp.indexOf('<input',i1);
+				}
+				
+				
+				
+				
+				
+				var useridtmp = $('input[name="sf_xw_user_id"]', data).val();
+				var i1 = useridtmp.indexOf('|')+1;
+				var useridfin = useridtmp.slice(i1);
+				
+				var i1 = myUrl.indexOf('&tmp=');
+				var i2 = myUrl.indexOf('&', i1+1);
+				var tmpTmp = myUrl.slice(i1, i2);
+				
+				var i1 = myUrl.indexOf('&cb=');				
+				var i2 = myUrl.indexOf('&', i1+1);
+				var tmpCb = myUrl.slice(i1, i2);
+				
+				params.sf_xw_user_id = $('input[name="sf_xw_user_id"]', data).val();
+				params.sf_xw_sig = $('input[name="sf_xw_sig"]', data).val();
+				
+				
+				params.click3param = myParms;
+				params.click3url = 'http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=requests&xw_action=friend_selector&xw_city=1&req_controller=freegifts&free_gift_id='+params.gift+'&free_gift_cat=1&xw_client_id=8&ajax=1&liteload=1&fbml_iframe=1&xw_person='+useridfin+tmpTmp+tmpCb;
+			
+				mafiawarsFreegifts.Click3(params);
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					mafiawarsFreegifts.Click2(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	}
+,
+	Click3: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+	
+	
+		$.post(params.click3url, params.click3param, function(data)
+		{
+			var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body'));
+
+			try {
+			
+				var i1,i2, myParms;
+				var strTemp = data;
+
+				i1       =  strTemp.indexOf('FB.Facebook.init("');
+				if (i1 == -1) throw {message:"Cannot find FB.init"}
+				i1 += 18;
+				i2       =  strTemp.indexOf('"',i1);
+
+				myParms  =  'app_key='+strTemp.slice(i1,i2);
+				i1     =  i2 +1;
+				i1       =  strTemp.indexOf('"',i1)+1;
+				i2       =  strTemp.indexOf('"',i1);
+				
+				myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
+
+				i1       =  strTemp.indexOf('<fb:fbml>');
+				i2       =  strTemp.indexOf('/script>',i1)-1;
+				myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+				
+				params.myParms = myParms;
+				
+				getFBML(params);
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					mafiawarsFreegifts.Click3(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	}
+};
+
+
 var mafiawarsRequests = 
 {
 	Click:	function(id, URI, retry)
@@ -418,7 +640,7 @@ var mafiawarsBonuses =
 					}
 
 					 mafiawarsBonuses.Click3(id, myUrl, myParms);
-				} 
+				}
 				catch(err)
 				{
 					console.log(err);

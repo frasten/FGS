@@ -266,7 +266,26 @@ var giftsArray = {
 		"473": { name: 'Tahitian Punch'},
 		"603": { name: 'Overstuffed Peppers'},
 		"638": { name: 'Lucky Fortune Cookie'},
-	}	
+	},
+	10979261223:  
+	{
+		"1":	{ name: 'Game Cards'},
+		"409":	{ name: 'Dead Bee'},
+		"410":	{ name: 'Golden Tiger'},
+		"411":	{ name: 'Dried Clover'},
+		"412":	{ name: 'Gun Barrel'},
+		"405":	{ name: 'Mystery Shipment'},
+		"180":	{ name: 'Super Pignata'},
+		"210":	{ name: 'Satchel of Lira'},
+		"100":	{ name: 'Mystery Bag'},
+		"151":	{ name: 'Mystery Animal'},
+		"152":	{ name: 'Rack of Chips'},
+		"80":	{ name: 'Thai Baht'},
+		"401":	{ name: 'Italian Hardwood'},
+		"402":	{ name: 'Marble Slab'},
+		
+		"189": { name: 'Special Delivery'},
+	}
 };
 
 
@@ -276,6 +295,7 @@ var freeGiftForGame =
 	102452128776: 'brick',
 	234860566661: 'construction_gears',
 	101539264719: '2548',
+	10979261223:  '189',
 }
 
 function ListNeighbours(gameID)
@@ -289,8 +309,8 @@ function ListNeighbours(gameID)
 	
 	if(options.games[gameID].enabled)
 	{
-		if(gameID == '101539264719')
-			eval(game+'Freegifts.Click(params)');
+		if(gameID == '101539264719' || gameID == '10979261223')
+			eval(game+'Freegifts.Click(params)');		
 		else
 			eval(game+'GetZyngaVars(params)');
 	}
@@ -302,7 +322,10 @@ function cafeworldGetZyngaVars(params, retry)
 	cafeworldFreegifts.Click(params);
 }
 
-
+function mafiawarsGetZyngaVars(params, retry)
+{
+	mafiawarsFreegifts.Click(params);
+}
 
 function treasureGetZyngaVars(params, retry)
 {
@@ -915,6 +938,10 @@ function getFBML(params, retry)
 					
 					myUrl2		= 'http://apps.facebook.com/cafeworld/send_request.php';
 				}
+				else if(params.gameID == '10979261223')
+				{
+					myUrl2 = $('form[type="Mafia Wars gift"]', data).attr('action');
+				}
 				else
 				{
 					i1          =   strTemp.indexOf('<form action="')
@@ -955,6 +982,12 @@ function getFBML(params, retry)
 					j++;
 				}
 				param2 += 'cmfs_typeahead_'+aTemp["request_form"]+'=start';
+				
+				if(params.gameID == '10979261223')
+				{
+					param2 += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
+				}
+				
 
 				params.myParms = myParms;
 				params.myUrl = myUrl2;
@@ -966,8 +999,9 @@ function getFBML(params, retry)
 				}
 				
 				console.log(params.param2);
+				console.log(params);
 				
-				//console.log(params);
+				
 				
 				
 				sendGift(params);
