@@ -498,6 +498,38 @@ var mafiawarsRequests =
 						throw {message:"Unknown page"}
 					}
 					
+
+					var sendInfo = '';
+					
+					if(data.indexOf('pic uid="') != -1 && data.indexOf('free_gift_id=') != -1)
+					{
+						
+						var i1 = data.indexOf('free_gift_id=');
+						var i2 = data.indexOf("'", i1);
+						var giftName = data.slice(i1+13, i2);
+						
+						var i1 = data.indexOf('pic uid="');
+						var i2 = data.indexOf('"', i1+9);
+						var receiveUid = data.slice(i1+9, i2);
+						
+						
+						var i1 = data.indexOf('false; " >', i2);
+						var i2 = data.indexOf('</a', i1);
+						var receiveName = data.slice(i1+10, i2);
+						
+						
+						sendInfo = {
+							gift: giftName,
+							destInt: receiveUid,
+							destName: receiveName,
+						}
+						
+						
+					}
+					info.thanks = sendInfo;
+					
+					console.log(info);
+					
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					
@@ -801,7 +833,7 @@ var mafiawarsBonuses =
 						throw {message:$('td.message_body', data).text()}
 					}
 					
-					console.log(info);
+					
 					
 					
 					

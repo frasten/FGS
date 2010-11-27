@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 36
-/svn/!svn/ver/32/trunk/scripts/games
+/svn/!svn/ver/34/trunk/scripts/games
 END
 frontierville.js
 K 25
@@ -37,7 +37,7 @@ mafiawars.js
 K 25
 svn:wc:ra_dav:version-url
 V 49
-/svn/!svn/ver/32/trunk/scripts/games/mafiawars.js
+/svn/!svn/ver/34/trunk/scripts/games/mafiawars.js
 END
 treasure.js
 K 25
