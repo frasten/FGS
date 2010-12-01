@@ -91,12 +91,10 @@ var giftsArray = {
 		"gloves": { name: 'Gloves'},
 		"purpleemperorbutterfly": { name: 'Emperor Butterfly'},
 		"greenfeather": { name: 'Green Plume'},
-		"fallacorn": { name: 'Acorn'},
-		"fallmapleleaf": { name: 'Maple Leaf'},
-		"fallpumpkin": { name: 'Pumpkin'},
-		"fallcornucopia": { name: 'Cornucopia'},
-		"fallharvestmoontoken": { name: 'Moon Token'},
-		"fallturkeyfeather": { name: 'Feather'},
+		
+		
+		
+		
 
 		"consume_kibble": { name: 'Puppy Kibble'},
 		"consume_treat": { name: 'Dog Treat'},
@@ -285,8 +283,94 @@ var giftsArray = {
 		"402":	{ name: 'Marble Slab'},
 		
 		"189": { name: 'Special Delivery'},
-	}
+	},
+	120563477996213:
+	{
+		"329": { name: 'One Energy'},
+		"408": { name: 'Pumpkin Pie'},
+		"434": { name: 'Ticket'},
+		"278": { name: 'Crystal'},
+		"279": { name: 'Ladybug'},
+		"280": { name: 'Tree Sap'},
+		"281": { name: 'Vitalin'},
+		"348": { name: 'Candy Corn'},
+		"349": { name: 'Sugar Skull'},
+		"195": { name: 'Dirt Path'},
+		"199": { name: 'Daisies'},
+		"200": { name: 'Mushroom Mailbox'},
+		"202": { name: 'Round Bush'},
+		"204": { name: 'White Picket Fence'},
+		"213": { name: 'Hay Bale'},
+		"319": { name: 'Clean Grass'},
+		"320": { name: 'Charming Sod'},
+		"321": { name: 'Gorgeous Turf'},
+		"330": { name: 'Balloons'},
+		"338": { name: 'Skullstone'},
+		"437": { name: 'Water Puddle'},
+		"203": { name: 'Round Tree'},
+		"214": { name: 'Tall Grass'},
+		"218": { name: 'Wooden Bench'},
+		"223": { name: 'Roses'},
+		"398": { name: 'Thanksgiving Table'},
+		"400": { name: 'Thanksgiving Chair'},
+		"208": { name: 'Jagged Rocks'},
+		"210": { name: 'Shiny Apples'},
+		"215": { name: 'Tumbleweed'},
+		"219": { name: 'Wooden Picnic Table'},
+		"439": { name: 'Orange Flag'},
+		"440": { name: 'Maroon Flag'},
+		"209": { name: 'Giant Pumpkins'},
+		"257": { name: 'Wooden Fence'},
+		"393": { name: 'Autumn Elm'},
+		"441": { name: 'Small Green Tent'},
+		"221": { name: 'Leafy Bush'},
+		"228": { name: 'Square Tree'},
+		"230": { name: 'Barrel Cacti'},
+		"363": { name: 'Petal Table'},
+		"364": { name: 'Petal Path'},
+		"212": { name: 'Aspen Tree'},
+		"224": { name: 'Stone Path'},
+		"365": { name: 'Flower Basket'},
+		"232": { name: 'Skeleton - lvl 7'},
+		"233": { name: 'Tombstone - lvl 7'},
+		"242": { name: 'Tulips - lvl 7'},
+		"366": { name: 'Royal Pew - lvl 7'},
+		"247": { name: 'Square Hedge - lvl 8'},
+		"237": { name: 'Dark Stone Path - lvl 9'},
+		"244": { name: 'Bear Hedge - lvl 9'},
+		"246": { name: 'Raven Hedge - lvl 10'},
+		"251": { name: 'Marble Path - lvl 10'},
+		"261": { name: 'Rock Fence - lvl 10'},
+		"235": { name: 'Peace Sign Hedge - lvl 11'},
+		"236": { name: 'Lotus Flower - lvl 11'},
+		"234": { name: 'Bongo Drums - lvl 12'},
+	},
+	151044809337:
+	{
+		"klfreefcollection1": { name: 'Live Rock'},
+		"tgvcranberryplant": { name: 'Cranberry Plant'},
+		"mysterybox": { name: 'Mystery Box'},
+		"threadfinbutterflyfish": { name: 'Threadfin Butterfly'},
+		"genericcoralindigo": { name: 'Special Indigo Coral'},
+		"sweetstash_butterscotch": { name: 'Butterscotch Treat'},
+		"blueDevilDamselfish": { name: 'Blue Devil Damsel'},
+		"shrimpgoby_mysterybox": { name: 'Blue Mystery Egg'},
+		"foodMedicine1": { name: 'Medicine'},
+		"fantasystatuewarrior": { name: 'Warrior Statue'},
+		"phoplantflower2": { name: 'Glow Flower'},
+		"galhmsbeagle": { name: 'HMS Beagle'},
+		"pinkCoral": { name: 'Pink Coral'},
+		"gibsmithiahawaiiensis": { name: 'Gibsmithia'},
+		"latch": { name: 'Latch'},
+		"nails": { name: 'Nails'},
+		"ccurchinshells": { name: 'Urchin Shells'},
+		"neonGreenNepthea": { name: 'Green Nepthea'},
+		"organPipeCoral": { name: 'Organ Pipe Coral'},
+		"greenBubbleCoral": { name: 'Green Bubble Coral'},
+	},
 };
+
+
 
 
 var freeGiftForGame =
@@ -296,6 +380,8 @@ var freeGiftForGame =
 	234860566661: 'construction_gears',
 	101539264719: '2548',
 	10979261223:  '189',
+	120563477996213: '329',
+	151044809337: 'mysterybox',
 }
 
 function ListNeighbours(gameID)
@@ -309,7 +395,7 @@ function ListNeighbours(gameID)
 	
 	if(options.games[gameID].enabled)
 	{
-		if(gameID == '101539264719' || gameID == '10979261223')
+		if(gameID == '101539264719' || gameID == '10979261223' || gameID == '120563477996213' || gameID == '151044809337')
 			eval(game+'Freegifts.Click(params)');		
 		else
 			eval(game+'GetZyngaVars(params)');
@@ -325,6 +411,16 @@ function cafeworldGetZyngaVars(params, retry)
 function mafiawarsGetZyngaVars(params, retry)
 {
 	mafiawarsFreegifts.Click(params);
+}
+
+function ravenwoodGetZyngaVars(params, retry)
+{
+	ravenwoodFreegifts.Click(params);
+}
+
+function fishvilleGetZyngaVars(params, retry)
+{
+	fishvilleFreegifts.Click(params);
 }
 
 function treasureGetZyngaVars(params, retry)
@@ -942,6 +1038,10 @@ function getFBML(params, retry)
 				{
 					myUrl2 = $('form[type="Mafia Wars gift"]', data).attr('action');
 				}
+				else if(params.gameID == '120563477996213')
+				{
+					myUrl2 = $('form[type="Ravenwood Fair Gift"]', data).attr('action');
+				}
 				else
 				{
 					i1          =   strTemp.indexOf('<form action="')
@@ -974,7 +1074,10 @@ function getFBML(params, retry)
 					var v = params.sendTo[u];
 					
 					myParms     +=  '&to_ids['+j+']='   +v;
-					param2 += 'ids[]='+v+'&';
+					if(params.gameID == '120563477996213')
+						param2 += 'ids[]='+v+'&';
+					else
+						param2 += 'ids%5B%5D='+v+'&';
 					
 					if(typeof(params.cafeUrl) != 'undefined')
 						tempParams += 'ids[]='+v+'&';
@@ -987,6 +1090,10 @@ function getFBML(params, retry)
 				{
 					param2 += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
 				}
+				if(params.gameID == '120563477996213')
+				{
+					param2 += '&'+ $('form[type="Ravenwood Fair Gift"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
+				}
 				
 
 				params.myParms = myParms;
@@ -996,12 +1103,7 @@ function getFBML(params, retry)
 				if(typeof(params.cafeUrl) != 'undefined')
 				{
 					params.param2 = tempParams;
-				}
-				
-				console.log(params.param2);
-				console.log(params);
-				
-				
+				}				
 				
 				
 				sendGift(params);
@@ -1069,6 +1171,8 @@ function sendGift(params, retry)
 				var reqMethod = 'POST';
 			}
 			
+			console.log(params.myUrl);
+			
 			$.ajax({
 				type: reqMethod,
 				url: params.myUrl,
@@ -1076,6 +1180,7 @@ function sendGift(params, retry)
 				data: params.param2,
 				success: function(data)
 				{
+					console.log(params);
 					var i = 0;
 					var sendHistArr = {};
 					

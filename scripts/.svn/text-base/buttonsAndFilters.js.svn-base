@@ -1,7 +1,7 @@
 var gamesData = 
 {
 	201278444497: 	{ 	
-						name: 'FrontierVille',	systemName: 'frontierville',
+						name: 'FrontierVille',	systemName: 'frontierville', link: 'http://apps.facebook.com/frontierville/',
 						filter:		
 						{	
 							bonuses: ['Go see my gift', 'Go Play FrontierVille', 'Go to FrontierVille', 'Send items'],		
@@ -27,6 +27,7 @@ var gamesData =
 													submenu: {
 																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
 																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 															}
 												},
 							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
@@ -38,6 +39,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												}, 
 							'SendFreeGifts':	{	name: 'Send free gifts',
@@ -56,7 +58,7 @@ var gamesData =
 						}
 					},
 	102452128776: 	{ 	
-						name: 'FarmVille',		systemName: 'farmville',
+						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/',
 						filter:
 						{	
 							bonuses: ['Fertilize their crops', 'Play Farmville Now'],
@@ -82,6 +84,7 @@ var gamesData =
 													submenu: {
 																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
 																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 															}
 												},
 							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
@@ -93,6 +96,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'SendFreeGifts':	{	name: 'Send free gifts',
@@ -111,7 +115,7 @@ var gamesData =
 						}
 					},
 	10979261223: 	{ 	
-						name: 'Mafia Wars',		systemName: 'mafiawars',
+						name: 'Mafia Wars',		systemName: 'mafiawars', link: 'http://apps.facebook.com/inthemafia/',
 						filter:		
 						{	
 							bonuses: ['Play Mafia Wars'],		
@@ -140,6 +144,7 @@ var gamesData =
 													submenu: {
 																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
 																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 															}
 												},
 							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
@@ -151,6 +156,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'SendFreeGifts':	{	name: 'Send free gifts',
@@ -169,7 +175,7 @@ var gamesData =
 						}
 					},
 	234860566661: 	{ 	
-						name: 'Treasure Isle',		systemName: 'treasure',
+						name: 'Treasure Isle',		systemName: 'treasure', link: 'http://apps.facebook.com/treasureisle/',
 						filter:		
 						{	
 							bonuses: ['Play Treasure Isle'],	
@@ -194,6 +200,7 @@ var gamesData =
 													submenu: {
 																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
 																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 															}
 												},
 							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
@@ -205,6 +212,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'SendFreeGifts':	{	name: 'Send free gifts',
@@ -223,7 +231,7 @@ var gamesData =
 						}
 					},
 	101539264719: 	{ 
-						name: 'Cafe World',		systemName: 'cafeworld',
+						name: 'Cafe World',		systemName: 'cafeworld', link: 'http://apps.facebook.com/cafeworld/',
 						filter:		
 						{
 							bonuses: [],
@@ -248,6 +256,7 @@ var gamesData =
 													submenu: {
 																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
 																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 															}
 												},
 							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
@@ -259,6 +268,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'SendFreeGifts':	{	name: 'Send free gifts',
@@ -277,7 +287,7 @@ var gamesData =
 						}
 					},
 	120563477996213: 	{ 
-						name: 'Ravenwood Fair',		systemName: 'ravenwood',
+						name: 'Ravenwood Fair',		systemName: 'ravenwood', link: 'http://apps.facebook.com/ravenwoodfair/',
 						filter:		
 						{
 							bonuses: [],
@@ -315,6 +325,18 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'SendFreeGifts':	{	name: 'Send free gifts',
+													submenu: {
+																'SelectFavourites': { name: 'Select favourites' },
+																'SendGifts': { name: 'Send free gifts' },
+															}
+												}, 
+							'SendFreeGiftsHistory':	{	name: 'Show free gifts history',
+													submenu: {
+																'ClearSentFreeGifts': { name: 'Clear send gifts history' },
 															}
 												},
 							'GameOptionsTab':	{	name: 'Filters',
@@ -322,7 +344,7 @@ var gamesData =
 						}
 					},
 	43016202276: 	{ 
-						name: 'Restaurant City',		systemName: 'restaurant',
+						name: 'Restaurant City',		systemName: 'restaurant', link: 'http://apps.facebook.com/restaurantcity/',
 						filter:		
 						{
 							bonuses: [],
@@ -360,6 +382,7 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'GameOptionsTab':	{	name: 'Filters',
@@ -367,7 +390,7 @@ var gamesData =
 						}
 					},
 	151044809337: 	{ 
-						name: 'Fishville',		systemName: 'fishville',
+						name: 'Fishville',		systemName: 'fishville', link: 'http://apps.facebook.com/fishville/',
 						filter:		
 						{
 							bonuses: [],
@@ -405,6 +428,19 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'SendFreeGifts':	{	name: 'Send free gifts',
+													submenu: {
+																'SelectFavourites': { name: 'Select favourites' },
+																'SendGifts': { name: 'Send free gifts' },
+															}
+												}, 
+							'SendFreeGiftsHistory':	{	name: 'Show free gifts history',
+													submenu: {
+																'ClearSentFreeGifts': { name: 'Clear send gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'GameOptionsTab':	{	name: 'Filters',
@@ -412,7 +448,7 @@ var gamesData =
 						}
 					},
 	21526880407: 	{ 
-						name: 'Yoville',		systemName: 'yoville',
+						name: 'Yoville',		systemName: 'yoville', link: 'http://apps.facebook.com/yoville/',
 						filter:		
 						{
 							bonuses: [],
@@ -450,6 +486,52 @@ var gamesData =
 							'RequestsHistory':	{	name: 'Show collected gifts',
 													submenu: {
 																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'GameOptionsTab':	{	name: 'Filters',
+							},
+						}
+					},
+	163965423072: 	{ 	name: 'Social City',		systemName: 'socialcity', link: 'http://apps.facebook.com/socialcity/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons:	
+						{
+							/*'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
+													submenu: {
+																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
+																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+															}
+												},
+							*/
+							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',
+													submenu: {
+																'ClearManualBonuses': { name: 'Clear all bonuses' },
+															}
+												},
+							/*
+							'BonusesHistory': 	{	name: 'Show collected bonuses',
+													submenu: {
+																'ClearCollectedBonuses': { name: 'Clear bonuses history' }
+															}
+												},
+							*/
+							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
+													submenu: {
+																'ReceivePendingRequests': { name: 'Receive all gifts' },
+																'ClearPendingRequests': 	{ name: 'Clear all requests' },
+															}
+												}, 
+							'RequestsHistory':	{	name: 'Show collected gifts',
+													submenu: {
+																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 															}
 												},
 							'GameOptionsTab':	{	name: 'Filters',

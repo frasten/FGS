@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
-V 29
-/svn/!svn/ver/2/trunk/context
+V 30
+/svn/!svn/ver/38/trunk/context
 END
 delete.png
 K 25
@@ -14,4 +14,10 @@ K 25
 svn:wc:ra_dav:version-url
 V 41
 /svn/!svn/ver/2/trunk/context/receive.png
+END
+goToGame.png
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/38/trunk/context/goToGame.png
 END

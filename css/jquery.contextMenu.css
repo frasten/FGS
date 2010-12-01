@@ -226,7 +226,7 @@ div.leftBox
 	position: absolute;
 	bottom: 2px;
 	right:5px;
-	width: 20px;
+	width: 25px;
 	height: 15px;
 	background-color: #435EE0;
 	/*border: 1px solid #000;*/
@@ -338,6 +338,7 @@ div.leftBox
 
 .contextMenu LI.receive A { background-image: url(../context/receive.png); }
 .contextMenu LI.delete A { background-image: url(../context/delete.png); }
+.contextMenu LI.goToGame A { background-image: url(../context/goToGame.png); }
 
 .bonusName
 {

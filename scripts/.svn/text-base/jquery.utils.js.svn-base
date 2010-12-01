@@ -1,3 +1,13 @@
+jQuery.extend({
+	unparam : function(params)
+	{
+		var objResult = {};
+        $.each(params.split("&"), function(){ var prm=this.split("=");
+		objResult[prm[0]] = prm[1]; });
+        return objResult;
+    }
+});
+
 (function($) {
 	$.version_compare = function(version1, version2, operator) {
 		// http://kevin.vanzonneveld.net

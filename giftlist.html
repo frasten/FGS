@@ -2,18 +2,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.4" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.5" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/time.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/time.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.5"></script>
 <script type="text/javascript">
 
-// ?version=3.8.4
+// ?version=3.8.5
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -540,7 +540,7 @@
 			
 			var infoAdd = '';
 			
-			if(typeof(data.thanks) != 'undefined')
+			if(typeof(data.thanks) != 'undefined' && data.thanks != '')
 			{
 				infoAdd = JSON.stringify(data.thanks);
 			}
@@ -562,7 +562,7 @@
 		
 		var sendBackHtml = '';
 
-		if(sendBack != '' && sendBack != null)
+		if(sendBack != '' && sendBack != null && sendBack != '""')
 		{
 			var sendBackJson = JSON.parse(sendBack);
 			
@@ -703,7 +703,7 @@
 			
 			var infoAdd = '';
 			
-			if(typeof(data.thanks) != 'undefined')
+			if(typeof(data.thanks) != 'undefined' && data.thanks != '')
 			{
 				infoAdd = JSON.stringify(data.thanks);
 			}
@@ -897,6 +897,58 @@
 					});
 					//('<br style="clear:both" />');
 					database.clearLimitErrors(gameID);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
+	function ClearCollectedBonusesReceivingError(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete receiving errors": function()
+				{
+					var game = gamesData[gameID].systemName;
+					$('#'+game+'BonusesHistoryList').children('div').each(function(){
+						if($(this).find('.bonusError').text().indexOf('receiving') != -1)
+						{
+							$(this).remove();
+						}
+					});
+					//('<br style="clear:both" />');
+					database.clearReceivingErrors(gameID);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
+	function ClearCollectedRequestsReceivingError(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete receiving errors": function()
+				{
+					var game = gamesData[gameID].systemName;
+					$('#'+game+'RequestsHistoryList').children('div').each(function(){
+						if($(this).find('.bonusError').text().indexOf('receiving') != -1)
+						{
+							$(this).remove();
+						}
+					});
+					//('<br style="clear:both" />');
+					database.clearRequestReceivingErrors(gameID);
 					$( this ).dialog( "close" );
 				},
 				Cancel: function() {
@@ -1665,9 +1717,8 @@
 			
 			$('#templateGame').clone().attr('id', d.systemName+'Game').insertBefore('#chat').find('h1.title').html(d.name+'<br style="clear: both" /><div class="checkOptions"></div><br style="clear: both" />');
 
-			$('<input type="radio" class="gameSelected" name="gameSelected" sysID="'+d.systemName+'" gameID="'+id+'" id="'+id+'Selected" /><label for="'+id+'Selected">'+d.name+'<br /><img src="icons/menu/'+d.systemName+'.png"><span class="badgeGames"></span></label>').appendTo('#gameSelector');
-			
-			
+			$('<input type="radio" class="gameSelected'+(e.hiddenIcon ? ' hideAtStart' : '')+'" name="gameSelected" sysID="'+d.systemName+'" gameID="'+id+'" id="'+id+'Selected" /><label for="'+id+'Selected">'+d.name+'<br /><img src="icons/menu/'+d.systemName+'.png"><span class="badgeGames"></span></label>').appendTo('#gameSelector');
+
 			//if(e.enabled)
 			//{
 				
@@ -1686,15 +1737,14 @@
 			switchEnabled(id);
 			createMenu(id);
 		}
-		
 		loadBonuses();
 		
 
-		$('<input type="radio" class="gameSelected" name="gameSelected" id="chatSelected" /><label for="chatSelected">Chat<br /><img src="icons/menu/chat.png"></label>').appendTo('#gameSelector');
+		$('<input type="radio" class="gameSelected isOptionsTab" name="gameSelected" id="chatSelected" /><label for="chatSelected">Chat<br /><img src="icons/menu/chat.png"></label>').appendTo('#gameSelector');
 		
-		$('<input type="radio" class="gameSelected" name="gameSelected" id="optionsSelected" /><label for="optionsSelected">Options<br /><img src="icons/menu/options.png"></label>').appendTo('#gameSelector');
+		$('<input type="radio" class="gameSelected isOptionsTab" name="gameSelected" id="optionsSelected" /><label for="optionsSelected">Options<br /><img src="icons/menu/options.png"></label>').appendTo('#gameSelector');
 		
-		//$('<input type="radio" class="gameSelected" name="gameSelected" id="debugSelected" /><label for="debugSelected">Debug logs<br /><img src="icons/menu/debug.png"></label>').appendTo('#gameSelector');
+		//$('<input type="radio" class="gameSelected isOptionsTab" name="gameSelected" id="debugSelected" /><label for="debugSelected">Debug logs<br /><img src="icons/menu/debug.png"></label>').appendTo('#gameSelector');
 
 		$("#gameSelector").children("input").click(function()
 		{
@@ -1897,6 +1947,34 @@
 			});
 		});
 		
+		$("#gameSelector > label").live('mouseenter', function()
+		{
+			if($(this).hasClass('hasContextMenu2') || $(this).prev().hasClass('isOptionsTab'))
+			{
+				return;
+			}
+			$(this).addClass('hasContextMenu2').contextMenu({
+				menu: 'myMenuGameIcon'
+			}, function(action, el, pos)
+			{
+				if(action == 'hideIcon')
+				{
+					var gameID = $(el).prev().attr('gameID');
+					$(el).addClass('hide');
+					bkP.options.games[gameID].hiddenIcon = true;					
+					bkP.saveOptions();
+					
+					if(!$('#options').hasClass('hide'))
+						loadOptionsData();					
+				}
+				else if(action == 'goToGame')
+				{
+					var gameID = $(el).prev().attr('gameID');
+					bkP.chrome.tabs.create({url: gamesData[gameID].link});
+				}
+			});
+		});
+		
 		$(".selectGiftToSend").live('mouseenter', function()
 		{
 			if($(this).hasClass('hasContextMenu'))
@@ -1985,6 +2063,10 @@
 					}});
 					
 					$('#dialog-confirm').dialog('open');
+				}
+				else if(action == 'debug')
+				{
+					bkP.getRequestLink($(el).attr('id'), $(el).attr('postData')+'&post_form_id='+bkP.post_form_id+'&fb_dtsg='+bkP.fb_dtsg);
 				}
 			});
 		});
@@ -2113,9 +2195,7 @@
 			$(this).parent().remove();
 			loadOptionsData();
 		});
-		
-		
-		
+
 		$( "#dialog-confirm" ).dialog({
 			resizable: false,
 			autoOpen: false,
@@ -2162,6 +2242,16 @@
 			eval($(this).attr('sysID')+'("'+$(this).attr('gameID')+'")');
 		});
 		$("#gameSelector").buttonset();
+		
+		$('#gameSelector > label').each(function()
+		{
+			if($(this).prev().hasClass('hideAtStart'))
+			{
+				$(this).prev().removeClass('hideAtStart');
+				$(this).addClass('hide');
+			}
+		});
+		
 		$('#lockScreen').button().click(function()
 		{
 			isScreenLocked = $(this).is(':checked');
@@ -2177,12 +2267,18 @@
 				updateCount();
 			}
 		});
-		
-		
-		
 		//Screen is: UNLOCKED (click to lock)
 	});
 	
+	function unhideGameIcon()
+	{
+		console.log($(this).attr('gameID'));
+		bkP.options.games[$(this).attr('gameID')].hiddenIcon = false;
+		bkP.saveOptions();
+		
+		$('#gameSelector > input[gameID="'+$(this).attr('gameID')+'"]').next().removeClass('hide');
+		loadOptionsData();
+	}
 
 	function loadOptionsData()
 	{
@@ -2194,6 +2290,21 @@
 		});
 		
 		$('#defaultCommentsMessages').append('<br style="clear:both" /><textarea style="margin-top: 50px;" class="newCommentText"></textarea><button class="saveNewComment">Add new comment</button>');
+		
+		$('.hiddenIconList').html('');
+		
+		for(var gameID in bkP.options.games)
+		{
+			if(bkP.options.games[gameID].hiddenIcon)
+			{
+				var gameName = gamesData[gameID].name;
+				$('.hiddenIconList').append('<div style="float: left; width: 250px;margin-right: 10px;"><img src="icons/delete-16.png" gameID="'+gameID+'" style="cursor: pointer;width: 10px;height: 10px" class="unhideGameIcon'+gameID+'" title="Unhide game icon"> '+gameName+'</div>');
+				
+				$('.unhideGameIcon'+gameID).click(unhideGameIcon);
+				
+			}
+		}
+		$('.hiddenIconList').append('<br style="clear:both" /><br />');
 	}
 	
 	function loadDebugData()
@@ -2504,6 +2615,9 @@
 		<div id="options" class="section hide gameContent">
 			
 			<h1 class="title">Options</h1>
+			
+				<h4>Hidden game icons (right click icon to hide it)</h4>
+				<div class="hiddenIconList"></div>
 		
 				<h4>Bonuses check timeout</h4>
 					<select id="checkBonusesTimeout">
@@ -2589,10 +2703,16 @@
 		<li class="receive"><a href="#receiveSimilar">Receive all "<span class="bonusName"></span> (<span class="bonusNameCount"></span>)"</a></li>
 		<li class="delete separator"><a href="#delete">Delete this gift</a></li>
 		<li class="delete"><a href="#deleteSimilar">Delete all "<span class="bonusName"></span> (<span class="bonusNameCount"></span>)"</a></li>
+		<li class="debug"><a href="#debug">Debug (for developer)</a></li>
 	</ul>
 	
 	<ul id="myMenuDefaultGift" class="contextMenu">
 		<li class="receive"><a href="#selectDefault">Select as default gift</a></li>
+	</ul>
+	
+	<ul id="myMenuGameIcon" class="contextMenu">
+		<li class="goToGame"><a href="#goToGame"><strong>Go to this game!</strong></a></li>
+		<li class="delete"><a href="#hideIcon">Hide this game icon</a></li>
 	</ul>
 	
 	

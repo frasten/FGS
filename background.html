@@ -3,30 +3,30 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/notices.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/chat.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/notices.js?version=3.8.5"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/socialcity.js?version=3.8.5"></script>
 
-
-<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.4"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.4"></script>
+<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.5"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=3.8.4
+// ?version=3.8.5
 
-var currentVersion = '3.8.4';
+var currentVersion = '3.8.5';
 var portsByName = {};
 
 var console2 =
@@ -101,8 +101,8 @@ function initializeDefaults()
 		deleteHistoryOlderThan: 0,
 	}
 
-	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, autoAcceptBonus: false, filter: [], defaultGift: 0 };
 
+	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
 	for(var idd in gamesData)
 	{
 		defaultOptions.games[idd] = defaultGameOptions;
@@ -946,7 +946,7 @@ function checkRequests()
 				
 				if(i1 == -1)
 				{
-					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1)
+					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1)
 					{
 						var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
 					}
@@ -1387,7 +1387,6 @@ $(function()
 	chrome.browserAction.setTitle({title: "FGS is not yet loaded... Please wait..."});
 
 	startup();
-
 	
 	$(window).unload( function () 
 	{

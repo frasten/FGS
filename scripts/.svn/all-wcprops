@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 30
-/svn/!svn/ver/34/trunk/scripts
+/svn/!svn/ver/39/trunk/scripts
 END
 notices.js
 K 25
@@ -13,7 +13,7 @@ database.js
 K 25
 svn:wc:ra_dav:version-url
 V 42
-/svn/!svn/ver/28/trunk/scripts/database.js
+/svn/!svn/ver/39/trunk/scripts/database.js
 END
 jquery.contextMenu.js
 K 25
@@ -25,7 +25,7 @@ buttonsAndFilters.js
 K 25
 svn:wc:ra_dav:version-url
 V 51
-/svn/!svn/ver/33/trunk/scripts/buttonsAndFilters.js
+/svn/!svn/ver/39/trunk/scripts/buttonsAndFilters.js
 END
 jquery-ui-1.8.4.custom.min.js
 K 25
@@ -42,8 +42,8 @@ END
 jquery.utils.js
 K 25
 svn:wc:ra_dav:version-url
-V 45
-/svn/!svn/ver/2/trunk/scripts/jquery.utils.js
+V 46
+/svn/!svn/ver/36/trunk/scripts/jquery.utils.js
 END
 chat.js
 K 25

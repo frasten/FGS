@@ -96,6 +96,22 @@ database.clearLimitErrors = function(gameID)
 	});
 }
 
+database.clearReceivingErrors = function(gameID)
+{
+	database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM bonuses where status = 1 and gameID = ? and error = "receiving"', [gameID], database.onSuccess, database.onError);
+	});
+}
+
+database.clearRequestReceivingErrors = function(gameID)
+{
+	database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM requests where status = 1 and gameID = ? and error = "receiving"', [gameID], database.onSuccess, database.onError);
+	});
+}
+
 database.clearByGameID = function(gameID)
 {
 	database.db.transaction(function(tx)
