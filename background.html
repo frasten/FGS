@@ -3,30 +3,32 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/notices.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/chat.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/notices.js?version=3.8.6"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/games/socialcity.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/socialcity.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/petville.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/games/cityville.js?version=3.8.6"></script>
 
-<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.6"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=3.8.5
+// ?version=3.8.6
 
-var currentVersion = '3.8.5';
+var currentVersion = '3.8.6';
 var portsByName = {};
 
 var console2 =
@@ -865,6 +867,14 @@ function checkRequests()
 				
 				data = tempD.pagelet_requests;				
 			}
+			else if(data.indexOf("content: {pagelet_requests: '") != -1)
+			{
+				var i1 = data.indexOf("content: {pagelet_requests: '")+9;
+				var i2 = data.indexOf("'}});", i1)+2;
+				eval('var tempD = '+data.slice(i1,i2));
+
+				data = tempD.pagelet_requests;	
+			}
 			
 			var FBdata = $('input[name="params\[app_id\]"]',data).parent('form:first');
 			
@@ -946,7 +956,7 @@ function checkRequests()
 				
 				if(i1 == -1)
 				{
-					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1)
+					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1)
 					{
 						var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
 					}

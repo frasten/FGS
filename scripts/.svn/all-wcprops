@@ -1,13 +1,13 @@
 K 25
 svn:wc:ra_dav:version-url
 V 30
-/svn/!svn/ver/39/trunk/scripts
+/svn/!svn/ver/47/trunk/scripts
 END
 notices.js
 K 25
 svn:wc:ra_dav:version-url
-V 40
-/svn/!svn/ver/2/trunk/scripts/notices.js
+V 41
+/svn/!svn/ver/41/trunk/scripts/notices.js
 END
 database.js
 K 25
@@ -25,7 +25,7 @@ buttonsAndFilters.js
 K 25
 svn:wc:ra_dav:version-url
 V 51
-/svn/!svn/ver/39/trunk/scripts/buttonsAndFilters.js
+/svn/!svn/ver/47/trunk/scripts/buttonsAndFilters.js
 END
 jquery-ui-1.8.4.custom.min.js
 K 25

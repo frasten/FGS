@@ -174,6 +174,92 @@ var gamesData =
 							},
 						}
 					},
+	291549705119: 	{ 	name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
+						filter:		
+						{
+							bonuses: ['Start your business', 'Send collectables', 'Send collectibles', 'iAbre tu negocio', 'Visit CityVille'],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons:	
+						{
+							'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
+													submenu: {
+																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
+																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+															}
+												},
+							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',
+													submenu: {
+																'ClearManualBonuses': { name: 'Clear all bonuses' },
+															}
+												},
+							'BonusesHistory': 	{	name: 'Show collected bonuses',
+													submenu: {
+																'ClearCollectedBonuses': { name: 'Clear bonuses history' }
+															}
+												},
+							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
+													submenu: {
+																'ReceivePendingRequests': { name: 'Receive all gifts' },
+																'ClearPendingRequests': 	{ name: 'Clear all requests' },
+															}
+												}, 
+							'RequestsHistory':	{	name: 'Show collected gifts',
+													submenu: {
+																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'GameOptionsTab':	{	name: 'Filters',
+							},
+						}
+					},
+	163576248142:	{ 	name: 'PetVille',		systemName: 'petville', link: 'http://apps.facebook.com/petvillegame/',
+						filter:		
+						{
+							bonuses: ['Play Now', 'Look at my bouquet'],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons:	
+						{
+							'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
+													submenu: {
+																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
+																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+															}
+												},
+							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',
+													submenu: {
+																'ClearManualBonuses': { name: 'Clear all bonuses' },
+															}
+												},
+							'BonusesHistory': 	{	name: 'Show collected bonuses',
+													submenu: {
+																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
+																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
+															}
+												},
+							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
+													submenu: {
+																'ReceivePendingRequests': { name: 'Receive all gifts' },
+																'ClearPendingRequests': 	{ name: 'Clear all requests' },
+															}
+												}, 
+							'RequestsHistory':	{	name: 'Show collected gifts',
+													submenu: {
+																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'GameOptionsTab':	{	name: 'Filters',
+							},
+						}
+				},
 	234860566661: 	{ 	
 						name: 'Treasure Isle',		systemName: 'treasure', link: 'http://apps.facebook.com/treasureisle/',
 						filter:		

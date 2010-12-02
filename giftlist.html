@@ -2,18 +2,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.5" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.6" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/time.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.5"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.5"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/time.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.6"></script>
 <script type="text/javascript">
 
-// ?version=3.8.5
+// ?version=3.8.6
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -2375,7 +2375,7 @@
 		
 		var opt = 'GameOptionsTabList';
 		
-		var html = '<div class="gameOptionsFiltersList"></div>';
+		var html = '<div class="gameOptionsFiltersList"><br style="clear: both" /></div>';
 		var game = gamesData[gameID].systemName;
 		
 		
@@ -2385,12 +2385,17 @@
 		
 		
 		$('div#'+game+opt, '#'+game+'Game').prepend(html);
-			
+
+		if(arr.length == 0)
+		{
+			$('div#'+game+opt, '#'+game+'Game').find('.gameOptionsFiltersList').prepend('<h4>You have currently no filters.</h4>To add some: Right click unwanted bonus and select "Don\'t collect this type of bonuses"</h4>');
+		}
+		
 		for(var i = 0; i < arr.length; i++)
 		{
 			var v = arr[i];
 			var html = '<div style="float: left; width: 250px;margin-right: 10px;"><img src="icons/delete-16.png" delIndex="'+i+'" gameID="'+gameID+'" style="cursor: pointer;width: 10px;height: 10px" class="deleteFilter" title="Delete filter"> '+v+'</div>';
-			
+
 			$('div#'+game+opt, '#'+game+'Game').find('.gameOptionsFiltersList').prepend(html);
 		}
 		
