@@ -326,7 +326,7 @@ var petvilleBonuses =
 					var out = jQuery.trim($('.main_giftConfirm_cont', data).text());
 					
 					if(out.indexOf('You already claimed') != -1 ||  out.indexOf('The item is all gone') != -1  || out.indexOf('already received') != -1 || out.indexOf('the celebration has ended') != -1 || out.indexOf('you cannot claim the celebration') != -1 || out.indexOf('this feed is only for friends') != -1)
-					{ 
+					{
 						info.error = 'limit';
 						info.time = Math.round(new Date().getTime() / 1000);
 						info.error_text = out;

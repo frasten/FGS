@@ -67,6 +67,19 @@ if(jQuery)( function() {
 							(e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
 							(e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
 							
+							if (y + $(menu).outerHeight() > d.pageYOffset + $(document.body).innerHeight())
+							{
+								var i1 = parseInt(y);
+								var i2 = parseInt($(menu).outerHeight());
+								y = i1-i2;
+							}
+							if (x + $(menu).outerWidth() > d.pageXOffset + $(document.body).innerWidth())
+							{
+								var i1 = parseInt(x);
+								var i2 = parseInt($(menu).outerWidth());
+								x = i1-i2;
+							}
+							
 							// Show the menu
 							$(document).unbind('click');
 							

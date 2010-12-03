@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 33
-/svn/!svn/ver/47/trunk/icons/menu
+/svn/!svn/ver/52/trunk/icons/menu
 END
 restaurant-bw.png
 K 25
@@ -27,17 +27,17 @@ svn:wc:ra_dav:version-url
 V 48
 /svn/!svn/ver/37/trunk/icons/menu/socialcity.png
 END
-ravenwood.png
-K 25
-svn:wc:ra_dav:version-url
-V 46
-/svn/!svn/ver/2/trunk/icons/menu/ravenwood.png
-END
 cityville.png
 K 25
 svn:wc:ra_dav:version-url
 V 47
 /svn/!svn/ver/47/trunk/icons/menu/cityville.png
+END
+ravenwood.png
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/2/trunk/icons/menu/ravenwood.png
 END
 cafeworld.png
 K 25
@@ -51,11 +51,11 @@ svn:wc:ra_dav:version-url
 V 51
 /svn/!svn/ver/37/trunk/icons/menu/socialcity-bw.png
 END
-mafiawars.png
+cityville-bw.png
 K 25
 svn:wc:ra_dav:version-url
-V 47
-/svn/!svn/ver/47/trunk/icons/menu/mafiawars.png
+V 50
+/svn/!svn/ver/47/trunk/icons/menu/cityville-bw.png
 END
 ravenwood-bw.png
 K 25
@@ -63,11 +63,11 @@ svn:wc:ra_dav:version-url
 V 49
 /svn/!svn/ver/2/trunk/icons/menu/ravenwood-bw.png
 END
-cityville-bw.png
+mafiawars.png
 K 25
 svn:wc:ra_dav:version-url
-V 50
-/svn/!svn/ver/47/trunk/icons/menu/cityville-bw.png
+V 47
+/svn/!svn/ver/47/trunk/icons/menu/mafiawars.png
 END
 cafeworld-bw.png
 K 25
@@ -80,6 +80,12 @@ K 25
 svn:wc:ra_dav:version-url
 V 41
 /svn/!svn/ver/2/trunk/icons/menu/chat.png
+END
+zooworld.png
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/52/trunk/icons/menu/zooworld.png
 END
 mafiawars-bw.png
 K 25
@@ -116,6 +122,12 @@ K 25
 svn:wc:ra_dav:version-url
 V 47
 /svn/!svn/ver/29/trunk/icons/menu/fishville.png
+END
+zooworld-bw.png
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/52/trunk/icons/menu/zooworld-bw.png
 END
 debug.png
 K 25

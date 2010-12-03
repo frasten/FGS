@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 36
-/svn/!svn/ver/50/trunk/scripts/games
+/svn/!svn/ver/52/trunk/scripts/games
 END
 frontierville.js
 K 25
@@ -19,7 +19,7 @@ petville.js
 K 25
 svn:wc:ra_dav:version-url
 V 48
-/svn/!svn/ver/43/trunk/scripts/games/petville.js
+/svn/!svn/ver/52/trunk/scripts/games/petville.js
 END
 cityville.js
 K 25
@@ -62,6 +62,12 @@ K 25
 svn:wc:ra_dav:version-url
 V 49
 /svn/!svn/ver/50/trunk/scripts/games/freegifts.js
+END
+zooworld.js
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/52/trunk/scripts/games/zooworld.js
 END
 farmville.js
 K 25

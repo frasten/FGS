@@ -2,18 +2,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.6" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.7" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.6"></script>
-<script type="text/javascript" src="scripts/time.js?version=3.8.6"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.6"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.6"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.7"></script>
+<script type="text/javascript" src="scripts/time.js?version=3.8.7"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.7"></script>
+<script type="text/javascript" src="scripts/queue.js?version=3.8.7"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.7"></script>
 <script type="text/javascript">
 
-// ?version=3.8.6
+// ?version=3.8.7
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -21,6 +22,7 @@
 	var loaded = 0;	
 	
 	var isScreenLocked = false;
+	var neighList = {}
 
 	
 	function updateLoaded()
@@ -60,7 +62,7 @@
 		
 		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
 		
-		$('input[name="neighArr[]"]:lt(20)', 'div#'+game+opt).trigger('click');
+		$('input[name="neighArr[]"]:lt(25)', 'div#'+game+opt).trigger('click');
 	}
 	
 	function listGifts(gameID)
@@ -113,54 +115,64 @@
 		var opt = 'SendFreeGiftsList';
 
 		var sortedList = new Array();
-		$('.sendToNeighboursList','div#'+game+opt).html('');
+		$('.sendToNeighboursList','div#'+game+opt).html('<br style="clear:both" />');
 		
 		for(var id in neigh)
 		{
-			var v = neigh[id];
-			
-			var initialLength = sortedList.length;
-			sortedList.push(v.name);
-			sortedList.sort(); //.reverse();
-			
-			var i = $.inArray(v.name, sortedList);
-			
-			if(v.name.length > 20)
-			{
-				var nameText = v.name.substring(0,20)+'...';
-			}
-			else
-			{
-				var nameText = v.name;
-			}
-			
-			var html = '<div style="float: left; width: 250px;margin-right: 10px;"><input type="checkbox" neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'" value="'+id+'"name="neighArr[]"> <img src="icons/favourite-bw.png" class="addToSendFav" title="Click to add to favourites"> '+nameText+'</div>';
-
-			if(i == initialLength)
-			{
-				$('.sendToNeighboursList','div#'+game+opt).append(html);
-			}
-			else 
-			{
-				$($('.sendToNeighboursList','div#'+game+opt).children("div")[i]).before(html);
-			}
-		}
-		
-		$('.sendToNeighboursList','div#'+game+opt).append('<br style="clear:both" />');
-		
-		$('.sendToFavouritesList','div#'+game+opt).html('');
-		
-		database.db.transaction(function(tx)
-		{
-			tx.executeSql("SELECT * FROM neighbours where gameID = ?", [gameID], function(tx, res)
-			{
-				for(var i = 0; i < res.rows.length; i++)
+			//var doBind = function(id)
+		//	{
+				var v = neigh[id];
+				
+				var initialLength = sortedList.length;
+				sortedList.push(v.name);
+				sortedList.sort(); //.reverse();
+				
+				var i = $.inArray(v.name, sortedList);
+				
+				if(v.name.length > 20)
 				{
-					$('input[neighID="'+res.rows.item(i)['id']+'"]').siblings('img').trigger('click');
+					var nameText = v.name.substring(0,20)+'...';
 				}
-				$('.sendToFavouritesList','div#'+game+opt).append('<br style="clear:both" />');
-			}, null, database.onSuccess, database.onError);
-		});
+				else
+				{
+					var nameText = v.name;
+				}
+				
+				var html = '<div style="float: left; width: 250px;margin-right: 10px;"><input type="checkbox" neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'" value="'+id+'" class="neighborCheckbox" name="neighArr[]"> <img src="icons/favourite-bw.png" class="addToSendFav" title="Click to add to favourites"> '+nameText+'</div>';
+
+				if(i == initialLength)
+				{
+					$('.sendToNeighboursList','div#'+game+opt).children('br').before(html);
+				}
+				else 
+				{
+					$($('.sendToNeighboursList','div#'+game+opt).children("div")[i]).before(html);
+				}
+			//};
+			//$.queue2.add(doBind, id);
+		}
+		$('.neighborCheckbox', 'div#'+game+opt).click(processSelectSendTo);	
+		$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
+		
+		
+		//var doBind2 = function()
+		//{
+			$('.sendToFavouritesList','div#'+game+opt).html('');
+			
+			database.db.transaction(function(tx)
+			{
+				tx.executeSql("SELECT * FROM neighbours where gameID = ?", [gameID], function(tx, res)
+				{
+					for(var i = 0; i < res.rows.length; i++)
+					{
+						$('input[neighID="'+res.rows.item(i)['id']+'"]', 'div#'+game+opt).siblings('img').trigger('click');
+					}
+					$('.sendToFavouritesList','div#'+game+opt).append('<br style="clear:both" />');
+				}, null, database.onSuccess, database.onError);
+			});
+		//};
+		
+		//$.queue2.add(doBind2, this);
 	}
 	
 	
@@ -546,7 +558,9 @@
 			}
 			
 			$('#'+id).find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false));
-			
+			$('#'+id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
+			$('#'+id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
+			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);	
 			
 			if(data.text != '')
 			{
@@ -709,7 +723,9 @@
 			}
 			
 			$('#'+id).find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false, true));
-			
+			$('#'+id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
+			$('#'+id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
+			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);			
 			
 			$('#'+id).find('.title').next('span').text(data.text);
 			$('#'+id).attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
@@ -1564,6 +1580,9 @@
 		else if(v.error == '')
 		{
 			$('div#'+v.id).find('.bonusError').css('height', '23px').html(addLikeRow(v.like_bonus, v.resend_gift, v.comment_bonus));
+			$('#'+v.id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
+			$('#'+v.id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
+			$('#'+v.id).find('.bonusError').find('.sendBack').click(processSendBack);	
 		}
 	}
 	
@@ -1584,6 +1603,9 @@
 		else if(v.error == '')
 		{
 			$('div#'+v.id).find('.bonusError').css('height', '23px').html(addLikeRow(false, v.resend_gift, false, true));
+			$('#'+v.id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
+			$('#'+v.id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
+			$('#'+v.id).find('.bonusError').find('.sendBack').click(processSendBack);	
 		}
 	}
 	
@@ -2080,121 +2102,6 @@
 		{
 			selectFirstTab(id);
 		}
-		
-		$('.addToSendFav').live('click', function(e)
-		{
-			var gameID = $(this).siblings('input').attr('gameID');
-			
-			if(typeof(e.altKey) != 'undefined')
-			{
-				database.addFavourite(gameID, $(this).siblings('input').attr('neighID'));
-			}
-			
-			var prepEl = $(this).parent().parent().siblings('.sendToFavouritesList');
-
-			$(this).removeClass('addToSendFav').addClass('isFavourite').attr('src', 'icons/favourite.png').attr('title', 'Click to remove from favourites');
-			$(this).parent().clone().prependTo(prepEl);
-			$(this).parent().hide();
-		});
-		
-		$('.isFavourite').live('click', function(e)
-		{
-			var gameID = $(this).siblings('input').attr('gameID');
-			
-			var neighID = $(this).siblings('input').attr('neighID');
-			$(this).parent().remove();
-			
-			database.delFavourite(gameID, neighID);
-
-			var el = $('input[neighID="'+neighID+'"]').parent().show().children('img').removeClass('isFavourite').addClass('addToSendFav').attr('src', 'icons/favourite-bw.png').attr('title', 'Click to add to favourites');
-		});
-		
-
-		$('input[name="neighArr[]"]').live('click',function(a)
-		{
-			var gameID = $(this).attr('gameID');
-			var game = gamesData[gameID].systemName;
-			var opt = 'SendFreeGiftsList';
-
-			var count = parseInt($('input[name="neighArr[]"]:checked', 'div#'+game+opt).length);
-			
-			if(a.altKey === undefined)
-			{
-				count++;
-			}
-
-			if(count > 25)
-			{
-				return false;
-			}
-		});
-		
-		
-		
-		$('img.likeBonus').live('click',function()
-		{
-			var bonusID = $(this).parent().parent().parent().parent().attr('id');
-			$(this).attr('src', 'gfx/act_indicator.gif');
-			bkP.likeBonus(bonusID);
-		});
-		
-		$('img.commentBonus').live('click',function()
-		{
-			if(bkP.options.defaultCommentsMessages.length == 0)
-			{
-				alert('You must setup comment messages first in options tab');
-			}
-			else
-			{
-				var randNum = Math.floor(Math.random()*(bkP.options.defaultCommentsMessages.length));
-				var bonusID = $(this).parent().parent().parent().parent().attr('id');
-				$(this).attr('src', 'gfx/act_indicator.gif');
-				bkP.commentBonus(bonusID, bkP.options.defaultCommentsMessages[randNum]);
-			}
-		});
-		
-		$('img.sendBack').live('click',function()
-		{
-			var bonusID = $(this).parent().parent().parent().parent().attr('id');
-			var gameID =  $(this).parent().parent().parent().parent().attr('gameID');
-			
-			$(this).attr('src', 'gfx/act_indicator.gif');
-			var tempData = JSON.parse($(this).next().text());
-			
-			var params = {
-				gift: tempData.gift,
-				gameID:	gameID,
-				sendTo: [tempData.destInt],
-				sendToName: tempData.destName,
-				thankYou: true,
-				bonusID: bonusID,	
-				isRequest: $(this).parent().parent().parent().parent().hasClass('bonusItem') ? false : true
-			};
-			
-			var game = gamesData[gameID].systemName;
-			
-			eval('bkP.'+game+'GetZyngaVars(params)');
-		});
-		
-		
-		$('.saveNewComment').live('click', function(){
-			if($(this).prev('textarea').val() != '')
-			{
-				var msg = $(this).prev('textarea').val();
-				bkP.options.defaultCommentsMessages.push(msg);
-				bkP.saveOptions();
-				loadOptionsData();
-			}
-		});
-		
-		$('.deleteComment').live('click', function()
-		{
-			bkP.options.defaultCommentsMessages.splice($(this).attr('delIndex'),1);
-			bkP.saveOptions();
-			
-			$(this).parent().remove();
-			loadOptionsData();
-		});
 
 		$( "#dialog-confirm" ).dialog({
 			resizable: false,
@@ -2270,6 +2177,124 @@
 		//Screen is: UNLOCKED (click to lock)
 	});
 	
+	function processSaveNewComment()
+	{
+		if($(this).prev('textarea').val() != '')
+		{
+			var msg = $(this).prev('textarea').val();
+			bkP.options.defaultCommentsMessages.push(msg);
+			bkP.saveOptions();
+			loadOptionsData();
+		}
+	}
+	
+	function processDeleteComment()
+	{
+		bkP.options.defaultCommentsMessages.splice($(this).attr('delIndex'),1);
+		bkP.saveOptions();
+		
+		$(this).parent().remove();
+		loadOptionsData();
+	}
+	
+	function processSelectSendTo(a)
+	{
+		var gameID = $(this).attr('gameID');
+		var game = gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+
+		var count = parseInt($('input[name="neighArr[]"]:checked', 'div#'+game+opt).length);
+		
+		if(a.altKey === undefined)
+		{
+			count++;
+		}
+
+		if(count > 25)
+		{
+			return false;
+		}
+	}	
+	
+	function processAddFavourite(e)
+	{
+		var gameID = $(this).siblings('input').attr('gameID');
+		
+		if(typeof(e.altKey) != 'undefined')
+		{
+			database.addFavourite(gameID, $(this).siblings('input').attr('neighID'));
+		}
+		
+		var prepEl = $(this).parent().parent().siblings('.sendToFavouritesList');
+
+		$(this).unbind('click', processAddFavourite).bind('click',processRemoveFavourite).removeClass('addToSendFav').addClass('isFavourite').attr('src', 'icons/favourite.png').attr('title', 'Click to remove from favourites');
+		$(this).parent().clone(true).prependTo(prepEl);
+		$(this).parent().hide();
+	}
+	
+	function processRemoveFavourite(e)
+	{
+		var gameID = $(this).siblings('input').attr('gameID');
+		
+		var neighID = $(this).siblings('input').attr('neighID');
+		$(this).parent().remove();
+		
+		database.delFavourite(gameID, neighID);
+
+		var el = $('input[neighID="'+neighID+'"]').parent().show().children('img').removeClass('isFavourite').addClass('addToSendFav').unbind('click', processRemoveFavourite).bind('click',processAddFavourite).attr('src', 'icons/favourite-bw.png').attr('title', 'Click to add to favourites');
+	}
+	
+	function processLikeBonus()
+	{
+		var bonusID = $(this).parent().parent().parent().parent().attr('id');
+		$(this).attr('src', 'gfx/act_indicator.gif');
+		bkP.likeBonus(bonusID);
+	}
+
+	function processCommentBonus()
+	{
+		if(bkP.options.defaultCommentsMessages.length == 0)
+		{
+			alert('You must setup comment messages first in options tab');
+		}
+		else
+		{
+			var randNum = Math.floor(Math.random()*(bkP.options.defaultCommentsMessages.length));
+			var bonusID = $(this).parent().parent().parent().parent().attr('id');
+			$(this).attr('src', 'gfx/act_indicator.gif');
+			bkP.commentBonus(bonusID, bkP.options.defaultCommentsMessages[randNum]);
+		}
+	}
+	
+	function processSendBack()
+	{
+			var bonusID = $(this).parent().parent().parent().parent().attr('id');
+			var gameID =  $(this).parent().parent().parent().parent().attr('gameID');
+			
+			$(this).attr('src', 'gfx/act_indicator.gif');
+			var tempData = JSON.parse($(this).next().text());
+			
+			var params = {
+				gift: tempData.gift,
+				gameID:	gameID,
+				sendTo: [tempData.destInt],
+				sendToName: tempData.destName,
+				thankYou: true,
+				bonusID: bonusID,	
+				isRequest: $(this).parent().parent().parent().parent().hasClass('bonusItem') ? false : true
+			};
+			
+			var game = gamesData[gameID].systemName;
+			
+			eval('bkP.'+game+'GetZyngaVars(params)');
+	}
+	
+	
+	
+	
+	
+	
+	
 	function unhideGameIcon()
 	{
 		console.log($(this).attr('gameID'));
@@ -2288,8 +2313,11 @@
 		{
 			$('#defaultCommentsMessages').append('<div style="float: left; width: 250px;margin-right: 10px;"><img src="icons/delete-16.png" delIndex="'+i+'" style="cursor: pointer;width: 10px;height: 10px" class="deleteComment" title="Delete comment"> '+msg+'</div>');
 		});
+		$('.deleteComment', '#defaultCommentsMessages').click(processDeleteComment);
 		
-		$('#defaultCommentsMessages').append('<br style="clear:both" /><textarea style="margin-top: 50px;" class="newCommentText"></textarea><button class="saveNewComment">Add new comment</button>');
+
+		$('#defaultCommentsMessages').append('<br style="clear:both" /><textarea style="margin-top: 50px;" class="newCommentText"></textarea><button id="saveNewComment">Add new comment</button>');
+		$('#saveNewComment').click(processSaveNewComment);
 		
 		$('.hiddenIconList').html('');
 		
