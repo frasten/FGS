@@ -1,3 +1,206 @@
+var cityvilleFreegifts = 
+{
+	Click: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+		
+		$.get('http://apps.facebook.com/cityville/', params2, function(data)
+		{
+			try
+			{
+				i1          =   data.indexOf('post_form_id:"')
+				if (i1 == -1) throw {message:'Cannot post_form_id in page'}
+				i1			+=	14;
+				i2          =   data.indexOf('"',i1);
+				
+				params.post_form_id = data.slice(i1,i2);
+				
+				
+				i1          =   data.indexOf('fb_dtsg:"',i1)
+				if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
+				i1			+=	9;
+				i2          = data.indexOf('"',i1);
+				params.fb_dtsg		= data.slice(i1,i2);
+				
+				params.step2url = $('#app_content_291549705119', data).find('iframe:first').attr('src');
+				cityvilleFreegifts.Click2(params);
+				
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					cityvilleFreegifts.Click(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	},
+	Click2: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+	
+		$.get(params.step2url, params2, function(data){
+			try
+			{
+				var dataStr = '';
+
+				
+				var i1 = data.indexOf('new ZY(');
+				if(i1 == -1) throw {}
+				i1+=7;				
+				var i2 = data.indexOf('},')+1;
+				
+				eval('var zyParam ='+data.slice(i1,i2));
+				
+				var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+				params.domain = params.step2url.match(re)[1].toString();
+				params.zyParam = jQuery.param(zyParam);
+				
+				cityvilleFreegifts.Click3(params);
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					cityvilleFreegifts.Click2(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	},
+	Click3: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+	
+		$.get('http://'+params.domain+'/gifts.php?action=chooseRecipient&gift='+params.gift+'&view=all&ref=&'+params.zyParam, params2, function(data){
+			try
+			{
+			
+				var i1,i2, myParms;
+				var strTemp = data;
+				
+				myParms = 'api_key=291549705119&locale=en_US&sdk=joey';
+
+				/*
+				i1       =  strTemp.indexOf('FB.init("');
+				if (i1 == -1) throw {message:"Cannot find FB.init"}
+				i1 += 9;
+				i2       =  strTemp.indexOf('"',i1);
+
+				myParms  =  'app_key='+strTemp.slice(i1,i2);
+				i1     =  i2 +1;
+				i1       =  strTemp.indexOf('"',i1)+1;
+				i2       =  strTemp.indexOf('"',i1);
+				
+				myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
+				*/
+
+				//var i1 = data.indexOf('serverSnml>');
+				//var i2 = data.indexOf('
+				data = data.replace(/snml:/g, 'fb_');
+				
+				var el2 = $('<div></div>');
+				
+				$('fb_serverSnml', data).find('style:first').appendTo(el2);
+				$('fb_serverSnml', data).find('div:first').appendTo(el2);
+
+				
+				
+				var el = $('div.mfs', data);
+				
+				$(el).prepend('<fbGood_request-form invite="'+$('fb_request-form', data).attr('invite')+'"  action="'+$('fb_request-form', data).attr('action')+'" method="'+$('fb_request-form', data).attr('method')+'"  type="'+$('fb_request-form', data).attr('type')+'" content="'+$('fb_content', data).html().replace(/\"/g, "'")+'" ><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.cityville.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form');
+				$(el).find('form, fb_request-form').remove();
+			
+				$(el).appendTo(el2);
+				
+				var str = $(el2).html();
+				
+				str = str.replace(/fbgood_/g, 'fb:');
+				
+				var fbml = '<fb:fbml>'+str+'</fb:fbml>';
+				
+				
+				myParms +=  '&fbml='+encodeURIComponent(fbml);
+				// myParms +=  '&channel_url=http://static.ak.fbcdn.net/connect/xd_proxy.php#cb=f268243e1c&origin=http%3A%2F%2Ffb-0.cityville.zynga.com%2Ff366dc9ba8&relation=parent.parent&transport=postmessage';
+
+				params.myParms = myParms;
+
+				console.log(getCurrentTime()+'[Z] FBMLinfo - OK');
+
+				getFBML(params);
+			}
+			catch(e)
+			{
+				
+				if(typeof(retry) == 'undefined')
+				{
+					cityvilleFreegifts.Click3(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	},
+};
+
+
 var cityvilleRequests = 
 {	
 	Click: function(id, URI, retry)
@@ -187,7 +390,7 @@ var cityvilleRequests =
 								}
 						}
 						*/
-						//info.thanks = sendInfo;					
+						//info.thanks = sendInfo;
 						
 						
 						info.image = $(".giftConfirm_img",data).children().attr("src");

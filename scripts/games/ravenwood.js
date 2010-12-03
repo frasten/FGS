@@ -174,7 +174,7 @@ var ravenwoodFreegifts =
 				var i1,i2, myParms;
 				var strTemp = data;
 
-				myParms  =  'api_key=120563477996213';				
+				myParms  =  'api_key=120563477996213';
 
 
 				i1       =  strTemp.indexOf('<fb:fbml>');

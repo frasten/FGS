@@ -368,6 +368,22 @@ var giftsArray = {
 		"organPipeCoral": { name: 'Organ Pipe Coral'},
 		"greenBubbleCoral": { name: 'Green Bubble Coral'},
 	},
+	
+	291549705119: 
+	{
+		"energy_1": { name: '+1 Energy'},
+		"energy_2": { name: '+2 Energy'},
+		"energy_3": { name: '+3 Energy'},
+		"permits": { name: 'Zoning Permit'},
+		"material_ribbon": { name: 'Ribbon'},
+		"material_permit": { name: 'Building Grant'},
+		"material_gold_plating": { name: 'Gold Plating'},
+		"deco_flowerPatchOrange": { name: 'Orange Flowers'},
+		"deco_fence01": { name: 'Fence'},
+		"Animal_duck1": { name: 'Duck'},
+		"Animal_pig1": { name: 'Pig'},
+		"Animal_Rabbit1": { name: 'White Bunny'},
+	},
 };
 
 
@@ -382,6 +398,7 @@ var freeGiftForGame =
 	10979261223:  '189',
 	120563477996213: '329',
 	151044809337: 'mysterybox',
+	291549705119: 'material_ribbon',
 }
 
 function ListNeighbours(gameID)
@@ -395,7 +412,7 @@ function ListNeighbours(gameID)
 	
 	if(options.games[gameID].enabled)
 	{
-		if(gameID == '101539264719' || gameID == '10979261223' || gameID == '120563477996213' || gameID == '151044809337')
+		if(gameID == '101539264719' || gameID == '10979261223' || gameID == '120563477996213' || gameID == '151044809337' || gameID == '291549705119')
 			eval(game+'Freegifts.Click(params)');		
 		else
 			eval(game+'GetZyngaVars(params)');
@@ -421,6 +438,11 @@ function ravenwoodGetZyngaVars(params, retry)
 function fishvilleGetZyngaVars(params, retry)
 {
 	fishvilleFreegifts.Click(params);
+}
+
+function cityvilleGetZyngaVars(params, retry)
+{
+	cityvilleFreegifts.Click(params);
 }
 
 function treasureGetZyngaVars(params, retry)
@@ -1041,6 +1063,10 @@ function getFBML(params, retry)
 				else if(params.gameID == '120563477996213')
 				{
 					myUrl2 = $('form[type="Ravenwood Fair Gift"]', data).attr('action');
+				}
+				else if(params.gameID == '291549705119')
+				{
+					myUrl2 = $('form', data).attr('action');
 				}
 				else
 				{
