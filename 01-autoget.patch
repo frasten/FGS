@@ -2,15 +2,16 @@ Index: background.html
 ===================================================================
 --- background.html	(revisione 10)
 +++ background.html	(copia locale)
-@@ -76,7 +76,7 @@
+@@ -107,8 +107,8 @@
  		deleteHistoryOlderThan: 0,
  	}
  
--	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [] };
-+	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, autoAcceptBonus: false, filter: [] };
+-	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false };
  
++	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
  	for(var idd in gamesData)
  	{
+ 		defaultOptions.games[idd] = defaultGameOptions;
 Index: giftlist.html
 ===================================================================
 --- giftlist.html	(revisione 10)
