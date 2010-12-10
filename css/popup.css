@@ -1,0 +1,92 @@
+body {
+	margin: 0px;
+	color: #345;
+	font: menu;
+	font-size: 9pt;
+	-webkit-user-select: none;
+	
+}
+
+body, td, th, input, select, textarea, button {
+	font: menu;
+	font-size: 9pt;
+}
+
+body * {
+	white-space: nowrap;
+}
+
+hr {
+	height: 0px;
+	margin: 0px 0px;
+	border: none;
+	border-top: solid 1px #eef;
+}
+
+#menu, #wait, #login {
+	margin: 2px 0px;
+}
+
+.templateItem
+{
+	display: none;
+}
+
+.item {
+	padding: 4px 25px;
+	-webkit-padding-start: 6px;
+	margin: 0px 2px;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.item2 {
+	padding: 4px 25px;
+	-webkit-padding-start: 6px;
+	margin: 0px 2px;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.item2 span {
+	-webkit-padding-start: 4px;
+}
+
+
+.item2 img {
+	vertical-align: text-top;	
+}
+
+.item:hover {
+	padding: 3px 24px;
+	-webkit-padding-start: 5px;
+	border: solid 1px #bcd;
+	border-radius: 3px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f0f5fc), color-stop(1, #e0e9f4));
+	background: -webkit-gradient(linear, left top, left bottom, 
+		color-stop(0, #fff),  color-stop(0.4, hsl(215, 67%, 97%)), color-stop(0.41, hsl(213, 48%, 95%)));
+}
+
+.item:active {
+	padding: 3px 24px;
+	-webkit-padding-start: 5px;
+	border: solid 1px #abc;
+	border-radius: 3px;
+	background: #dde7f2 none;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e8eef4), color-stop(1, #f5f9f4));
+}
+
+.item img {
+	vertical-align: text-top;	
+}
+
+.item span {
+	-webkit-padding-start: 4px;
+}
+
+.separator {
+	height: 0px;
+	margin: 3px 2px;
+	border: 0;
+	border-top: 1px solid #ddd;
+}
