@@ -99,10 +99,7 @@ var farmvilleRequests =
 					info.title = $(".giftConfirm_name",data).children().text();
 					info.text  = $(".padding_content",data).find('h3').text();
 					info.time = Math.round(new Date().getTime() / 1000);
-					
-					
 
-					
 					database.updateItem('requests', id, info);
 					sendView('requestSuccess', id, info);
 				}
@@ -179,7 +176,6 @@ var farmvilleBonuses =
 
 				if($('.inputsubmit[value="OK"]',data).length > 0)
 				{
-				
 					//console.log('farmvilleBonus', $(".main_giftConfirm_cont", data).find('h3').text(), dataFull);
 
 					var stop = false;
@@ -225,7 +221,7 @@ var farmvilleBonuses =
 							newUrl = dataFull.slice(i1+23,i2);
 						}					
 					}
-					
+
 					if(newUrl == '')
 					{
 						newUrl = unescape(newUrl);

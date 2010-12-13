@@ -60,6 +60,18 @@ var giftsArray = {
 		"socialplumbingmysterygift": { name: 'Special Delivery' },
 		"shovel_item_01": { name: '2 Shovels'},
 		
+		"holidaytree2010_gift_1": {name: 'Holiday Gift'},
+		"holidaytree2010_gift_2": {name: 'Holiday Gift'},
+		"holidaytree2010_gift_3": {name: 'Holiday Gift'},
+		"holidaytree2010_gift_4": {name: 'Holiday Gift'},
+		"holidaytree2010_gift_5": {name: 'Holiday Gift'},
+		
+		
+		
+		
+		
+		
+		
 		"fruitcake": { name: 'Fruit Cake' },
 		"spicedcider": { name: 'Spiced Cider' },
 		"leafcandle": { name: 'Leaf Candle' },
@@ -383,6 +395,15 @@ var giftsArray = {
 		"Animal_duck1": { name: 'Duck'},
 		"Animal_pig1": { name: 'Pig'},
 		"Animal_Rabbit1": { name: 'White Bunny'},
+		
+		
+		"material_marble": { name: 'Marble'},
+		"material_city_seal": { name: 'City Seal'},
+		"tree_poinciana": { name: 'Poinciana Tree - lvl 15'},
+		"Animal_cow1": { name: 'White Cow - lvl 15'},
+		"Animal_horse1": { name: 'Horse - lvl 20'},
+		"tree_willow": { name: 'Willow Tree - lvl 30'},
+		"deco_fountain01": { name: 'Fountain - lvl 40'},		
 	},
 };
 
