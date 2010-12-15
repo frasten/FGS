@@ -1,3 +1,164 @@
+var zooworldFreegifts = 
+{
+	Click: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+		
+		$.get('http://apps.facebook.com/playzoo/', params2, function(data)
+		{
+			try
+			{
+				i1          =   data.indexOf('post_form_id:"')
+				if (i1 == -1) throw {message:'Cannot post_form_id in page'}
+				i1			+=	14;
+				i2          =   data.indexOf('"',i1);
+				
+				params.post_form_id = data.slice(i1,i2);
+				
+				
+				i1          =   data.indexOf('fb_dtsg:"',i1)
+				if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
+				i1			+=	9;
+				i2          = data.indexOf('"',i1);
+				params.fb_dtsg		= data.slice(i1,i2);
+				
+				var src = $('#app_content_167746316127', data).find('iframe:first').attr('src');
+					
+					
+				var i1 = src.indexOf('?');
+				src = src.slice(i1+1);
+				
+				var postParams = {}
+				
+				for(var idd in jQuery.unparam(src))
+				{
+					if(idd.indexOf('fb_') != -1)
+					{
+						postParams[idd] = jQuery.unparam(src)[idd];
+					}
+				}
+				
+				postParams['service'] 	= 'dsplygiftinvite';
+				postParams['giftId'] 	= params.gift;
+				postParams['appname']	= 'zooparent';
+				postParams['appId'] 	= '74';
+				postParams['straightToGift'] = '1';
+				
+				params.param2 = postParams;
+		
+				zooworldFreegifts.Click2(params);
+				
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					zooworldFreegifts.Click(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	},
+	Click2: function(params, retry)
+	{
+		if(typeof(retry) !== 'undefined')
+		{
+			var params2 = '_fb_noscript=1';
+		}
+		else
+		{
+			var params2 = '';
+		}
+	
+		$.get('http://fbeq.rockyou.com/facebook_apps/zoo/giftInIframe.php', params.param2, function(data){
+			try
+			{
+			
+				var i1,i2, myParms;
+				var strTemp = data;
+
+				i1       =  strTemp.indexOf('FB.Facebook.init("');
+				if (i1 == -1) throw {message:"Cannot find FB.init"}
+				i1 += 18;
+				i2       =  strTemp.indexOf('"',i1);
+
+				myParms  =  'app_key='+strTemp.slice(i1,i2);
+				i1     =  i2 +1;
+				i1       =  strTemp.indexOf('"',i1)+1;
+				i2       =  strTemp.indexOf('"',i1);
+				
+				myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
+
+				i1       =  strTemp.indexOf('<fb:fbml>');
+				i2       =  strTemp.indexOf('/script>',i1)-1;
+				myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+				
+				params.myParms = myParms;
+				
+				console.log(getCurrentTime()+'[Z] FBMLinfo - OK');
+				
+				getFBML(params);
+				
+				
+				/*
+				var nextUrl = $('#app101539264719_frmGifts', data).attr('action');
+				
+				var formParam = $('#app101539264719_frmGifts', data).serialize();
+				
+				console.log(getCurrentTime()+'[Z] Zynga params updated');
+				
+				var tempUrl = nextUrl+'?'+formParam;
+				
+				var i1 = tempUrl.indexOf('gid=');
+				
+				params.cafeUrl = tempUrl.slice(0, i1+4)+params.gift+'&view=cafe';
+				*/
+				//getFBML(params);
+			}
+			catch(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					zooworldFreegifts.Click2(params, true);
+				}
+				else
+				{
+					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}		
+		});
+	}
+};
+
+
 var zooworldRequests = 
 {	
 	Click: function(id, URI, retry)

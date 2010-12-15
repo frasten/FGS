@@ -2,19 +2,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.9" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=3.8.9.5" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.9"></script>
-<script type="text/javascript" src="scripts/time.js?version=3.8.9"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.9"></script>
-<script type="text/javascript" src="scripts/queue.js?version=3.8.9"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.9"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/time.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/queue.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.9.5"></script>
 <script type="text/javascript">
 
-// ?version=3.8.9
+// ?version=3.8.9.5
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -73,7 +73,7 @@
 		for(var id in bkP.giftsArray[gameID])
 		{
 			var v = bkP.giftsArray[gameID][id];
-			$('.sendToGiftsList','div#'+game+opt).append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="icons/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
+			$('.sendToGiftsList','div#'+game+opt).append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
 		}
 		if(bkP.options.games[gameID].defaultGift == 0)
 		{
@@ -210,7 +210,7 @@
 		{
 			var thankText = '';
 		}		
-		return  '<div class="freegiftHistory updateTimeAgo" title="'+v.friend+'" alt="'+v.friend+'" time="'+v.time+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><br /><img  style="width: 32px; height: 32px;margin:2px auto;" src="icons/reqs/'+game+'/'+v.gift+'.png"><div style="font-size: 11px;">'+v.friend+''+thankText+'</div></div>'
+		return  '<div class="freegiftHistory updateTimeAgo" title="'+v.friend+'" alt="'+v.friend+'" time="'+v.time+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><br /><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+v.gift+'.png"><div style="font-size: 11px;">'+v.friend+''+thankText+'</div></div>'
 	}
 	
 	function checkIfBonusIsManual(gameID, typeText)
@@ -290,7 +290,7 @@
 		}
 		else
 		{
-			var url = 'icons/reqs/'+game+'/'+v.image+'.png';
+			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
 		}
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
@@ -316,7 +316,7 @@
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
 
-		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="icons/reqs/'+game+'/'+v.image+'.png" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
 	}
 	
 	

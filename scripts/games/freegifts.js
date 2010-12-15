@@ -405,6 +405,52 @@ var giftsArray = {
 		"tree_willow": { name: 'Willow Tree - lvl 30'},
 		"deco_fountain01": { name: 'Fountain - lvl 40'},		
 	},
+	
+	167746316127:
+	{
+		"977": { name: 'Winter Scarf'},
+		"978": { name: 'Reindeer Headdress'},
+		"979": { name: 'Christmas Bells'},
+		"886": { name: 'Autumn Apple'},
+		"885": { name: 'Autumn Leaf'},
+		"887": { name: 'Grape'},
+		"888": { name: 'Pear'},
+		"889": { name: 'Pumpkin'},
+		"564": { name: 'Red Rose'},
+		"566": { name: 'White Rose'},
+		"565": { name: 'Yellow Rose'},
+		"563": { name: 'Blue Rose'},
+		"562": { name: 'Glass Panel'},
+		"559": { name: 'Glass Pillar'},
+		"560": { name: 'Planting Pot'},
+		"325": { name: 'Frog Sculpture'},
+		"308": { name: 'Pear Tree'},
+		"4": { name: 'Giant Panda'},
+		"3": { name: 'Tortoise'},
+		"11": { name: 'African Elephant'},
+		"9": { name: 'Bison'},
+		"1": { name: 'Bonobo'},
+		"16": { name: 'Camel'},
+		"23": { name: 'Caribbean Flamingo'},
+		"6": { name: 'Caribou'},
+		"7": { name: 'Emperor Penguin'},
+		"19": { name: 'Gazelle'},
+		"10": { name: 'Giraffe'},
+		"2": { name: 'Hippopotamus'},
+		"14": { name: 'Jaguar'},
+		"20": { name: 'Kangaroo'},
+		"18": { name: 'Koala'},
+		"12": { name: 'Lion'},
+		"13": { name: 'Monkey'},
+		"8": { name: 'Otter'},
+		"5": { name: 'Polar Bear'},
+		"144": { name: 'Pot-bellied Pig'},
+		"17": { name: 'Rattlesnake'},
+		"21": { name: 'Rhinoceros'},
+		"24": { name: 'Siberian Tiger'},
+		"15": { name: 'Tree Frog'},
+		"22": { name: 'Zebra'},
+	}
 };
 
 
@@ -420,6 +466,7 @@ var freeGiftForGame =
 	120563477996213: '329',
 	151044809337: 'mysterybox',
 	291549705119: 'material_ribbon',
+	167746316127: '886',
 }
 
 function ListNeighbours(gameID)
@@ -433,10 +480,7 @@ function ListNeighbours(gameID)
 	
 	if(options.games[gameID].enabled)
 	{
-		if(gameID == '101539264719' || gameID == '10979261223' || gameID == '120563477996213' || gameID == '151044809337' || gameID == '291549705119')
-			eval(game+'Freegifts.Click(params)');		
-		else
-			eval(game+'GetZyngaVars(params)');
+		eval(game+'GetZyngaVars(params)');
 	}
 }
 
@@ -444,6 +488,11 @@ function ListNeighbours(gameID)
 function cafeworldGetZyngaVars(params, retry)
 {
 	cafeworldFreegifts.Click(params);
+}
+
+function zooworldGetZyngaVars(params, retry)
+{
+	zooworldFreegifts.Click(params);
 }
 
 function mafiawarsGetZyngaVars(params, retry)
