@@ -332,7 +332,7 @@ var gamesData =
 						filter:		
 						{
 							bonuses: [],
-							bonusesNewWindow: ['Send the missing parts', 'Get Lotto Ticket', '^Visit', '^Help ', 'Send Energy', 'Send Fairy Dust', 'Send Utensils', 'Send Wildflower Essence', 'Send Vials of Dewdrops', 'Send Mountain-Fresh Air', '^Send Spice to', 'Free Spice'],
+							bonusesNewWindow: ['Send the missing parts', 'Get Lotto Ticket', '^Visit', '^Help ', 'Send Energy', 'Send Fairy Dust', 'Send Utensils', 'Send Wildflower Essence', 'Send Vials of Dewdrops', 'Send Mountain-Fresh Air', '^Send Spice to', 'Free Spice', 'Send Special Delivery'],
 							requests: [],
 							requestsNewWindow: []
 						},
@@ -733,4 +733,48 @@ var gamesData =
 							},
 						}
 					},
+	114335335255741: { 	name: 'City of Wonder',		systemName: 'cityofwonder', link: 'http://apps.facebook.com/cityofwonder/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['^Send'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons:	
+						{
+							'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
+													submenu: {
+																'ReceivePendingBonuses': { name: 'Receive all bonuses' },
+																'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
+															}
+												},
+							'ManualBonuses':	{	name: 'Bonuses With Action Required (<span>?</span>)',
+													submenu: {
+																'ClearManualBonuses': { name: 'Clear all bonuses' },
+															}
+												},
+							'BonusesHistory': 	{	name: 'Show collected bonuses',
+													submenu: {
+																'ClearCollectedBonuses': { name: 'Clear bonuses history' },
+																'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
+																'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
+															}
+												},
+							'RequestsPending':	{	name: 'Show pending gifts (<span>?</span>)',
+													submenu: {
+																'ReceivePendingRequests': { name: 'Receive all gifts' },
+																'ClearPendingRequests': 	{ name: 'Clear all requests' },
+															}
+												}, 
+							'RequestsHistory':	{	name: 'Show collected gifts',
+													submenu: {
+																'ClearCollectedRequests': { name: 'Clear gifts history' },
+																'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+															}
+												},
+							'GameOptionsTab':	{	name: 'Filters',
+							},
+						}
+				},
 };

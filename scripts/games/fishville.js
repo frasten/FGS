@@ -140,6 +140,28 @@ var fishvilleRequests =
 			dataType: 'text',
 			success: function(data2)
 			{
+			
+				var redirectUrl = checkForLocationReload(data2);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
+						fishvilleRequests.Click(id, redirectUrl, true);
+					}
+					else
+					{
+						info.error = 'receiving';
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						database.updateErrorItem('requests', id, info);
+						sendView('requestError', id, info);	
+					}
+					return;
+				}
+				
+				
 				var dataFull = data2;
 				var data = data2.substr(data2.indexOf('<body'),data2.lastIndexOf('</body'));
 				

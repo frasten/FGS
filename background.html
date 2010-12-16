@@ -3,36 +3,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/notices.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/chat.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/notices.js?version=3.9.4"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/socialcity.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/petville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/cityville.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/zooworld.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/games/vampirewars.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/socialcity.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/petville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/cityville.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/zooworld.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/vampirewars.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/cityofwonder.js?version=3.9.4"></script>
 
-<script type="text/javascript" src="scripts/games/freegifts.js?version=3.8.9.5"></script>
 
-<script type="text/javascript" src="scripts/queue.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.8.9.5"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.8.9.5"></script>
+<script type="text/javascript" src="scripts/games/freegifts.js?version=3.9.4"></script>
+
+<script type="text/javascript" src="scripts/queue.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/database.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.9.4"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=3.8.9.5
+// ?version=3.9.4
 
-var currentVersion = '3.8.9.5';
+var currentVersion = '3.9.4';
 var portsByName = {};
 
 var console2 =
@@ -462,8 +464,6 @@ function sendView(msg, data, data2, data3)
 		}
 		xhrQueue = newArray;
 		
-		console.log(resetIds);
-		
 		if(resetIds.length > 0)
 		{
 			for(var ind in resetIds)
@@ -483,6 +483,17 @@ function sendView(msg, data, data2, data3)
 	}
 }
 
+function checkForLocationReload(data)
+{
+	var i1 = data.indexOf('script>window.location.replace("');
+	if(i1 == -1) return false;
+	var i2 = data.indexOf('"', i1+32);
+	var text = data.slice(i1+32,i2).replace(/\\/g,'');
+	var url = $('<a href="'+text+'"></a>');
+	
+	return $(url).attr('href');
+}
+
 function checkXhrQueue()
 {
 	if(xhrWorking < 5)
@@ -497,6 +508,9 @@ function checkXhrQueue()
 			}
 			else if(xhrQueue[0].type == 'bonus')
 			{
+			
+				//checkForLocationReload(xhrQueue[0].game, xhrQueue[0].id, xhrQueue[0].url);
+				
 				eval(xhrQueue[0].game+'Bonuses.Click("'+xhrQueue[0].id+'","'+xhrQueue[0].url+'")');
 				xhrQueue = xhrQueue.slice(1);
 				xhrWorking++;
@@ -1097,8 +1111,9 @@ function checkBonuses(appID)
 
 				var data = JSON.parse(str).onload.toString();
 
-				var i1 = data.indexOf('HTML("')+6;
-				var i2 = data.indexOf('"))');
+				var i0 = data.indexOf('"#app_stories"');
+				var i1 = data.indexOf('HTML("', i0)+6;
+				var i2 = data.indexOf('"))',i1);
 				
 				var data = data.slice(i1,i2);
 				

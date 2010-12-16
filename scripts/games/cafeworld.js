@@ -119,6 +119,27 @@ var cafeworldRequests =
 			dataType: 'text',
 			success: function(data2)
 			{
+				var redirectUrl = checkForLocationReload(data2);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
+						cafeworldRequests.Click(id, redirectUrl, true);
+					}
+					else
+					{
+						info.error = 'receiving';
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						database.updateErrorItem('requests', id, info);
+						sendView('requestError', id, info);	
+					}
+					return;
+				}
+				
+				
 				var data = data2.substr(data2.indexOf('<body'),data2.lastIndexOf('</body'));
 				
 				if(data.indexOf('There is a problem in the kitchen') != -1)
@@ -261,6 +282,27 @@ var cafeworldBonuses =
 			success: function(data)
 			{
 				var dataFull = data;
+				
+				var redirectUrl = checkForLocationReload(data);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
+						cafeworldBonuses.Click(id, redirectUrl, true);
+					}
+					else
+					{
+						info.error = 'receiving';
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						database.updateErrorItem('bonuses', id, info);
+						sendView('bonusError', id, info);	
+					}
+					return;
+				}
+
 				data = data.substr(data.indexOf('<body'),data.lastIndexOf('</body'));
 				
 				if(data.indexOf('There are no more servings left') != -1 || data.indexOf('Looks like all the prizes have') != -1 || data.indexOf('already claimed') != -1 || data.indexOf('You are either too late or you clicked here previously') != -1 || data.indexOf('You already received this bonus') != -1 || data.indexOf(' Perfect Servings once today!') != -1 || data.indexOf('already received all the help they could handle') != -1 || data.indexOf('You have already helped today!') != -1)

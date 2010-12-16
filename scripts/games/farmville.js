@@ -12,6 +12,27 @@ var farmvilleRequests =
 			dataType: 'text',
 			success: function(data2)
 			{
+				var redirectUrl = checkForLocationReload(data2);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
+						farmvilleRequests.Click(id, redirectUrl, true);
+					}
+					else
+					{
+						info.error = 'receiving';
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						database.updateErrorItem('requests', id, info);
+						sendView('requestError', id, info);	
+					}
+					return;
+				}
+				
+				
 				var data = data2.substr(data2.indexOf('<body'),data2.lastIndexOf('</body'));
 				
 				var i1 = URI.indexOf('addneighbo');
@@ -170,6 +191,26 @@ var farmvilleBonuses =
 			url: url,
 			success: function(data)
 			{
+				var redirectUrl = checkForLocationReload(data);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
+						farmvilleBonuses.Click(id, redirectUrl, true);
+					}
+					else
+					{
+						info.error = 'receiving';
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						database.updateErrorItem('bonuses', id, info);
+						sendView('bonusError', id, info);	
+					}
+					return;
+				}
+			
 				var dataFull = data;
 				
 				data = data.substr(data.indexOf('<body'),data.lastIndexOf('</body'));
