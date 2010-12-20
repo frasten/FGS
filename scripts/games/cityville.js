@@ -118,7 +118,7 @@ var cityvilleFreegifts =
 			var params2 = '';
 		}
 	
-		$.get('http://'+params.domain+'/gifts.php?action=chooseRecipient&gift='+params.gift+'&view=all&ref=&'+params.zyParam, params2, function(data){
+		$.get('http://'+params.domain+'/gifts.php?action=chooseRecipient&gift='+params.gift+'&view=app&ref=&'+params.zyParam, params2, function(data){
 			try
 			{
 			
@@ -150,30 +150,87 @@ var cityvilleFreegifts =
 				$('fb_serverSnml', data).find('style:first').appendTo(el2);
 				$('fb_serverSnml', data).find('div:first').appendTo(el2);
 
+				var exclude = $('fb_multi-friend-selector', data).attr('exclude_ids');
 				
 				
-				var el = $('div.mfs', data);
 				
-				$(el).prepend('<fbGood_request-form invite="'+$('fb_request-form', data).attr('invite')+'"  action="'+$('fb_request-form', data).attr('action')+'" method="'+$('fb_request-form', data).attr('method')+'"  type="'+$('fb_request-form', data).attr('type')+'" content="'+$('fb_content', data).html().replace(/\"/g, "'")+'" ><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.cityville.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form');
-				$(el).find('form, fb_request-form').remove();
-			
-				$(el).appendTo(el2);
+				var cmd_id = new Date().getTime();
 				
-				var str = $(el2).html();
+				var i1 = data.indexOf('SNAPI.init(');
+				var i2 = data.indexOf('{', i1);
+				var i3 = data.indexOf('}},', i2)+2;
 				
-				str = str.replace(/fbgood_/g, 'fb:');
+				var session = data.slice(i2,i3);
 				
-				var fbml = '<fb:fbml>'+str+'</fb:fbml>';
+				var exArr = exclude.split(',');
+				
+				var str = '';
+				$(exArr).each(function(k,v)
+				{
+					str += '"'+v+'"'
+					
+					if(k+1 < exArr.length)
+						str+= ',';
+				});
+				
+				var i1 = data.indexOf('"zy_user":"')+11;
+				var i2 = data.indexOf('"', i1);
+				var zy_user = data.slice(i1,i2);	
 				
 				
-				myParms +=  '&fbml='+encodeURIComponent(fbml);
-				// myParms +=  '&channel_url=http://static.ak.fbcdn.net/connect/xd_proxy.php#cb=f268243e1c&origin=http%3A%2F%2Ffb-0.cityville.zynga.com%2Ff366dc9ba8&relation=parent.parent&transport=postmessage';
+				var postData = 
+				{
+					method: 'getSNUIDs',
+					params:	'[['+str+'],"1"]',
+					cmd_id:	cmd_id,
+					app_id:	'75',
+					session: session,
+					zid:	zy_user,
+					snid:	1,
+				}				
+				
+				$.post('http://fb-client-0.cityville.zynga.com/snapi_proxy.php', postData, function(data2)
+				{
+					var info = JSON.parse(data2);
+					
+					var str = '';
+					
+					for(var uid in info.body)
+					{
+						var t = info.body[uid];
+						str+= t+',';
+					}
+					exclude = str.slice(0, -1);					
+					
+					var el = $('div.mfs', data);
+					
+					$(el).prepend('<fbGood_request-form invite="'+$('fb_request-form', data).attr('invite')+'"  action="'+$('fb_request-form', data).attr('action')+'" method="'+$('fb_request-form', data).attr('method')+'"  type="'+$('fb_request-form', data).attr('type')+'" content="'+$('fb_content', data).html().replace(/\"/g, "'")+'" ><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="'+exclude+'" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.cityville.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form');
+					$(el).find('form, fb_request-form').remove();
+				
+					$(el).appendTo(el2);
+					
+					var str = $(el2).html();
+					
+					str = str.replace(/fbgood_/g, 'fb:');
+					str = str.replace(/fb_req-choice/g, 'fb:req-choice');
+					str = str.replace('/fb:req-choice', '/fb:request');
+					str = str.replace('/fb:req-choice', '/fb:req');
+					
+					
+					
+					var fbml = '<fb:fbml>'+str+'</fb:fbml>';
+					
+					
+					myParms +=  '&fbml='+encodeURIComponent(fbml);
+					// myParms +=  '&channel_url=http://static.ak.fbcdn.net/connect/xd_proxy.php#cb=f268243e1c&origin=http%3A%2F%2Ffb-0.cityville.zynga.com%2Ff366dc9ba8&relation=parent.parent&transport=postmessage';
 
-				params.myParms = myParms;
+					params.myParms = myParms;
 
-				console.log(getCurrentTime()+'[Z] FBMLinfo - OK');
+					console.log(getCurrentTime()+'[Z] FBMLinfo - OK');
 
-				getFBML(params);
+					getFBML(params);
+				});
+
 			}
 			catch(e)
 			{
@@ -350,13 +407,12 @@ var cityvilleRequests =
 					
 					if($('.errorMessage', data).length > 0)
 					{ 
-						info.error = 'limit';
+						info.error = 'receiving';
 						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = jQuery.trim($('.errorMessage', data).text());
-						
+						//info.error_text = jQuery.trim($('.errorMessage', data).text());
 						
 						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						sendView('requestError', id, info);
 						return;
 					}
 					
@@ -389,20 +445,23 @@ var cityvilleRequests =
 					{
 						var sendInfo = '';
 						
-						/*
 						var tmpStr = unescape(url);
 						
-						var i1 = tmpStr.indexOf('&gift=');
+						var i1 = tmpStr.indexOf('?gift=');
+						if(i1 == -1)
+						{
+							i1 = tmpStr.indexOf('&gift=');
+						}
 						if(i1 != -1)
 						{
 							var i2 = tmpStr.indexOf('&', i1+1);
 								
 							var giftName = tmpStr.slice(i1+6,i2);
 							
-							var i1 = tmpStr.indexOf('&senderId=');
+							var i1 = tmpStr.indexOf('senderId=');
 							var i2 = tmpStr.indexOf('&', i1+1);
 							
-							var giftRecipient = tmpStr.slice(i1+10,i2);						
+							var giftRecipient = tmpStr.slice(i1+9,i2);						
 								
 							sendInfo = {
 								gift: giftName,
@@ -410,8 +469,7 @@ var cityvilleRequests =
 								destName: $('.giftFrom_name', data).children().text()
 								}
 						}
-						*/
-						//info.thanks = sendInfo;
+						info.thanks = sendInfo;
 						
 						
 						info.image = $(".giftConfirm_img",data).children().attr("src");

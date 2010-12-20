@@ -3,38 +3,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/notices.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/chat.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/notices.js?version=4.0.0.2"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/socialcity.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/petville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/cityville.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/zooworld.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/vampirewars.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/games/cityofwonder.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/socialcity.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/petville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/cityville.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/zooworld.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/vampirewars.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/cityofwonder.js?version=4.0.0.2"></script>
 
 
-<script type="text/javascript" src="scripts/games/freegifts.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/games/freegifts.js?version=4.0.0.2"></script>
 
-<script type="text/javascript" src="scripts/queue.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/database.js?version=3.9.4"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=3.9.4"></script>
+<script type="text/javascript" src="scripts/queue.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/database.js?version=4.0.0.21"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=4.0.0.2"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=3.9.4
+// ?version=4.0.0.2
 
-var currentVersion = '3.9.4';
+var currentVersion = '4.0.0.2';
 var portsByName = {};
 
 var console2 =
@@ -531,6 +531,8 @@ function prepareLinkForGame(game, id, dataPost, retry)
 	var info = {
 		image: 'gfx/90px-cancel.png'
 	}
+	
+	dataPost+='&nctr[_mod]=pagelet_requests';
 
 	$.ajax({
 		type: "POST",
@@ -823,7 +825,7 @@ function emptyUnwantedGifts(post)
 	$.ajax({
 		type: "POST",
 		url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
-		data: post+'&post_form_id='+post_form_id+'&fb_dtsg='+fb_dtsg,
+		data: post+'&post_form_id='+post_form_id+'&fb_dtsg='+fb_dtsg+'&nctr[_mod]=pagelet_requests',
 		dataType: 'text',
 		success: function(data)
 		{

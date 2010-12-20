@@ -1115,7 +1115,30 @@ function getFBML(params, retry)
 					var slice = strTemp.slice(i1,i2)
 				}
 
-				eval('var items = {'+ slice + '};');
+				var arr = [];
+				var i0 = 0;
+				var i1 = slice.indexOf('},"', i0);		
+				
+				while(i1 != -1)
+				{
+					var item = slice.slice(i0, i1+1);
+					eval('var tmpItm = {'+item+'}');
+					arr.push(tmpItm);
+					
+					i0 = i1+2;
+					i1 = slice.indexOf('},"', i0);	
+				}
+				
+				i0 = slice.lastIndexOf('},"')+2;
+				if(i0 != 1)
+				{
+					i1 = slice.length;
+					var item = slice.slice(i0, i1);
+					eval('var tmpItm = {'+item+'}');
+					arr.push(tmpItm);
+				}
+				
+				var items = arr;
 				
 				var tempParams = '';
 				if(typeof(params.cafeUrl) != 'undefined')
@@ -1157,9 +1180,7 @@ function getFBML(params, retry)
 					myUrl2      =   myUrl2.replace(/&amp;/g,'&');
 				}
 				*/
-				
 
-				
 				var param2 = '';
 
 				params.items = items;
@@ -1202,7 +1223,7 @@ function getFBML(params, retry)
 				}
 				
 
-				params.myParms = myParms;
+				params.myParms = myParms+'&lsd=';
 				params.myUrl = myUrl2;
 				params.param2 = param2;
 				
@@ -1295,10 +1316,17 @@ function sendGift(params, retry)
 					
 					var found = false;
 					
-					for(u in params.items)
+					ListNeighbours(params.gameID);
+					
+					$(params.items).each(function(k,val)
 					{
-						var v = params.items[u];
-						if(jQuery.inArray(u, params.sendTo) > -1)
+						for(var i in val)
+						{
+							var id = i;
+						}
+						var v = val[id];					
+						
+						if(jQuery.inArray(id, params.sendTo) > -1)
 						{
 							var sendHistory = {
 								gift: params.gift,
@@ -1316,12 +1344,9 @@ function sendGift(params, retry)
 							sendView('freegiftSuccess', sendHistory, (typeof(params.thankYou) != 'undefined' ? params.bonusID : ''));
 							
 							found = true;
-							
-							delete params.items[u];
-							continue;
 						}
 						i++;
-					}
+					});
 					
 					if(!found && typeof(params.thankYou) != 'undefined')
 					{
@@ -1337,10 +1362,7 @@ function sendGift(params, retry)
 						database.updateItemGiftBack((params.isRequest ? 'requests' : 'bonuses'), params.bonusID);
 						
 						sendView('freegiftSuccess', sendHistory, (typeof(params.thankYou) != 'undefined' ? params.bonusID : ''));
-					
-					}		
-					
-					sendView('updateNeighbours', params.gameID, params.items);
+					}
 				},
 				error: function()
 				{

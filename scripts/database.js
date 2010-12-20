@@ -288,20 +288,29 @@ database.addBonus = function(data2)
 {
 	database.db.transaction(function(tx)
 	{
+		var outArr = [];
+
+		var total = data2.length;
+		
 		$(data2).each(function(k, data)
 		{
 			tx.executeSql("INSERT OR IGNORE INTO bonuses VALUES (?,?,0,'',?,?,?,?,?,?,?,0,0,'','')", data,
 			function(t,r)
 			{
+				total--;
 				if(r.rowsAffected == 1)
 				{
+					outArr.push(data);
 					if(giftlistFocus == false)
 					{
 						newElements++;
 					}
-					sendView('addNewBonus', '', '', data);
-					updateIcon();
 				}
+				if(total == 0)
+				{
+					sendView('addNewBonus', '', '', outArr);
+					updateIcon();
+				}				
 			}, database.onSuccess, database.onError);
 		});
 	});
@@ -311,20 +320,32 @@ database.addRequest = function(data2)
 {
 	database.db.transaction(function(tx)
 	{
+		var outArr = [];
+
+		var total = data2.length;		
+		
 		$(data2).each(function(k, data)
 		{
 			tx.executeSql("INSERT OR IGNORE INTO requests VALUES (?,?,0,'',?,?,?,?,?,'')", data,
 			function(t,r)
 			{
+				total--;
 				if(r.rowsAffected == 1)
 				{
+					outArr.push(data);
 					if(giftlistFocus == false)
 					{
 						newElements++;
 					}
-					sendView('addNewRequest', '', '',data);
-					updateIcon();
 				}
+				if(total == 0)
+				{
+					if(outArr.length > 0)
+					{
+						sendView('addNewRequest', '', '', outArr);
+					}
+					updateIcon();
+				}		
 			}, database.onSuccess, database.onError);
 		});
 	});

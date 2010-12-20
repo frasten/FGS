@@ -78,7 +78,7 @@ var cafeworldFreegifts =
 				
 				var i1 = tempUrl.indexOf('gid=');
 				
-				params.cafeUrl = tempUrl.slice(0, i1+4)+params.gift+'&view=cafe';
+				params.cafeUrl = tempUrl.slice(0, i1+4)+params.gift+'&view=farm';
 				getFBML(params);
 			}
 			catch(e)

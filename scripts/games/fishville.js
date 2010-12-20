@@ -248,10 +248,10 @@ var fishvilleRequests =
 							
 						var giftName = tmpStr.slice(i1+6,i2);
 						
-						var i1 = tmpStr.indexOf('&senderId=');
-						var i2 = tmpStr.indexOf('&', i1+1);
+						var i1 = tmpStr.indexOf('senderId=');
+						var i2 = tmpStr.indexOf('&', i1);
 						
-						var giftRecipient = tmpStr.slice(i1+10,i2);						
+						var giftRecipient = tmpStr.slice(i1+9,i2);						
 							
 						sendInfo = {
 							gift: giftName,
@@ -259,7 +259,7 @@ var fishvilleRequests =
 							destName: $(".giftFrom_name",data).children().text(),
 							}
 					}
-					//info.thanks = sendInfo;					
+					info.thanks = sendInfo;					
 					
 					info.image = $(".giftConfirm_img",data).children().attr("src");
 					info.title = $(".giftConfirm_name",data).children().text();
