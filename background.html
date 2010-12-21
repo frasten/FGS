@@ -3,38 +3,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/chat.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/notices.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/chat.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/notices.js?version=4.0.0.3"></script>
 
-<script type="text/javascript" src="scripts/games/frontierville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/farmville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/mafiawars.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/treasure.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/cafeworld.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/ravenwood.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/restaurant.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/fishville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/yoville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/socialcity.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/petville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/cityville.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/zooworld.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/vampirewars.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/games/cityofwonder.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/games/frontierville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/farmville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/mafiawars.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/treasure.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/cafeworld.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/ravenwood.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/restaurant.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/fishville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/yoville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/socialcity.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/petville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/cityville.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/zooworld.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/vampirewars.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/cityofwonder.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/games/poker.js?version=4.0.0.3"></script>
 
+<script type="text/javascript" src="scripts/games/freegifts.js?version=4.0.0.3"></script>
 
-<script type="text/javascript" src="scripts/games/freegifts.js?version=4.0.0.2"></script>
-
-<script type="text/javascript" src="scripts/queue.js?version=4.0.0.2"></script>
-<script type="text/javascript" src="scripts/database.js?version=4.0.0.21"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=4.0.0.2"></script>
+<script type="text/javascript" src="scripts/queue.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/database.js?version=4.0.0.31"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=4.0.0.3"></script>
 <script type="text/javascript">
 localStorage.removeItem('FarmVAIO.options');
 localStorage.removeItem('options');
 
-// ?version=4.0.0.2
+// ?version=4.0.0.3
 
-var currentVersion = '4.0.0.2';
+var currentVersion = '4.0.0.3';
 var portsByName = {};
 
 var console2 =
@@ -571,12 +571,11 @@ function prepareLinkForGame(game, id, dataPost, retry)
 
 				var URI = JSON.parse(strTemp);
 				
-				console.log(URI);
-				
 				eval(game+'Requests.Click("'+id+'","'+URI+'")');
 			}
 			catch(err)
 			{
+				console.log(err);
 				if(typeof(retry) == 'undefined')
 				{
 					prepareLinkForGame(game, id, dataPost, true);
@@ -1119,6 +1118,8 @@ function checkBonuses(appID)
 				
 				var data = data.slice(i1,i2);
 				
+				console.log(data);
+				
 				eval('var tmpData = {"html": "'+data+'"}');
 				
 				if(tmpData.html == "")
@@ -1149,7 +1150,8 @@ function checkBonuses(appID)
 				{
 					var el = $(this);
 
-					var data = $(this).attr('data-ft');
+					var data = $(this).find('input[name="feedback_params"]').val();
+
 					eval('var bonusData = '+data);
 
 					var bonusTimeTmp = new Date($(el).find('abbr').attr('data-date')).getTime();					
@@ -1158,7 +1160,7 @@ function checkBonuses(appID)
 					var diff = now-bonusTimeTmp;
 					var secs = Math.floor(diff.valueOf()/1000);
 					
-					var elID = bonusData.fbid;
+					var elID = bonusData.target_fbid;
 					var actr = bonusData.actrs;
 					
 					
@@ -1171,8 +1173,6 @@ function checkBonuses(appID)
 							console.log('Rozne id: '+actr+' i '+targets+' userid: '+userID);
 							return;
 						}
-						
-						
 					}
 					
 					if(secs > options.deleteOlderThan && options.deleteOlderThan != 0)
