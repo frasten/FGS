@@ -123,8 +123,7 @@ var mafiawarsFreegifts =
 				var tmpCb = myUrl.slice(i1, i2);
 				
 				params.sf_xw_user_id = $('input[name="sf_xw_user_id"]', data).val();
-				params.sf_xw_sig = $('input[name="sf_xw_sig"]', data).val();
-				
+				params.sf_xw_sig = $('input[name="sf_xw_sig"]', data).val();				
 				
 				params.click3param = myParms;
 				params.click3url = 'http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=requests&xw_action=friend_selector&xw_city=1&req_controller=freegifts&free_gift_id='+params.gift+'&free_gift_cat=1&xw_client_id=8&ajax=1&liteload=1&fbml_iframe=1&xw_person='+useridfin+tmpTmp+tmpCb;

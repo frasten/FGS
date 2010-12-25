@@ -2,19 +2,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=4.0.0.3" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=4.0.0.8" rel="stylesheet" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=4.0.0.3"></script>
-<script type="text/javascript" src="scripts/time.js?version=4.0.0.3"></script>
-<script type="text/javascript" src="scripts/database.js?version=4.0.0.3"></script>
-<script type="text/javascript" src="scripts/queue.js?version=4.0.0.3"></script>
-<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=4.0.0.3"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=4.0.0.8"></script>
+<script type="text/javascript" src="scripts/time.js?version=4.0.0.8"></script>
+<script type="text/javascript" src="scripts/database.js?version=4.0.0.8"></script>
+<script type="text/javascript" src="scripts/queue.js?version=4.0.0.8"></script>
+<script type="text/javascript" src="scripts/buttonsAndFilters.js?version=4.0.0.8"></script>
 <script type="text/javascript">
 
-// ?version=4.0.0.3
+// ?version=4.0.0.8
 
 	var bkP = chrome.extension.getBackgroundPage();
 	var userID = bkP.userID;
@@ -94,7 +94,7 @@
 
 		var sendTo = [];
 
-		$('input[name="neighArr[]"]:checked','div#'+game+opt).each(function()
+		$('input[name="neighArr[]"]:checked:visible','div#'+game+opt).each(function()
 		{
 			sendTo.push($(this).val());
 		});
@@ -573,7 +573,10 @@
 	function requestError(id, data)
 	{
 		$('#'+id).find('img:last').attr('src', 'gfx/90px-cancel.png');
-		$('#'+id).find('.bonusError').text('('+data.error+' error)');
+		
+		var error_text = (typeof(data.error_text) != 'undefined'  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
+		
+		$('#'+id).find('.bonusError').html('('+data.error+' error)'+error_text);
 		
 		var gameID = $('#'+id).attr('gameID');
 		var game = gamesData[gameID].systemName;
@@ -618,7 +621,9 @@
 	function requestSuccess(id, data)
 	{
 		$('#'+id).find('img:last').attr('src', 'gfx/90px-check.png');
-		$('#'+id).find('.bonusError').text('');
+		
+		var error_text = (typeof(data.error_text) != 'undefined'  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');		
+		$('#'+id).find('.bonusError').html(error_text);
 		
 		var gameID = $('#'+id).attr('gameID');
 		var game = gamesData[gameID].systemName;
@@ -700,9 +705,11 @@
 				{
 					tx.executeSql('DELETE FROM bonuses where id = ? and gameID = ?', [elID, gameID], database.onSuccess, database.onError);
 				}
+				
 			
 				$(this).remove();
-			});	
+			});
+			updateCount(gameID);			
 		});
 	}
 	
@@ -722,12 +729,15 @@
 						$(this).remove();
 					});
 					
-					if(delArr.length > 0)
+					while(delArr.length > 0)
 					{
-						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						var tmpArr = delArr.slice(0,500);
+						
+						var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
 						database.deleteItemArray('bonuses', gameID, str, 0);
+						
+						delArr = delArr.slice(500);						
 					}
-					
 					updateCount(gameID);
 					
 					
@@ -764,10 +774,14 @@
 						delArr.push($(this).attr('id'));
 					});
 					
-					if(delArr.length > 0)
+					while(delArr.length > 0)
 					{
-						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						var tmpArr = delArr.slice(0,500);
+						
+						var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
 						database.deleteItemArray('requests', gameID, str, 0);
+						
+						delArr = delArr.slice(500);						
 					}
 					
 					updateCount(gameID);
@@ -823,10 +837,14 @@
 						}
 					});
 					
-					if(delArr.length > 0)
+					while(delArr.length > 0)
 					{
-						var str = ' where id = "'+delArr.join('" or id = "')+'" ';
+						var tmpArr = delArr.slice(0,500);
+						
+						var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
 						database.deleteItemArray('bonuses', gameID, str, 0);
+						
+						delArr = delArr.slice(500);						
 					}
 					updateCount(gameID);
 					
@@ -996,33 +1014,31 @@
 			$('div#'+game+'RequestsPendingList').prepend(htmls[tmp]);
 			$('div#'+game+'RequestsPendingList').children('div.awaitingClick').removeClass('awaitingClick').click(processRequestsClick);
 		}
-
-		updateLoaded();
+		
+		updateCount();
 	}
 	
 	function createMenu(gameID)
 	{
 		var game = 	gamesData[gameID].systemName;
 		
-		for(var id in 	gamesData[gameID].buttons)
+		$(gamesData[gameID].buttons).each(function(k,id)
 		{
-			var but = gamesData[gameID].buttons[id];
-			var butName = but.name;
-
+			var butName = submenuButtons[id].name;
+			
 			$('.optionsMenu', '#'+game+'Game').append('<input type="radio" id="'+game+id+'" gameID="'+gameID+'" sysID="'+id+'" name="'+game+'Menu" class="'+id+'" /><label for="'+game+id+'">'+butName+'</label>');
 			
 			$('.contentListing', '#'+game+'Game').append('<div id="'+game+id+'List" class="hide"><br style="clear: both" /></div>');
 			
 			$('.submenu', '#'+game+'Game').append('<div id="'+game+id+'SubMenu" class="hide"></div>');
 			
-			for(var id2 in but.submenu)
+			for(var id2 in submenuButtons[id].submenu)
 			{
-				var sub = but.submenu[id2];
-				
+				var sub = submenuButtons[id].submenu[id2];
+
 				$('#'+game+id+'SubMenu').append('<button id="'+game+id2+'" gameID="'+gameID+'" sysID="'+id2+'">'+sub.name+'</button>');
 			}
-			
-		}
+		});
 	}
 	
 	function indicator_switch(mode)
@@ -1538,7 +1554,16 @@
 	
 	function getBonusHistoryRow(v)
 	{
-		var error_text = (v.error_text != '' ? ' <img src="gfx/info.png" title="'+v.error_text+'" />' : '');		
+		if(!v.error_text)
+		{
+			var errorText = '';
+		}
+		else
+		{
+			var errorText = v.error_text;
+		}
+
+		var error_text = (errorText != '' ? ' <img src="gfx/info.png" title="'+errorText+'" />' : '');		
 		
 		var err = (v.error == error_text ? addLikeRow(v.like_bonus, v.resend_gift, v.comment_bonus) : '('+v.error+' error)'+error_text);
 		
@@ -1568,7 +1593,19 @@
 	
 	function getRequestHistoryRow(v)
 	{
-		var err = (v.error == '' ? addLikeRow(false, v.resend_gift, false, true) : '('+v.error+' error)');
+		if(!v.error_text)
+		{
+			var errorText = '';
+		}
+		else
+		{
+			var errorText = v.error_text;
+		}
+		
+		var error_text = (errorText != '' ? ' <img src="gfx/info.png" title="'+errorText+'" />' : '');
+		
+		
+		var err = (v.error == error_text ? addLikeRow(false, v.resend_gift, false, true) : '('+v.error+' error)'+error_text);
 		
 		var addClass = '';
 		if(v.error == 'receiving')
@@ -2369,7 +2406,7 @@
 	
 	function processOptionsTab(gameID)
 	{
-		
+	
 		var arr = bkP.options.games[gameID].filter;
 		
 		arr.sort();
@@ -2427,6 +2464,8 @@
 	
 		var olderThanTime = bkP.options.deleteHistoryOlderThan;
 		var olderBonusThanTime = bkP.options.deleteOlderThan;
+		
+		
 		
 		$('.updateTimeAgo').each(function()
 		{

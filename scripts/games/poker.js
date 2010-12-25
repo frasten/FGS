@@ -11,7 +11,7 @@ var pokerFreegifts =
 			var params2 = '';
 		}
 		
-		$.get('http://apps.facebook.com/holdem_poker/', params2, function(data)
+		$.get('http://apps.facebook.com/texas_holdem/', params2, function(data)
 		{
 			try
 			{
@@ -29,19 +29,41 @@ var pokerFreegifts =
 				i2          = data.indexOf('"',i1);
 				params.fb_dtsg		= data.slice(i1,i2);
 				
+				var i1 = data.indexOf('app_2389801228.context');
+				var i2 = data.indexOf('\\"', i1);
+				var i3 = data.indexOf('\\"', i2+2);
+				
+				var fb_mock_hash = data.slice(i2+2,i3);
+				
+				var i1 = data.indexOf('app_2389801228.contextd', i1);
+				var i2 = data.indexOf('\\"', i1);
+				var i3 = data.indexOf('}\\"', i2+5);
+				
+				var fb_mock = data.slice(i2+2,i3+1).replace(/\\/g, '').replace(/\\/g, '');
 				
 				
-				var paramTmp = $('span.fb_protected_wrapper > iframe', data).attr('src');
+				//domene sprawdzic
 				
-				var i1 = paramTmp.lastIndexOf('/')+2;
+				params.postData =
+				{
+					url: 'http://facebook2.poker.zynga.com/poker/inc/ajax/todo_send_chip.php?box=0',
+					type:1,
+					require_login:true,
+					fb_mockajax_context: fb_mock,
+					fb_mockajax_context_hash: fb_mock_hash,
+					appid: '2389801228',
+					fb_dtsg: params.fb_dtsg,
+					post_form_id: params.post_form_id,
+					lsd:'',
+					post_form_id_source: 'AsyncRequest'
+				}
 				
-				
-				params.step2params = paramTmp.slice(i1);
 				pokerFreegifts.Click2(params);
 				
 			}
 			catch(e)
 			{
+				console.log(e);
 				if(typeof(retry) == 'undefined')
 				{
 					pokerFreegifts.Click(params, true);
@@ -64,63 +86,129 @@ var pokerFreegifts =
 	},
 	Click2: function(params, retry)
 	{
-		if(typeof(retry) !== 'undefined')
-		{
-			var params2 = '_fb_noscript=1';
-		}
-		else
-		{
-			var params2 = '';
-		}
 	
-		$.get('http://facebook.poker.zynga.com/public/gifts_send.php?gift='+params.gift+'&view=poker&appRef=preload_gifts&secAppRef=&reqType=gift&partial=true&'+params.step2params, params2, function(data){
-			try
+		$.ajax({
+			type: "POST",
+			url: 'http://apps.facebook.com/fbml/fbjs_ajax_proxy.php?__a=1',
+			dataType: 'text',
+			data: params.postData,
+			success: function(data)
 			{
-				var i1,i2, myParms;
-				var strTemp = data;
-
-				i1       =  strTemp.indexOf('FB.init("');
-				if (i1 == -1) throw {message:"Cannot find FB.init"}
-				i1 += 9;
-				i2       =  strTemp.indexOf('"',i1);
-
-				myParms  =  'app_key='+strTemp.slice(i1,i2);
-				i1     =  i2 +1;
-				i1       =  strTemp.indexOf('"',i1)+1;
-				i2       =  strTemp.indexOf('"',i1);
-				
-				myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
-
-				i1       =  strTemp.indexOf('<fb:fbml>');
-				i2       =  strTemp.indexOf('/script>',i1)-1;
-				myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
-				
-				params.myParms = myParms;
-				
-				console.log(getCurrentTime()+'[Z] FBMLinfo - OK');
-				
-				getFBML(params);
-			}
-			catch(e)
-			{
-				if(typeof(retry) == 'undefined')
+				try
 				{
-					pokerFreegifts.Click2(params, true);
-				}
-				else
-				{
-					console.log(getCurrentTime()+'[Z] Error: '+e.message);
+					var str = data.substring(9);
+					var error = parseInt(JSON.parse(str).error);
+					
+					if(error > 0) throw {}
+					
+					var x = JSON.parse(str);
+					
+					var data = x.payload.data.fbml_form0;
+					
+					var arr = [];
+					
+					$('.unselected_list', data).children('label').each(function()
+					{
+						var itm = {}
+						itm[$(this).children('input').val()] = {name: $(this).children('span').text()};
+						arr.push(itm);
+					});
 					
 					if(typeof(params.sendTo) == 'undefined')
 					{
-						sendView('errorUpdatingNeighbours');
+						console.log(getCurrentTime()+'[Z] Updating neighbours');
+						sendView('updateNeighbours', params.gameID, arr);
+						return;
+					}
+					
+					var strTemp = data;
+					var strTemp2;
+					
+					i1       =  strTemp.indexOf('PlatformInvite.sendInvitation');
+					if (i1 == -1) throw {message:"Cannot find PlatformInvite.sendInvitation in page"}
+					i1       =  strTemp.indexOf('&#123;',i1);
+					i2       =  strTemp.indexOf('&#125;',i1)+6;
+					strTemp2     =  strTemp.slice(i1,i2);
+					strTemp2   =  strTemp2.replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}');
+					eval("aTemp = "+strTemp2);
+					
+					myParms      =  'app_id='     +aTemp["app_id"];
+					myParms     +=  '&request_type='  +escape(aTemp["request_type"]);
+					myParms     +=  '&invite='      +aTemp["invite"];
+					
+					
+					strTemp2 = $('form[content]:first', data).attr('content');
+					/*					
+					i1           =  strTemp.indexOf('content=\\"');
+					if (i1 == -1) throw {message:"Cannot find  content=\\ in page"};
+					i1			+=  10;
+					i2           =  strTemp.indexOf('"',i1)-1;
+					strTemp2    =   eval('"'+strTemp.slice(i1,i2)+'"');
+					*/
+					
+					if(typeof(strTemp2) == 'undefined') throw {message:"Cannot find  content=\\ in page"};
+					myParms     +=  '&content='     +encodeURIComponent(strTemp2);
+					
+					myParms     +=  '&preview=false';
+					myParms     +=  '&is_multi='    +aTemp["is_multi"];
+					myParms     +=  '&is_in_canvas='  +aTemp["is_in_canvas"];
+					myParms     +=  '&form_id='     +aTemp["request_form"];
+					myParms     +=  '&include_ci='    +aTemp["include_ci"];
+					
+					myParms     +=  '&prefill=true&message=&donot_send=false&__d=1';
+
+					myParms    +=  '&post_form_id='+params.post_form_id;
+					myParms     +=  '&fb_dtsg='+params.fb_dtsg;
+					myParms     +=  '&post_form_id_source=AsyncRequest&lsd&';
+					
+					myUrl2 = $('form[content]', data).attr('action');
+					
+					var param2 = $('form[content]', data).serialize();
+					
+					params.items = arr;
+					
+					console.log(getCurrentTime()+'[Z] Sending');
+					
+					var j = 0;
+					for(u in params.sendTo)
+					{
+						var v = params.sendTo[u];
+						
+						myParms     +=  '&to_ids['+j+']='   +v;
+						if(params.gameID == '120563477996213')
+							param2 += 'ids[]='+v+'&';
+						else
+							param2 += '&ids%5B%5D='+v;						
+						j++;
+					}
+										
+					params.myParms = myParms+'&lsd=';
+					params.myUrl = 'http://apps.facebook.com/texas_holdem/'+myUrl2;
+					params.param2 = param2;
+					
+					sendGift(params);
+				}
+				catch(e)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						pokerFreegifts.Click2(params, true);
 					}
 					else
 					{
-						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						console.log(getCurrentTime()+'[Z] Error: '+e.message);
+						
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
 					}
 				}
-			}		
+			}				
 		});
 	},
 };
@@ -152,8 +240,24 @@ var pokerRequests =
 					info.text  = $('.acceptGiftFrom', data).find('img:first').attr('title');
 					info.time = Math.round(new Date().getTime() / 1000);
 				
+					var sendInfo = '';
+					
+					if($('.acceptGiftFrom', data).find('img[uid]').length > 0)
+					{
+						sendInfo = {
+							gift: 'chips',
+							destInt: $('.acceptGiftFrom', data).find('img[uid]:first').attr('uid'),
+							destName: $('.acceptGiftFrom', data).find('img[uid]:first').attr('title'),
+							}
+					}
+					info.thanks = sendInfo;	
+					
+					
+					
 					database.updateItem('requests', id, info);
 					sendView('requestSuccess', id, info);
+					
+					
 				}
 				else
 				{							

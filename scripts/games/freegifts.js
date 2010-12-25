@@ -13,6 +13,10 @@ var giftsArray = {
 		//"table_silverware" : { name: 'Silverware'},
 		
 		
+		"toys": { name: 'Toys' },
+		"fruitcake": { name: 'Fruitcake' },
+		"winterdecor3_largewreath": { name: 'Large wreath' },
+		"garland_fence": { name: 'Fence with Garland' },
 		
 		"meal1": { name: 'Light snack'},
 		"meal2": { name: 'Breakfast (lvl 15)'},
@@ -239,6 +243,8 @@ var giftsArray = {
 		"fruit_banana": { name: 'Bananas (lvl 10)'},
 		"fruit_mango": { name: 'Mangoes (lvl 15)'},
 		"fruit_lavamango": { name: 'Lava Mango'},
+		"fruit_pineapple": { name: 'Fruit Pineapple' },
+		
 		"deco_poppyfield": { name: 'Poppyfield'},
 		"deco_mnkpillar": { name: 'Short Pillar'},
 		"deco_happyyellowflower": { name: 'Yellow Flower'},
@@ -252,24 +258,30 @@ var giftsArray = {
 	},
 	'101539264719':
 	{
+		"2883": { name: 'Maxwell Coffee'},
 		"2548": { name: 'Special Delivery'},
-		"2714": { name: 'Tassimo Coffee'},
 		"1174": { name: 'Spice Shelf'},
 		"1177": { name: 'Spice Small Jar'},
+		"1834": { name: 'Vaccuum Tube'},
+		"1833": { name: 'Flux Switch'},
 		"1875": { name: 'Lotto Ticket'},
-		"1836": { name: 'Tesla Coil'},
-		"1835": { name: 'Science Book'},
 		"1837": { name: 'Small Energy Boost'},
 		"2266": { name: 'Pita and Dolmas'},
 		"2404": { name: 'Ranch Beans'},
+		"2925": { name: 'Holly Candy Cane'},
 		"2450": { name: 'Tempura Udon'},
-		"2480": { name: 'Pan Dulce'},
+		"2856": { name: 'Pumpkin Cookies'},
 		"2773": { name: 'Tea Party'},
+		"2480": { name: 'Pan Dulce'},
+		"2924": { name: 'Mistletoe'},
 		"2540": { name: 'In Flight Meal'},
 		"2677": { name: 'Skull Cookies'},
 		"2774": { name: 'Drink Me Elixir'},
 		"2541": { name: 'Sky Nuts'},
+		"758": { name: 'Lump of Coal'},
+		"759": { name: 'Ginger Man'},
 		"1793": { name: 'Falafel'},
+		
 		"1600": { name: 'Spring Rolls'},
 		"1559": { name: 'Popcorn Shrimp'},
 		"601": { name: 'Kung Pao Stir Fry'},
@@ -279,34 +291,45 @@ var giftsArray = {
 	},
 	10979261223:  
 	{
-		"1":	{ name: 'Game Cards'},
-		"409":	{ name: 'Dead Bee'},
-		"410":	{ name: 'Golden Tiger'},
-		"411":	{ name: 'Dried Clover'},
-		"412":	{ name: 'Gun Barrel'},
-		"405":	{ name: 'Mystery Shipment'},
-		"180":	{ name: 'Super Pignata'},
-		"210":	{ name: 'Satchel of Lira'},
-		"100":	{ name: 'Mystery Bag'},
-		"151":	{ name: 'Mystery Animal'},
-		"152":	{ name: 'Rack of Chips'},
-		"80":	{ name: 'Thai Baht'},
-		"401":	{ name: 'Italian Hardwood'},
-		"402":	{ name: 'Marble Slab'},
+		"425": { name: 'Beats by Dre'},
+		"426": { name: 'Doctors Orders'},
+		"427": { name: 'Certified Platinum'},
+		"429": { name: 'Holiday Sack'},
+		"423": { name: 'Time Capsule'},
+		"405": { name: 'Mystery Shipment'},
+		"211": { name: 'Engine'},
+		"422": { name: 'Exotic Animal Feed'},
+		"420": { name: 'Feeding Trough'},
+		"419": { name: 'Bird Cage'},
+		"210": { name: 'Satchel of Lira'},
+		"100": { name: 'Mystery Bag'},
+		"151": { name: 'Mystery Animal'},
+		"189": { name: 'Special Part'},
+		"152": { name: 'Rack of Chips'},
 		
-		"189": { name: 'Special Delivery'},
+		
+		/*
+		"527": { name: 'Mystery bag'} ,
+		"736": { name: 'Red mystery bag' },
+		"2602": { name: 'Stone Column' },
+		"1581": { name: 'Poker Table' },
+		*/
+		
 	},
 	120563477996213:
 	{
 		"329": { name: 'One Energy'},
+		"405": { name: 'Leaf'},
+		"406": { name: 'Cornucopia'},
+		"407": { name: 'Musket'},
 		"408": { name: 'Pumpkin Pie'},
 		"434": { name: 'Ticket'},
+		"447": { name: 'Snowflake'},
+		"448": { name: 'Candycane'},
+		"449": { name: 'Mistletoe'},
+		"450": { name: 'Fruitcake'},
+		"539": { name: 'Acorn'},
 		"278": { name: 'Crystal'},
-		"279": { name: 'Ladybug'},
-		"280": { name: 'Tree Sap'},
-		"281": { name: 'Vitalin'},
-		"348": { name: 'Candy Corn'},
-		"349": { name: 'Sugar Skull'},
 		"195": { name: 'Dirt Path'},
 		"199": { name: 'Daisies'},
 		"200": { name: 'Mushroom Mailbox'},
@@ -317,14 +340,13 @@ var giftsArray = {
 		"320": { name: 'Charming Sod'},
 		"321": { name: 'Gorgeous Turf'},
 		"330": { name: 'Balloons'},
-		"338": { name: 'Skullstone'},
 		"437": { name: 'Water Puddle'},
+		"482": { name: 'Winter Candle Pine'},
 		"203": { name: 'Round Tree'},
 		"214": { name: 'Tall Grass'},
 		"218": { name: 'Wooden Bench'},
 		"223": { name: 'Roses'},
-		"398": { name: 'Thanksgiving Table'},
-		"400": { name: 'Thanksgiving Chair'},
+		"485": { name: 'Red Winter Gift'},
 		"208": { name: 'Jagged Rocks'},
 		"210": { name: 'Shiny Apples'},
 		"215": { name: 'Tumbleweed'},
@@ -333,21 +355,25 @@ var giftsArray = {
 		"440": { name: 'Maroon Flag'},
 		"209": { name: 'Giant Pumpkins'},
 		"257": { name: 'Wooden Fence'},
-		"393": { name: 'Autumn Elm'},
 		"441": { name: 'Small Green Tent'},
 		"221": { name: 'Leafy Bush'},
 		"228": { name: 'Square Tree'},
 		"230": { name: 'Barrel Cacti'},
 		"363": { name: 'Petal Table'},
 		"364": { name: 'Petal Path'},
+		"503": { name: 'Sled in the Snow'},
 		"212": { name: 'Aspen Tree'},
 		"224": { name: 'Stone Path'},
-		"365": { name: 'Flower Basket'},
 		"232": { name: 'Skeleton - lvl 7'},
 		"233": { name: 'Tombstone - lvl 7'},
 		"242": { name: 'Tulips - lvl 7'},
+		"365": { name: 'Flower Basket - lvl 7'},
 		"366": { name: 'Royal Pew - lvl 7'},
+		"466": { name: 'Snowfall - lvl 7'},
+		"467": { name: 'Snowfall Footprints - lvl 7'},
+		"471": { name: 'Snowfall Angel - lvl 7'},
 		"247": { name: 'Square Hedge - lvl 8'},
+		"489": { name: 'Cinnamon Hook - lvl 8'},
 		"237": { name: 'Dark Stone Path - lvl 9'},
 		"244": { name: 'Bear Hedge - lvl 9'},
 		"246": { name: 'Raven Hedge - lvl 10'},
@@ -356,6 +382,8 @@ var giftsArray = {
 		"235": { name: 'Peace Sign Hedge - lvl 11'},
 		"236": { name: 'Lotus Flower - lvl 11'},
 		"234": { name: 'Bongo Drums - lvl 12'},
+		"526": { name: 'Vinca Vine - lvl 13'},
+		"530": { name: 'Picnic Umbrella - lvl 14'},
 	},
 	151044809337:
 	{
@@ -395,6 +423,13 @@ var giftsArray = {
 		"Animal_duck1": { name: 'Duck'},
 		"Animal_pig1": { name: 'Pig'},
 		"Animal_Rabbit1": { name: 'White Bunny'},
+		
+		"present_holiday_2010": { name: 'Present' },
+		"quest_item_holiday_snowflake" : { name: 'Snow Flake' },
+		"quest_item_holiday_lights": { name: 'Lights' },
+		"quest_item_holiday_snowball": { name: 'Snowball' },
+		"quest_item_holiday_skates": { name: 'Skates' },
+		"quest_item_holiday_pinecones": { name: 'Pincecones' },
 		
 		
 		"material_marble": { name: 'Marble'},
@@ -450,11 +485,13 @@ var giftsArray = {
 		"24": { name: 'Siberian Tiger'},
 		"15": { name: 'Tree Frog'},
 		"22": { name: 'Zebra'},
+	},
+	2389801228:
+	{
+		"chips": { name: "Chips" }
 	}
+	
 };
-
-
-
 
 var freeGiftForGame =
 {
@@ -467,6 +504,7 @@ var freeGiftForGame =
 	151044809337: 'mysterybox',
 	291549705119: 'energy_1',
 	167746316127: '886',
+	2389801228: 'chips',
 }
 
 function ListNeighbours(gameID)
@@ -513,6 +551,11 @@ function fishvilleGetZyngaVars(params, retry)
 function cityvilleGetZyngaVars(params, retry)
 {
 	cityvilleFreegifts.Click(params);
+}
+
+function pokerGetZyngaVars(params, retry)
+{
+	pokerFreegifts.Click(params);
 }
 
 function treasureGetZyngaVars(params, retry)
@@ -1137,6 +1180,8 @@ function getFBML(params, retry)
 					eval('var tmpItm = {'+item+'}');
 					arr.push(tmpItm);
 				}
+				
+				
 				
 				var items = arr;
 				

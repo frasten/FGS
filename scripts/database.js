@@ -10,7 +10,7 @@ database.open = function(userID)
 
 database.onError = function(tx, e) 
 {
-	//console.log('Something unexpected happened: ' + e.message );
+	console.log('Something unexpected happened: ' + e.message );
 }
 
 database.onSuccess = function(tx, e) 
@@ -28,12 +28,12 @@ database.createTable = function()
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN comment_bonus INTEGER', [],  database.onSuccess, database.onError);
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN resend_gift TEXT', [],  database.onSuccess, database.onError);
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN error_text TEXT', [],  database.onSuccess, database.onError);
-		
-		
+
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
-				'requests(id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, post TEXT, time INTEGER, resend_gift TEXT)', [],  database.onSuccess, database.onError);
-				
+				'requests(id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, post TEXT, time INTEGER, resend_gift TEXT, error_text TEXT)', [],  database.onSuccess, database.onError);
+
 		tx.executeSql('ALTER TABLE requests ADD COLUMN resend_gift TEXT', [],  database.onSuccess, database.onError);
+		tx.executeSql('ALTER TABLE requests ADD COLUMN error_text TEXT', [],  database.onSuccess, database.onError);
 		
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
                   'neighbours(autoID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id INTEGER, gameID INTEGER)', [], database.onSuccess, database.onError);
@@ -308,7 +308,10 @@ database.addBonus = function(data2)
 				}
 				if(total == 0)
 				{
-					sendView('addNewBonus', '', '', outArr);
+					if(outArr.length > 0)
+					{
+						sendView('addNewBonus', '', '', outArr);
+					}
 					updateIcon();
 				}				
 			}, database.onSuccess, database.onError);
@@ -326,7 +329,7 @@ database.addRequest = function(data2)
 		
 		$(data2).each(function(k, data)
 		{
-			tx.executeSql("INSERT OR IGNORE INTO requests VALUES (?,?,0,'',?,?,?,?,?,'')", data,
+			tx.executeSql("INSERT OR IGNORE INTO requests VALUES (?,?,0,'',?,?,?,?,?,'','')", data,
 			function(t,r)
 			{
 				total--;

@@ -178,6 +178,11 @@ var cityvilleFreegifts =
 				var zy_user = data.slice(i1,i2);	
 				
 				
+				if(typeof(params.thankYou) != 'undefined')
+				{
+					str = params.sendTo[0];
+				}	
+				
 				var postData = 
 				{
 					method: 'getSNUIDs',
@@ -198,9 +203,14 @@ var cityvilleFreegifts =
 					for(var uid in info.body)
 					{
 						var t = info.body[uid];
-						str+= t+',';
+						str+= t+',';					
 					}
-					exclude = str.slice(0, -1);					
+					exclude = str.slice(0, -1);
+					
+					if(typeof(params.thankYou) != 'undefined')
+					{
+						params.sendTo[0] = info.body[params.sendTo[0]];
+					}					
 					
 					var el = $('div.mfs', data);
 					
@@ -407,9 +417,9 @@ var cityvilleRequests =
 					
 					if($('.errorMessage', data).length > 0)
 					{ 
-						info.error = 'receiving';
+						info.error = 'limit';
 						info.time = Math.round(new Date().getTime() / 1000);
-						//info.error_text = jQuery.trim($('.errorMessage', data).text());
+						info.error_text = 'There was problem receiving this gift. You have probably already accepted it';
 						
 						database.updateErrorItem('requests', id, info);
 						sendView('requestError', id, info);

@@ -146,6 +146,7 @@ var cafeworldRequests =
 				{
 					info.error = 'limit';
 					info.time = Math.round(new Date().getTime() / 1000);
+					info.error_text = 'There was problem receiving this gift. You have probably already accepted it';
 					
 					database.updateErrorItem('requests', id, info);
 					sendView('requestError', id, info);
