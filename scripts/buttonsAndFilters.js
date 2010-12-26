@@ -26,7 +26,7 @@ var gamesData =
 						filter:
 						{	
 							bonuses: ['Fertilize their crops', 'Play Farmville Now'],
-							bonusesNewWindow: ['Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle', 'Get some slop', 'Help', 'Retaliate', 'Get Revenge'],
+							bonusesNewWindow: ['Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle'],
 							requests: ['Toolbar_Install', 'sendcredits'],
 							requestsNewWindow: [],
 						},
@@ -46,7 +46,7 @@ var gamesData =
 						filter:		
 						{	
 							bonuses: ['Play Mafia Wars'],		
-							bonusesNewWindow: ['^Help','Play Slots', 'Send Mystery Bag', 'Send Satchel of Lira', 'Be all you can be', 'Get uniforms', 'Get a uniform', 'Send a uniform', 'Send Army uniform', 'Go sailing', 'Check your Respect Meter', 'Click image to win', 'Goooooooal', 'Send Mystery Shipment', 'Enter now', 'Claim Halloween Reward', 'Send Anvil', 'Join Operation', 'Get the bounty'],
+							bonusesNewWindow: ['^Help','Play Slots', 'Send Mystery Bag', 'Send Satchel of Lira', 'Be all you can be', 'Get uniforms', 'Get a uniform', 'Send a uniform', 'Send Army uniform', 'Go sailing', 'Check your Respect Meter', 'Click image to win', 'Goooooooal', 'Send Mystery Shipment', 'Enter now', 'Claim Halloween Reward', 'Send Anvil', 'Join Operation', 'Get the bounty', 'Send Ornaments', 'Send a present', 'Send LE parts'],
 							requests: [],
 							requestsNewWindow: [
 								'Join me on a crime spree and find out what we loot',

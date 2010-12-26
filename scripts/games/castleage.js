@@ -59,7 +59,7 @@ var castleageRequests =
 					var i2 = tmpTxt.indexOf('.', i1);
 					var tit = tmpTxt.slice(i1+28, i2);
 				}
-				
+
 				info.title = '';
 				info.text = tit;
 				info.image = $(el).find('img:first').attr('src');				
