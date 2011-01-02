@@ -49,10 +49,13 @@ var zooworldFreegifts =
 				postParams['giftId'] 	= params.gift;
 				postParams['appname']	= 'zooparent';
 				postParams['appId'] 	= '74';
-				postParams['straightToGift'] = '1';
+				//postParams['straightToGift'] = '1';
 				
 				params.param2 = postParams;
-		
+//http://fbeq.rockyou.com/facebook_apps/zoo/giftInIframe.php?service=dsplygiftinvite&giftId=977&appname=zooparent&appId=74&fb_sig_in_iframe=1&fb_sig_base_domain=rockyou.com&fb_sig_locale=pl_PL&fb_sig_in_new_facebook=1&fb_sig_time=1293477719.0314&fb_sig_added=1&fb_sig_profile_update_time=1291727948&fb_sig_expires=1293483600&fb_sig_user=100001178615702&fb_sig_session_key=2.CXT_hOTef4C_zohaK3MG1w__.3600.1293483600-100001178615702&fb_sig_ss=5ptmukWpwN3GOKXxHq2u8g__&fb_sig_cookie_sig=d7f71a284392c238406d31b01a9a8118&fb_sig_country=pl&fb_sig_api_key=daa4b920374244da1829a0df63cd815f&fb_sig_app_id=167746316127&fb_sig=b174aef00662d0cb251ceae3d091da82
+
+
+
 				zooworldFreegifts.Click2(params);
 				
 			}
@@ -272,14 +275,18 @@ var zooworldBonuses =
 				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
 				
 				try {
-				
-					if($('#app_content_167746316127', data).text().indexOf('No Thanks') != -1)
+					if($('#app_content_167746316127', data).length > 0)
+						var el = $('#app_content_167746316127', data);
+					else
+						var el = $('#app_content_2345673396', data);
+					
+					if($(el).text().indexOf('No Thanks') != -1)
 					{
 						console.log(URI);
 					}
 					else
 					{
-						var src = $('#app_content_167746316127', data).find('iframe:first').attr('src');
+						var src = $(el).find('iframe:first').attr('src');
 						
 						if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
 						zooworldBonuses.Click2(id, src);
@@ -287,6 +294,7 @@ var zooworldBonuses =
 				} 
 				catch(err)
 				{
+					console.log(err);
 					if(typeof(retry) == 'undefined')
 					{
 						zooworldBonuses.Click(id, URI+'&_fb_noscript=1', true);
@@ -346,7 +354,7 @@ var zooworldBonuses =
 						var i2 = data.indexOf('},', i1)+1;
 						lastPos = i2;
 						
-						if(data.slice(i1, i2).indexOf('zooparent') != -1)
+						if(data.slice(i1, i2).indexOf('zooparent') != -1 || data.slice(i1, i2).indexOf('"hugme"') != -1)
 						{
 							eval('var tempVars = '+data.slice(i1,i2));
 							break;
@@ -394,7 +402,6 @@ var zooworldBonuses =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
 					sendView('bonusError', id, info);
 				}
 			}
@@ -525,7 +532,6 @@ var zooworldBonuses =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
 					sendView('bonusError', id, info);
 				}
 			}

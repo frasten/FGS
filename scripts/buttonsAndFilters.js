@@ -341,6 +341,21 @@ var gamesData =
 							'GameOptionsTab'
 						],
 					},
+	8630423715: 	{ 	name: 'Sorority Life',		systemName: 'sorority', link: 'http://apps.facebook.com/sororitylife/',
+						filter:
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'ManualBonuses',
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
 };
 
 var submenuButtons =

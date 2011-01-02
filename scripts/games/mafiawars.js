@@ -293,7 +293,6 @@ var mafiawarsRequests =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
 					sendView('requestError', id, info);
 				}
 			}
@@ -373,7 +372,6 @@ var mafiawarsRequests =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
 					sendView('requestError', id, info);
 				}
 			}
@@ -734,7 +732,6 @@ var mafiawarsBonuses =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
 					sendView('bonusError', id, info);
 				}
 			}

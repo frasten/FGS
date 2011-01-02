@@ -129,7 +129,6 @@ var treasureRequests =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					
 					sendView('requestError', id, info);
 				}
 			}

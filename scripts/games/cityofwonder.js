@@ -295,7 +295,6 @@ var cityofwonderBonuses =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
 					sendView('bonusError', id, info);
 				}
 			}

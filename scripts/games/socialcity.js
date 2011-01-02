@@ -124,7 +124,6 @@ var socialcityRequests =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
 					sendView('requestError', id, info);
 				}
 			}
@@ -195,7 +194,6 @@ var socialcityRequests =
 				{
 					info.error = 'connection';
 					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
 					sendView('requestError', id, info);
 				}
 			}
