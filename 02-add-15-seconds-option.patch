@@ -1,22 +1,22 @@
-Index: background.html
+Index: fgs.js
 ===================================================================
---- background.html	(revisione 10)
-+++ background.html	(copia locale)
-@@ -802,6 +802,9 @@
- 	
- 	switch(parseInt(options.checkBonusesTimeout))
- 	{
-+		case 15:
-+			num = 3;
-+			break;
- 		case 30:
- 			num = 5;
- 			break;
+--- fgs.js	(revisione 134)
++++ fgs.js	(copia locale)
+@@ -60,6 +60,9 @@
+ 		
+ 		switch(parseInt(FGS.options.checkBonusesTimeout))
+ 		{
++			case 15:
++				num = 3;
++				break;
+ 			case 30:
+ 				num = 5;
+ 				break;
 Index: giftlist.html
 ===================================================================
 --- giftlist.html	(revisione 10)
 +++ giftlist.html	(copia locale)
-@@ -2150,6 +2150,7 @@
+@@ -2539,6 +2557,7 @@
  		
  				<h4>Bonuses check timeout</h4>
  					<select id="checkBonusesTimeout">

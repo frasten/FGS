@@ -1,110 +1,109 @@
-var yovilleRequests = 
+FGS.yovilleRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data2)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data2);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
-						yovilleRequests.Click(id, redirectUrl, true);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
-			
-				var data = data2.slice(data2.indexOf('<body'),data2.lastIndexOf('</body'))+'</body>';
 				
-				if(data2.indexOf('seem to have already accepted this request') != -1)
+				try
 				{
-					info.error = 'limit';
-					info.time = Math.round(new Date().getTime() / 1000);
-					info.error_text = 'Sorry, you seem to have already accepted this request from the Message Center';
-					
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);		
-				}
-				else if(data2.indexOf('You are neighbors now') != -1)
-				{
-					info.image = 'gfx/90px-check.png';
-					info.text = 'New neighbour';
-					//info.text  = $(".reqFrom_name",data).children().text();
-					info.time = Math.round(new Date().getTime() / 1000);
-					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
-				}
-				else if($('#app21526880407_main-gift-body', data).find('div > b').length > 0)
-				{
-					var sendInfo = '';
-					
-					$('form', data).each(function()
+				
+					if(dataStr.indexOf('seem to have already accepted this request') != -1)
 					{
+						var error_text = 'Sorry, you seem to have already accepted this request from the Message Center';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
 					
-						var tmpStr = unescape($(this).attr('action'));
+					if(dataStr.indexOf('You are neighbors now') != -1)
+					{
+						info.image = '';
+						info.title = '';
+						info.text  = 'New neighbour';
+						info.time = Math.round(new Date().getTime() / 1000);
 						
-						if(tmpStr.indexOf('item_id') != -1)
+						FGS.endWithSuccess(currentType, id, info);
+						return;
+					}
+					else if($('#app21526880407_main-gift-body', dataHTML).find('div > b').length > 0)
+					{
+						var sendInfo = '';
+						
+						$('form', dataHTML).each(function()
 						{
-							var giftRecipient = $('img[uid]', data).attr('uid');
+							var tmpStr = unescape($(this).attr('action'));
 							
-							var i1 = tmpStr.indexOf('&item_id=');
-							var i2 = tmpStr.indexOf('&', i1+1);
-							
-							var giftName = tmpStr.slice(i1+9,i2);
-							
-							
-							sendInfo = {
-								gift: giftName,
-								destInt: giftRecipient,
-								destName: $('img[uid]', data).attr('title')
-							}							
-							return false;
-						}
-					});
-					
-					//info.thanks = sendInfo;					
-					
-					info.image = $('#app21526880407_main-gift-body', data).find('div > img').attr("src");
-					info.title = $('#app21526880407_main-gift-body', data).find('div > h2').text();
-					info.text  = $('#app21526880407_main-gift-body', data).find('div > b').text();
-					info.time = Math.round(new Date().getTime() / 1000);
-					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
+							if(tmpStr.indexOf('item_id') != -1)
+							{
+								var giftRecipient = $('img[uid]', dataHTML).attr('uid');
+								
+								var i1 = tmpStr.indexOf('&item_id=');
+								var i2 = tmpStr.indexOf('&', i1+1);
+								
+								var giftName = tmpStr.slice(i1+9,i2);
+
+								sendInfo = {
+									gift: giftName,
+									destInt: giftRecipient,
+									destName: $('img[uid]', dataHTML).attr('title')
+								}							
+								return false;
+							}
+						});
+						
+						//info.thanks = sendInfo;					
+						
+						info.image = $('#app21526880407_main-gift-body', dataHTML).find('div > img').attr("src");
+						info.title = $('#app21526880407_main-gift-body', dataHTML).find('div > h2').text();
+						info.text  = $('#app21526880407_main-gift-body', dataHTML).find('div > b').text();
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						FGS.endWithSuccess(currentType, id, info);
+						return;
+					}
+					else
+					{	
+						throw {message: dataStr}
+					}
 				}
-				else
-				{							
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						yovilleRequests.Click(id, URI+'&_fb_noscript=1', true);
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -112,14 +111,11 @@ var yovilleRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					yovilleRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

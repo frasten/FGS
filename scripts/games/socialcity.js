@@ -1,40 +1,57 @@
-var socialcityRequests = 
+FGS.socialcityRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var data = data.substr(data.indexOf('<body'),data.lastIndexOf('</body'));
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
-				try {
-					var src = $('#app_content_163965423072', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					src = src.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
-					
-					
-					socialcityRequests.Click2(id, src);
-				} 
-				catch(err)
+				if(redirectUrl != false)
 				{
-					console.log(err);
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						socialcityRequests.Click(id, URI+'&_fb_noscript=1', true);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
+				
+				try
+				{
+					var src = FGS.findIframeAfterId('#app_content_163965423072', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					
+					src = src.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
+					
+					FGS.socialcityRequests.Click2(currentType, id, src);
+				} 
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -42,35 +59,33 @@ var socialcityRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					socialcityRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
-
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var src = url;
-					
+					var src = currentURL;
 					
 					var i1 = src.indexOf('?');
 					src = src.slice(i1+1);
@@ -78,85 +93,88 @@ var socialcityRequests =
 					var postParams = {}
 					var extra = {}
 					
-					for(var idd in jQuery.unparam(src))
+					for(var idd in FGS.jQuery.unparam(src))
 					{
 						if(idd.indexOf('fb_') != -1)
 						{
-							postParams[idd] = jQuery.unparam(src)[idd];
+							postParams[idd] = FGS.jQuery.unparam(src)[idd];
 						}
 						else
 						{
-							extra[idd] = jQuery.unparam(src)[idd];
+							extra[idd] = FGS.jQuery.unparam(src)[idd];
 						}
 					}
-
-					var tmpdata = $('#pd_authToken', data).val()
+					
+					var tmpdata = $('#pd_authToken', dataHTML).val();
 
 					var i1 = tmpdata.indexOf('|');
 					var auth_key = tmpdata.slice(0, i1);
 					var auth_time = tmpdata.slice(i1+1);
 					
-					var landing = jQuery.unparam(src).landing;
+					var landing = FGS.jQuery.unparam(src).landing;
 					
 					var i1 = landing.indexOf('_');
 					var page = landing.slice(0, i1);
 					var aaa =  landing.slice(i1+1);
 
-					var newUrl = 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php?'+jQuery.param(postParams)+'&extra='+JSON.stringify(extra)+'&rtype=ajax&p='+page+'&a='+aaa+'&auth_key='+auth_key+'&auth_time='+auth_time+'&ts='+new Date().getTime();
-
-					socialcityRequests.Click3(id, newUrl);
+					var newUrl = 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php?'+FGS.jQuery.param(postParams)+'&extra='+JSON.stringify(extra)+'&rtype=ajax&p='+page+'&a='+aaa+'&auth_key='+auth_key+'&auth_time='+auth_time+'&ts='+new Date().getTime();
+					
+					FGS.socialcityRequests.Click3(currentType, id, newUrl);
 				}
 				catch(err)
 				{
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					socialcityRequests.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click3:	function(id, url, retry)
+	Click3:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
-				
-
 				try
 				{
-					var data = eval('var dataHtml = '+data.slice(data.indexOf('{'),data.lastIndexOf('}')+1));
-					data = dataHtml.html;
+					eval('var dataTMP = '+dataStr.slice(dataStr.indexOf('{'),dataStr.lastIndexOf('}')+1));
 					
-					
+					var dataHTML = FGS.HTMLParser(dataTMP.html);
+										
 					//var sendInfo = '';
 					//info.thanks = sendInfo;	
 					
-					if($('#neighbor_title', data).length > 0)
+					if($('#neighbor_title', dataHTML).length > 0)
 					{
-						info.image = $('#neighbor_image', data).children('img').attr('src');
+						info.image = $('#neighbor_image', dataHTML).children('img').attr('src');
 						
-						var tmpTitle = $('#neighbor_title > h1', data).text();
+						var tmpTitle = $('#neighbor_title > h1', dataHTML).text();
 						var i1 = tmpTitle.indexOf('with');
 						info.title = 'New neighbour';
 						info.text = tmpTitle.slice(i1+5);
@@ -164,37 +182,40 @@ var socialcityRequests =
 					else
 					{
 
-						info.image = $('#acceptInfo', data).children('img').attr('src');
-						info.title = $("#infoText > .highlight",data).text();
-						var txt =  $("#infoText", data).text();
+						info.image = $('#acceptInfo', dataHTML).children('img').attr('src');
+						info.title = $("#infoText > .highlight" ,dataHTML).text();
+						var txt =  $("#infoText", dataHTML).text();
 						var i1 = txt.indexOf('from');
 						
 						info.text  = txt.slice(i1+5);
 					}
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					socialcityRequests.Click3(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

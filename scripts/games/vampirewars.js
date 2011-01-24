@@ -1,47 +1,40 @@
-var vampirewarsRequests = 
+FGS.vampirewarsRequests = 
 {
-	Click:	function(id, URI, retry)
+	Click:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
-				try {
-					var i1 = data.indexOf('top.location.href = "');
+				try
+				{
+					var i1 = dataStr.indexOf('top.location.href = "');
 					if(i1 != -1)
 					{
-						var i2 = data.indexOf('"', i1+28);
-						var url = data.slice(i1+21, i2);
-						vampirewarsRequests.Login(id, url);
+						var i2 = dataStr.indexOf('"', i1+28);
+						var url = dataStr.slice(i1+21, i2);
+						FGS.vampirewarsRequests.Login(currentType, id, url);
+						return;
 					}
-					else
-					{
-						var i1 = data.indexOf('script>window.location.replace("');
-						if(i1 == -1) throw{}
-						var i2 = data.indexOf('"', i1+32);
-						var text = data.slice(i1+32,i2).replace(/\\/g,'');
-						var url = $('<a href="'+text+'"></a>');
-					}
-				} 
+					throw {message: dataStr}
+				}
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving request, Retrying request with ID: '+id);
-						vampirewarsRequests.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						console.log(err);
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -49,125 +42,109 @@ var vampirewarsRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[B] Connection error while receiving request, Retrying request with ID: '+id);
-					vampirewarsRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Login:	function(id, URI, retry)
+	Login:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
-			success: function(data)
-			{
-				try {
-					
-					
-					var i1 = data.indexOf('script>window.location.replace("');
-					var i2 = data.indexOf('"', i1+32);
-					var text = data.slice(i1+32,i2).replace(/\\/g,'');
-					var url = $('<a href="'+text+'"></a>');
-					
-					if(typeof(retry) == 'undefined')
-					{
-						retry = 0;
-					}
-					
-					if(i1 != -1 && retry < 4)
-					{
-						vampirewarsRequests.Login(id, $(url).attr('href'), retry++);
-					}
-					else
-					{
-						if($('#app_content_25287267406', data).length > 0)
-						{
-							var url = $('#app_content_25287267406', data).find('iframe:first').attr('src');
-							vampirewarsRequests.Click4(id, url);
-						}
-						else
-						{
-							throw {}
-						}
-					}
-				} 
-				catch(err)
-				{
-					if(typeof(retry) == 'undefined')
-					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving request, Retrying request with ID: '+id);
-						vampirewarsRequests.Login(id, URI+'&_fb_noscript=1', true);
-					}
-					else
-					{
-						console.log(err);
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
-					}
-				}
-			},
-			error: function()
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					console.log(getCurrentTime()+'[B] Connection error while receiving request, Retrying request with ID: '+id);
-					vampirewarsRequests.Login(id, URI+'&_fb_noscript=1', true);
-				}
-				else
-				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
-				}
-			}
-		});
-	},
-	
-	Click4:	function(id, url, retry)
-	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
-		
-		console.log(getCurrentTime()+'[B] Part four MW: '+id);	
-		
-		$.ajax({
-			type: "GET",
-			url: url,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var data = data.slice(data.indexOf('<div'),data.lastIndexOf('</div')+6);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
+				
+				if(typeof(retry) == 'undefined')
+				{
+					retry = 0;
+				}
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined' || retry < 4)
+					{
+						retryThis(currentType, id, redirectUrl, retry++);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
 				
 				try
 				{
-					if($('div.title', data).text().indexOf('You must accept gifts within') != -1)
+					var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					
+					FGS.vampirewarsRequests.Click4(currentType, id, src);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
 					{
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = jQuery.trim($('div.title', data).text());
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
+	Click4:	function(currentType, id, currentURL, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "GET",
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					if($('div.title', dataHTML).text().indexOf('You must accept gifts within') != -1)
+					{
+						var error_text = $.trim($('div.title', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					info.image = $('img:first', data).attr('src');
-					info.title = $('img:first', data).attr('title');
-					info.text = $('div.senderPic', data).parent().find('p').text();
+					info.image = $('img:first', dataHTML).attr('src');
+					info.title = $('img:first', dataHTML).attr('title');
+					info.text = $('div.senderPic', dataHTML).parent().find('p').text();
 					
 					
 					var sendInfo = '';
@@ -200,38 +177,33 @@ var vampirewarsRequests =
 					}
 					*/
 					info.thanks = sendInfo;
+					info.time = Math.round(new Date().getTime() / 1000);					
 					
-					console.log(info);
-					
-					info.time = Math.round(new Date().getTime() / 1000);
-					
-					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
-					
-					console.log(getCurrentTime()+'[B] Bonus collected SUCCESSFULLY - ID: '+id);	
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					vampirewarsRequests.Click4(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

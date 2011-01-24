@@ -1,58 +1,55 @@
-var cityofwonderRequests = 
+FGS.cityofwonderRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
-						cityofwonderRequests.Click(id, redirectUrl, true);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
-				}
-				
+				}			
 				
 				try
 				{
-					var src = $('#app_content_114335335255741', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					cityofwonderRequests.Click2(id, src);
+					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					
+					FGS.cityofwonderRequests.Click2(currentType, id, src);
 				}
 				catch(err)
-				{							
+				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						cityofwonderRequests.Click(id, URI+'&_fb_noscript=1', true);
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -60,49 +57,44 @@ var cityofwonderRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					cityofwonderRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
-	Click2: function(id, URI, retry)
+	Click2: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data2)
+			success: function(dataStr)
 			{
 				try
 				{
 				
-					var i1 =  data2.indexOf('<fb:fbml>');
-					var i2 =  data2.indexOf('/script>',i1)-1;
-					var data = data2.slice(i1,i2);
-
-					info.image = $('.ally_accept', data).find('img:first').attr('src');
-					var txt = $('.ally_accept', data).find('h1').text();
+					var i1 =  dataStr.indexOf('<fb:fbml>');
+					var i2 =  dataStr.indexOf('/script>',i1)-1;
+					var data = dataStr.slice(i1,i2);
+					
+					var dataHTML = FGS.HTMLParser(data);
+					
+					
+					info.image = $('.ally_accept', dataHTML).find('img:first').attr('src');
+					var txt = $('.ally_accept', dataHTML).find('h1').text();
 					
 					if(txt.indexOf('You can not accept this gift') != -1)
 					{
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = txt;
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
-						
+						var error_text = txt;
+						FGS.endWithError('limit', currentType, id, error_text);						
 						return;
 					}
 					
@@ -123,23 +115,19 @@ var cityofwonderRequests =
 					}
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
-				{							
+				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						cityofwonderRequests.Click2(id, URI+'&_fb_noscript=1', true);
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -147,73 +135,64 @@ var cityofwonderRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					cityofwonderRequests.Click2(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	}
 };
 
-var cityofwonderBonuses = 
+FGS.cityofwonderBonuses = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-						cityofwonderBonuses.Click(id, redirectUrl, true);
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
-			
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
 				
-				try {
-					var src = $('#app_content_114335335255741', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					cityofwonderBonuses.Click2(id, src);
+				try 
+				{
+					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					FGS.cityofwonderBonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						cityofwonderBonuses.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -221,41 +200,38 @@ var cityofwonderBonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					cityofwonderBonuses.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
-
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
 				try
 				{
-					var out = jQuery.trim($('div.msgs', data).text());
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var out = $.trim($('div.msgs', dataHTML).text());
 					
 					if(out.indexOf('You already collected this bonus') != -1 || out.indexOf('is already complete') != -1 || out.indexOf('you cannot help now') != -1 || out.indexOf('No more bonuses to collect') != -1 || out.indexOf('already helped with') != -1)
 					{
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = out;
-
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);	
+						var error_text = out;
+						FGS.endWithError('limit', currentType, id, error_text);
 					
 						return;
 					}
@@ -265,37 +241,42 @@ var cityofwonderBonuses =
 					info.text  = out.replace('<br>', ' ');;
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					var link = $('div.msgs', data).find('a:first').attr('onclick').toString();
-					var i1 = link.indexOf("'");
-					var i2 = link.indexOf("'", i1+1);
 					
-					link = link.slice(i1+1, i2);
+					var i1 = dataStr.indexOf('onclick="awardClicked(');
+					if(i1 != -1)
+					{
+						i1+=23;
+						var i2 = dataStr.indexOf("'", i1);					
+						var link = dataStr.slice(i1, i2);
+						//dump(link);
+						$.get(link);
+					}
 					
-					$.get(link);
-					
-					database.updateItem('bonuses', id, info);
-					sendView('bonusSuccess', id, info);
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
-					sendView('bonusError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					cityofwonderBonuses.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

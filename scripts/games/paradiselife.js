@@ -1,4 +1,4 @@
-FGS.bakinglifeRequests = 
+FGS.paradiselifeRequests = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -35,10 +35,9 @@ FGS.bakinglifeRequests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
+					var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
 					if (src == '') throw {message:"Cannot find <iframe src= in page"}
-					
-					FGS.bakinglifeRequests.Click2(currentType, id, src);
+					FGS.paradiselifeRequests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -84,35 +83,47 @@ FGS.bakinglifeRequests =
 				
 				try
 				{
-					if(dataStr.indexOf('Make sure you click on the request within one week') != -1)
+
+					if(dataStr.indexOf('Sorry, there is something wrong with this page') != -1)
 					{
-						var error_text = 'Make sure you click on the request within one week.';
+						var error_text = 'Request already accepted.';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if($('.gift', dataHTML).length > 0)
+					var i1 = dataStr.indexOf('id="gifts_received"');
+					
+					
+					if($('.gift_wrap', dataHTML).length > 0)
 					{
-						info.image = $(".gift",dataHTML).children('img').attr("src");
-						info.title = $(".gift",dataHTML).children('img').attr("alt");
-						info.text  = $(".friendContainer2",dataHTML).find('b:first').text();
+						info.image = $('.gift_wrap', dataHTML).find('img').attr('src');
+						info.title = $('.gift_wrap', dataHTML).find('p').text();
+						info.text  = ' ';
 						info.time = Math.round(new Date().getTime() / 1000);
 						
 						FGS.endWithSuccess(currentType, id, info);
 					}
-					else if($('td.boxPadding', dataHTML).find('h1').length > 0)
+					else if(dataStr.indexOf('as your neighbor') != -1)
 					{
-						info.image = $('td.boxPadding', dataHTML).find('img:first').attr('src');
+						info.image = '';
+						info.text  = 'New neighbour';
+						info.title = '';
+						info.time = Math.round(new Date().getTime() / 1000);
 						
-						if($('td.boxPadding', dataHTML).find('.bigGreen').length > 0)
-						{
-							info.title = $('td.boxPadding', dataHTML).find('.bigGreen').text();
-						}
-						else
-						{
-							info.title = $('td.boxPadding', dataHTML).find('h1:first').text();
-						}
-						info.text  = $.trim($('td.boxPadding', dataHTML).find('p:first').text());
+						FGS.endWithSuccess(currentType, id, info);
+					}
+					else if(i1 != -1)
+					{
+						var i2 = dataStr.indexOf('<h2', i1)+4;
+						var i3 = dataStr.indexOf('<', i2);
+						
+						var i4 = dataStr.indexOf('<img ', i1);
+						var i5 = dataStr.indexOf('src="', i4)+5;
+						var i6 = dataStr.indexOf('"', i5);
+						
+						info.image = dataStr.slice(i5, i6);
+						info.text  = ' ';
+						info.title = dataStr.slice(i2, i3);
 						info.time = Math.round(new Date().getTime() / 1000);
 						
 						FGS.endWithSuccess(currentType, id, info);
@@ -151,7 +162,7 @@ FGS.bakinglifeRequests =
 	}
 };
 
-FGS.bakinglifeBonuses = 
+FGS.paradiselifeBonuses = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -184,9 +195,9 @@ FGS.bakinglifeBonuses =
 								
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
+					var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
 					if (src == '') throw {message:"Cannot find <iframe src= in page"}
-					FGS.bakinglifeBonuses.Click2(currentType, id, src);
+					FGS.paradiselifeBonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -231,27 +242,23 @@ FGS.bakinglifeBonuses =
 				
 				try
 				{
-					var out = $.trim($('td.boxPadding', dataHTML).find('p:first').text());
-					var out2 = $.trim($('td.boxPadding', dataHTML).find('h1:first').text());
-					
-					if(out.indexOf('already received') != -1 || out.indexOf('Make sure you click on the story within') != -1 || out2.indexOf('Bad News!') != -1 || out2.indexOf('Oops!') != -1)
+					var testElem = $('.title_text_pos', dataHTML).children().attr('src')
+					if(testElem != undefined)
 					{
-						var error_text = out;
-						FGS.endWithError('limit', currentType, id, error_text);						
-						return;
+						if(testElem.indexOf('feed_expire_title') != -1)
+						{
+							var error_text = 'This feed has expired or you have already collected it';
+							FGS.endWithError('limit', currentType, id, error_text);	
+							return;
+						}
 					}
 					
-					info.image = $('td.boxPadding', dataHTML).find('img:first').attr('src');
+					if($('.gift_wrap', dataHTML).length == 0) throw {message: 'something is wrong'}
 					
-					if($('td.boxPadding', dataHTML).find('.bigGreen').length > 0)
-					{
-						info.title = $('td.boxPadding', dataHTML).find('.bigGreen').text();
-					}
-					else
-					{
-						info.title = $('td.boxPadding', dataHTML).find('h1:first').text();
-					}
-					info.text  = $.trim(out);
+					info.image = $('.gift_wrap', dataHTML).find('img').attr('src');
+					info.title = $('.gift_wrap', dataHTML).find('p').text();
+					
+					info.text  = ' ';
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					FGS.endWithSuccess(currentType, id, info);

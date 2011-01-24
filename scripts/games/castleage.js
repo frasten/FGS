@@ -1,85 +1,94 @@
-var castleageRequests = 
+FGS.castleageRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data2)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data2);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
-						castleageRequests.Click(id, redirectUrl, true);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
-			
-				var data = data2.slice(data2.indexOf('<body'),data2.lastIndexOf('</body')+7);
 				
-				if(data.indexOf('have already accepted this gift or it has expired') != -1)
+				
+				try
 				{
-					info.error = 'limit';
+					if(dataStr.indexOf('have already accepted this gift or it has expired') != -1)
+					{
+						var error_text = 'You have already accepted this gift or it has expired';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+
+					var el = $('#app46755028429_results_main_wrapper', dataHTML);
+					
+					var tmpTxt = $(el).text();
+					var i1 = tmpTxt.indexOf('You have accepted the gift:');
+					if(i1 == -1)
+					{
+						var i1 = tmpTxt.indexOf('You have been awarded the gift:');
+						var i2 = tmpTxt.indexOf(' from ');
+						var tit = tmpTxt.slice(i1+31, i2);
+					}
+					else
+					{
+						var i2 = tmpTxt.indexOf('.', i1);
+						var tit = tmpTxt.slice(i1+28, i2);
+					}
+
+					info.title = '';
+					info.text = tit;
+					info.image = $(el).find('img:first').attr('src');				
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);	
-					return;
+					
+					FGS.endWithSuccess(currentType, id, info);
 				}
-
-				var el = $('#app46755028429_results_main_wrapper', data);
-				
-				var tmpTxt = $(el).text();
-				var i1 = tmpTxt.indexOf('You have accepted the gift:');
-				if(i1 == -1)
+				catch(err)
 				{
-					var i1 = tmpTxt.indexOf('You have been awarded the gift:');
-					var i2 = tmpTxt.indexOf(' from ');
-					var tit = tmpTxt.slice(i1+31, i2);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
-				else
-				{
-					var i2 = tmpTxt.indexOf('.', i1);
-					var tit = tmpTxt.slice(i1+28, i2);
-				}
-
-				info.title = '';
-				info.text = tit;
-				info.image = $(el).find('img:first').attr('src');				
-				info.time = Math.round(new Date().getTime() / 1000);
-				
-				database.updateItem('requests', id, info);
-				sendView('requestSuccess', id, info);
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					castleageRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

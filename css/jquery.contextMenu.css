@@ -48,6 +48,11 @@ th, td
 	/*min-width: 100px;*/
 }
 
+.disabledComment, .disabledLike
+{
+	cursor: default !important;
+}
+
 .hideScreenLocked
 {
 	display: none;

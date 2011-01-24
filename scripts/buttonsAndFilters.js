@@ -1,4 +1,4 @@
-var gamesData = 
+FGS.gamesData = 
 {
 	201278444497: 	{ 	
 						name: 'FrontierVille',	systemName: 'frontierville', link: 'http://apps.facebook.com/frontierville/',
@@ -356,9 +356,42 @@ var gamesData =
 							'GameOptionsTab'
 						],
 					},
+	143547399002598:	{ 	name: 'Paradise Life',		systemName: 'paradiselife', link: 'http://apps.facebook.com/paradiselife/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['^Go play', '^Send', '^Go see my gift'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory', 
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
+	26947445683:	{ 	name: 'Country Life',		systemName: 'countrylife', link: 'http://apps.facebook.com/countrylife/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: ['be my friend']
+						},
+						buttons: [
+							'ManualBonuses',
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
+					
 };
 
-var submenuButtons =
+FGS.submenuButtons =
 {
 	'BonusesPending': 	{	name: 'Show pending bonuses (<span>?</span>)',
 							submenu: {

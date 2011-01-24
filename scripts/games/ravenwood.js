@@ -1,275 +1,59 @@
-var ravenwoodFreegifts = 
+FGS.ravenwoodFreegifts = 
 {
 	Click: function(params, retry)
 	{
-		if(typeof(retry) !== 'undefined')
-		{
-			var params2 = '_fb_noscript=1';
-		}
-		else
-		{
-			var params2 = '';
-		}
-		
-		$.get('http://apps.facebook.com/ravenwoodfair/', params2, function(data)
-		{
-			try
-			{
-				i1          =   data.indexOf('post_form_id:"')
-				if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-				i1			+=	14;
-				i2          =   data.indexOf('"',i1);
-				
-				params.post_form_id = data.slice(i1,i2);
-				
-				
-				i1          =   data.indexOf('fb_dtsg:"',i1)
-				if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-				i1			+=	9;
-				i2          = data.indexOf('"',i1);
-				params.fb_dtsg		= data.slice(i1,i2);
-				
-				params.step2url = $('span.fb_protected_wrapper > iframe', data).attr('src');
-				
-				ravenwoodFreegifts.Click2(params);
-				
-			}
-			catch(e)
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					ravenwoodFreegifts.Click(params, true);
-				}
-				else
-				{
-					console.log(getCurrentTime()+'[Z] Error: '+e.message);
-					
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						sendView('errorUpdatingNeighbours');
-					}
-					else
-					{
-						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}		
-		});
-	},
-	Click2: function(params, retry)
-	{
-		if(typeof(retry) !== 'undefined')
-		{
-			var params2 = '_fb_noscript=1';
-		}
-		else
-		{
-			var params2 = '';
-		}
-	
-		$.get(params.step2url, params2, function(data){
-			try
-			{
-				//var nextUrl = $('#app101539264719_frmGifts', data).attr('action');
-				
-				var i1 = data.indexOf('fbparams: "');
-				var i2 = data.indexOf('"', i1+11);
-				params.step3params = unescape(data.slice(i1+11, i2))+'&ask_gift=-1&item_id='+params.gift+'&recipient_id=0&thankyou_gift=0';
-				params.step3url = 'http://www.ravenwoodfair.com/app/1/gift/send';
-				
-				ravenwoodFreegifts.Click3(params);
-				//var formParam = $('#app101539264719_frmGifts', data).serialize();
-				
-				//console.log(getCurrentTime()+'[Z] Zynga params updated');
-				
-				//var tempUrl = nextUrl+'?'+formParam;
-				
-				//var i1 = tempUrl.indexOf('gid=');
-				
-				//params.cafeUrl = tempUrl.slice(0, i1+4)+params.gift+'&view=cafe';
-				//getFBML(params);
-			}
-			catch(e)
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					ravenwoodFreegifts.Click2(params, true);
-				}
-				else
-				{
-					console.log(getCurrentTime()+'[Z] Error: '+e.message);
-					
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						sendView('errorUpdatingNeighbours');
-					}
-					else
-					{
-						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}		
-		});
-	},
-	Click3: function(params, retry)
-	{
-		if(typeof(retry) !== 'undefined')
-		{
-			var params2 = '_fb_noscript=1';
-		}
-		else
-		{
-			var params2 = '';
-		}
-	
-		$.post(params.step3url, params.step3params, function(data){
-			try
-			{
-				var i1 = data.lastIndexOf('fb:tab-item href="');
-				var i2 = data.indexOf('"', i1+18);
-				
-				params.step4url = data.slice(i1+18, i2);
-				
-				ravenwoodFreegifts.Click4(params);
-				
-				//getFBML(params);
-			}
-			catch(e)
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					ravenwoodFreegifts.Click3(params, true);
-				}
-				else
-				{
-					console.log(getCurrentTime()+'[Z] Error: '+e.message);
-					
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						sendView('errorUpdatingNeighbours');
-					}
-					else
-					{
-						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}		
-		});
-	},
-	Click4: function(params, retry)
-	{
-		if(typeof(retry) !== 'undefined')
-		{
-			var params2 = '_fb_noscript=1';
-		}
-		else
-		{
-			var params2 = '';
-		}
-	
-		$.get(params.step4url, '',
-		function(data){
-			try
-			{
-				var i1,i2, myParms;
-				var strTemp = data;
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
-				myParms  =  'api_key=120563477996213';
-
-
-				i1       =  strTemp.indexOf('<fb:fbml>');
-				i2       =  strTemp.indexOf('/script>',i1)-1;
-				myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
-				
-				params.myParms = myParms;
-				getFBML(params);
-			}
-			catch(e)
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					ravenwoodFreegifts.Click4(params, true);
-				}
-				else
-				{
-					console.log(getCurrentTime()+'[Z] Error: '+e.message);
-					
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						sendView('errorUpdatingNeighbours');
-					}
-					else
-					{
-						sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}		
-		});
-	},
-};
-
-
-var ravenwoodRequests = 
-{	
-	Click: function(id, URI, retry)
-	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
-		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: 'http://apps.facebook.com/ravenwoodfair/'+addAntiBot,
 			dataType: 'text',
-			success: function(data2)
+			success: function(dataStr)
 			{
-				var data = data2.substr(data2.indexOf('<body'),data2.lastIndexOf('</body'));
-				
-				//info.image =
-				var el = $('#app_content_120563477996213 > div > div > div > div > div', data);
-				if($(el).length > 0)
+				try
 				{
-					if($(el).text().indexOf('You just accepted a neighbor request') != -1)
-					{
-						info.image = '';
-						info.title = 'New neighbour';
-						info.text  = $(el).text();
-						info.time = Math.round(new Date().getTime() / 1000);
-					}
-					else
-					{
-						info.title = $(el).text();
-						
-						
-						var i1 = $(el).text().indexOf('You just accepted this');
-						if(i1 != -1)
-						{
-							var i2 = $(el).text().indexOf(' from ', i1);
-							info.title = $(el).text().slice(i1+22, i2);
-						}
-						
-						info.image = $('#app_content_120563477996213', data).find('img').attr("src");
-						info.text  = $(el).text();
-						info.time = Math.round(new Date().getTime() / 1000);
-					}
+					i1          =   dataStr.indexOf('post_form_id:"')
+					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
+					i1			+=	14;
+					i2          =   dataStr.indexOf('"',i1);
 					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);
+					params.post_form_id = dataStr.slice(i1,i2);
+					
+					
+					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
+					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
+					i1			+=	9;
+					i2          = dataStr.indexOf('"',i1);
+					params.fb_dtsg		= dataStr.slice(i1,i2);
+					
+					
+					var src = FGS.findIframeAfterId('#app_content_120563477996213', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					
+					params.step2url = src;
+
+					FGS.ravenwoodFreegifts.Click2(params);
 				}
-				else
-				{							
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-						ravenwoodRequests.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(params, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
 					}
 				}
 			},
@@ -277,14 +61,314 @@ var ravenwoodRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					ravenwoodRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(params, true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "GET",
+			url: params.step2url+''+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				
+				try
+				{
+					var i1 = dataStr.indexOf('fbparams: "');
+					var i2 = dataStr.indexOf('"', i1+11);
+					params.step3params = '?ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(i1+11, i2));
+					params.step3url = 'http://www.ravenwoodfair.com/app/1/gift/send';
+					
+					FGS.ravenwoodFreegifts.Click3(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click3: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "GET",
+			url: params.step3url,
+			data: params.step3params+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var i1 = dataStr.lastIndexOf('fb:tab-item href="');
+					var i2 = dataStr.indexOf('"', i1+18);
+					
+					
+					params.step4url = dataStr.slice(i1+18, i2);
+				
+					FGS.ravenwoodFreegifts.Click4(params);
+				
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click4: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "POST",
+			url: params.step3url+''+addAntiBot,
+			data: params.step3params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var i1,i2, myParms;
+					var strTemp = dataStr;
+
+					myParms  =  'api_key=120563477996213';
+
+
+					i1       =  strTemp.indexOf('<fb:fbml>');
+					i2       =  strTemp.indexOf('/script>',i1)-1;
+					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					
+					params.myParms = myParms;
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+};
+
+
+FGS.ravenwoodRequests = 
+{	
+	Click: function(currentType, id, currentURL, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "GET",
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
+				
+				if(redirectUrl != false)
+				{
+					if(FGS.checkForNotFound(redirectUrl) === true)
+					{
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
+				
+				try
+				{
+					var el = $('#app_content_120563477996213 > div > div > div > div > div', dataHTML);
+					if($(el).length > 0)
+					{
+						if($(el).text().indexOf('You just accepted a neighbor request') != -1)
+						{
+							info.image = '';
+							info.title = 'New neighbour';
+							info.text  = $(el).text();
+							info.time = Math.round(new Date().getTime() / 1000);
+						}
+						else
+						{
+							info.title = $(el).text();				
+							
+							var i1 = $(el).text().indexOf('You just accepted this');
+							if(i1 != -1)
+							{
+								var i2 = $(el).text().indexOf(' from ', i1);
+								info.title = $(el).text().slice(i1+22, i2);
+							}
+							
+							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
+							info.text  = $(el).text();
+							info.time = Math.round(new Date().getTime() / 1000);
+						}
+						
+						FGS.endWithSuccess(currentType, id, info);
+					}
+					else
+					{
+						throw {message: dataStr}
+					}
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

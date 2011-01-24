@@ -1,45 +1,61 @@
-var sororityRequests = 
+FGS.sororityRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var data = data.substr(data.indexOf('<body'),data.lastIndexOf('</body'));
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
-				try {
-					if($('#app8630423715_claimGift', data).length > 0)
+				if(redirectUrl != false)
+				{
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						var el = $('#app8630423715_claimGift', data);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						var el = $('#app8630423715_acceptInvite', data);
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
+				
+				try 
+				{
+					if($('#app8630423715_claimGift', dataHTML).length > 0)
+					{
+						var el = $('#app8630423715_claimGift', dataHTML);
+					}
+					else
+					{
+						var el = $('#app8630423715_acceptInvite', dataHTML);
 					}
 
 					var out = $(el).text();
 					
+					
 					if(out.indexOf('been claimed. Go claim ') != -1 || out.indexOf('You can only claim gifts from your friends') != -1)
 					{
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = 'This Gift has already been claimed.';
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						var error_text = 'This Gift has already been claimed.';
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
-					
+
 					if($(el).find('img[uid]').length > 0)
 					{
-						info.image = $(el).find('img[uid]:first').attr('src');
+						info.image = '';
 						info.title = '';
 						info.text  = 'New neighbour';
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -52,22 +68,19 @@ var sororityRequests =
 						info.time = Math.round(new Date().getTime() / 1000);
 					}
 					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);		
+					FGS.endWithSuccess(currentType, id, info);	
 				} 
 				catch(err)
 				{
-					console.log(err);
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						sororityRequests.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -75,13 +88,11 @@ var sororityRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					sororityRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

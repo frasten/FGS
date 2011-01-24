@@ -1,71 +1,96 @@
-var restaurantRequests = 
+FGS.restaurantRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data2)
+			success: function(dataStr)
 			{
-				var data = data2.substr(data2.indexOf('<body'),data2.lastIndexOf('</body'));
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
-				if(data.indexOf('have already accepted this gift or it has expired') != -1)
+				if(redirectUrl != false)
 				{
-					info.error = 'limit';
-					info.time = Math.round(new Date().getTime() / 1000);
-					
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);	
+					if(FGS.checkForNotFound(redirectUrl) === true)
+					{
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 					return;
 				}
 				
-				
-				//info.image =
-				var tempText = $('#app43016202276_gift_text', data).text();
-				info.text = tempText;
-				
-				var i1 = tempText.indexOf('You have accepted ');
-				if(i1 != -1)
+				try
 				{
-					var i2 = tempText.indexOf('from', i1);
-					if(i2 != -1)
+					if(dataStr.indexOf('have already accepted this gift or it has expired') != -1)
 					{
-						info.title = tempText.slice(i1+18,i2);
+						var error_text = 'You have already accepted this gift or it has expired.';					
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+
+					var tempText = $('#app43016202276_gift_text', dataHTML).text();
+					info.text = tempText;
+					
+					var i1 = tempText.indexOf('You have accepted ');
+					if(i1 != -1)
+					{
+						var i2 = tempText.indexOf('from', i1);
+						if(i2 != -1)
+						{
+							info.title = tempText.slice(i1+18,i2);
+						}
+						else
+						{
+							info.title = tempText;
+						}
 					}
 					else
 					{
 						info.title = tempText;
 					}
+					
+					
+					info.image = $('#app43016202276_gift_img', dataHTML).children('img').attr('src');
+					info.time = Math.round(new Date().getTime() / 1000);
+					
+					FGS.endWithSuccess(currentType, id, info);					
 				}
-				else
+				catch(err)
 				{
-					info.title = tempText;
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
-				
-				
-				info.image = $('#app43016202276_gift_img', data).children('img').attr('src');
-				info.time = Math.round(new Date().getTime() / 1000);
-				
-				database.updateItem('requests', id, info);
-				sendView('requestSuccess', id, info);
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					console.log(getCurrentTime()+'[R] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-					restaurantRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

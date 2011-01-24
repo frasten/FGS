@@ -1,57 +1,51 @@
-var crimecityRequests = 
+FGS.crimecityRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
-						crimecityRequests.Click(id, redirectUrl, true);
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
 				
-				
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
-				
-				try {
-					var src = $('#app_content_129547877091100', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					crimecityRequests.Click2(id, src);
-				} 
+				try
+				{
+					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					
+					FGS.crimecityRequests.Click2(currentType, id, src);
+				}
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						crimecityRequests.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -59,43 +53,41 @@ var crimecityRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					crimecityRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				
 				try
 				{
-					if($('.streamRewardAllRewardsClaimed', data).length > 0)
+					if($('.streamRewardAllRewardsClaimed', dataHTML).length > 0)
 					{ 
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = jQuery.trim($('.streamRewardAllRewardsClaimed', data).text());
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						var error_text = $.trim($('.streamRewardAllRewardsClaimed', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if($('.acceptMafiaMemberBox', data).length > 0)
+					if($('.acceptMafiaMemberBox', dataHTML).length > 0)
 					{
 						info.image = '';
 						info.title = '';
@@ -104,97 +96,91 @@ var crimecityRequests =
 					}
 					else
 					{
-						info.image = $('.acceptGiftGiftBoxImage', data).children('img').attr('src');
+						info.image = $('.acceptGiftGiftBoxImage', dataHTML).children('img').attr('src');
 						info.title = '';						
-						info.text  = $('.acceptGiftGiftBoxTitle', data).text();
-						
+						info.text  = $('.acceptGiftGiftBoxTitle', dataHTML).text();
 						info.time = Math.round(new Date().getTime() / 1000);
 					}
 					
-					database.updateItem('requests', id, info);
-					sendView('requestSuccess', id, info);			
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					crimecityRequests.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 };
 
-var crimecityBonuses = 
+FGS.crimecityBonuses = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-						crimecityBonuses.Click(id, redirectUrl, true);
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
 				
-				
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
-				
-				try {
-					var src = $('#app_content_129547877091100', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
+				try 
+				{
+					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
 					
-					crimecityBonuses.Click2(id, src);
+					FGS.crimecityBonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						crimecityBonuses.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -202,72 +188,72 @@ var crimecityBonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					crimecityBonuses.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				
 				try
 				{
-					if($('.streamRewardAllRewardsClaimed', data).length > 0)
+					if($('.streamRewardAllRewardsClaimed', dataHTML).length > 0)
 					{ 
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = jQuery.trim($('.streamRewardAllRewardsClaimed', data).text());
-						
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);
+						var error_text = $.trim($('.streamRewardAllRewardsClaimed', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
 					
-					info.image = $('.streamRewardGiftBoxImage', data).children('img').attr('src');
-					info.title = $('.streamRewardGiftBoxTitle', data).text();
-					
-					info.text  = $('.streamRewardGiftBoxTitle', data).text();//jQuery.trim($('.streamRewardBoxTitle', data).text());
+					info.image = $('.streamRewardGiftBoxImage', dataHTML).children('img').attr('src');
+					info.title = $('.streamRewardGiftBoxTitle', dataHTML).text();
+					info.text  = $('.streamRewardGiftBoxTitle', dataHTML).text();//$.trim($('.streamRewardBoxTitle', dataHTML).text());
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					database.updateItem('bonuses', id, info);
-					sendView('bonusSuccess', id, info);			
+					
+					FGS.endWithSuccess(currentType, id, info);		
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
-					sendView('bonusError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					crimecityBonuses.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

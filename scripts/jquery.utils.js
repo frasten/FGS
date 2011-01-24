@@ -2,7 +2,7 @@ jQuery.extend({
 	unparam : function(params)
 	{
 		var objResult = {};
-        $.each(params.split("&"), function(){ var prm=this.split("=");
+		jQuery.each(params.split("&"), function(){ var prm=this.split("=");
 		objResult[prm[0]] = prm[1]; });
         return objResult;
     }

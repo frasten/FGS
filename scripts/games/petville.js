@@ -1,58 +1,55 @@
-var petvilleRequests = 
+FGS.petvilleRequests = 
 {	
-	Click: function(id, URI, retry)
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-			
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving gift, Retrying bonus with ID: '+id);
-						petvilleRequests.Click(id, redirectUrl, true);
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
 				
+				try 
+				{
+					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
 				
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
-				
-				try {
-					var src = $('#app_content_163576248142', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					petvilleRequests.Click2(id, src);
-				} 
+					FGS.petvilleRequests.Click2(currentType, id, src);
+				}
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						petvilleRequests.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('requests', id, info);
-						sendView('requestError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -60,103 +57,107 @@ var petvilleRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleRequests.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var URL = $('#flashiframe', data).attr('src');
-					
+					var URL = FGS.findIframeAfterId('#flashFrame', dataStr);
+					if (URL == '') throw {message:"Cannot find <iframe src= in page"}
+
 					var i1 = 0;
 					var i2 = URL.lastIndexOf('/')+1;
 					
 					var nextUrl = URL.slice(i1,i2);
 
-					var i1 = data.indexOf('ZYFrameManager.gotoTab');
-					var i2 = data.indexOf(",'", i1)+2;
-					var i3 = data.indexOf("'", i2);
+					var i1 = dataStr.indexOf('ZYFrameManager.gotoTab');
+					var i2 = dataStr.indexOf(",'", i1)+2;
+					var i3 = dataStr.indexOf("'", i2);
 					
-					nextUrl = nextUrl+data.slice(i2,i3);
+					nextUrl = nextUrl+dataStr.slice(i2,i3);
 					
 					
-					petvilleRequests.Click3(id, nextUrl);
+					FGS.petvilleRequests.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleRequests.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click3:	function(id, url, retry)
+	Click3:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				try
 				{
-					if($('.reqFrom_img', data).length > 0 && $(".giftConfirm_img",data).length == 0)
+					if($('.reqFrom_img', dataHTML).length > 0 && $(".giftConfirm_img" ,dataHTML).length == 0)
 					{
-						console.log('New neighbour');
-
-						info.image = $(".reqFrom_img",data).children().attr("src");
+						info.image = $(".reqFrom_img" ,dataHTML).children().attr("src");
 						info.title = 'New neighbour';
-						info.text  = $(".reqFrom_name",data).children().text();
+						info.text  = $(".reqFrom_name" ,dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
 						
-						database.updateItem('requests', id, info);
-						sendView('requestSuccess', id, info);
+						FGS.endWithSuccess(currentType, id, info);
 					}
-					else if($('.giftFrom_img', data).length > 0 && $(".giftConfirm_img",data).length > 0)
+					else if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img" ,dataHTML).length > 0)
 					{
 						var sendInfo = '';
 						
-						var tmpStr = unescape(url);
+						var tmpStr = unescape(currentURL);
 						
 						var i1 = tmpStr.indexOf('&gift=');
 						if(i1 != -1)
@@ -173,105 +174,100 @@ var petvilleRequests =
 							sendInfo = {
 								gift: giftName,
 								destInt: giftRecipient,
-								destName: $('.giftFrom_name', data).children().text()
+								destName: $('.giftFrom_name', dataHTML).children().text()
 								}
 						}
 						//info.thanks = sendInfo;					
 						
-						info.image = $(".giftConfirm_img",data).children().attr("src");
-						info.title = $(".giftConfirm_name",data).children().text();
-						info.text  = $(".giftFrom_name",data).children().text();
+						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("src");
+						info.title = $(".giftConfirm_name" ,dataHTML).children().text();
+						info.text  = $(".giftFrom_name" ,dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
 						
-						database.updateItem('requests', id, info);
-						sendView('requestSuccess', id, info);
+						FGS.endWithSuccess(currentType, id, info);
 					}
 					else
 					{
-						throw {}
+						throw {message: dataStr}
 					}
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('requests', id, info);
-					sendView('requestError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleRequests.Click3(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('requestError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 };
 
-var petvilleBonuses = 
-{	
-	Click: function(id, URI, retry)
+FGS.petvilleBonuses =
+{
+	Click: function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: URI,
+			url: currentURL,
 			dataType: 'text',
-			success: function(data)
+			success: function(dataStr)
 			{
-				var redirectUrl = checkForLocationReload(data);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
 					if(typeof(retry) == 'undefined')
 					{
-						console.log(getCurrentTime()+'[B] Connection error while receiving bonus, Retrying bonus with ID: '+id);
-						petvilleBonuses.Click(id, redirectUrl, true);
+						retryThis(currentType, id, redirectUrl, true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);	
+						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
 				}
 				
-				
-				
-				var data = data.slice(data.indexOf('<body'),data.lastIndexOf('</body')+7);
-				
-				try {
-					var src = $('#app_content_163576248142', data).find('iframe:first').attr('src');
-					if (typeof(src) == 'undefined') throw {message:"Cannot find <iframe src= in page"}
-					petvilleBonuses.Click2(id, src);
-				} 
+				try
+				{
+					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
+					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+
+					FGS.petvilleBonuses.Click2(currentType, id, src);
+				}
 				catch(err)
 				{
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						petvilleBonuses.Click(id, URI+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 					}
 					else
 					{
-						info.error = 'receiving';
-						info.time = Math.round(new Date().getTime() / 1000);
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);
+						FGS.endWithError('receiving', currentType, id);
 					}
 				}
 			},
@@ -279,115 +275,112 @@ var petvilleBonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleBonuses.Click(id, URI+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click2:	function(id, url, retry)
+	Click2:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var URL = $('#flashiframe', data).attr('src');
+					var URL = FGS.findIframeAfterId('#flashFrame', dataStr);
+					if (URL == '') throw {message:"Cannot find <iframe src= in page"}
 					
 					var i1 = 0;
 					var i2 = URL.lastIndexOf('/')+1;
 					
 					var nextUrl = URL.slice(i1,i2);
 
-					var i1 = data.indexOf('ZYFrameManager.gotoTab');
+					var i1 = dataStr.indexOf('ZYFrameManager.gotoTab');
 					
-					if(i1 == -1) throw {}
+					if(i1 == -1) throw {message: 'No ZYframeManager'}
 					
-					var i2 = data.indexOf(",'", i1)+2;
-					var i3 = data.indexOf("'", i2);
+					var i2 = dataStr.indexOf(",'", i1)+2;
+					var i3 = dataStr.indexOf("'", i2);
 					
-					var nextUrl2 = data.slice(i2,i3).replace('http://fb-client-0.petville.zynga.com/current/', '');
+					var nextUrl2 = dataStr.slice(i2,i3).replace('http://fb-client-0.petville.zynga.com/current/', '');
 					
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 					
 					
-					petvilleBonuses.Click3(id, nextUrl);
+					FGS.petvilleBonuses.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
-					sendView('bonusError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleBonuses.Click2(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});
 	},
 	
-	Click3:	function(id, url, retry)
+	Click3:	function(currentType, id, currentURL, retry)
 	{
-		var info = {
-			image: 'gfx/90px-cancel.png'
-		}	
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
 		
 		$.ajax({
 			type: "GET",
-			url: url,
-			success: function(data)
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
 			{
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				try
 				{
-					var out = jQuery.trim($('.main_giftConfirm_cont', data).text());
+					var out = $.trim($('.main_giftConfirm_cont', dataHTML).text());
 					
 					if(out.indexOf('You already claimed') != -1 ||  out.indexOf('The item is all gone') != -1  || out.indexOf('already received') != -1 || out.indexOf('the celebration has ended') != -1 || out.indexOf('you cannot claim the celebration') != -1 || out.indexOf('this feed is only for friends') != -1)
 					{
-						info.error = 'limit';
-						info.time = Math.round(new Date().getTime() / 1000);
-						info.error_text = out;
-						
-						
-						database.updateErrorItem('bonuses', id, info);
-						sendView('bonusError', id, info);	
-					
+						var error_text = out;
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
 					if(out.indexOf('cannot claim more than') != -1 || out.indexOf('Claim more tomorrow') != -1)
 					{
-						info.error = 'other';
-						info.time = Math.round(new Date().getTime() / 1000);
-						
-						info.error_text = out;
-					
-						sendView('bonusError', id, info);
-						return;						
+						var error_text = out;
+						FGS.endWithError('other', currentType, id, error_text);
+						return;
 					}
 					
 					var outText = '';
@@ -400,7 +393,7 @@ var petvilleBonuses =
 						if(i3 != -1)
 							if(i3 < i2 || i2 == -1)
 								i2 = i3;
-								
+						
 						outText = out.slice(i1,i2);
 					}
 					else if(out.indexOf('has shared a') != -1)
@@ -449,15 +442,10 @@ var petvilleBonuses =
 						outText = out;
 					}
 					
-					var postUrl = $('.main_giftConfirm_cont', data).find('form').attr('action');
-					var postData = $('.main_giftConfirm_cont', data).find('form').serialize();
-					
-					console.log(postData);
-					console.log(postUrl);
-					
+					var postUrl = $('.main_giftConfirm_cont', dataHTML).find('form').attr('action');
+					var postData = $('.main_giftConfirm_cont', dataHTML).find('form').serialize();
+
 					$.post(postUrl, postData);
-					
-					
 
 					info.text  = outText;
 					info.image = 'gfx/90px-check.png';
@@ -465,29 +453,31 @@ var petvilleBonuses =
 					
 					info.time = Math.round(new Date().getTime() / 1000);
 					
-					database.updateItem('bonuses', id, info);
-					sendView('bonusSuccess', id, info);
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
-					console.log(err);
-					info.error = 'receiving';
-					info.time = Math.round(new Date().getTime() / 1000);
-					database.updateErrorItem('bonuses', id, info);
-					sendView('bonusError', id, info);
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
 				}
 			},
 			error: function()
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					petvilleBonuses.Click3(id, url, true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
 				}
 				else
 				{
-					info.error = 'connection';
-					info.time = Math.round(new Date().getTime() / 1000);
-					sendView('bonusError', id, info);
+					FGS.endWithError('connection', currentType, id);
 				}
 			}
 		});

@@ -1,23 +1,9 @@
-Index: background.html
-===================================================================
---- background.html	(revisione 10)
-+++ background.html	(copia locale)
-@@ -107,8 +107,8 @@
- 		deleteHistoryOlderThan: 0,
- 	}
- 
--	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false };
- 
-+	defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
- 	for(var idd in gamesData)
- 	{
- 		defaultOptions.games[idd] = defaultGameOptions;
 Index: giftlist.html
 ===================================================================
---- giftlist.html	(revisione 10)
+--- giftlist.html	(revisione 134)
 +++ giftlist.html	(copia locale)
-@@ -360,6 +360,11 @@
- 			$('div#'+v.id).click(processBonusClick);
+@@ -328,6 +328,11 @@
+ 			$('.optionsMenu', $('#'+game+'Game')).buttonset('refresh');
  		}
  		updateCount(gameID);
 +		
@@ -28,7 +14,7 @@ Index: giftlist.html
  	}
  	
  	function processBonusClick(e)
-@@ -994,7 +999,7 @@
+@@ -1229,7 +1234,7 @@
  		else
  		{
  			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
@@ -37,7 +23,7 @@ Index: giftlist.html
  			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
  			
  			if(gameID == bkP.options.defaultGame)
-@@ -1007,6 +1012,11 @@
+@@ -1242,6 +1247,11 @@
  				$('.gameLikeBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
  			}
  			
@@ -45,11 +31,11 @@ Index: giftlist.html
 +			{
 +				$('.gameAutoAcceptBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
 +			}
-+			
- 			//if(e.commentBonus)
- 			//{
- 			//	$('.gameCommentBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-@@ -1440,6 +1450,8 @@
++
+ 			$(el).removeClass('hide');
+ 			$('img', 'label[for="'+gameID+'Selected"]').attr('src', 'icons/menu/'+game+'.png');
+ 			$('div.content', 		$('#'+game+'Game')).removeClass('hide');
+@@ -1529,6 +1539,8 @@
  			
  			$('<label><span>Post "I like" on bonuses</span><input type="checkbox" class="gameLikeBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
  			
@@ -58,7 +44,7 @@ Index: giftlist.html
  			//$('<label><span>Post comment on bonuses</span><input type="checkbox" class="gameCommentBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
  			
  			switchEnabled(id);
-@@ -1518,6 +1530,12 @@
+@@ -1649,6 +1661,12 @@
  			bkP.saveOptions();
  		});
  		
@@ -71,3 +57,16 @@ Index: giftlist.html
  		//$(".gameCommentBonusBox").click(function()
  		//{
  			//bkP.options.games[$(this).attr('gameID')].commentBonus = $(this).is(':checked') ? true : false;
+Index: fgs.js
+===================================================================
+--- fgs.js	(revisione 134)
++++ fgs.js	(copia locale)
+@@ -33,7 +33,7 @@
+ 			collectXbonusesAtTheSameTime: 5,
+ 		}
+ 
+-		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false };
++		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
+ 
+ 		for(var idd in FGS.gamesData)
+ 		{
