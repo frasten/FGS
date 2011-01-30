@@ -44,13 +44,13 @@ FGS.restaurantRequests =
 					var tempText = $('#app43016202276_gift_text', dataHTML).text();
 					info.text = tempText;
 					
-					var i1 = tempText.indexOf('You have accepted ');
-					if(i1 != -1)
+					var pos1 = tempText.indexOf('You have accepted ');
+					if(pos1 != -1)
 					{
-						var i2 = tempText.indexOf('from', i1);
-						if(i2 != -1)
+						var pos2 = tempText.indexOf('from', pos1);
+						if(pos2 != -1)
 						{
-							info.title = tempText.slice(i1+18,i2);
+							info.title = tempText.slice(pos1+18,pos2);
 						}
 						else
 						{

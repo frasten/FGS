@@ -14,52 +14,21 @@ FGS.frontiervilleFreegifts =
 			{
 				try
 				{
-					var strTemp = '';
-
-					i1  =   dataStr.indexOf('zySnid=');
-					if (i1 == -1) throw {message:'Cannot find zySnid in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
-
-					i1  =   dataStr.indexOf('zySnuid=');
-					if (i1 == -1) throw {message:'Cannot find zySnuid in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
-
-					i1  =   dataStr.indexOf('zy_user=');
-					if (i1 == -1) throw {message:'Cannot find zy_user in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
-
-					i1  =   dataStr.indexOf('zy_ts=');
-					if (i1 == -1) throw {message:'Cannot find zy_ts in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
-
-					i1  =   dataStr.indexOf('zy_session=');
-					if (i1 == -1) throw {message:'Cannot find zy_session in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
-
-					i1  =   dataStr.indexOf('zySig=');
-					if (i1 == -1) throw {message:'Cannot find zySig in page'}
-					i2  =   dataStr.indexOf('&',i1);
-					strTemp += dataStr.slice(i1,i2)+'&';
+					var tst = new RegExp(/<iframe[^>].*src=\s*["].*populateFbCache\.php[?]([^"]+)/m).exec(dataStr);
+					if(tst == null) throw {message:'no frontierville iframe tag'}
 					
-					params.zyParam = strTemp;
-
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
+					var zyParams = {}
 					
-					params.post_form_id = dataStr.slice(i1,i2);
-
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
+					var qry = tst[1].replace(/&amp;/g,'&');
+					
+					for(var idd in FGS.jQuery.unparam(qry))
+					{
+						if(idd.indexOf('zy') == 0)
+						{
+							zyParams[idd] = FGS.jQuery.unparam(qry)[idd];
+						}
+					}
+					params.zyParam = $.param(zyParams);
 					
 					FGS.frontiervilleFreegifts.Click2(params);
 				}
@@ -118,28 +87,19 @@ FGS.frontiervilleFreegifts =
 			{
 				try
 				{
-					var i1,i2, myParms;
-					var strTemp = dataStr;
+					var tst = new RegExp(/FB[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
 					
-					i1       =  strTemp.indexOf('FB.init("');
-					if (i1 == -1) throw {message:"Cannot find FB.init"}
-					i1 += 9;
-					i2       =  strTemp.indexOf('"',i1);
-
-					myParms  =  'app_key='+strTemp.slice(i1,i2);
-					i1     =  i2 +1;
-					i1       =  strTemp.indexOf('"',i1)+1;
-					i2       =  strTemp.indexOf('"',i1);
+					var app_key = tst[1];
+					var channel_url = tst[2];
 					
-					myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
-
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
 					
-					params.myParms = myParms;
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
 					
-					//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
+					params.nextParams = paramsStr;
 					
 					FGS.getFBML(params);
 				}
@@ -244,17 +204,17 @@ FGS.frontiervilleRequests =
 						
 						var tmpStr = unescape(currentURL);
 						
-						var i1 = tmpStr.indexOf('&gift=');
-						if(i1 != -1)
+						var pos1 = tmpStr.indexOf('&gift=');
+						if(pos1 != -1)
 						{
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-							var giftName = tmpStr.slice(i1+6,i2);
+							var giftName = tmpStr.slice(pos1+6,pos2);
 							
-							var i1 = tmpStr.indexOf('&senderId=1:');
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos1 = tmpStr.indexOf('&senderId=1:');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 							
-							var giftRecipient = tmpStr.slice(i1+12,i2);						
+							var giftRecipient = tmpStr.slice(pos1+12,pos2);						
 								
 							sendInfo = {
 								gift: giftName,
@@ -371,10 +331,10 @@ FGS.frontiervilleBonuses =
 							{
 								if(d.indexOf('giftLimit') != -1)
 								{
-									var i1 = d.indexOf('class="giftLimit')+18;
-									var i2 = d.indexOf('div>', i1)-2;
+									var pos1 = d.indexOf('class="giftLimit')+18;
+									var pos2 = d.indexOf('div>', pos1)-2;
 									
-									var error_text = $.trim(d.slice(i1,i2));
+									var error_text = $.trim(d.slice(pos1,pos2));
 									
 									if(error_text.indexOf('your friend will still get their') != -1)
 									{

@@ -69,15 +69,15 @@ if(jQuery)( function() {
 							
 							if (y + $(menu).outerHeight() > d.pageYOffset + $(document.body).innerHeight())
 							{
-								var i1 = parseInt(y);
-								var i2 = parseInt($(menu).outerHeight());
-								y = i1-i2;
+								var y = parseInt(y);
+								var yO = parseInt($(menu).outerHeight());
+								y = y-yO;
 							}
 							if (x + $(menu).outerWidth() > d.pageXOffset + $(document.body).innerWidth())
 							{
-								var i1 = parseInt(x);
-								var i2 = parseInt($(menu).outerWidth());
-								x = i1-i2;
+								var x = parseInt(x);
+								var xO = parseInt($(menu).outerWidth());
+								x = x-xO;
 							}
 							
 							// Show the menu

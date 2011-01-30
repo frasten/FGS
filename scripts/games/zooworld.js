@@ -14,29 +14,12 @@ FGS.zooworldFreegifts =
 			{
 				try
 				{
-					var i1, i2;
-					
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
-					
 					var src = FGS.findIframeAfterId('#app_content_167746316127', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
-					var i1 = src.indexOf('?');
-					src = src.slice(i1+1);
-					
+					var pos1 = src.indexOf('?');
+					src = src.slice(pos1+1);
+										
 					var postParams = {}
 					
 					for(var idd in $.unparam(src))
@@ -116,28 +99,19 @@ FGS.zooworldFreegifts =
 			{
 				try
 				{
-					var i1,i2, myParms;
-					var strTemp = dataStr;
-
-					i1       =  strTemp.indexOf('FB.Facebook.init("');
-					if (i1 == -1) throw {message:"Cannot find FB.init"}
-					i1 += 18;
-					i2       =  strTemp.indexOf('"',i1);
-
-					myParms  =  'app_key='+strTemp.slice(i1,i2);
-					i1     =  i2 +1;
-					i1       =  strTemp.indexOf('"',i1)+1;
-					i2       =  strTemp.indexOf('"',i1);
+					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
 					
-					myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
+					var app_key = tst[1];
+					var channel_url = tst[2];
+					
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
 
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
-					
-					params.myParms = myParms;
-					
-					//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
+					params.nextParams = paramsStr;
 					
 					FGS.getFBML(params);
 				}
@@ -231,6 +205,61 @@ FGS.zooworldRequests =
 					}
 					else
 					{
+					
+						var sendInfo = '';
+						
+						
+						var tmpStr = unescape(currentURL);
+						
+						var pos1 = tmpStr.indexOf('?itemId=');
+						if(pos1 == -1)
+						{
+							pos1 = tmpStr.indexOf('&itemId=');
+						}
+						if(pos1 != -1)
+						{
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftName = tmpStr.slice(pos1+8,pos2);
+							
+							var pos1 = tmpStr.indexOf('&giftSenderId=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftRecipient = tmpStr.slice(pos1+14,pos2);			
+								
+							sendInfo = {
+								gift: giftName,
+								destInt: giftRecipient,
+								destName: $('img[uid]', dataHTML).attr('title')
+								}
+						}
+						
+						var pos1 = tmpStr.indexOf('?giftId=');
+						if(pos1 == -1)
+						{
+							pos1 = tmpStr.indexOf('&giftId=');
+						}
+						if(pos1 != -1)
+						{
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftName = tmpStr.slice(pos1+8,pos2);
+							
+							var pos1 = tmpStr.indexOf('&senderId=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftRecipient = tmpStr.slice(pos1+10,pos2);			
+								
+							sendInfo = {
+								gift: giftName,
+								destInt: giftRecipient,
+								destName: $('img[uid]', dataHTML).attr('title')
+								}
+						}
+						
+						info.thanks = sendInfo;				
+					
+					
 						info.image = $('.main_body', dataHTML).find('img:first').attr('src');
 						info.title = $('.main_body', dataHTML).find('p:first').text();
 						info.text  = $('.main_body', dataHTML).find('p:last').text();
@@ -310,7 +339,7 @@ FGS.zooworldBonuses =
 						var src = FGS.findIframeAfterId('#app_content_2345673396', dataStr);
 					}
 
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					FGS.zooworldBonuses.Click2(currentType, id, src);
 				}
 				catch(err)
@@ -357,9 +386,9 @@ FGS.zooworldBonuses =
 				
 				try
 				{
-					var i1 = 0;
-					var i2 = currentURL.lastIndexOf('/')+1;
-					var domain = currentURL.slice(i1,i2);
+					var pos1 = 0;
+					var pos2 = currentURL.lastIndexOf('/')+1;
+					var domain = currentURL.slice(pos1,pos2);
 
 					var lastPos = 0;
 
@@ -367,16 +396,16 @@ FGS.zooworldBonuses =
 
 					for(var i = 0; i < count.length; i++)
 					{
-						var ii1 = dataStr.indexOf('var serviceObj =', lastPos);
-						var i1  = dataStr.indexOf('data:', ii1);
-						if(i1 == -1) continue;
-						i1+=5;
-						var i2 = dataStr.indexOf('},', i1)+1;
-						lastPos = i2;
+						var ipos1 = dataStr.indexOf('var serviceObj =', lastPos);
+						var pos1 = dataStr.indexOf('data:', ipos1);
+						if(pos1 == -1) continue;
+						pos1+=5;
+						var pos2 = dataStr.indexOf('},', pos1)+1;
+						lastPos = pos2;
 						
-						if(dataStr.slice(i1, i2).indexOf('zooparent') != -1 || dataStr.slice(i1, i2).indexOf('"hugme"') != -1)
+						if(dataStr.slice(pos1, pos2).indexOf('zooparent') != -1 || dataStr.slice(pos1, pos2).indexOf('"hugme"') != -1)
 						{
-							eval('var tempVars = '+dataStr.slice(i1,i2));
+							eval('var tempVars = '+dataStr.slice(pos1,pos2));
 							break;
 						}
 					}
@@ -393,12 +422,12 @@ FGS.zooworldBonuses =
 						}
 					}
 					
-					var i3 = dataStr.indexOf('url: "', i2);
-					i3+=6;
-					var i4 = dataStr.indexOf('"', i3);
+					var pos3 = dataStr.indexOf('url: "', pos2);
+					pos3+=6;
+					var pos4 = dataStr.indexOf('"', pos3);
 					
 					
-					var nextUrl = domain+dataStr.slice(i3,i4)+getStr;
+					var nextUrl = domain+dataStr.slice(pos3,pos4)+getStr;
 					var params = tempVars;
 					
 					FGS.zooworldBonuses.Click3(currentType, id, nextUrl, params);
@@ -462,9 +491,9 @@ FGS.zooworldBonuses =
 							FGS.endWithError('limit', currentType, id, error_text);
 							return;						
 						}
-						var i1 = out.indexOf('<b>')+3;
-						var i2 = out.indexOf('b>',i1)-2;
-						out = out.slice(i1,i2);
+						var pos1 = out.indexOf('<b>')+3;
+						var pos2 = out.indexOf('b>',pos1)-2;
+						out = out.slice(pos1,pos2);
 					}
 					
 					if(body.indexOf('You have adopted the') != -1)
@@ -477,9 +506,9 @@ FGS.zooworldBonuses =
 					{
 						var temp = out;
 
-						var i1 = body.indexOf('<b')+3;
-						var i2 = body.indexOf('</',i1);
-						out = body.slice(i1,i2);
+						var pos1 = body.indexOf('<b')+3;
+						var pos2 = body.indexOf('</',pos1);
+						out = body.slice(pos1,pos2);
 						
 						body = temp;
 					}
@@ -491,34 +520,34 @@ FGS.zooworldBonuses =
 					
 					if(out.indexOf("Hurray! You've claimed the") != -1)
 					{
-						var i1 = out.indexOf("Hurray! You've claimed the ");
-						var i2 = out.indexOf('for', i1);
-						out = out.slice(i1+27, i2);
+						var pos1 = out.indexOf("Hurray! You've claimed the ");
+						var pos2 = out.indexOf('for', pos1);
+						out = out.slice(pos1+27, pos2);
 					}
 					
 					if(out.indexOf('For trying, you received a ') != -1)
 					{
-						var i1 = out.indexOf("For trying, you received a ");
-						var i2 = out.indexOf('!', i1);
-						out = out.slice(i1+27, i2);
+						var pos1 = out.indexOf("For trying, you received a ");
+						var pos2 = out.indexOf('!', pos1);
+						out = out.slice(pos1+27, pos2);
 					}
 					
 					
 					if(out.indexOf('You opened the mystery gift box and found a ') != -1)
 					{
-						var i1 = out.indexOf("You opened the mystery gift box and found a ");
-						var i2 = out.indexOf('!', i1);
-						out = out.slice(i1+44, i2);
+						var pos1 = out.indexOf("You opened the mystery gift box and found a ");
+						var pos2 = out.indexOf('!', pos1);
+						out = out.slice(pos1+44, pos2);
 					}
 					
 					if(out.indexOf(' from ') != -1)
 					{
-						var i1 = 0;
-						var i2 = out.indexOf(' from ', i1);
-						out = out.slice(i1, i2);
+						var pos1 = 0;
+						var pos2 = out.indexOf(' from ', pos1);
+						out = out.slice(pos1, pos2);
 					}
 					
-					
+
 					out = out.replace('You helped and received a','').replace(' has been added to your inventory.','').replace('You received a', '').replace('You have adopted the','').replace('You got a', '').replace('!','');
 					
 					info.title = out;

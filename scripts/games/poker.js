@@ -14,36 +14,17 @@ FGS.pokerFreegifts =
 			{
 				try
 				{
-					var i1, i2;
-
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
+					var pos1 = dataStr.indexOf('app_2389801228.context');
+					var pos2 = dataStr.indexOf('\\"', pos1);
+					var pos3 = dataStr.indexOf('\\"', pos2+2);
 					
-					params.post_form_id = dataStr.slice(i1,i2);
+					var fb_mock_hash = dataStr.slice(pos2+2,pos3);
 					
+					var pos1 = dataStr.indexOf('app_2389801228.contextd', pos1);
+					var pos2 = dataStr.indexOf('\\"', pos1);
+					var pos3 = dataStr.indexOf('}\\"', pos2+5);
 					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
-					var i1 = dataStr.indexOf('app_2389801228.context');
-					var i2 = dataStr.indexOf('\\"', i1);
-					var i3 = dataStr.indexOf('\\"', i2+2);
-					
-					var fb_mock_hash = dataStr.slice(i2+2,i3);
-					
-					var i1 = dataStr.indexOf('app_2389801228.contextd', i1);
-					var i2 = dataStr.indexOf('\\"', i1);
-					var i3 = dataStr.indexOf('}\\"', i2+5);
-					
-					var fb_mock = dataStr.slice(i2+2,i3+1).replace(/\\/g, '').replace(/\\/g, '');
-					
-					
-					//domene sprawdzic
+					var fb_mock = dataStr.slice(pos2+2,pos3+1).replace(/\\/g, '').replace(/\\/g, '');
 					
 					params.postData =
 					{
@@ -53,8 +34,8 @@ FGS.pokerFreegifts =
 						fb_mockajax_context: fb_mock,
 						fb_mockajax_context_hash: fb_mock_hash,
 						appid: '2389801228',
-						fb_dtsg: params.fb_dtsg,
-						post_form_id: params.post_form_id,
+						fb_dtsg: FGS.fb_dtsg,
+						post_form_id: FGS.post_form_id,
 						lsd:'',
 						post_form_id_source: 'AsyncRequest'
 					}
@@ -125,9 +106,7 @@ FGS.pokerFreegifts =
 					var x = JSON.parse(str);
 					
 					var data = x.payload.data.fbml_form0;
-					
-					var strTemp = data;
-					
+
 					var arr = [];
 					
 					var dataHTML = FGS.HTMLParser(data);
@@ -145,67 +124,52 @@ FGS.pokerFreegifts =
 						FGS.sendView('updateNeighbours', params.gameID, arr);
 						return;
 					}
-										
-					var strTemp2;
-					
-					i1       =  strTemp.indexOf('PlatformInvite.sendInvitation');
-					if (i1 == -1) throw {message:"Cannot find PlatformInvite.sendInvitation in page"}
-					i1       =  strTemp.indexOf('&#123;',i1);
-					i2       =  strTemp.indexOf('&#125;',i1)+6;
-					strTemp2     =  strTemp.slice(i1,i2);
-					strTemp2   =  strTemp2.replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}');
-					eval("aTemp = "+strTemp2);
-					
-					myParms      =  'app_id='     +aTemp["app_id"];
-					myParms     +=  '&request_type='  +escape(aTemp["request_type"]);
-					myParms     +=  '&invite='      +aTemp["invite"];
-					
-					
-					//strTemp2 = $('form[content]:first', dataHTML).attr('content');
+								
 
-					i1           =  strTemp.indexOf('" content="');
-					if (i1 == -1) throw {message:"Cannot find  content=\\ in page"};
-					i1			+=  11;
-					i2           =  strTemp.indexOf('"',i1)-1;
-					strTemp2    =   eval('"'+strTemp.slice(i1,i2)+'"');
-					myParms     +=  '&content='     +encodeURIComponent(strTemp2);
+					var reqData =
+					{
+						prefill: true,
+						message: '',
+						preview: false,
+						donot_send: false,
+						__d: 1,
+						post_form_id: FGS.post_form_id,
+						fb_dtsg: FGS.fb_dtsg,
+						post_form_id_source: 'AsyncRequest',
+						lsd: ''
+					}
+				
+					var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(data);
+					if(tst == null) throw {message:'no api_key tag'}
+					var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
 					
-					myParms     +=  '&preview=false';
-					myParms     +=  '&is_multi='    +aTemp["is_multi"];
-					myParms     +=  '&is_in_canvas='  +aTemp["is_in_canvas"];
-					myParms     +=  '&form_id='     +aTemp["request_form"];
-					myParms     +=  '&include_ci='    +aTemp["include_ci"];
+					$.extend(reqData, reqData2);
+					reqData.form_id = reqData2.request_form;
+					delete(reqData.request_form);
 					
-					myParms     +=  '&prefill=true&message=&donot_send=false&__d=1';
+					var tst = new RegExp(/<form[^>].*content=\s*["]([^"]+)[^>]*>/gm).exec(data);
+					if(tst == null) throw {message:'no content'}
+					
+					reqData.content = tst[1];
+					reqData.prefill = true;
 
-					myParms    +=  '&post_form_id='+params.post_form_id;
-					myParms     +=  '&fb_dtsg='+params.fb_dtsg;
-					myParms     +=  '&post_form_id_source=AsyncRequest&lsd&';
-					
-					myUrl2 = $('form[type]', dataHTML).attr('action');
-					
-					var param2 = $('form[type]', dataHTML).serialize();
-					
 					params.items = arr;
 					
-					//dump(FGS.getCurrentTime()+'[Z] Sending');
+					var sendGiftParams = $('form[type]', dataHTML).serialize();
 					
-					var j = 0;
-					for(u in params.sendTo)
+					$(params.sendTo).each(function(k,v)
 					{
-						var v = params.sendTo[u];
+						reqData['to_ids['+k+']'] = v;
 						
-						myParms     +=  '&to_ids['+j+']='   +v;
 						if(params.gameID == '120563477996213')
-							param2 += 'ids[]='+v+'&';
+							sendGiftParams += 'ids[]='+v+'&';
 						else
-							param2 += '&ids%5B%5D='+v;						
-						j++;
-					}
+							sendGiftParams += '&ids%5B%5D='+v;
+					});
 					
-					params.myParms = myParms+'&lsd=';
-					params.myUrl = 'http://apps.facebook.com/texas_holdem/requests/chipgift/chipgift_post.php';
-					params.param2 = param2;
+					params.promptParams = reqData;
+					params.sendGiftUrl = 'http://apps.facebook.com/texas_holdem/requests/chipgift/chipgift_post.php';
+					params.sendGiftParams = sendGiftParams;
 					
 					FGS.sendGift(params);
 				}

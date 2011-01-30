@@ -1,3 +1,12 @@
+FGS.castleageFreegifts =
+{
+	Click: function(params, retry)
+	{
+		params.customUrl = 'http://apps.facebook.com/castle_age/gift.php?quick=true&app_friends=c&giftSelection='+params.gift;
+		FGS.getFBML(params);
+	},
+};
+
 FGS.castleageRequests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
@@ -41,21 +50,21 @@ FGS.castleageRequests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
-
+					
 					var el = $('#app46755028429_results_main_wrapper', dataHTML);
 					
 					var tmpTxt = $(el).text();
-					var i1 = tmpTxt.indexOf('You have accepted the gift:');
-					if(i1 == -1)
+					var pos1 = tmpTxt.indexOf('You have accepted the gift:');
+					if(pos1 == -1)
 					{
-						var i1 = tmpTxt.indexOf('You have been awarded the gift:');
-						var i2 = tmpTxt.indexOf(' from ');
-						var tit = tmpTxt.slice(i1+31, i2);
+						var pos1 = tmpTxt.indexOf('You have been awarded the gift:');
+						var pos2 = tmpTxt.indexOf(' from ');
+						var tit = tmpTxt.slice(pos1+31, pos2);
 					}
 					else
 					{
-						var i2 = tmpTxt.indexOf('.', i1);
-						var tit = tmpTxt.slice(i1+28, i2);
+						var pos2 = tmpTxt.indexOf('.', pos1);
+						var tit = tmpTxt.slice(pos1+28, pos2);
 					}
 
 					info.title = '';

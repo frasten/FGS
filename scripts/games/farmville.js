@@ -14,46 +14,9 @@ FGS.farmvilleFreegifts =
 			{
 				try
 				{
-					var i1,i2;
-					
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
-					
-					var count = dataStr.match(/<iframe[^>]*?.*?<\/iframe>/g);
-					
-					var nextUrl = false;
-					
-					FGS.jQuery(count).each(function(k,v)
-					{
-						var i1 = v.indexOf('src="');
-						if(i1 == -1) return true; 
-						i1+=5;
-						var i2 = v.indexOf('"', i1);
-						var url = v.slice(i1,i2);
-						if(url.indexOf('farmville.com/flash.php') != -1)
-						{
-							var url = $(FGS.HTMLParser('<p class="link" href="'+url+'">abc</p>')).find('p.link');
-							nextUrl = $(url).attr('href');
-							return false;
-						}
-					});
-					
-					if(nextUrl == false) throw {message:'no iframe'}
-					params.nextUrl = nextUrl;
-					
-					
+					var tst = new RegExp(/<iframe[^>].*src=\s*["](.*farmville.com\/flash.php.*[^"]+)[^>]*>*?.*?<\/iframe>/gm).exec(dataStr);
+					if(tst == null) throw {message:'no farmville iframe tag'}
+					params.click2url = $(FGS.HTMLParser('<p class="link" href="'+tst[1]+'">abc</p>')).find('p.link').attr('href');
 					FGS.farmvilleFreegifts.Click2(params);
 				}
 				catch(err)
@@ -103,29 +66,22 @@ FGS.farmvilleFreegifts =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
+		
 		$.ajax({
 			type: "GET",
-			url: params.nextUrl+''+addAntiBot,
+			url: params.click2url+''+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-					params.domain = params.nextUrl.match(re)[1].toString();
-
-					var dataParam = '&';
-
-					var i1 = dataStr.indexOf('http://'+params.domain+'/stats_counter.php?');
+					params.domain = params.click2url.match(re)[1].toString();
 					
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1 += 47;
-					i2 = dataStr.indexOf('\'', i1);
-					dataParam	+= dataStr.slice(i1,i2);
+					var tst = new RegExp(/Farm.StatsURL =  '.*stats_counter.php[?](.*)'/).exec(dataStr);
+					if(tst == null) throw {message:'no zy_params'}
+					params.zyParam = tst[1];
 					
-					params.zyParam = dataParam;
-
 					FGS.farmvilleFreegifts.Click3(params);
 				}
 				catch(err)
@@ -184,26 +140,19 @@ FGS.farmvilleFreegifts =
 			{
 				try
 				{
-					var i1,i2, myParms;
-					var strTemp = dataStr;
-
-					i1       =  strTemp.indexOf('FB.init("');
-					if (i1 == -1) throw {message:"Cannot find FB.init"}
-					i1 += 9;
-					i2       =  strTemp.indexOf('"',i1);
-
-					myParms  =  'app_key='+strTemp.slice(i1,i2);
-					i1     =  i2 +1;
-					i1       =  strTemp.indexOf('"',i1)+1;
-					i2       =  strTemp.indexOf('"',i1);
+					var tst = new RegExp(/FB[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
 					
-					myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
-
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					var app_key = tst[1];
+					var channel_url = tst[2];
 					
-					params.myParms = myParms;
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
 					
 					FGS.getFBML(params);
 				}
@@ -269,8 +218,8 @@ FGS.farmvilleRequests =
 				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
-				var i1 = currentURL.indexOf('addneighbo');
-				if(i1 != -1)
+				var pos1 = currentURL.indexOf('addneighbo');
+				if(pos1 != -1)
 				{
 					info.image = '';
 					info.title = '';
@@ -300,7 +249,6 @@ FGS.farmvilleRequests =
 				
 				try
 				{
-				
 					if($('.main_giftConfirm_cont', dataHTML).length > 0)
 					{
 						if($('.main_giftConfirm_cont', dataHTML).text().indexOf('seem to send that gift to your friend right now') != -1)
@@ -328,15 +276,15 @@ FGS.farmvilleRequests =
 							
 							if(tmpStr.indexOf('sendThankYou') != -1)
 							{
-								var i1 = tmpStr.indexOf('&giftRecipient=');
-								var i2 = tmpStr.indexOf('&', i1+1);
+								var pos1 = tmpStr.indexOf('&giftRecipient=');
+								var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-								var giftRecipient = tmpStr.slice(i1+15,i2);
+								var giftRecipient = tmpStr.slice(pos1+15,pos2);
 								
-								var i1 = tmpStr.indexOf('&gift=');
-								var i2 = tmpStr.indexOf('&', i1+1);
+								var pos1 = tmpStr.indexOf('&gift=');
+								var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-								var giftName = tmpStr.slice(i1+6,i2);
+								var giftName = tmpStr.slice(pos1+6,pos2);
 								
 								
 								sendInfo = {
@@ -352,10 +300,10 @@ FGS.farmvilleRequests =
 						{
 							var tmpStr = unescape(currentURL);
 												
-							var i1 = tmpStr.indexOf('&gift=');
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos1 = tmpStr.indexOf('&gift=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 							
-							var giftName = tmpStr.slice(i1+6,i2);
+							var giftName = tmpStr.slice(pos1+6,pos2);
 							
 							sendInfo = {
 								gift: giftName,
@@ -487,11 +435,11 @@ FGS.farmvilleBonuses =
 						
 						if($('.inner_giftConfirm_cont > form', dataHTML).length > 0)
 						{
-							var i1 = dataStr.indexOf('media="handheld" href="');
-							if(i1 != -1)
+							var pos1 = dataStr.indexOf('media="handheld" href="');
+							if(pos1 != -1)
 							{
-								var i2 = dataStr.indexOf('"', i1+23);
-								newUrl = dataStr.slice(i1+23,i2);
+								var pos2 = dataStr.indexOf('"', pos1+23);
+								newUrl = dataStr.slice(pos1+23,pos2);
 							}		
 						}
 

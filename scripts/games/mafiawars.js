@@ -14,26 +14,10 @@ FGS.mafiawarsFreegifts =
 			{
 				try
 				{
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
 					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
-					
-					params.click2url = src;
-					
+					if (src == '') throw {message:"no iframe"}
+					params.click2url = src;					
 					FGS.mafiawarsFreegifts.Click2(params);
-				
 				}
 				catch(err)
 				{
@@ -92,60 +76,54 @@ FGS.mafiawarsFreegifts =
 				
 				try
 				{
-					var i1, i2, strTemp, myUrl, myParms;
-
-					strTemp = dataStr;
-
-					i1 = strTemp.indexOf('action="');
-					if (i1 == -1) throw {message:"Cannot find action= in page"}
+					var tst = new RegExp(/<form.*[^>]action="(.*)" .*>/).exec(dataStr);
+					if(tst == null) throw {message: 'no form'}
 					
-					i1 += 8;
-					i2 = strTemp.indexOf('"',i1);
-					myUrl = strTemp.slice(i1,i2);
-
-					myParms = '';
+					var tmpUrl = tst[1];
 					
+					var count = dataStr.match(/<input[^>]*?.*?>/g);
 					
-					var count = strTemp.match(/<input[^>]*?.*?>/g);
+					var nextParams = '';
 					
 					$(count).each(function(k,v)
 					{
 						
-						var i1 = v.indexOf('name="')+6;
-						if(i1 == 5) return;
-						i2 = v.indexOf('"',i1);
+						var pos1 = v.indexOf('name="')+6;
+						if(pos1 == 5) return;
+						pos2 = v.indexOf('"',pos1);
 						
-						
-						
-						if (myParms=='')
-							var tmpName = v.slice(i1,i2)+'=';
+						if (nextParams=='')
+							var tmpName = v.slice(pos1,pos2)+'=';
 						else
-							var tmpName = '&'+v.slice(i1,i2)+'=';
+							var tmpName = '&'+v.slice(pos1,pos2)+'=';
 						
 						
-						var i1 = v.indexOf('value="')+7;
-						if(i1 == 6) return;
+						var pos1 = v.indexOf('value="')+7;
+						if(pos1 == 6) return;
 						
-						i2 = v.indexOf('"',i1);
-						myParms += tmpName+escape(v.slice(i1,i2));
+						pos2 = v.indexOf('"',pos1);
+						nextParams += tmpName+escape(v.slice(pos1,pos2));
 					});
 					
 					var useridtmp = $('input[name="sf_xw_user_id"]', dataHTML).val();
-					var i1 = useridtmp.indexOf('|')+1;
-					var useridfin = useridtmp.slice(i1);
+					var pos1 = useridtmp.indexOf('|')+1;
+					var useridfin = useridtmp.slice(pos1);
 					
-					var i1 = myUrl.indexOf('&tmp=');
-					var i2 = myUrl.indexOf('&', i1+1);
-					var tmpTmp = myUrl.slice(i1, i2);
 					
-					var i1 = myUrl.indexOf('&cb=');				
-					var i2 = myUrl.indexOf('&', i1+1);
-					var tmpCb = myUrl.slice(i1, i2);
+					var pos1 = tmpUrl.indexOf('&tmp=');
+					var pos2 = tmpUrl.indexOf('&', pos1+1);
+					var tmpTmp = tmpUrl.slice(pos1, pos2);
+					
+					
+					var pos1 = tmpUrl.indexOf('&cb=');				
+					var pos2 = tmpUrl.indexOf('&', pos1+1);
+					var tmpCb = tmpUrl.slice(pos1, pos2);
+					
 					
 					params.sf_xw_user_id = $('input[name="sf_xw_user_id"]', dataHTML).val();
 					params.sf_xw_sig = $('input[name="sf_xw_sig"]', dataHTML).val();				
 					
-					params.click3param = myParms;
+					params.click3param = nextParams;
 					params.click3url = 'http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=requests&xw_action=friend_selector&xw_city=1&req_controller=freegifts&free_gift_id='+params.gift+'&free_gift_cat=1&xw_client_id=8&ajax=1&liteload=1&fbml_iframe=1&xw_person='+useridfin+tmpTmp+tmpCb;
 				
 					FGS.mafiawarsFreegifts.Click3(params);
@@ -207,27 +185,19 @@ FGS.mafiawarsFreegifts =
 			{
 				try
 				{
-				
-					var i1,i2, myParms;
-					var strTemp = dataStr;
-
-					i1       =  strTemp.indexOf('FB.Facebook.init("');
-					if (i1 == -1) throw {message:"Cannot find FB.init"}
-					i1 += 18;
-					i2       =  strTemp.indexOf('"',i1);
-
-					myParms  =  'app_key='+strTemp.slice(i1,i2);
-					i1     =  i2 +1;
-					i1       =  strTemp.indexOf('"',i1)+1;
-					i2       =  strTemp.indexOf('"',i1);
+					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
 					
-					myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
-
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					var app_key = tst[1];
+					var channel_url = tst[2];
 					
-					params.myParms = myParms;
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+
+					params.nextParams = paramsStr;
 					
 					FGS.getFBML(params);
 				}
@@ -313,7 +283,7 @@ FGS.mafiawarsRequests =
 				{
 				
 					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
 					FGS.mafiawarsRequests.Click3(currentType, id, src);
 				} 
@@ -361,53 +331,41 @@ FGS.mafiawarsRequests =
 
 				try 
 				{
-					var i1, i2, strTemp, myUrl, myParms;
-
-					strTemp = dataStr;
-
-					i1 = strTemp.indexOf('action="');
-					if (i1 == -1) throw {message:"Cannot find action= in page"}
+					var tst = new RegExp(/<form.*[^>]action="(.*)" .*>/).exec(dataStr);
+					if(tst == null) throw {message: 'no form'}
 					
-					i1 += 8;
-					i2 = strTemp.indexOf('"',i1);
-					myUrl = strTemp.slice(i1,i2);
-
-					myParms = '';
+					var tmpUrl = tst[1];
 					
+					var count = dataStr.match(/<input[^>]*?.*?>/g);
 					
-					var count = strTemp.match(/<input[^>]*?.*?>/g);
+					var nextParams = '';
 					
 					$(count).each(function(k,v)
 					{
+						var pos1 = v.indexOf('name="')+6;
+						if(pos1 == 5) return;
+						pos2 = v.indexOf('"',pos1);
 						
-						var i1 = v.indexOf('name="')+6;
-						if(i1 == 5) return;
-						i2 = v.indexOf('"',i1);
-						
-						
-						
-						if (myParms=='')
-							var tmpName = v.slice(i1,i2)+'=';
+						if (nextParams=='')
+							var tmpName = v.slice(pos1,pos2)+'=';
 						else
-							var tmpName = '&'+v.slice(i1,i2)+'=';
+							var tmpName = '&'+v.slice(pos1,pos2)+'=';
+
+						var pos1 = v.indexOf('value="')+7;
+						if(pos1 == 6) return;
 						
-						
-						var i1 = v.indexOf('value="')+7;
-						if(i1 == 6) return;
-						
-						i2 = v.indexOf('"',i1);
-						myParms += tmpName+escape(v.slice(i1,i2));
+						pos2 = v.indexOf('"',pos1);
+						nextParams += tmpName+escape(v.slice(pos1,pos2));
 					});
-					
 					
 					var isBoost = false;
 					
-					if(myUrl.indexOf('mastery_boost') != -1)
+					if(tmpUrl.indexOf('mastery_boost') != -1)
 					{
 						isBoost = true;
 					}
 					
-					FGS.mafiawarsRequests.Click4(currentType, id, myUrl, myParms, isBoost);
+					FGS.mafiawarsRequests.Click4(currentType, id, tmpUrl, nextParams, isBoost);
 				}
 				catch(err)
 				{
@@ -501,16 +459,16 @@ FGS.mafiawarsRequests =
 							info.image = $('img:first', dataHTML).attr('src');
 							var tmpText = $('.good:first', dataHTML).text();
 							
-							var i1 = tmpText.indexOf(':');
-							if(i1 != -1)
+							var pos1 = tmpText.indexOf(':');
+							if(pos1 != -1)
 							{
-								tmpText = tmpText.slice(i1+1);
+								tmpText = tmpText.slice(pos1+1);
 							}
 							
-							var i2 = tmpText.indexOf('+');							
-							if(i2 != -1)
+							var pos2 = tmpText.indexOf('+');							
+							if(pos2 != -1)
 							{
-								info.text = tmpText.slice(i2);
+								info.text = tmpText.slice(pos2);
 								tmpText = tmpText.replace(info.text, '');
 							}					
 							
@@ -518,12 +476,12 @@ FGS.mafiawarsRequests =
 						}
 						else if(data.indexOf('You got an Energy Pack.') != -1)
 						{
-							var i1 = data.indexOf('You got an Energy Pack.');
-							var i2 = data.indexOf('.', i1+23);
+							var pos1 = data.indexOf('You got an Energy Pack.');
+							var pos2 = data.indexOf('.', pos1+23);
 							
 							info.image = $('img:first', dataHTML).attr('src');
 							info.title = $('img:first', dataHTML).parent().text();
-							info.text = data.slice(i1,i2);
+							info.text = data.slice(pos1,pos2);
 						}
 						else if(data.indexOf('Your Super Pignata contained') != -1)
 						{
@@ -532,10 +490,10 @@ FGS.mafiawarsRequests =
 						}
 						else if(data.indexOf('Requests from other Mafias') != -1)
 						{
-							var i1 = data.indexOf('http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=recruit&xw_action=accept');
-							var i2 = data.indexOf('"', i1);
+							var pos1 = data.indexOf('http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=recruit&xw_action=accept');
+							var pos2 = data.indexOf('"', pos1);
 							
-							var newURL = data.slice(i1,i2);
+							var newURL = data.slice(pos1,pos2);
 							
 							$.ajax({
 								type: "POST",
@@ -566,18 +524,18 @@ FGS.mafiawarsRequests =
 					if(data.indexOf('pic uid="') != -1 && data.indexOf('free_gift_id=') != -1)
 					{
 						
-						var i1 = data.indexOf('free_gift_id=');
-						var i2 = data.indexOf("'", i1);
-						var giftName = data.slice(i1+13, i2);
+						var pos1 = data.indexOf('free_gift_id=');
+						var pos2 = data.indexOf("'", pos1);
+						var giftName = data.slice(pos1+13, pos2);
 						
-						var i1 = data.indexOf('pic uid="');
-						var i2 = data.indexOf('"', i1+9);
-						var receiveUid = data.slice(i1+9, i2);
+						var pos1 = data.indexOf('pic uid="');
+						var pos2 = data.indexOf('"', pos1+9);
+						var receiveUid = data.slice(pos1+9, pos2);
 						
 						
-						var i1 = data.indexOf('false; " >', i2);
-						var i2 = data.indexOf('</a', i1);
-						var receiveName = data.slice(i1+10, i2);
+						var pos1 = data.indexOf('false; " >', pos2);
+						var pos2 = data.indexOf('</a', pos1);
+						var receiveName = data.slice(pos1+10, pos2);
 
 						sendInfo = {
 							gift: giftName,
@@ -653,7 +611,7 @@ FGS.mafiawarsBonuses =
 				try
 				{
 					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 
 					FGS.mafiawarsBonuses.Click2(currentType, id, src);
 				}
@@ -701,44 +659,38 @@ FGS.mafiawarsBonuses =
 				
 				try
 				{
-					var i1, i2, strTemp, myUrl, myParms;
-
-					strTemp = dataStr;
-
-					i1 = strTemp.indexOf('action="');
-					if (i1 == -1) throw {message:"Cannot find action= in page"}
+					var tst = new RegExp(/<form.*[^>]action="(.*)" .*>/).exec(dataStr);
+					if(tst == null) throw {message: 'no form'}
 					
-					i1 += 8;
-					i2 = strTemp.indexOf('"',i1);
-					myUrl = strTemp.slice(i1,i2);
-
-					myParms = '';
+					var tmpUrl = tst[1];
 					
+					var count = dataStr.match(/<input[^>]*?.*?>/g);
 					
-					var count = strTemp.match(/<input[^>]*?.*?>/g);
+					var nextParams = '';
+					
+					var count = dataStr.match(/<input[^>]*?.*?>/g);
 					
 					$(count).each(function(k,v)
 					{
 						
-						var i1 = v.indexOf('name="')+6;
-						if(i1 == 5) return;
-						i2 = v.indexOf('"',i1);
-						
-						
-						
-						if (myParms=='')
-							var tmpName = v.slice(i1,i2)+'=';
+						var pos1 = v.indexOf('name="')+6;
+						if(pos1 == 5) return;
+						pos2 = v.indexOf('"',pos1);
+
+						if (nextParams=='')
+							var tmpName = v.slice(pos1,pos2)+'=';
 						else
-							var tmpName = '&'+v.slice(i1,i2)+'=';
+							var tmpName = '&'+v.slice(pos1,pos2)+'=';
 						
 						
-						var i1 = v.indexOf('value="')+7;
-						if(i1 == 6) return;
+						var pos1 = v.indexOf('value="')+7;
+						if(pos1 == 6) return;
 						
-						i2 = v.indexOf('"',i1);
-						myParms += tmpName+escape(v.slice(i1,i2));
+						pos2 = v.indexOf('"',pos1);
+						nextParams += tmpName+escape(v.slice(pos1,pos2));
 					});
-					FGS.mafiawarsBonuses.Click3(currentType, id, myUrl, myParms);
+					
+					FGS.mafiawarsBonuses.Click3(currentType, id, tmpUrl, nextParams);
 				}
 				catch(err)
 				{
@@ -785,111 +737,109 @@ FGS.mafiawarsBonuses =
 
 				try
 				{
-					var strTemp = dataStr;
-					
-					if(strTemp.indexOf('Sorry, you already collected on this stash!') != -1 || strTemp.indexOf('secret stashes today, and have to wait') != -1 || strTemp.indexOf('You cannot claim this reward') != -1 || strTemp.indexOf('You have already received your free boost') != -1 || strTemp.indexOf('You have already helped') != -1 || strTemp.indexOf('has already paid out the bounty on this target') != -1 || strTemp.indexOf('This user has already received the maximum amount of help') != -1 || strTemp.indexOf('has already got their Energy Pack for today') != -1 || strTemp.indexOf('You cannot gift this item to people not in your mafia') != -1 || strTemp.indexOf('has received all the help allowed for today') != -1 || strTemp.indexOf('All of the available boosts have already been claimed') != -1 || strTemp.indexOf('This stash has already been found') != -1 || strTemp.indexOf('has passed out all available') != -1 || strTemp.indexOf('You already helped this user') != -1 || strTemp.indexOf('You can only receive') != -1 || strTemp.indexOf('cannot receive any more parts') != -1 || strTemp.indexOf('has no more free boosts to hand out') != -1 || strTemp.indexOf(', come back tomorrow to help out more') != -1 || strTemp.indexOf('You are too late to claim a reward') != -1 || strTemp.indexOf('You have already claimed the maximum number of') != -1)
+					if(dataStr.indexOf('Sorry, you already collected on this stash!') != -1 || dataStr.indexOf('secret stashes today, and have to wait') != -1 || dataStr.indexOf('You cannot claim this reward') != -1 || dataStr.indexOf('You have already received your free boost') != -1 || dataStr.indexOf('You have already helped') != -1 || dataStr.indexOf('has already paid out the bounty on this target') != -1 || dataStr.indexOf('This user has already received the maximum amount of help') != -1 || dataStr.indexOf('has already got their Energy Pack for today') != -1 || dataStr.indexOf('You cannot gift this item to people not in your mafia') != -1 || dataStr.indexOf('has received all the help allowed for today') != -1 || dataStr.indexOf('All of the available boosts have already been claimed') != -1 || dataStr.indexOf('This stash has already been found') != -1 || dataStr.indexOf('has passed out all available') != -1 || dataStr.indexOf('You already helped this user') != -1 || dataStr.indexOf('You can only receive') != -1 || dataStr.indexOf('cannot receive any more parts') != -1 || dataStr.indexOf('has no more free boosts to hand out') != -1 || dataStr.indexOf(', come back tomorrow to help out more') != -1 || dataStr.indexOf('You are too late to claim a reward') != -1 || dataStr.indexOf('You have already claimed the maximum number of') != -1)
 					{
 						FGS.endWithError('limit', currentType, id);
 						return;
 					}
 					
-					if(strTemp.indexOf('>Congratulations</div>') != -1) // Get Reward
+					if(dataStr.indexOf('>Congratulations</div>') != -1) // Get Reward
 					{
-						var i1 = strTemp.indexOf('>Congratulations</div>');
-						var i2 = strTemp.indexOf('You Have Received', i1);
-						if(i2 == -1)
+						var pos1 = dataStr.indexOf('>Congratulations</div>');
+						var pos2 = dataStr.indexOf('You Have Received', pos1);
+						if(pos2 == -1)
 						{
-							var i2 = strTemp.indexOf('You have received', i1);
+							var pos2 = dataStr.indexOf('You have received', pos1);
 						}
-						var i3 = strTemp.indexOf('</div>', i2);
+						var pos3 = dataStr.indexOf('</div>', pos2);
 											
 						info.image = 'gfx/90px-check.png';
-						info.text  = strTemp.slice(i2,i3);
-						info.title = strTemp.slice(i2+17,i3);					
+						info.text  = dataStr.slice(pos2,pos3);
+						info.title = dataStr.slice(pos2+17,pos3);					
 					}
-					else if(strTemp.indexOf('Congrats! You received a') != -1) // Grab your share
+					else if(dataStr.indexOf('Congrats! You received a') != -1) // Grab your share
 					{
-						var i1 = strTemp.indexOf('Congrats! You received a');
-						var i2 = strTemp.indexOf('from', i1);
-						var i3 = strTemp.indexOf('</div>', i1);
+						var pos1 = dataStr.indexOf('Congrats! You received a');
+						var pos2 = dataStr.indexOf('from', pos1);
+						var pos3 = dataStr.indexOf('</div>', pos1);
 
-						info.text  = strTemp.slice(i1,i3);
+						info.text  = dataStr.slice(pos1,pos3);
 						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
-						info.title = strTemp.slice(i1+25,i2);
+						info.title = dataStr.slice(pos1+25,pos2);
 					}
-					else if(strTemp.indexOf('You received a Liquid Courage') != -1 || strTemp.indexOf(' to celebrate his recent promotion') != -1 || strTemp.indexOf('to celebrate her recent promotion') != -1)
+					else if(dataStr.indexOf('You received a Liquid Courage') != -1 || dataStr.indexOf(' to celebrate his recent promotion') != -1 || dataStr.indexOf('to celebrate her recent promotion') != -1)
 					{
-						var i1 = strTemp.indexOf('You received a');
-						var i2 = strTemp.indexOf('from', i1);
+						var pos1 = dataStr.indexOf('You received a');
+						var pos2 = dataStr.indexOf('from', pos1);
 						
 						info.text  = $('td.message_body', dataHTML).text();
 						info.image = $('td.message_body > img:nth-child(2)', dataHTML).attr('src');
-						info.title = strTemp.slice(i1+15,i2);
+						info.title = dataStr.slice(pos1+15,pos2);
 					}
-					else if(strTemp.indexOf('fight the enemy and claim a cash bounty') != -1)
+					else if(dataStr.indexOf('fight the enemy and claim a cash bounty') != -1)
 					{
 						info.title = 'Cash';
 						info.text = 'Fight the enemy and claim a cash';
 						info.image = 'http://mwfb.static.zynga.com/mwfb/graphics/buy_cash_75x75_01.gif';
 					
 						var strNotice = $('td.message_body', dataHTML).html();
-						var myUrl = '';
+						var tmpUrl = '';
 						
 						$('td.message_body', dataHTML).find('a').each(function()
 						{
 							if($(this).attr('href').indexOf('loot_confirmed=yes') != -1)
 							{
-								myUrl = $(this).attr('href');
+								tmpUrl = $(this).attr('href');
 								return false;
 							}
 						});
 						
-						$.post(myUrl, currentParams+'&ajax=1&liteload=1', function(){});
+						$.post(tmpUrl, currentParams+'&ajax=1&liteload=1', function(){});
 					}
-					else if(strTemp.indexOf('You sent a') != -1 || strTemp.indexOf('You collected a') != -1)
+					else if(dataStr.indexOf('You sent a') != -1 || dataStr.indexOf('You collected a') != -1)
 					{
 						info.title = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('title');
 						info.text =  $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').parent().next('div').text();
 						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
 					}
-					else if(strTemp.indexOf('loot_confirmed=yes') != -1)
+					else if(dataStr.indexOf('loot_confirmed=yes') != -1)
 					{
-						var strTemp2 = $('td.message_body', dataHTML).text();
+						var dataStr2 = $('td.message_body', dataHTML).text();
 					
-						var i1 = strTemp2.indexOf('You received a');
-						var i2 = strTemp2.indexOf('from', i1);
+						var pos1 = dataStr2.indexOf('You received a');
+						var pos2 = dataStr2.indexOf('from', pos1);
 						
 						info.title = $('td.message_body > div:nth-child(2)', dataHTML).find('img:first').parent().next('div').text();
-						info.text =  strTemp2.slice(i1,i2);
+						info.text =  dataStr2.slice(pos1,pos2);
 						info.image = $('td.message_body > div:nth-child(2)', dataHTML).find('img:first').attr('src');
 						
 						var body = $('td.message_body', dataHTML).html();
 						
 						if(body.indexOf('No Thanks') != -1)
 						{
-							var myUrl = '';
+							var tmpUrl = '';
 							
 							$('td.message_body', dataHTML).find('a').each(function()
 							{
 								if($(this).attr('href').indexOf('loot_confirmed=yes') != -1)
 								{
-									myUrl = $(this).attr('href');
+									tmpUrl = $(this).attr('href');
 									return false;
 								}
 							});
 							
-							$.post(myUrl, currentParams+'&ajax=1&liteload=1', function(){});				
+							$.post(tmpUrl, currentParams+'&ajax=1&liteload=1', function(){});				
 						}
 					}
-					else if(strTemp.indexOf('You collected a') != -1)
+					else if(dataStr.indexOf('You collected a') != -1)
 					{
-						var i1 = strTemp.indexOf('You collected a');
-						var i2 = strTemp.indexOf('from', i1);
-						var i3 = strTemp.indexOf('</div>', i1);
+						var pos1 = dataStr.indexOf('You collected a');
+						var pos2 = dataStr.indexOf('from', pos1);
+						var pos3 = dataStr.indexOf('</div>', pos1);
 
-						info.text  = strTemp.slice(i1,i3);
+						info.text  = dataStr.slice(pos1,pos3);
 						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
-						info.title = strTemp.slice(i1+16,i2);
+						info.title = dataStr.slice(pos1+16,pos2);
 					}
 					else
 					{

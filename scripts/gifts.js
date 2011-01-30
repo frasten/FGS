@@ -265,22 +265,23 @@ FGS.giftsArray = {
 	},
 	'101539264719': // cafe world
 	{
-		"2883": { name: 'Maxwell Coffee'},
 		"2548": { name: 'Special Delivery'},
 		"1174": { name: 'Spice Shelf'},
 		"1177": { name: 'Spice Small Jar'},
-		"1834": { name: 'Vaccuum Tube'},
 		"1833": { name: 'Flux Switch'},
+		"1834": { name: 'Vaccuum Tube'},
 		"1875": { name: 'Lotto Ticket'},
+		"3013": { name: 'Puff Pastries'},
 		"1837": { name: 'Small Energy Boost'},
 		"2266": { name: 'Pita and Dolmas'},
 		"2404": { name: 'Ranch Beans'},
-		"2925": { name: 'Holly Candy Cane'},
 		"2450": { name: 'Tempura Udon'},
-		"2856": { name: 'Pumpkin Cookies'},
-		"2773": { name: 'Tea Party'},
+		"2925": { name: 'Holly Candy Cane'},
 		"2480": { name: 'Pan Dulce'},
+		"2773": { name: 'Tea Party'},
 		"2924": { name: 'Mistletoe'},
+		"2856": { name: 'Pumpkin Cookies'},
+		"2974": { name: 'New Year Popper'},
 		"2540": { name: 'In Flight Meal'},
 		"2677": { name: 'Skull Cookies'},
 		"2774": { name: 'Drink Me Elixir'},
@@ -288,6 +289,7 @@ FGS.giftsArray = {
 		"758": { name: 'Lump of Coal'},
 		"759": { name: 'Ginger Man'},
 		"1793": { name: 'Falafel'},
+
 		
 		"1600": { name: 'Spring Rolls'},
 		"1559": { name: 'Popcorn Shrimp'},
@@ -506,8 +508,135 @@ FGS.giftsArray = {
 	2389801228: // poker
 	{
 		"chips": { name: "Chips" }
-	}
+	},
+	338051018849: //baking life
+	{
+		"Valentine+Cookies": { name: 'Valentine Cookies'},
+		"Stanchion": { name: 'Stanchion'},
+		"Cinnamon+Rolls": { name: 'Cinnamon Rolls'},
+		"Lemon+Poppy+Seed+Muffins": { name: 'Lemon Poppy Seed Muffins'},
+		"Lattice+Top+Apple+Pie": { name: 'Lattice Top Apple Pie'},
+		"Layered+Chocolate+Cake": { name: 'Layered Chocolate Cake'},
+		"Almond+Croissants": { name: 'Almond Croissants'},
+		"Potted+Flower%3A+Yellow": { name: 'Potted Flower: Yellow'},
+		"Chocolate+Chip+Cookies": { name: 'Chocolate Chip Cookies'},
+		"Raspberry+Cheesecake": { name: 'Raspberry Cheesecake'},
+		"Paulas+Igloo+Pudding": { name: 'Paulas Igloo Pudding'},
+		"Tres+Leches+Cake": { name: 'Tres Leches Cake'},
+		"Potted+Flower%3A+Pink": { name: 'Potted Flower: Pink'},
+		"Vanilla+Bundt+Cake": { name: 'Vanilla Bundt Cake'},
+		"Baklava": { name: 'Baklava'},
+		"Chocolate+Delights": { name: 'Chocolate Delights'},
+		"Strawberry+Rhubarb+Pie": { name: 'Strawberry Rhubarb Pie'},
+		"Bibingka+Coconut+Cake": { name: 'Bibingka Coconut Cake'},
+		"Pistachio+Biscotti": { name: 'Pistachio Biscotti'},
+		"Pumpkin+Pie": { name: 'Pumpkin Pie'},
+		"Parisian+Macaroons": { name: 'Parisian Macaroons'},
+		"Passion+Fruit+Mousse+Cake": { name: 'Passion Fruit Mousse Cake'},
+		"Peanut+Butter+Blossoms": { name: 'Peanut Butter Blossoms'},
+		"Tiramisu": { name: 'Tiramisu'},
+		"Carrot+Cake": { name: 'Carrot Cake'},
+		"Marshmallow+Crispy+Stars": { name: 'Marshmallow Crispy Stars'},
+		"Red+Velvet+Cake": { name: 'Red Velvet Cake'},
+		"Cherry+Pound+Cake": { name: 'Cherry Pound Cake'},
+	},
 	
+	46755028429: //castle age
+	{
+		"1": { name: 'Mystery Shield Gift!'},
+		"2": { name: 'Mystery Trident Gift!'},
+		"3": { name: 'Mystery Cloak Gift!'},
+		"4": { name: 'Mystery Dagger Gift!'},
+		"5": { name: 'Mystery Axe Gift!'},
+		"6": { name: 'Mystery Staff Gift!'},
+		"7": { name: 'Mystery Lava Gift!'},
+		"8": { name: 'Mystery Crest Piece!'},
+		"9": { name: 'Mystery Plate Gift!'},
+		"10": { name: 'Great Fiery Gift!'},
+		"11": { name: 'Volcanic Egg!'},
+		"12": { name: 'Mystery Ice Artifact!'},
+		"13": { name: 'Mystery Earth!'},
+		"14": { name: 'Mystery Relic!'},
+		"15": { name: 'Mystery Item!'},
+		"16": { name: 'Limited Dragan Gift!'},
+		"17": { name: 'Mystery Relic!'},
+		"18": { name: 'Mystery Treasure!'},
+		"20": { name: 'Serpent Egg!'},
+		"21": { name: 'Dragon Egg!'},
+		"22": { name: 'Mystery Druid Item!'},
+		"23": { name: 'Mystery Armor!'},
+		"24": { name: 'Mystery Frost Item!'},
+		"25": { name: 'Mystery Artifact!'},
+		"26": { name: 'Mystery Armor!'},
+		"27": { name: 'Mystery Frost Relic!'},
+		"28": { name: 'Mystery Fire Relic!'},
+		"29": { name: 'Mystery Heirloom!'},
+		"30": { name: 'Mystery Blade Gift!'},
+	},
+	
+	129547877091100: // crime city
+	{
+		"23": { name: 'Mystery Blade'},
+		"1": { name: 'Brass Knuckle...'},
+		"24": { name: 'Mystery Pisto...'},
+		"2": { name: 'Ski Mask'},
+		"16": { name: 'Circular Saw'},
+		"25": { name: 'Mystery Armor...'},
+		"4": { name: 'Steel Garrote'},
+		"7": { name: 'Police Baton - (lvl 8)'},
+		"10": { name: 'M14 Sniper Ri... - (lvl 15)'},
+		"31": { name: 'Mystery Car - (lvl 20)'},
+		"27": { name: 'Mystery Shotg... - (lvl 20)'},
+		"28": { name: 'Mystery Rifle - (lvl 30)'},
+		"26": { name: 'Mystery Armor... - (lvl 35)'},
+		"29": { name: 'Mystery Heavy... - (lvl 40)'},
+	},
+	
+	163576248142:
+	{
+		"5280": { name: 'Purple Key'},
+		"5281": { name: 'Red Key'},
+		"5282": { name: 'Yellow Key'},
+		"5215": { name: 'Blue Mystery Gift'},
+		"4140": { name: 'Creative Cupcake Treat'},
+		"4138": { name: 'Social Butterfly Cupcake Treat'},
+		"4139": { name: 'Troublemaker Cupcake Treat'},
+		"6016": { name: 'Magic Nails'},
+		"6017": { name: 'Magic Paint'},
+		"5526": { name: 'Bamboo'},
+		"5527": { name: 'Coconuts'},
+		"4950": { name: 'Blue Iris'},
+		"4952": { name: 'Red Lily'},
+		"4866": { name: 'Yellow Daffodils'},
+		"4873": { name: "Baby's Breath"},
+	},
+	
+	25287267406:
+	{
+		"478": { name: 'Red Snow Cone'},
+		"439": { name: 'Bold Mystery Gift Box'},
+		"204": { name: 'Black Mystery Gift Box'},
+		"247": { name: 'Gold Mystery Gift Box'},
+		"246": { name: 'Red Mystery Gift Box'},
+		"160": { name: 'Holy Water'},
+		"472": { name: 'Fingernails'},
+		"130": { name: 'Premonition (lvl 8)'},
+		"129": { name: 'Bloodletting'},
+		"131": { name: 'Shadow Conceal (lvl 6)'},
+		"165": { name: 'Werewolf Claw (lvl 10)'},
+		"15": { name: 'Shadow Transformation (lvl 10)'},
+		"166": { name: 'Chupacabra Teeth (lvl 12)'},
+		"167": { name: 'Pentagram Shard (lvl 14)'},
+		"168": { name: "Charon's Obol (lvl 18)"},
+		"163": { name: 'Wolfsbane (lvl 40)'},
+		"172": { name: 'Ankh Shard (lvl 34)'},
+		"173": { name: 'Pompeii Ash'},
+		"170": { name: 'Unholy Water'},
+		"175": { name: 'Raven Feathers'},
+		"169": { name: 'Tarot Death Card (lvl 22)'},
+		"171": { name: 'Map Fragment'},
+
+	}	
 };
 
 FGS.freeGiftForGame =
@@ -522,6 +651,11 @@ FGS.freeGiftForGame =
 	291549705119: 'energy_1',
 	167746316127: '562',
 	2389801228: 'chips',
+	338051018849: 'Stanchion',
+	46755028429: '1',
+	129547877091100: '23',
+	163576248142: '5215',
+	25287267406: '439',
 }
 
 
@@ -534,6 +668,16 @@ FGS.getFBML = function(params, retry)
 		var thisUrl = params.cafeUrl;
 		var thisMethod = 'get';
 	}
+	else if(typeof(params.bakinglifeUrl) != 'undefined')
+	{
+		var thisUrl = params.bakinglifeUrl;
+		var thisMethod = 'get';
+	}
+	else if(typeof(params.customUrl) != 'undefined')
+	{
+		var thisUrl = params.customUrl;
+		var thisMethod = 'get';
+	}
 	else
 	{
 		var thisUrl = 'http://www.connect.facebook.com/widgets/serverfbml.php';
@@ -544,191 +688,136 @@ FGS.getFBML = function(params, retry)
 		type: thisMethod,
 		url: thisUrl,
 		cache: false,
-		headers: {
-			'Accept':           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-			'Accept-Language':  'en-us,en;q=0.5',
-			'Content-Type':     'application/x-www-form-urlencoded'
-		},
-		data: params.myParms,
-		success: function(data)
+		data: params.nextParams,
+		success: function(dataStr)
 		{
-			var i1,i2, myParms, strTemp2;
-			var strTemp = data;
-			
-			data = FGS.HTMLParser(data);
+			var data = FGS.HTMLParser(dataStr);
 			
 			try
 			{
-				i1       =  strTemp.indexOf('PlatformInvite.sendInvitation');
-				if (i1 == -1) throw {message:"Cannot find PlatformInvite.sendInvitation in page"}
-				i1       =  strTemp.indexOf('&#123;',i1);
-				i2       =  strTemp.indexOf('&#125;',i1)+6;
-				strTemp2     =  strTemp.slice(i1,i2);
-				strTemp2   =  strTemp2.replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}');
-				eval("aTemp = "+strTemp2);
+				var reqData =
+				{
+					prefill: true,
+					message: '',
+					preview: false,
+					donot_send: false,
+					__d: 1,
+					post_form_id: FGS.post_form_id,
+					fb_dtsg: FGS.fb_dtsg,
+					post_form_id_source: 'AsyncRequest',
+					lsd: ''
+				}
+			
+				var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(dataStr);
+				if(tst == null) throw {message:'no api_key tag'}
+				var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
 				
-				myParms      =  'app_id='     +aTemp["app_id"];
-				myParms     +=  '&request_type='  +escape(aTemp["request_type"]);
-				myParms     +=  '&invite='      +aTemp["invite"];
-
-				if(typeof(params.cafeUrl) != 'undefined')
-				{
-					i1           =  strTemp.indexOf('.php" content="');
-					if (i1 == -1) throw {message:"Cannot find  content=\\ in page"};
-					i1			+=  15;
-					i2           =  strTemp.indexOf('"',i1)-1;
-					strTemp2    =   eval('"'+strTemp.slice(i1,i2)+'"');
-					myParms     +=  '&content='     +encodeURIComponent(strTemp2);
-				}
-				else
-				{
-					var searchStr = strTemp.slice(strTemp.indexOf('<body'),strTemp.lastIndexOf('</body')+7);
-					i1           =  searchStr.indexOf(' content="');
-					if (i1 == -1) throw {message:"Cannot find  content=\\ in page"};
-					i1			+=  10;
-					i2           =  searchStr.indexOf('"',i1)-1;
-					strTemp2 	 = searchStr.slice(i1,i2);
-					myParms     +=  '&content='     +encodeURIComponent(strTemp2);
-				}
-
-				myParms     +=  '&preview=false';
-				myParms     +=  '&is_multi='    +aTemp["is_multi"];
-				myParms     +=  '&is_in_canvas='  +aTemp["is_in_canvas"];
-				myParms     +=  '&form_id='     +aTemp["request_form"];
-				myParms     +=  '&include_ci='    +aTemp["include_ci"];
-
-				myParms     +=  '&prefill=true&message=&donot_send=false&__d=1';
-
-				i1          =   strTemp.indexOf('name="post_form_id" value="');
-				if (i1 == -1) throw {message:'Cannot find name="post_form_id" value=" in page'}
-				i1 		   += 27
-				i2          =   strTemp.indexOf('"',i1);
-				myParms    +=  '&post_form_id='+strTemp.slice(i1,i2)
-
-				if(typeof(params.cafeUrl) != 'undefined')
-				{
-					i1          =   strTemp.indexOf('fb_dtsg:"');
-				}
-				else
-				{
-					i1          =   strTemp.indexOf('fb_dtsg:"',i1);
-				}
+				$.extend(reqData, reqData2);
+				reqData.form_id = reqData2.request_form;
+				delete(reqData.request_form);
 				
-				if (i1 == -1) throw {message:'Cannot find fb_dtsg:" in page'}
-				i1		   += 9;
-				i2          =   strTemp.indexOf('"',i1);
-				myParms     +=  '&fb_dtsg='+strTemp.slice(i1,i2);
-				myParms     +=  '&post_form_id_source=AsyncRequest';
+				var tst = new RegExp(/<form[^>].*content=\s*["]([^"]+)[^>]*>/gm).exec(dataStr);
+				if(tst == null) throw {message:'no content'}
 				
-				
-				i1          =   strTemp.indexOf('var items={',i1)+11;
-				
-				if (i1 == 10)
-				{
-					var slice = '';
-				}
-				else
-				{
-					i2 =   strTemp.indexOf('}};',i1)+1;
-					var slice = strTemp.slice(i1,i2)
-				}
+				reqData.content = tst[1];
+				reqData.prefill = true;
 
+				var tst = new RegExp(/var items=({.*});/gm).exec(dataStr);
+				if(tst == null) throw {message:'no items'}
+				var tst = tst[1];
+				
+				var tst = tst.match(/("[0-9]+":{"name":\s*["][^"]+[^}]})/g);
+				if(tst == null) throw {message:'no friends'}
+				
 				var arr = [];
-				var i0 = 0;
-				var i1 = slice.indexOf('},"', i0);
-						
-				while(i1 != -1)
+				$(tst).each(function(k,v)
 				{
-					var item = slice.slice(i0, i1+1);
-					eval('var tmpItm = {'+item+'}');
-					arr.push(tmpItm);
-					
-					i0 = i1+2;
-					i1 = slice.indexOf('},"', i0);	
-				}
-				
-				i0 = slice.lastIndexOf('},"')+2;
-				if(i0 != 1)
-				{
-					i1 = slice.length;
-					var item = slice.slice(i0, i1);
-					eval('var tmpItm = {'+item+'}');
-					arr.push(tmpItm);
-				}				
+					arr.push(JSON.parse('{'+v+'}'));
+				});
 
-				var items = arr;
-				
-				var tempParams = '';
 				if(typeof(params.cafeUrl) != 'undefined')
 				{
-					$('form', data).each(function(){
+					var cafeParams = '';
+					
+					$('form', data).each(function()
+					{
 						if( $(this).serialize().indexOf('cmfs_type') != -1)
 						{
-							tempParams = $(this).serialize()+'&';
+							cafeParams = $(this).serialize()+'&';
 							return false;
 						}
 					});
 					
-					myUrl2		= 'http://apps.facebook.com/cafeworld/send_request.php';
+					var sendGiftUrl = 'http://apps.facebook.com/cafeworld/send_request.php';
 				}
 				else
 				{
-					myUrl2 = $('form[type]', data).attr('action');
+					sendGiftUrl = $('form[type]', data).attr('action');
+				}
+				
+				if(params.gameID == '46755028429')
+				{
+					sendGiftUrl = 'http://apps.facebook.com/castle_age/'+sendGiftUrl;
 				}
 
-				var param2 = '';
+				var sendGiftParams = '';
 
-				params.items = items;
+				params.items = arr;
 				
 				if(typeof(params.sendTo) == 'undefined')
 				{
-					//dump(FGS.getCurrentTime()+'[Z] Updating neighbours');
-					FGS.sendView('updateNeighbours', params.gameID, items);
+					FGS.sendView('updateNeighbours', params.gameID, arr);
 					return;
 				}
 				
-				//dump(FGS.getCurrentTime()+'[Z] Sending');
-
-				var j = 0;
-				for(u in params.sendTo)
+				$(params.sendTo).each(function(k,v)
 				{
-					var v = params.sendTo[u];
+					reqData['to_ids['+k+']'] = v;
 					
-					myParms     +=  '&to_ids['+j+']='   +v;
 					if(params.gameID == '120563477996213')
-						param2 += 'ids[]='+v+'&';
+						sendGiftParams += 'ids[]='+v+'&';
 					else
-						param2 += 'ids%5B%5D='+v+'&';
+						sendGiftParams += 'ids%5B%5D='+v+'&';
 					
 					if(typeof(params.cafeUrl) != 'undefined')
-						tempParams += 'ids[]='+v+'&';
-					
-					j++;
-				}
-				param2 += 'cmfs_typeahead_'+aTemp["request_form"]+'=start';
+						cafeParams += 'ids[]='+v+'&';
+				});
+				
+				if(params.gameID != '25287267406')
+					sendGiftParams += 'cmfs_typeahead_'+reqData.form_id+'=start';
 				
 				if(params.gameID == '10979261223')
 				{
-					param2 += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
+					sendGiftParams += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
+				}
+				
+				if(params.gameID == '25287267406')
+				{
+					sendGiftParams += $('form[type]', data).serialize();
 				}
 				
 				if(params.gameID == '120563477996213')
 				{
-					param2 += '&'+ $('form[type="Ravenwood Fair Gift"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
+					sendGiftParams += '&'+ $('form[type="Ravenwood Fair Gift"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
+				}
+				
+				if(params.gameID == '129547877091100')
+				{
+					sendGiftParams += '&'+$('form[type]', data).serialize();
 				}
 				
 				if(params.gameID == '167746316127')
 				{
-					param2 += '&giftId='+params.gift;
+					sendGiftParams += '&giftId='+params.gift;
 				}
 				
-				params.myParms = myParms+'&lsd=';
-				params.myUrl = myUrl2;
-				params.param2 = param2;
+				params.promptParams = reqData;
+				params.sendGiftUrl = sendGiftUrl;
+				params.sendGiftParams = sendGiftParams;
 				
 				if(typeof(params.cafeUrl) != 'undefined')
 				{
-					params.param2 = tempParams;
+					params.sendGiftParams = cafeParams;
 				}				
 				
 				FGS.sendGift(params);
@@ -777,7 +866,7 @@ FGS.sendGift = function(params, retry)
 		url: 'http://apps.facebook.com/fbml/ajax/prompt_send.php?__a=1',
 		cache: false,
 		dataType: 'text',
-		data: params.myParms,
+		data: params.promptParams,
 		success: function(data)
 		{
 			var str = data.substring(9);
@@ -800,13 +889,22 @@ FGS.sendGift = function(params, retry)
 						
 			$.ajax({
 				type: reqMethod,
-				url: params.myUrl,
+				url: params.sendGiftUrl,
 				dataType: 'text',
-				data: params.param2,
+				data: params.sendGiftParams,
 				success: function(data)
 				{
 					var i = 0;
 					var sendHistArr = {};
+					
+					if(params.gameID == '25287267406')
+					{
+						var vampGet = FGS.findIframeAfterId('#app_content_25287267406', data);
+						if(vampGet != '')
+						{
+							$.get(vampGet);
+						}
+					}
 					
 					var curTime = Math.round(new Date().getTime() / 1000);
 

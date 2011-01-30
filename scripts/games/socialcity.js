@@ -35,7 +35,7 @@ FGS.socialcityRequests =
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_163965423072', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
 					src = src.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
 					
@@ -87,8 +87,8 @@ FGS.socialcityRequests =
 				{
 					var src = currentURL;
 					
-					var i1 = src.indexOf('?');
-					src = src.slice(i1+1);
+					var pos1 = src.indexOf('?');
+					src = src.slice(pos1+1);
 					
 					var postParams = {}
 					var extra = {}
@@ -107,15 +107,15 @@ FGS.socialcityRequests =
 					
 					var tmpdata = $('#pd_authToken', dataHTML).val();
 
-					var i1 = tmpdata.indexOf('|');
-					var auth_key = tmpdata.slice(0, i1);
-					var auth_time = tmpdata.slice(i1+1);
+					var pos1 = tmpdata.indexOf('|');
+					var auth_key = tmpdata.slice(0, pos1);
+					var auth_time = tmpdata.slice(pos1+1);
 					
 					var landing = FGS.jQuery.unparam(src).landing;
 					
-					var i1 = landing.indexOf('_');
-					var page = landing.slice(0, i1);
-					var aaa =  landing.slice(i1+1);
+					var pos1 = landing.indexOf('_');
+					var page = landing.slice(0, pos1);
+					var aaa =  landing.slice(pos1+1);
 
 					var newUrl = 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php?'+FGS.jQuery.param(postParams)+'&extra='+JSON.stringify(extra)+'&rtype=ajax&p='+page+'&a='+aaa+'&auth_key='+auth_key+'&auth_time='+auth_time+'&ts='+new Date().getTime();
 					
@@ -175,9 +175,9 @@ FGS.socialcityRequests =
 						info.image = $('#neighbor_image', dataHTML).children('img').attr('src');
 						
 						var tmpTitle = $('#neighbor_title > h1', dataHTML).text();
-						var i1 = tmpTitle.indexOf('with');
+						var pos1 = tmpTitle.indexOf('with');
 						info.title = 'New neighbour';
-						info.text = tmpTitle.slice(i1+5);
+						info.text = tmpTitle.slice(pos1+5);
 					}
 					else
 					{
@@ -185,9 +185,9 @@ FGS.socialcityRequests =
 						info.image = $('#acceptInfo', dataHTML).children('img').attr('src');
 						info.title = $("#infoText > .highlight" ,dataHTML).text();
 						var txt =  $("#infoText", dataHTML).text();
-						var i1 = txt.indexOf('from');
+						var pos1 = txt.indexOf('from');
 						
-						info.text  = txt.slice(i1+5);
+						info.text  = txt.slice(pos1+5);
 					}
 					info.time = Math.round(new Date().getTime() / 1000);
 					

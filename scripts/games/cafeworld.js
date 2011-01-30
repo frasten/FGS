@@ -8,30 +8,19 @@ FGS.cafeworldFreegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/cafeworld/'+addAntiBot,
+			url: 'http://apps.facebook.com/cafeworld/view_gift.php?ref=tab'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
-					var i1, i2;
-					
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
-					FGS.cafeworldFreegifts.Click2(params);
-					
+					var dataHTML = FGS.HTMLParser(dataStr);
+					var nextUrl = $('#app101539264719_frmGifts', dataHTML).attr('action');
+					var formParam = $('#app101539264719_frmGifts', dataHTML).serialize();
+					var tempUrl = nextUrl+'?'+formParam;
+					var pos1 = tempUrl.indexOf('gid=');
+					params.cafeUrl = tempUrl.slice(0, pos1+4)+params.gift+'&view=farm';
+					FGS.getFBML(params);				
 				}
 				catch(err)
 				{
@@ -74,71 +63,6 @@ FGS.cafeworldFreegifts =
 			}
 		});
 	},
-	
-	Click2: function(params, retry)
-	{
-		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
-		$.ajax({
-			type: "GET",
-			url: 'http://apps.facebook.com/cafeworld/view_gift.php?ref=tab'+addAntiBot,
-			dataType: 'text',
-			success: function(dataStr)
-			{
-				try
-				{
-					var dataHTML = FGS.HTMLParser(dataStr);
-					var nextUrl = $('#app101539264719_frmGifts', dataHTML).attr('action');
-					var formParam = $('#app101539264719_frmGifts', dataHTML).serialize();
-					var tempUrl = nextUrl+'?'+formParam;
-					var i1 = tempUrl.indexOf('gid=');
-					params.cafeUrl = tempUrl.slice(0, i1+4)+params.gift+'&view=farm';
-					FGS.getFBML(params);
-				
-				}
-				catch(err)
-				{
-					//dump(err);
-					//dump(err.message);
-					if(typeof(retry) == 'undefined')
-					{
-						retryThis(params, true);
-					}
-					else
-					{
-						if(typeof(params.sendTo) == 'undefined')
-						{
-							FGS.sendView('errorUpdatingNeighbours');
-						}
-						else
-						{
-							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-						}
-					}
-				}
-			},
-			error: function()
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					retryThis(params, true);
-				}
-				else
-				{
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						FGS.sendView('errorUpdatingNeighbours');
-					}
-					else
-					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}
-		});
-	}
 };
 
 FGS.cafeworldRequests = 
@@ -202,23 +126,23 @@ FGS.cafeworldRequests =
 						if(titleX.indexOf('You just accepted this ') != -1)
 						{
 							titleX = titleX.replace('You just accepted this ','').replace('!','');
-							var i1= titleX.indexOf(' from ');
-							var gift = titleX.slice(0,i1)+' from';
-							var from = titleX.slice(i1+6);
+							var pos1 = titleX.indexOf(' from ');
+							var gift = titleX.slice(0,pos1)+' from';
+							var from = titleX.slice(pos1+6);
 						}
 						else if(titleX.indexOf('You just sent this ') != -1)
 						{
 							titleX = titleX.replace('You just sent this ','').replace('!','');
-							var i1= titleX.indexOf(' to ');
-							var gift = titleX.slice(0,i1);
-							var from = ' sent to '+titleX.slice(i1+4);
+							var pos1 = titleX.indexOf(' to ');
+							var gift = titleX.slice(0,pos1);
+							var from = ' sent to '+titleX.slice(pos1+4);
 						}
 						else if(titleX.indexOf('You have given ') != -1)
 						{
 							titleX = titleX.replace('You have given ','').replace('!','');
-							var i1= titleX.indexOf(' to ');
-							var gift = ' sent to '+titleX.slice(0,i1);
-							var from = titleX.slice(i1+4);
+							var pos1 = titleX.indexOf(' to ');
+							var gift = ' sent to '+titleX.slice(0,pos1);
+							var from = titleX.slice(pos1+4);
 						}
 						else
 						{
@@ -229,17 +153,17 @@ FGS.cafeworldRequests =
 						var sendInfo = '';
 
 						var tmpStr = unescape(currentURL);					
-						var i1 = tmpStr.indexOf('&gid=');
-						if(i1 != -1)
+						var pos1 = tmpStr.indexOf('&gid=');
+						if(pos1 != -1)
 						{
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-							var giftName = tmpStr.slice(i1+5,i2);
+							var giftName = tmpStr.slice(pos1+5,pos2);
 							
-							var i1 = tmpStr.indexOf('&from=');
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos1 = tmpStr.indexOf('&from=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 							
-							var giftRecipient = tmpStr.slice(i1+6,i2);						
+							var giftRecipient = tmpStr.slice(pos1+6,pos2);						
 								
 							sendInfo = {
 								gift: giftName,
@@ -411,8 +335,8 @@ FGS.cafeworldBonuses =
 						if(titleX.indexOf('You have a free ') != -1)
 						{
 							titleX = titleX.replace('You have a free ','').replace('!','');
-							var i1= titleX.indexOf(' from ');
-							var gift = titleX.slice(0,i1);
+							var pos1= titleX.indexOf(' from ');
+							var gift = titleX.slice(0,pos1);
 						}
 						else if(titleX.indexOf('have been added to your gift') != -1)
 						{
@@ -420,8 +344,8 @@ FGS.cafeworldBonuses =
 						}
 						else if(titleX.indexOf('earned a big tip for great service') != -1)
 						{
-							var i1 = titleX.indexOf(' will get ');
-							var gift = titleX.slice(i1+10);
+							var pos1 = titleX.indexOf(' will get ');
+							var gift = titleX.slice(pos1+10);
 						}
 						else
 						{
@@ -436,21 +360,21 @@ FGS.cafeworldBonuses =
 							
 							if(gift.indexOf(' from ') != -1)
 							{
-								var i1 = gift.indexOf(' from ');
-								var gift = gift.slice(0,i1);
+								var pos1 = gift.indexOf(' from ');
+								var gift = gift.slice(0,pos1);
 							}
 							
 							if(gift.indexOf(' is giving out ') != -1)
 							{
-								var i1 = gift.indexOf(' is giving out ')+15;
-								var i2 = gift.indexOf(' in celebration!');
-								if(i2 != -1)
+								var pos1 = gift.indexOf(' is giving out ')+15;
+								var pos2 = gift.indexOf(' in celebration!');
+								if(pos2 != -1)
 								{
-									var gift = gift.slice(i1,i2);
+									var gift = gift.slice(pos1,pos2);
 								}
 								else
 								{
-									var gift = gift.slice(0,i1);
+									var gift = gift.slice(0,pos1);
 								}
 							}
 							
@@ -474,21 +398,21 @@ FGS.cafeworldBonuses =
 					else if($("#app101539264719_item_wrapper",dataHTML).find('.right_cell').find('h3').length > 0)
 					{
 						var titleX = $("#app101539264719_item_wrapper",dataHTML).find('.right_cell').find('h3').text();
-						var i1 = titleX.indexOf('to claim ');
-						if(i1 != -1)
+						var pos1 = titleX.indexOf('to claim ');
+						if(pos1 != -1)
 						{
-							titleX = titleX.slice(i1+9);
+							titleX = titleX.slice(pos1+9);
 						}
-						var i1 = titleX.indexOf('to collect ');
-						if(i1 != -1)
+						var pos1 = titleX.indexOf('to collect ');
+						if(pos1 != -1)
 						{
-							titleX = titleX.slice(i1+11);
+							titleX = titleX.slice(pos1+11);
 						}
 							
 						if(titleX.indexOf(' from ') != -1)
 						{
-							var i1 = titleX.indexOf(' from ');
-							titleX = titleX.slice(0,i1);
+							var pos1 = titleX.indexOf(' from ');
+							titleX = titleX.slice(0,pos1);
 						}
 						var gift = titleX;
 						
@@ -500,16 +424,16 @@ FGS.cafeworldBonuses =
 						
 						info.text = titleX;
 						
-						var i1 = titleX.indexOf('completed a collection and shared');
-						if(i1 != -1)
+						var pos1 = titleX.indexOf('completed a collection and shared');
+						if(pos1 != -1)
 						{
-							titleX = titleX.slice(i1+33);
+							titleX = titleX.slice(pos1+33);
 						}
 						
 						if(titleX.indexOf('with you!') != -1)
 						{
-							var i1 = titleX.indexOf('with you!');
-							titleX = titleX.slice(0,i1);
+							var pos1 = titleX.indexOf('with you!');
+							titleX = titleX.slice(0,pos1);
 						}
 						var gift = titleX;
 					}

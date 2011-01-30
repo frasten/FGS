@@ -2,16 +2,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=4.0.3.4" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=4.2.0.0" rel="stylesheet" />
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Facebook Games Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=4.0.3.4"></script>
-<script type="text/javascript" src="scripts/time.js?version=4.0.3.4"></script>
-<script type="text/javascript" src="scripts/notices.js?version=4.0.3.4"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=4.0.3.4"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=4.2.0.0"></script>
+<script type="text/javascript" src="scripts/time.js?version=4.2.0.0"></script>
+<script type="text/javascript" src="scripts/notices.js?version=4.2.0.0"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=4.2.0.0"></script>
 <script type="text/javascript">
 	var loaded = 0;
 	
@@ -284,10 +284,10 @@
 	{
 		var gameID = $(e.currentTarget).attr('gameID');
 		$(e.currentTarget).unbind('click');
-		$(e.currentTarget).remove();
 		bkP.database.deleteItem('requests', gameID, $(e.currentTarget).attr('id'), 0);
 		bkP.database.deleteItem('requests', gameID, $(e.currentTarget).attr('id'), 1);
 		bkP.getRequestLink($(e.currentTarget).attr('id'), $(e.currentTarget).attr('postData')+'&post_form_id='+bkP.post_form_id+'&fb_dtsg='+bkP.fb_dtsg);
+		$(e.currentTarget).remove();
 		updateCount(gameID);
 	}
 	
@@ -682,7 +682,12 @@
 			$('#'+id).find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false, true));
 			$('#'+id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
 			$('#'+id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
-			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);			
+			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);	
+			
+			if(typeof $('#'+id).attr('SendbackInProgress') !== 'undefined')
+			{
+				updateSendbackState('#'+id);
+			}
 			
 			$('#'+id).find('.title').next('span').text(data.text);
 			$('#'+id).attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
@@ -703,9 +708,9 @@
 			if($(this).hasClass('manualRequest'))
 			{
 				var postData = $(this).attr('postData');
-				var i1 = postData.indexOf('&actions%5B');
+				var pos1 = postData.indexOf('&actions%5B');
 				
-				var postData = postData.slice(0,i1);
+				var postData = postData.slice(0,pos1);
 				postData += '&actions[reject]=Ignore';
 				bkP.emptyUnwantedGifts(postData);
 				
@@ -793,9 +798,9 @@
 					$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function()
 					{
 						var postData = $(this).attr('postData');
-						var i1 = postData.indexOf('&actions%5B');
+						var pos1 = postData.indexOf('&actions%5B');
 						
-						var postData = postData.slice(0,i1);
+						var postData = postData.slice(0,pos1);
 						postData += '&actions[reject]=Ignore';
 						$(this).remove();
 						bkP.emptyUnwantedGifts(postData);
@@ -1234,18 +1239,25 @@
 		else
 		{
 			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
-			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
+			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
+			
 			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
 			
 			if(gameID == bkP.options.defaultGame)
 			{
 				$('.gameDefaultBox[gameID="'+gameID+'"]').attr('checked', 'checked');
 			}
-			
+
 			if(e.likeBonus)
 			{
 				$('.gameLikeBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
 			}
+			
+			if(e.sendbackGift)
+			{
+				$('.gameSendbackGiftBox[gameID="'+gameID+'"]').attr('checked', 'checked');			
+			}
+			
 			
 			if(e.autoAcceptBonus)
 			{
@@ -1539,8 +1551,10 @@
 			
 			$('<label><span>Post "I like" on bonuses</span><input type="checkbox" class="gameLikeBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
-			$('<label><span>Automatically accept bonuses</span><input type="checkbox" class="gameAutoAcceptBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
+			$('<label><span>Auto send thank you gift, if possible</span><input type="checkbox" class="gameSendbackGiftBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
+			$('<label><span>Automatically accept bonuses</span><input type="checkbox" class="gameAutoAcceptBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
+
 			//$('<label><span>Post comment on bonuses</span><input type="checkbox" class="gameCommentBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
 			switchEnabled(id);
@@ -1661,12 +1675,18 @@
 			bkP.saveOptions();
 		});
 		
+		$(".gameSendbackGiftBox").click(function()
+		{
+			bkP.options.games[$(this).attr('gameID')].sendbackGift = $(this).is(':checked') ? true : false;
+			bkP.saveOptions();
+		});
+		
 		$(".gameAutoAcceptBonusBox").click(function()
 		{
 			bkP.options.games[$(this).attr('gameID')].autoAcceptBonus = $(this).is(':checked') ? true : false;
 			bkP.saveOptions();
 		});
-		
+
 		//$(".gameCommentBonusBox").click(function()
 		//{
 			//bkP.options.games[$(this).attr('gameID')].commentBonus = $(this).is(':checked') ? true : false;
@@ -1868,9 +1888,9 @@
 				else if(action == 'delete')
 				{
 					var postData = $(el).attr('postData');
-					var i1 = postData.indexOf('&actions%5B');
+					var pos1 = postData.indexOf('&actions%5B');
 					
-					var postData = postData.slice(0,i1);
+					var postData = postData.slice(0,pos1);
 					postData += '&actions[reject]=Ignore';
 					$(el).remove();
 					bkP.database.deleteItem('requests', $(el).attr('gameID'), $(el).attr('id'), 0);
@@ -1889,9 +1909,9 @@
 								$(el).parent().children('div[title="'+$(el).attr('title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
 								{
 									var postData = $(this).attr('postData');
-									var i1 = postData.indexOf('&actions%5B');
+									var pos1 = postData.indexOf('&actions%5B');
 									
-									var postData = postData.slice(0,i1);
+									var postData = postData.slice(0,pos1);
 									postData += '&actions[reject]=Ignore';
 									$(this).remove();
 									bkP.emptyUnwantedGifts(postData);
@@ -2116,10 +2136,13 @@
 	
 	function processSendBack()
 	{
+		if(!$(this).hasClass('disabledSendback'))
+		{
 			var bonusID = $(this).parent().parent().parent().parent().attr('id');
+			$(this).attr('src', 'gfx/act_indicator.gif');
+
 			var gameID =  $(this).parent().parent().parent().parent().attr('gameID');
 			
-			$(this).attr('src', 'gfx/act_indicator.gif');
 			var tempData = JSON.parse($(this).next().text());
 			
 			var params = {
@@ -2135,13 +2158,8 @@
 			var game = bkP.gamesData[gameID].systemName;
 			
 			eval('bkP.'+game+'Freegifts.Click(params)');
+		}
 	}
-	
-	
-	
-	
-	
-	
 	
 	function unhideGameIcon()
 	{
@@ -2274,6 +2292,25 @@
 		}
 	}
 	
+	function changeSendbackState(bonusID)
+	{
+		var img = $('img.sendBack', '#'+bonusID);
+		
+		if(img.length > 0)
+		{
+			updateSendbackState('#'+bonusID);
+		}
+		else
+		{
+			$('#'+bonusID).attr('SendbackInProgress', 1);
+		}
+	}
+	
+	function updateSendbackState(selector)
+	{
+		$('img.sendBack', selector).addClass('disabledSendback').css('cursor', 'default').attr('src', 'gfx/act_indicator.gif').attr('title', 'Sending back is in progress');
+	}
+	
 	setInterval('updateTimeAgo()', 15000);
 	
 	function processOptionsTab(gameID)
@@ -2346,7 +2383,7 @@
 			{
 				return;
 			}
-				
+			
 			
 			if($(this).hasClass('bonusItem') || $(this).hasClass('manualBonus'))
 			{
@@ -2414,7 +2451,7 @@
 	</div>
 	
 	<div id="dialog-html" title="View HTML">
-		
+	
 	</div>
 	
 	<div id="dialog-error" title="Error">

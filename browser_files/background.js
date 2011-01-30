@@ -126,6 +126,40 @@ FGS.likeBonus = function (bonusID, autolike)
 	});
 };
 
+FGS.sendbackGift = function (bonusID, sendbackData)
+{
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql("SELECT * FROM requests where id = ?", [bonusID], function(tx2, res)
+		{
+			var v = res.rows.item(0);
+			if(!FGS.options.games[v.gameID].sendbackGift)
+			{	
+				return;
+			}
+			var gameID = v.gameID;			
+			
+			FGS.sendView('changeSendbackState', bonusID);
+			
+			var tempData = sendbackData;
+			
+			var params = {
+				gift: tempData.gift,
+				gameID:	gameID,
+				sendTo: [tempData.destInt],
+				sendToName: tempData.destName,
+				thankYou: true,
+				bonusID: bonusID,	
+				isRequest: true
+			};
+			
+			var game = FGS.gamesData[gameID].systemName;
+			
+			eval('FGS.'+game+'Freegifts.Click(params)');			
+		});
+	});
+};
+
 FGS.sendView = function (msg, data, data2, data3)
 {
 	if(msg == 'requestError' || msg == 'requestSuccess' || msg == 'bonusError' || msg == 'bonusSuccess')
@@ -149,6 +183,11 @@ FGS.sendView = function (msg, data, data2, data3)
 				view.close();
 			}
 			// chat off/
+			
+			else if(msg == 'changeSendbackState')
+			{
+				view.changeSendbackState(data);
+			}
 
 			// bonusy //
 			else if(msg == 'bonusError')
@@ -178,6 +217,10 @@ FGS.sendView = function (msg, data, data2, data3)
 			}
 			else if(msg == 'requestSuccess')
 			{
+				if(typeof(data2.thanks) != 'undefined' && data2.thanks != '')
+				{
+					FGS.sendbackGift(data, data2.thanks);
+				}
 				view.requestSuccess(data, data2);
 			}
 			// request off //
@@ -326,16 +369,11 @@ FGS.openFacebook = function()
 
 FGS.checkVersion = function()
 {
-	var oldVersion = localStorage.getItem('version');
-	
-	if(oldVersion == undefined || oldVersion == null)
-	{
-	}
-	else if(FGS.jQuery.version_compare(oldVersion, FGS.currentVersion, '<'))
-	{
-		// changelog
-	}
-	localStorage.setItem('version', FGS.currentVersion);	
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+	xhr.send(null);
+	var manifest = JSON.parse(xhr.responseText);
+	FGS.currentVersion = manifest.version;
 };
 
 FGS.preStartup = function() 

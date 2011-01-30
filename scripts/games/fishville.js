@@ -5,7 +5,7 @@ FGS.fishvilleFreegifts =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
+		
 		$.ajax({
 			type: "GET",
 			url: 'http://apps.facebook.com/fishville/'+addAntiBot,
@@ -14,27 +14,11 @@ FGS.fishvilleFreegifts =
 			{
 				try
 				{
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-
 					var paramTmp = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
 					if(paramTmp == '') throw {message: 'no iframe'}
+					var pos1 = paramTmp.lastIndexOf('/')+2;
 
-					var i1 = paramTmp.lastIndexOf('/')+2;
-					
-					
-					params.step2params = paramTmp.slice(i1);
+					params.step2params = paramTmp.slice(pos1);
 					FGS.fishvilleFreegifts.Click2(params);
 					
 				}
@@ -93,26 +77,19 @@ FGS.fishvilleFreegifts =
 			{
 				try
 				{
-					var i1,i2, myParms;
-					var strTemp = dataStr;
-
-					i1       =  strTemp.indexOf('FB.init("');
-					if (i1 == -1) throw {message:"Cannot find FB.init"}
-					i1 += 9;
-					i2       =  strTemp.indexOf('"',i1);
+					var tst = new RegExp(/FB[.]init\("(.*)","(.*)",/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
 					
-					myParms  =  'app_key='+strTemp.slice(i1,i2);
-					i1     =  i2 +1;
-					i1       =  strTemp.indexOf('"',i1)+1;
-					i2       =  strTemp.indexOf('"',i1);
+					var app_key = tst[1];
+					var channel_url = tst[2];
 					
-					myParms +=  '&channel_url='+ encodeURIComponent(strTemp.slice(i1,i2));
-
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
 					
-					params.myParms = myParms;
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
 					
 					FGS.getFBML(params);
 				}
@@ -193,7 +170,7 @@ FGS.fishvilleRequests =
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					FGS.fishvilleRequests.Click2(currentType, id, src);
 				}				
 				catch(err)
@@ -240,6 +217,12 @@ FGS.fishvilleRequests =
 				
 				try
 				{
+					var tst = new RegExp(/<fb:fbml[^>]*?>([\s\S]*?)<\/fb:fbml>/m).exec(dataStr);
+					if(tst != null)
+					{
+						var dataHTML = FGS.HTMLParser(tst[1]);	
+					}
+
 					if(dataStr.indexOf('seem to have already accepted this request') != -1)
 					{
 						var error_text = 'Sorry, you seem to have already accepted this request from the Message Center';
@@ -260,17 +243,17 @@ FGS.fishvilleRequests =
 						
 						var tmpStr = unescape(currentURL);
 						
-						var i1 = tmpStr.indexOf('&gift=');
-						if(i1 != -1)
+						var pos1 = tmpStr.indexOf('&gift=');
+						if(pos1 != -1)
 						{
-							var i2 = tmpStr.indexOf('&', i1+1);
+							var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-							var giftName = tmpStr.slice(i1+6,i2);
+							var giftName = tmpStr.slice(pos1+6,pos2);
 							
-							var i1 = tmpStr.indexOf('senderId=');
-							var i2 = tmpStr.indexOf('&', i1);
+							var pos1 = tmpStr.indexOf('senderId=');
+							var pos2 = tmpStr.indexOf('&', pos1);
 							
-							var giftRecipient = tmpStr.slice(i1+9,i2);						
+							var giftRecipient = tmpStr.slice(pos1+9,pos2);						
 								
 							sendInfo = {
 								gift: giftName,

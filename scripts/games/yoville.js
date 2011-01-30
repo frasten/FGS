@@ -64,10 +64,10 @@ FGS.yovilleRequests =
 							{
 								var giftRecipient = $('img[uid]', dataHTML).attr('uid');
 								
-								var i1 = tmpStr.indexOf('&item_id=');
-								var i2 = tmpStr.indexOf('&', i1+1);
+								var pos1 = tmpStr.indexOf('&item_id=');
+								var pos2 = tmpStr.indexOf('&', pos1+1);
 								
-								var giftName = tmpStr.slice(i1+9,i2);
+								var giftName = tmpStr.slice(pos1+9,pos2);
 
 								sendInfo = {
 									gift: giftName,

@@ -98,6 +98,8 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'GameOptionsTab'
 						],
 				},
@@ -126,7 +128,7 @@ FGS.gamesData =
 						filter:		
 						{
 							bonuses: [],
-							bonusesNewWindow: ['Get Energy', 'Get Energy Refill', 'Get a Mastery Boost', 'Get a spice crate', 'Send the missing parts', 'Get Lotto Ticket', '^Visit', '^Help ', 'Send Energy', 'Send Fairy Dust', 'Send Utensils', 'Send Wildflower Essence', 'Send Vials of Dewdrops', 'Send Mountain-Fresh Air', '^Send Spice to', 'Free Spice', 'Send Special Delivery'],
+							bonusesNewWindow: ['Get Energy', 'Get Energy Refill', 'Get a spice crate', 'Send the missing parts', 'Get Lotto Ticket', '^Visit', '^Help ', 'Send Energy', 'Send Fairy Dust', 'Send Utensils', 'Send Wildflower Essence', 'Send Vials of Dewdrops', 'Send Mountain-Fresh Air', '^Send Spice to', 'Free Spice', 'Send Special Delivery'],
 							requests: [],
 							requestsNewWindow: []
 						},
@@ -255,6 +257,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'GameOptionsTab'
 						],
 					},
@@ -306,6 +310,8 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'GameOptionsTab'
 						],
 					},
@@ -323,6 +329,8 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'GameOptionsTab'
 						],
 					},
@@ -337,7 +345,9 @@ FGS.gamesData =
 						buttons: [
 							'ManualBonuses',
 							'RequestsPending',
-							'RequestsHistory',	
+							'RequestsHistory',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'GameOptionsTab'
 						],
 					},

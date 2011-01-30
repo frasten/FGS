@@ -14,24 +14,8 @@ FGS.ravenwoodFreegifts =
 			{
 				try
 				{
-					i1          =   dataStr.indexOf('post_form_id:"')
-					if (i1 == -1) throw {message:'Cannot post_form_id in page'}
-					i1			+=	14;
-					i2          =   dataStr.indexOf('"',i1);
-					
-					params.post_form_id = dataStr.slice(i1,i2);
-					
-					
-					i1          =   dataStr.indexOf('fb_dtsg:"',i1)
-					if (i1 == -1) throw {message:'Cannot find fb_dtsg in page'}
-					i1			+=	9;
-					i2          = dataStr.indexOf('"',i1);
-					params.fb_dtsg		= dataStr.slice(i1,i2);
-					
-					
 					var src = FGS.findIframeAfterId('#app_content_120563477996213', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
-					
+					if (src == '') throw {message:"no iframe"}
 					params.step2url = src;
 
 					FGS.ravenwoodFreegifts.Click2(params);
@@ -89,12 +73,11 @@ FGS.ravenwoodFreegifts =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				
 				try
 				{
-					var i1 = dataStr.indexOf('fbparams: "');
-					var i2 = dataStr.indexOf('"', i1+11);
-					params.step3params = '?ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(i1+11, i2));
+					var pos1 = dataStr.indexOf('fbparams: "');
+					var pos2 = dataStr.indexOf('"', pos1+11);
+					params.step3params = '?ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(pos1+11, pos2));
 					params.step3url = 'http://www.ravenwoodfair.com/app/1/gift/send';
 					
 					FGS.ravenwoodFreegifts.Click3(params);
@@ -155,11 +138,9 @@ FGS.ravenwoodFreegifts =
 			{
 				try
 				{
-					var i1 = dataStr.lastIndexOf('fb:tab-item href="');
-					var i2 = dataStr.indexOf('"', i1+18);
-					
-					
-					params.step4url = dataStr.slice(i1+18, i2);
+					var pos1 = dataStr.lastIndexOf('fb:tab-item href="');
+					var pos2 = dataStr.indexOf('"', pos1+18);
+					params.step4url = dataStr.slice(pos1+18, pos2);
 				
 					FGS.ravenwoodFreegifts.Click4(params);
 				
@@ -220,17 +201,13 @@ FGS.ravenwoodFreegifts =
 			{
 				try
 				{
-					var i1,i2, myParms;
-					var strTemp = dataStr;
-
-					myParms  =  'api_key=120563477996213';
-
-
-					i1       =  strTemp.indexOf('<fb:fbml>');
-					i2       =  strTemp.indexOf('/script>',i1)-1;
-					myParms +=  '&fbml='+encodeURIComponent(strTemp.slice(i1,i2));
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
 					
-					params.myParms = myParms;
+					var nextParams  =  'api_key=120563477996213&fbml='+encodeURIComponent(fbml);		
+					
+					params.nextParams = nextParams;
 					FGS.getFBML(params);
 				}
 				catch(err)
@@ -325,13 +302,44 @@ FGS.ravenwoodRequests =
 						}
 						else
 						{
+							var sendInfo = '';
+							
+							var tmpStr = unescape(currentURL);
+							
+							var pos1 = tmpStr.indexOf('?item_id=');
+							if(pos1 == -1)
+							{
+								pos1 = tmpStr.indexOf('&item_id=');
+							}
+							if(pos1 != -1)
+							{
+								var pos2 = tmpStr.indexOf('&', pos1+1);
+								
+								var giftName = tmpStr.slice(pos1+9,pos2);
+								
+								var pos1 = tmpStr.indexOf('&sender_id=');
+								var pos2 = tmpStr.indexOf('&', pos1+1);
+								
+								var giftRecipient = tmpStr.slice(pos1+11,pos2);			
+									
+								sendInfo = {
+									gift: giftName,
+									destInt: giftRecipient,
+									destName: "Can't say"
+									}
+							}
+							
+							info.thanks = sendInfo;
+							
+							
+						
 							info.title = $(el).text();				
 							
-							var i1 = $(el).text().indexOf('You just accepted this');
-							if(i1 != -1)
+							var pos1 = $(el).text().indexOf('You just accepted this');
+							if(pos1 != -1)
 							{
-								var i2 = $(el).text().indexOf(' from ', i1);
-								info.title = $(el).text().slice(i1+22, i2);
+								var pos2 = $(el).text().indexOf(' from ', pos1);
+								info.title = $(el).text().slice(pos1+22, pos2);
 							}
 							
 							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");

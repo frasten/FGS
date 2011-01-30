@@ -1,3 +1,211 @@
+FGS.vampirewarsFreegifts = 
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/vampiresgame/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var paramTmp = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
+					if(paramTmp == '') throw {message: 'no iframe'}
+					
+					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+					params.domain = paramTmp.match(re)[1].toString();
+					var pos1 = paramTmp.lastIndexOf('?')+1;
+					params.step2param = paramTmp.slice(pos1);
+					
+					FGS.vampirewarsFreegifts.Click2(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://'+params.domain+'/send_gifts.php',
+			data: params.step2param+'&next=send_gifts.php&action=recruit_gift_friends&giftId='+params.gift+'&skipLink=index.php'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
+					
+					var app_key = tst[1];
+					var channel_url = tst[2];
+					
+	
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml=';
+					
+					params.nextParams = paramsStr;
+					
+					var pos1 = dataStr.indexOf('send_gifts_mfs.php?');
+					var pos2 = dataStr.indexOf('")', pos1);
+					
+					params.step3param = dataStr.slice(pos1,pos2).replace('"+mfsID+"', 5);
+					
+					FGS.vampirewarsFreegifts.Click3(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click3: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://'+params.domain+'/'+params.step3param,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					params.nextParams += encodeURIComponent(fbml);
+										
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('errorUpdatingNeighbours');
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('errorUpdatingNeighbours');
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+};
+
 FGS.vampirewarsRequests = 
 {
 	Click:	function(currentType, id, currentURL, retry)
@@ -14,11 +222,11 @@ FGS.vampirewarsRequests =
 			{
 				try
 				{
-					var i1 = dataStr.indexOf('top.location.href = "');
-					if(i1 != -1)
+					var pos1 = dataStr.indexOf('top.location.href = "');
+					if(pos1 != -1)
 					{
-						var i2 = dataStr.indexOf('"', i1+28);
-						var url = dataStr.slice(i1+21, i2);
+						var pos2 = dataStr.indexOf('"', pos1+28);
+						var url = dataStr.slice(pos1+21, pos2);
 						FGS.vampirewarsRequests.Login(currentType, id, url);
 						return;
 					}
@@ -87,7 +295,7 @@ FGS.vampirewarsRequests =
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
 					FGS.vampirewarsRequests.Click4(currentType, id, src);
 				}
@@ -149,33 +357,26 @@ FGS.vampirewarsRequests =
 					
 					var sendInfo = '';
 					
-					/*
-					if(data.indexOf('pic uid="') != -1 && data.indexOf('free_gift_id=') != -1)
+					var tmpStr = unescape(currentURL);
+					
+					var pos1 = tmpStr.indexOf('&iid=');
+					if(pos1 != -1)
 					{
+						var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+						var giftName = tmpStr.slice(pos1+5,pos2);
 						
-						var i1 = data.indexOf('free_gift_id=');
-						var i2 = data.indexOf("'", i1);
-						var giftName = data.slice(i1+13, i2);
+						var pos1 = tmpStr.indexOf('senderId=');
+						var pos2 = tmpStr.indexOf('&', pos1+1);
 						
-						var i1 = data.indexOf('pic uid="');
-						var i2 = data.indexOf('"', i1+9);
-						var receiveUid = data.slice(i1+9, i2);
-						
-						
-						var i1 = data.indexOf('false; " >', i2);
-						var i2 = data.indexOf('</a', i1);
-						var receiveName = data.slice(i1+10, i2);
-						
-						
+						var giftRecipient = tmpStr.slice(pos1+9,pos2);						
+							
 						sendInfo = {
 							gift: giftName,
-							destInt: receiveUid,
-							destName: receiveName,
-						}
-						
-						
+							destInt: giftRecipient,
+							destName: $('div.senderPic', dataHTML).parent().find('p').text(),
+							}
 					}
-					*/
 					info.thanks = sendInfo;
 					info.time = Math.round(new Date().getTime() / 1000);					
 					

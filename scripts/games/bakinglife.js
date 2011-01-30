@@ -1,3 +1,13 @@
+FGS.bakinglifeFreegifts =
+{
+	Click: function(params, retry)
+	{
+		params.bakinglifeUrl = 'http://apps.facebook.com/bakinglife/sendGift.php?gift='+params.gift+'&fb_force_mode=fbml&friends=app';
+		
+		FGS.getFBML(params);
+	},
+};
+
 FGS.bakinglifeRequests = 
 {
 	Click: function(currentType, id, currentURL, retry)
@@ -36,7 +46,7 @@ FGS.bakinglifeRequests =
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
 					FGS.bakinglifeRequests.Click2(currentType, id, src);
 				}
@@ -81,7 +91,7 @@ FGS.bakinglifeRequests =
 			success: function(dataStr)
 			{
 				var dataHTML = FGS.HTMLParser(dataStr);
-				
+
 				try
 				{
 					if(dataStr.indexOf('Make sure you click on the request within one week') != -1)
@@ -93,6 +103,36 @@ FGS.bakinglifeRequests =
 					
 					if($('.gift', dataHTML).length > 0)
 					{
+						var sendInfo = '';
+						
+						var tmpStr = unescape(currentURL);
+						
+						var pos1 = tmpStr.indexOf('?gift=');
+						if(pos1 == -1)
+						{
+							pos1 = tmpStr.indexOf('&gift=');
+						}
+						if(pos1 != -1)
+						{
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftName = tmpStr.slice(pos1+6,pos2);
+							
+							var pos1 = tmpStr.indexOf('&senderID=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftRecipient = tmpStr.slice(pos1+10,pos2);			
+								
+							sendInfo = {
+								gift: giftName,
+								destInt: giftRecipient,
+								destName: $(".friendContainer2",dataHTML).find('b:first').text()
+								}
+						}
+						
+						info.thanks = sendInfo;
+						
+						
 						info.image = $(".gift",dataHTML).children('img').attr("src");
 						info.title = $(".gift",dataHTML).children('img').attr("alt");
 						info.text  = $(".friendContainer2",dataHTML).find('b:first').text();
@@ -185,7 +225,7 @@ FGS.bakinglifeBonuses =
 				try 
 				{
 					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					FGS.bakinglifeBonuses.Click2(currentType, id, src);
 				}
 				catch(err)

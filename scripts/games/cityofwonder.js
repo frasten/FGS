@@ -35,7 +35,7 @@ FGS.cityofwonderRequests =
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					
 					FGS.cityofwonderRequests.Click2(currentType, id, src);
 				}
@@ -80,14 +80,12 @@ FGS.cityofwonderRequests =
 			{
 				try
 				{
-				
-					var i1 =  dataStr.indexOf('<fb:fbml>');
-					var i2 =  dataStr.indexOf('/script>',i1)-1;
-					var data = dataStr.slice(i1,i2);
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var data = tst[1];
 					
 					var dataHTML = FGS.HTMLParser(data);
-					
-					
+										
 					info.image = $('.ally_accept', dataHTML).find('img:first').attr('src');
 					var txt = $('.ally_accept', dataHTML).find('h1').text();
 					
@@ -106,9 +104,8 @@ FGS.cityofwonderRequests =
 					else
 					{
 						txt = txt.replace('You just accepted ','');
-						var i2 = txt.indexOf(' from ');
-						
-						txt = txt.slice(0, i2);
+						var pos2 = txt.indexOf(' from ');
+						txt = txt.slice(0, pos2);
 						
 						info.title = txt;
 						info.text  = '';
@@ -179,7 +176,7 @@ FGS.cityofwonderBonuses =
 				try 
 				{
 					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-					if (src == '') throw {message:"Cannot find <iframe src= in page"}
+					if (src == '') throw {message:"no iframe"}
 					FGS.cityofwonderBonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
@@ -242,12 +239,12 @@ FGS.cityofwonderBonuses =
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					
-					var i1 = dataStr.indexOf('onclick="awardClicked(');
-					if(i1 != -1)
+					var pos1 = dataStr.indexOf('onclick="awardClicked(');
+					if(pos1 != -1)
 					{
-						i1+=23;
-						var i2 = dataStr.indexOf("'", i1);					
-						var link = dataStr.slice(i1, i2);
+						pos1+=23;
+						var pos2 = dataStr.indexOf("'", pos1);					
+						var link = dataStr.slice(pos1, pos2);
 						//dump(link);
 						$.get(link);
 					}

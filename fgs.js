@@ -1,5 +1,4 @@
 var FGS = {
-	currentVersion: '4.0.3.4',
 	alreadyOpened: false,
 	
 	initializeDefaults: function ()
@@ -33,7 +32,7 @@ var FGS = {
 			collectXbonusesAtTheSameTime: 5,
 		}
 
-		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
+		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
 
 		for(var idd in FGS.gamesData)
 		{
@@ -100,11 +99,11 @@ var FGS = {
 			{
 				try
 				{
-					var strTemp = data;
+					var parseStr = data;
 					
-					var dataObj = JSON.parse(strTemp.slice(9));
+					var dataObj = JSON.parse(parseStr.slice(9));
 					
-					if(typeof(dataObj.onload) == 'undefined') throw {message:"Cannot find goURI in page"}
+					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
 					
 					var found = false;
 					
@@ -112,23 +111,23 @@ var FGS = {
 					{
 						if(v.indexOf('goURI') != -1)
 						{
-							strTemp = v;
+							parseStr = v;
 							found = true;
 							return false;
 						}
 					});
 					
-					if(!found) throw {message:"Cannot find goURI in page"}
+					if(!found) throw {message:"no URI"}
 				
-					var i1      =   strTemp.indexOf('goURI');
-					var i2        =   strTemp.indexOf(');',i1);
-					strTemp   =   "'"+strTemp.slice(i1+6,i2)+"'";
-
-					eval("strTemp =" + strTemp);
+					var pos1 = parseStr.indexOf('goURI');
+					var pos2 = parseStr.indexOf(');',pos1);
+					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
 					
-					strTemp = strTemp.replace(/\\u0025/g, '%');
+					eval("parseStr =" + parseStr);
 					
-					var URI = JSON.parse(strTemp);
+					parseStr = parseStr.replace(/\\u0025/g, '%');
+					
+					var URI = JSON.parse(parseStr);
 					
 					eval('FGS.'+game+'Requests.Click("request", "'+id+'","'+URI+'")');
 				}
@@ -162,7 +161,6 @@ var FGS = {
 	
 	emptyUnwantedGifts: function(post)
 	{
-
 		FGS.jQuery.ajax({
 			type: "POST",
 			url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
@@ -170,11 +168,11 @@ var FGS = {
 			dataType: 'text',
 			success: function(data)
 			{
-				var strTemp = data;
+				var parseStr = data;
 				
-				var dataObj = JSON.parse(strTemp.slice(9));
+				var dataObj = JSON.parse(parseStr.slice(9));
 				
-				if(typeof(dataObj.onload) == 'undefined') return;
+				if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
 				
 				var found = false;
 				
@@ -182,22 +180,23 @@ var FGS = {
 				{
 					if(v.indexOf('goURI') != -1)
 					{
-						strTemp = v;
+						parseStr = v;
 						found = true;
 						return false;
 					}
 				});
 				
-				if(!found) return;
+				if(!found) throw {message:"no URI"}
 			
-				var i1      =   strTemp.indexOf('goURI');
-				var i2        =   strTemp.indexOf(');',i1);
-				strTemp   =   "'"+strTemp.slice(i1+6,i2)+"'";
+				var pos1 =  parseStr.indexOf('goURI');
+				var pos2 =  parseStr.indexOf(');',pos1);
+				parseStr =  "'"+parseStr.slice(pos1+6,pos2)+"'";
 
-				eval("strTemp =" + strTemp);
-
-				var URI = JSON.parse(strTemp);
+				eval("parseStr =" + parseStr);
 				
+				parseStr = parseStr.replace(/\\u0025/g, '%');
+				
+				var URI = JSON.parse(parseStr);				
 				
 				FGS.jQuery.ajax({
 					type: "GET",
@@ -254,9 +253,9 @@ var FGS = {
 
 				if(FGS.userID == null || FGS.userName == null)
 				{
-					var i1 = data2.indexOf('Env={')+4;
-					var i2 = data2.indexOf('};', i1)+1;
-					eval('var tmpObj = '+data2.slice(i1,i2)+';');
+					var pos1 = data2.indexOf('Env={')+4;
+					var pos2 = data2.indexOf('};', pos1)+1;
+					eval('var tmpObj = '+data2.slice(pos1,pos2)+';');
 					FGS.userID = tmpObj.user;
 					FGS.userName = FGS.jQuery('#navAccountName', data).text();
 				}
@@ -302,10 +301,10 @@ var FGS = {
 				
 		try
 		{
-			var i1 = data.indexOf('script>window.location.replace("');
-			if(i1 == -1) return false;
-			var i2 = data.indexOf('"', i1+32);
-			var text = data.slice(i1+32,i2);
+			var pos1 = data.indexOf('script>window.location.replace("');
+			if(pos1 == -1) return false;
+			var pos2 = data.indexOf('"', pos1+32);
+			var text = data.slice(pos1+32,pos2);
 			text = text.replace(/\\u0025/g, '%');
 			text = text.replace(/\\/g,'');
 			var url = $(FGS.HTMLParser('<p class="link" href="'+text+'">abc</p>')).find('p.link');
@@ -413,7 +412,7 @@ var FGS = {
 	
 	checkForNotFound: function(url)
 	{
-		var errorsArr = ['gifterror=notfound', 'countrylife/play'];
+		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home'];
 		
 		var ret = false;
 		
@@ -435,7 +434,7 @@ var FGS = {
 		
 		try
 		{
-			var count = data.match(/<iframe[^>]*?.*?<\/iframe>/g);
+			var count = data.match(/<iframe[^>]*?>/gm);
 			
 			var v = '';
 			
@@ -452,12 +451,12 @@ var FGS = {
 			
 			var nextUrl = false;
 			
-			var i1 = v.indexOf('src="');
-			if(i1 != -1)
+			var pos1 = v.indexOf('src="');
+			if(pos1 != -1)
 			{
-				i1+=5;
-				var i2 = v.indexOf('"', i1);
-				var url = v.slice(i1,i2);
+				pos1+=5;
+				var pos2 = v.indexOf('"', pos1);
+				var url = v.slice(pos1,pos2);
 				var url = $(FGS.HTMLParser('<p class="link" href="'+url+'">abc</p>')).find('p.link');
 				nextUrl = $(url).attr('href');
 			}
@@ -479,21 +478,21 @@ var FGS = {
 		
 		try
 		{
-			var i1 = data.indexOf('"'+id.slice(1)+'"');
-			var data = data.slice(i1);
+			var pos1 = data.indexOf('"'+id.slice(1)+'"');
+			var data = data.slice(pos1);
 			
-			var count = data.match(/<iframe[^>]*?.*?<\/iframe>/g);
+			var count = data.match(/<iframe[^>]*?>/gm);
 			if(count == 0) throw {message: 'iframe not found'}
 			
 			var nextUrl = false;
 			v = count[0];
 			
-			var i1 = v.indexOf('src="');
-			if(i1 != -1)
+			var pos1 = v.indexOf('src="');
+			if(pos1 != -1)
 			{
-				i1+=5;
-				var i2 = v.indexOf('"', i1);
-				var url = v.slice(i1,i2);
+				pos1+=5;
+				var pos2 = v.indexOf('"', pos1);
+				var url = v.slice(pos1,pos2);
 				var url = $(FGS.HTMLParser('<p class="link" href="'+url+'">abc</p>')).find('p.link');
 				nextUrl = $(url).attr('href');
 			}
@@ -586,17 +585,17 @@ var FGS = {
 			{
 				if(data.indexOf('"content":{"pagelet_requests":"') != -1)
 				{
-					var i1 = data.indexOf('"content":{"pagelet_requests":"')+10;
-					var i2 = data.indexOf('"}});', i1)+2;				
-					eval('var tempD = '+data.slice(i1,i2));
+					var pos1 = data.indexOf('"content":{"pagelet_requests":"')+10;
+					var pos2 = data.indexOf('"}});', pos1)+2;				
+					eval('var tempD = '+data.slice(pos1,pos2));
 					
 					data = tempD.pagelet_requests;				
 				}
 				else if(data.indexOf("content: {pagelet_requests: '") != -1)
 				{
-					var i1 = data.indexOf("content: {pagelet_requests: '")+9;
-					var i2 = data.indexOf("'}});", i1)+2;
-					eval('var tempD = '+data.slice(i1,i2));
+					var pos1 = data.indexOf("content: {pagelet_requests: '")+9;
+					var pos2 = data.indexOf("'}});", pos1)+2;
+					eval('var tempD = '+data.slice(pos1,pos2));
 
 					data = tempD.pagelet_requests;	
 				}
@@ -688,9 +687,9 @@ var FGS = {
 					
 					var typeText = unescape(typeText);
 					
-					var i1 = typeText.indexOf('&'+searchStr+'=');
+					var pos1 = typeText.indexOf('&'+searchStr+'=');
 					
-					if(i1 == -1)
+					if(pos1 == -1)
 					{
 						if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1)
 						{
@@ -702,16 +701,16 @@ var FGS = {
 							{
 							
 								var typeText = unescape(typeText);
-								var i1 = typeText.indexOf('"item_id":"');
-								if(i1 == -1)
+								var pos1 = typeText.indexOf('"item_id":"');
+								if(pos1 == -1)
 								{
 									var type = 'unknown';
 								}
 								else
 								{
-									i1 += 11;
-									i2 = typeText.indexOf('"', i1);
-									var type = typeText.slice(i1, i2);
+									pos1 += 11;
+									pos2 = typeText.indexOf('"', pos1);
+									var type = typeText.slice(pos1, pos2);
 								}
 							}
 							else
@@ -722,9 +721,9 @@ var FGS = {
 					}
 					else
 					{
-						i1+=(searchStr.length+2);
-						i2 = typeText.indexOf('&', i1);
-						var type = typeText.slice(i1, i2);
+						pos1+=(searchStr.length+2);
+						pos2 = typeText.indexOf('&', pos1);
+						var type = typeText.slice(pos1, pos2);
 					}
 
 					
@@ -823,10 +822,10 @@ var FGS = {
 					var data = JSON.parse(str).onload.toString();
 
 					var i0 = data.indexOf('"#app_stories"');
-					var i1 = data.indexOf('HTML("', i0)+6;
-					var i2 = data.indexOf('"))',i1);
+					var pos1 = data.indexOf('HTML("', i0)+6;
+					var pos2 = data.indexOf('"))',pos1);
 					
-					var data = data.slice(i1,i2);
+					var data = data.slice(pos1,pos2);
 					
 					eval('var tmpData = {"html": "'+data+'"}');
 					
@@ -1020,11 +1019,11 @@ var FGS = {
 			{
 				try
 				{
-					var strTemp = data;
+					var parseStr = data;
 					
-					var dataObj = JSON.parse(strTemp.slice(9));
+					var dataObj = JSON.parse(parseStr.slice(9));
 					
-					if(typeof(dataObj.onload) == 'undefined') throw {message:"Cannot find goURI in page"}
+					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
 					
 					var found = false;
 					
@@ -1032,21 +1031,23 @@ var FGS = {
 					{
 						if(v.indexOf('goURI') != -1)
 						{
-							strTemp = v;
+							parseStr = v;
 							found = true;
 							return false;
 						}
 					});
 					
-					if(!found) throw {message:"Cannot find goURI in page"}
+					if(!found) throw {message:"no URI"}
 				
-					var i1      =   strTemp.indexOf('goURI');
-					var i2        =   strTemp.indexOf(');',i1);
-					strTemp   =   "'"+strTemp.slice(i1+6,i2)+"'";
+					var pos1 = parseStr.indexOf('goURI');
+					var pos2 = parseStr.indexOf(');',pos1);
+					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
 
-					eval("strTemp =" + strTemp);
-
-					var URI = JSON.parse(strTemp);
+					eval("parseStr =" + parseStr);
+					
+					parseStr = parseStr.replace(/\\u0025/g, '%');
+					
+					var URI = JSON.parse(parseStr);
 					
 					FGS.openURI(URI, true);
 				}
@@ -1065,6 +1066,4 @@ var FGS = {
 			}
 		});
 	},
-	
-	
 };
