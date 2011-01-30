@@ -412,7 +412,9 @@ var FGS = {
 	
 	checkForNotFound: function(url)
 	{
-		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home'];
+		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home', '/cafeworld/?ref=requests'];
+		
+		// tutaj regexp jescze np. http://apps.facebook.com/cafeworld/
 		
 		var ret = false;
 		

@@ -85,6 +85,8 @@ FGS.cityofwonderRequests =
 					var data = tst[1];
 					
 					var dataHTML = FGS.HTMLParser(data);
+					
+					// Oops! you cannot accept this request!
 										
 					info.image = $('.ally_accept', dataHTML).find('img:first').attr('src');
 					var txt = $('.ally_accept', dataHTML).find('h1').text();

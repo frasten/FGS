@@ -1,7 +1,7 @@
 {
 	"update_url": "http://rzadki.eu/projects/fgs/updates.xml",
-	"name": "Facebook Games Simplifier",
-    "version": "4.2.0.0",
+	"name": "Friendly Gaming Simplifier",
+    "version": "1.0.0.0",
 	"description": "This extension allows you to collect bonuses and request from many Facebook games.",
 	"permissions": ["cookies", "tabs", "http://*.ravenwoodfair.com/*", "http://*.mafiawars.com/*", "http://*.farmville.com/*",  "http://*.frontier.zynga.com/*", "https://*.frontier.zynga.com/*", "http://*.treasure.zynga.com/*", "http://*.yoville.com/*", "https://*.treasure.zynga.com/*", "http://*.playdom.com/*", "http://*.rockyou.com/*", "http://*.fishville.zynga.com/*",  "http://*.zynga.com/*", "http://*.playcrafter.com/*", "http://*.facebook.com/*", "https://*.facebook.com/*",  "http://*.amazonaws.com/*", "http://*.icebreakgames.com/*", "http://rzadki.eu/*", "notifications", "unlimitedStorage" ],
 	"background_page": "background.html",
@@ -12,7 +12,7 @@
 	"browser_action": {
 		"default_icon": "gfx/48px-icon-bw.png",
 		"default_title": "",
-		"name": "Facebook Games Simplifier",
+		"name": "Friendly Gaming Simplifier",
 		"popup": "popup.html"
 	},
 	"content_scripts":

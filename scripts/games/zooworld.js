@@ -194,6 +194,8 @@ FGS.zooworldRequests =
 				
 				try
 				{
+					// <h3>Cannot accept gift.
+				
 					var testStr = $('#app_content_167746316127', dataHTML).find('h1:first').text();
 					
 					if(testStr.indexOf('You are now ZooMates') != -1)
