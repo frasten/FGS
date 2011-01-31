@@ -194,7 +194,7 @@ FGS.zooworldRequests =
 				
 				try
 				{
-					// <h3>Cannot accept gift.
+					// <h3>Cannot accept gift. // <h3>This promotion is over.
 				
 					var testStr = $('#app_content_167746316127', dataHTML).find('h1:first').text();
 					
