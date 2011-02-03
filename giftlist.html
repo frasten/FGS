@@ -2,16 +2,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=4.2.0.0" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.2" rel="stylesheet" />
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Friendly Gaming Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=4.2.0.0"></script>
-<script type="text/javascript" src="scripts/time.js?version=4.2.0.0"></script>
-<script type="text/javascript" src="scripts/notices.js?version=4.2.0.0"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=4.2.0.0"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.2"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.0.0.2"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.0.0.2"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.2"></script>
 <script type="text/javascript">
 	var loaded = 0;
 	
@@ -478,8 +478,23 @@
 		setTimeout(function() 
 		{
 			$('#'+id).prependTo('#'+game+'BonusesHistoryList');
-			$('#'+id).removeClass('hide').removeClass('inProgress').find('img:last').attr('src', data.image);
-			$('#'+id).find('.title').text(data.title);
+			$('#'+id).removeClass('hide').removeClass('inProgress');
+
+			if(data.image !== '')
+			{
+				$('#'+id).find('img:last').attr('src', data.image);
+			}
+			else
+			{
+				$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+			}
+			
+			
+			if(data.title != '')
+			{
+				$('#'+id).find('.title').text(data.title);
+			}
+			
 			
 			var infoAdd = '';
 			

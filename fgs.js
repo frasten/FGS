@@ -167,44 +167,7 @@ var FGS = {
 			data: post+'&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests',
 			dataType: 'text',
 			success: function(data)
-			{
-				var parseStr = data;
-				
-				var dataObj = JSON.parse(parseStr.slice(9));
-				
-				if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
-				
-				var found = false;
-				
-				FGS.jQuery(dataObj.onload).each(function(k,v)
-				{
-					if(v.indexOf('goURI') != -1)
-					{
-						parseStr = v;
-						found = true;
-						return false;
-					}
-				});
-				
-				if(!found) throw {message:"no URI"}
-			
-				var pos1 =  parseStr.indexOf('goURI');
-				var pos2 =  parseStr.indexOf(');',pos1);
-				parseStr =  "'"+parseStr.slice(pos1+6,pos2)+"'";
-
-				eval("parseStr =" + parseStr);
-				
-				parseStr = parseStr.replace(/\\u0025/g, '%');
-				
-				var URI = JSON.parse(parseStr);				
-				
-				FGS.jQuery.ajax({
-					type: "GET",
-					url: URI,
-					dataType: 'text',
-					success: function(data2){}
-				});
-			}
+			{}
 		});
 	},
 	
@@ -693,7 +656,7 @@ var FGS = {
 					
 					if(pos1 == -1)
 					{
-						if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1)
+						if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1)
 						{
 							var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
 						}

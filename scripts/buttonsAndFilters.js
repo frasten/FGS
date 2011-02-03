@@ -300,7 +300,7 @@ FGS.gamesData =
 						filter:	
 						{
 							bonuses: [],
-							bonusesNewWindow: [],
+							bonusesNewWindow: ['Accept Promotion'],
 							requests: [],
 							requestsNewWindow: []
 						},
@@ -398,7 +398,55 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-					
+	372268249833:	{ 	name: 'Evony',		systemName: 'evony', link: 'http://apps.facebook.com/evonyoffical/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory', 
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
+	56748925791:	{ 	name: 'Farm Town',		systemName: 'farmtown', link: 'http://apps.facebook.com/farmtown/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'ManualBonuses',
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
+	213518941553:	{ 	name: 'Fantasy Kingdoms',		systemName: 'fantasy', link: 'http://apps.facebook.com/fantasykingdoms/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Send'],
+							requests: [],
+							requestsNewWindow: ['Come join me in Fantasy Kingdoms']
+						},
+						buttons: [
+							'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory', 
+							'RequestsPending',
+							'RequestsHistory',	
+							'GameOptionsTab'
+						],
+					},
 };
 
 FGS.submenuButtons =
