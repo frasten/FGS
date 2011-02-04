@@ -473,6 +473,14 @@ var FGS = {
 		}
 	},
 	
+	stopQueue: function()
+	{
+		var resetArr = FGS.xhrQueue;
+		FGS.xhrQueue = [];
+		
+		return resetArr;
+	},
+	
 	checkXhrQueue: function()
 	{
 		if(FGS.xhrWorking < FGS.options.collectXbonusesAtTheSameTime)
@@ -633,34 +641,34 @@ var FGS = {
 					
 					dataPost += '&'+escape($(el).find('input[type="submit"]:first').attr('name'))+'='+$(el).find('input[type="submit"]:first').attr('value');
 					
-					if(APPID == 120563477996213)
+					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1)
 					{
-						var searchStr = 'item_id';
-					}
-					else if(APPID == 101539264719)
-					{
-						var searchStr = 'gid';
-					}
-					else if(APPID == 167746316127)
-					{
-						var searchStr = 'giftId';
+						var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
 					}
 					else
 					{
-						var searchStr = 'gift';
-					}
-					
-					var typeText = unescape(typeText);
-					
-					var pos1 = typeText.indexOf('&'+searchStr+'=');
-					
-					if(pos1 == -1)
-					{
-						if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1)
+						if(APPID == 120563477996213)
 						{
-							var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
+							var searchStr = 'item_id';
+						}
+						else if(APPID == 101539264719)
+						{
+							var searchStr = 'gid';
+						}
+						else if(APPID == 167746316127)
+						{
+							var searchStr = 'giftId';
 						}
 						else
+						{
+							var searchStr = 'gift';
+						}
+						
+						var typeText = unescape(typeText);
+
+						var pos1 = FGS.Gup(searchStr, typeText);
+
+						if(pos1 == "")
 						{
 							if(APPID == 10979261223)
 							{
@@ -683,14 +691,11 @@ var FGS = {
 								var type = 'unknown';
 							}
 						}
+						else
+						{
+							var type = pos1;
+						}
 					}
-					else
-					{
-						pos1+=(searchStr.length+2);
-						pos2 = typeText.indexOf('&', pos1);
-						var type = typeText.slice(pos1, pos2);
-					}
-
 					
 					var curTime = Math.round(new Date().getTime() / 1000);		
 					var bTitle = $(el).find('.UIImageBlock_SMALL_Content').find('a:first').text().replace(/'/gi, '');		
@@ -715,13 +720,24 @@ var FGS = {
 		});
 	},
 	
+	Gup: function(name, str)
+	{
+		var results = (new RegExp("[\\?&]"+name+"=([^&#]*)")).exec(str);
+		if(results == null)
+			return ''
+		else
+			return results[1];
+	},
+	
 	ListNeighbours: function(gameID)
 	{
 		var game = FGS.gamesData[gameID].systemName;
 		
-		var params = {
+		var params = 
+		{
 			gift: FGS.freeGiftForGame[gameID],
-			gameID:	gameID
+			gameID:	gameID,
+			loadList: true
 		};
 		
 		if(FGS.options.games[gameID].enabled)
@@ -1031,4 +1047,100 @@ var FGS = {
 			}
 		});
 	},
+	
+	searchForNeighbors:
+	{
+		Step1: function(gameID)
+		{
+			FGS.jQuery.ajax({
+				url: 'https://developers.facebook.com/docs/api',
+				method: 'GET',
+				dataType: 'text',
+				success: function(d)
+				{
+					var pos1 = d.indexOf('?access_token=')+1;
+					if(pos1 == 0)
+					{
+						FGS.sendView('friendsLoaded', gameID, false);
+						return;
+					}
+					var pos2 = d.indexOf('"', pos1);
+					
+					FGS.searchForNeighbors.Step2(gameID, d.slice(pos1,pos2));
+				},
+				error: function()
+				{
+					FGS.sendView('friendsLoaded', gameID, false);
+				}
+			});
+		},
+		Step2: function(gameID, access)
+		{
+			FGS.jQuery.ajax({
+				url: 'https://graph.facebook.com/me/friends?'+access,
+				method: 'GET',
+				dataType: 'text',
+				success:function(obj)
+				{
+					try
+					{
+						var usersObj = {}
+						
+						var users = JSON.parse(obj);
+						FGS.jQuery(users.data).each(function(k,v)
+						{
+							usersObj[v.id] = v.name;
+						});
+						
+						FGS.searchForNeighbors.Step3(gameID, usersObj);
+					}
+					catch(e)
+					{
+						FGS.sendView('friendsLoaded', gameID, false);
+					}
+				},
+				error: function()
+				{
+					FGS.sendView('friendsLoaded', gameID, false);
+				}
+			});
+		},
+		Step3: function(gameID, users)
+		{
+			FGS.jQuery.ajax({
+				url: 'http://rzadki.eu/projects/fgs/jsonp/friends.php',
+				data: {callback: '?', action: 'get', games: gameID, userID: FGS.userID},
+				method: 'GET',
+				dataType: 'json',
+				success:function(obj)
+				{
+					try
+					{
+						var usersArr = [];
+						
+						//var obj = JSON.parse(data);
+						
+						FGS.jQuery(obj).each(function(k,v)
+						{
+							if(typeof(users[v]) == 'undefined' && v.toString() != FGS.userID.toString())
+							{
+								usersArr.push(v);
+							}
+						});
+						FGS.sendView('friendsLoaded', gameID, usersArr);
+					}
+					catch(e)
+					{
+						FGS.sendView('friendsLoaded', gameID, false);
+					}
+				},
+				error: function()
+				{
+					FGS.sendView('friendsLoaded', gameID, false);
+				}
+			});
+		},
+	}
+
+
 };

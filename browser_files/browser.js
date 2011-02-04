@@ -243,15 +243,5 @@
 				}
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
-			
-			
-			for(var gameID in bkP.options.games)
-			{
-				if(!bkP.options.games[gameID].enabled)
-				{
-					continue;
-				}
-				prepareNeighboursList(gameID);
-			}
 		});
 	}

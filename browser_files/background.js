@@ -182,7 +182,11 @@ FGS.sendView = function (msg, data, data2, data3)
 			{
 				view.close();
 			}
-			// chat off/
+			
+			else if(msg == 'friendsLoaded')
+			{
+				view.friendsLoaded(data, data2);
+			}
 			
 			else if(msg == 'changeSendbackState')
 			{
@@ -223,19 +227,22 @@ FGS.sendView = function (msg, data, data2, data3)
 				}
 				view.requestSuccess(data, data2);
 			}
-			// request off //
 			
-			else if(msg == 'updateNeighbours')
+			else if(msg == 'updateNeighbors')
 			{
-				view.ListNeighbours(data,data2);
+				view.neighborsLoaded(data, data2);
 			}
+			
 			else if(msg == 'errorWithSend')
 			{
-				if(data != '')
+				if(data2 != '')
 				{
-					view.updateSendback(data, false);
+					view.updateSendback(data2, false);
 				}
-				view.freegiftError();
+				else
+				{
+					view.freegiftError(data);
+				}
 			}		
 			else if(msg == 'freegiftSuccess')
 			{

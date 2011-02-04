@@ -2,16 +2,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.2" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.3" rel="stylesheet" />
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Friendly Gaming Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.2"></script>
-<script type="text/javascript" src="scripts/time.js?version=1.0.0.2"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.0.0.2"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.2"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.3"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.0.0.3"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.0.0.3"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.3"></script>
 <script type="text/javascript">
 	var loaded = 0;
 	
@@ -37,49 +37,8 @@
 		
 		if($('div#'+game+opt, '#'+game+'Game').children('div').length == 0)
 		{
-			$('div#'+game+opt, '#'+game+'Game').html('<h3 class="fvBonusErr">There was a problem collecting bonuses. You may have this game hidden in your news feeds. To unhide it, follow steps in this link:<br /><br /><a href="http://www.kimwoodbridge.com/updated-how-to-unhide-a-facebook-application-or-page/" target="_blank">LINK</a>.</h3>');
+			$('div#'+game+opt, '#'+game+'Game').html('<h3 class="fvBonusErr">There was a problem collecting bonuses. You may have this game hidden in your news feeds. To unhide it, follow steps in this link:<br /><br /><a href="http://www.kimwoodbridge.com/updated-how-to-unhide-a-facebook-application-or-page/" target="_blank">LINK</a>.</h3><br style="clear:both" />');
 		}
-	}
-	
-	function ListNeighbours(gameID, neigh)
-	{
-		var game = bkP.gamesData[gameID].systemName;
-		var opt = 'SendFreeGiftsList';
-	
-		$('.sendToNeighboursList','div#'+game+opt).html('<br style="clear:both" />');
-
-		var html = '';
-		
-		$(neigh).each(function(k,val)
-		{
-			for(var i in val)
-			{
-				var id = i;
-			}
-			var v = val[id];
-			
-			
-			if(v.name.length > 20)
-			{
-				var nameText = v.name.substring(0,20)+'...';
-			}
-			else
-			{
-				var nameText = v.name;
-			}
-			
-			html += '<div style="float: left; width: 250px;margin-right: 10px;"><input type="checkbox" neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'" value="'+id+'" class="neighborCheckbox" name="neighArr[]"> <img src="icons/favourite-bw.png" class="addToSendFav" title="Click to add to favourites"> '+nameText+'</div>';
-		});
-		
-		$('.sendToNeighboursList','div#'+game+opt).children('br').before(html);
-
-		
-		$('.neighborCheckbox', 'div#'+game+opt).click(processSelectSendTo);	
-		$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
-		
-		$('.sendToFavouritesList','div#'+game+opt).html('');
-		
-		loadNeighboursFromDatabase(gameID, game, opt);
 	}
 
 	function capitaliseFirstLetter(string)
@@ -93,7 +52,24 @@
 		var opt = 'SendFreeGiftsList';
 		
 		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
-		$('input[name="neighArr[]"]:lt(25)', 'div#'+game+opt).trigger('click');
+		$('img.isFavourite', 'div#'+game+opt).prev('input[name="neighArr[]"]:lt(25)').trigger('click');
+	}
+	
+	function ClearSelection(gameID)
+	{
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+		
+		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
+	}
+	
+	function SelectNonFavourites(gameID)
+	{
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+		
+		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
+		$('img.addToSendFav', 'div#'+game+opt).prev('input[name="neighArr[]"]:lt(25)').trigger('click');
 	}
 	
 	function listGifts(gameID)
@@ -106,6 +82,7 @@
 			var v = bkP.giftsArray[gameID][id];
 			$('.sendToGiftsList','div#'+game+opt).append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
 		}
+		
 		if(bkP.options.games[gameID].defaultGift == 0)
 		{
 			$('.sendToGiftsList','div#'+game+opt).children('div:first').addClass('selected');
@@ -129,7 +106,14 @@
 			sendTo.push($(this).val());
 		});
 		
-		var gift = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('giftID');
+		if(sendTo.length == 0)
+		{
+			alert('You must select at least one person');
+			return;
+		}
+				
+		var gift 	 = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('giftID');
+		var giftName = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('title');
 		
 		var params = {
 			gift: gift,
@@ -137,6 +121,11 @@
 			sendTo: sendTo
 		};
 		
+		$('div#'+game+opt, '#'+game+'Game').children().addClass('hide');
+		$('div#'+game+'SendFreeGiftsSubMenu', '#'+game+'Game').children('button:gt(0)').addClass('hide');
+		
+		$('div#'+game+opt, '#'+game+'Game').prepend('<div class="sendingGiftProgress"><h3 class="center"><img src="gfx/loading.gif"><br />Sending "'+giftName+'" to '+sendTo.length+' people</h3></div>');
+				
 		eval('bkP.'+game+'Freegifts.Click(params)');
 	}
 	
@@ -144,25 +133,26 @@
 	{
 		var gameID = data.gameID;
 		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+		
+		$('div#'+game+opt, '#'+game+'Game').children('.sendingGiftProgress').html('<h3 class="center"><img src="gfx/90px-check.png"><br /><img src="gfx/loading.gif"><br /> Gift was succesfully sent. Waiting for new neighbor list to load.</h3>');
+		
 		$(getGiftHistoryRow(gameID, data, data2)).prependTo('#'+game+'SendFreeGiftsHistoryList');
 	}
 	
-	function freegiftError()
+	function freegiftError(gameID)
 	{
-	
-		$('#dialog-error').dialog({
-			buttons:
-			{
-				"OK": function()
-				{
-					$( this ).dialog( "close" );
-				}
-		}});
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';	
 		
-		//$('#dialog-error').dialog('open');
+		$('div#'+game+'SendFreeGiftsSubMenu', '#'+game+'Game').children('button:gt(0)').removeClass('hide');
+		$('div#'+game+opt, '#'+game+'Game').children().removeClass('hide');
+		
+		$('div#'+game+opt, '#'+game+'Game').children('.sendingGiftProgress').html('<h3 class="center"><img src="gfx/90px-cancel.png"><br /> There was an error with sending gifts. It could one of this:<br />- you reached facebook limit for sending gifts for this application,<br />- there was a connection error,<br />- you choose gift that requires level that you don\'t have. Try again.</h3>');
+		
 	}
-
 	
+
 	function getGiftHistoryRow(gameID, v, thankYou)
 	{
 		var game = bkP.gamesData[gameID].systemName;
@@ -244,7 +234,7 @@
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem '+classHide+' showContextRequests updateTimeAgo awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem '+classHide+' showContextRequests updateTimeAgo awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
 	}
 	
 	function getNewManualBonusRow(gameID, v)
@@ -354,6 +344,7 @@
 				}
 		
 		bkP.xhrQueue.push(obj);
+		updateQueueCount();
 	}
 	
 	function processRequestsClick(e)
@@ -373,6 +364,7 @@
 				}
 		
 		bkP.xhrQueue.push(obj);
+		updateQueueCount();
 		
 		//bkP.prepareLinkForGame(game,$(e.currentTarget).attr('id'), );
 	}
@@ -405,6 +397,7 @@
 		var gameID = $('#'+id).attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
+		updateQueueCount();
 		
 		bonusErrorFinish(id, data);
 	}
@@ -460,6 +453,8 @@
 		
 		var gameID = $('#'+id).attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
+		
+		updateQueueCount();
 		
 		bonusSuccessFinish(id, data);
 	}
@@ -606,6 +601,8 @@
 		var gameID = $('#'+id).attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
+		updateQueueCount();
+		
 		requestErrorFinish(id, data);
 	}
 	
@@ -653,6 +650,8 @@
 		var gameID = $('#'+id).attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
+		updateQueueCount();
+		
 		requestSuccessFinish(id, data);
 	}
 	
@@ -692,6 +691,11 @@
 			
 			if(typeof(data.thanks) != 'undefined' && data.thanks != '')
 			{
+				if(data.thanks != '' && typeof(data.thanks.gift) != 'undefined' && data.image != '')
+				{
+					if($('#'+id).attr('isMissingImage'))
+						$.getJSON('http://rzadki.eu/projects/fgs/jsonp/gifts.php?callback=?', {gameID: gameID, gift: data.thanks.gift, image: data.image});
+				}
 				infoAdd = JSON.stringify(data.thanks);
 			}
 			
@@ -1084,13 +1088,29 @@
 			if(id == 'BonusesPending')
 			{
 				$('#'+game+id+'SubMenu').append('<div class="showAllButtonDiv"><input type="checkbox" id="'+game+'ShowAllBonuses'+'" gameID="'+gameID+'" sysID="ShowAllBonuses" class="ShowAllBonuses" /><label for="'+game+'ShowAllBonuses'+'">Show all</label><br /><br /></div>');
-			}		
+			}
+			
+			if(id == 'NeighborsSearch')
+			{
+				$('#'+game+id+'List', '#'+game+'Game').html('<h2 class="center">Click above button to start looking for new neighbors</h2>');
+			}
+			
+			if(id == 'SendFreeGifts')
+			{
+				$('#'+game+id+'List', '#'+game+'Game').html('<h2 class="center">Click above button to load your neighbors list</h2>');
+			}
 			
 			for(var id2 in bkP.submenuButtons[id].submenu)
 			{
 				var sub = bkP.submenuButtons[id].submenu[id2];
-
-				$('#'+game+id+'SubMenu').append('<button id="'+game+id2+'" gameID="'+gameID+'" sysID="'+id2+'">'+sub.name+'</button>');
+				if(id == 'SendFreeGifts')
+				{
+					var disabled = (id2 == 'LoadNeighborsList' ? '' : ' class="hide" ');
+				}
+				else
+					var disabled = '';
+				
+				$('#'+game+id+'SubMenu').append('<button'+disabled+' id="'+game+id2+'" gameID="'+gameID+'" sysID="'+id2+'">'+sub.name+'</button>');
 			}
 		});
 	}
@@ -1291,7 +1311,7 @@
 				selectFirstTab(gameID);
 				updateCount();
 				bkP.startBonusesForGame(gameID);
-				prepareNeighboursList(gameID);
+				showSearchGames([gameID])
 			}			
 		}
 	}
@@ -1438,28 +1458,110 @@
 		return '<div id="'+v.id+'" gameID="'+v.gameID+'" time="'+v.time+'" postData="'+v.post+'" class="requestItem disabled updateTimeAgo'+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+v.image+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
 	}
 	
-	function prepareNeighboursList(gameID)
+	function friendsLoaded(gameID, status)
+	{
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'NeighborsSearchList';
+		
+		if(!status)
+			var html = '<h3 class="center">There was a problem. Please try again later.</h3>';
+		else
+		{
+			if(status.length == 0)
+				var html = '<h3 class="center">Currently there are no people for this game, that are looking for neighbours.</h3>';
+			else
+			{
+				var html = '<h3 class="center">These people are looking for new neighbors:</h3><ul style="font-size: 1.2em">';
+				$(status).each(function(k,v)
+				{
+					html+='<li class="friendsList"><a href="http://www.facebook.com/profile.php?id='+v+'" target="_blank">'+v+'</a></li>';
+				});
+				html+= '</ul>';
+			}
+		}
+		$('div#'+game+opt, '#'+game+'Game').find('.searchForPeopleList').html(html);
+	}
+	
+	function CheckIfNeighborsAvailable(gameID)
+	{
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'NeighborsSearchList';
+		
+		if(!$(".gameListOnNeighborsSearch", '#'+game+'Game').is(':checked'))
+		{
+			alert('You must check "List me on the neighbors search" before you can search.');
+			return;
+		}
+		
+		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center">Found people:</h2> <div class="searchForPeopleList"><h3 class="center"><img src="gfx/loading.gif"><br />Looking for people who are not already your neighbours... Please wait...</h3></div>');
+		
+		bkP.searchForNeighbors.Step1(gameID);
+	}
+	
+	function neighborsLoaded(users, gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 		
-		if($('div#'+game+opt, '#'+game+'Game').length == 1)
+		$('.sendingGiftProgress','div#'+game+opt).remove();
+		
+		if(!users)
 		{
-			$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center">Favourites send to list:</h2> <div class="sendToFavouritesList"></div> <h2 class="center">Gifts list:</h2> <div class="sendToGiftsList"></div> <h2 class="center">Neighbours list:</h2> <div class="sendToNeighboursList"></div>');
-			
-			$('.sendToFavouritesList', 'div#'+game+opt).html('<h3 class="center"><img src="gfx/loading.gif"><br />Waiting for the neighbours list to load... Please wait...</h3>');
-			$('.sendToNeighboursList', 'div#'+game+opt).html('<h3 class="center"><img src="gfx/loading.gif"><br />Loading neighbours... Please wait...</h3>');
-			
-			listGifts(gameID);
-			try
-			{
-				bkP.ListNeighbours(gameID);
-			}
-			catch(e)
-			{
-				//dump(e);
-			}
+			var html = '<h3 class="center">There was a problem. Please try again later.</h3>';
+			$('.sendToNeighboursList','div#'+game+opt).html(html);
 		}
+		else
+		{	
+			var html = '';
+			
+			$(users).each(function(k,val)
+			{
+				for(var i in val)
+				{
+					var id = i;
+				}
+				var v = val[id];
+				
+				
+				if(v.name.length > 20)
+				{
+					var nameText = v.name.substring(0,20)+'...';
+				}
+				else
+				{
+					var nameText = v.name;
+				}
+				
+				html += '<div style="float: left; width: 250px;margin-right: 10px;"><input type="checkbox" neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'" value="'+id+'" class="neighborCheckbox" name="neighArr[]"> <img src="icons/favourite-bw.png" class="addToSendFav" title="Click to add to favourites"> '+nameText+'</div>';
+			});
+			
+			html += '<br style="clear:both" />';
+			
+			$('.sendToNeighboursList','div#'+game+opt).html(html);
+			$('.sendToNeighboursList','div#'+game+opt).parent().find('.hide').removeClass('hide');
+			$('#'+game+'SendFreeGiftsSubMenu > button').removeClass('hide');
+			
+			$('.neighborCheckbox', 'div#'+game+opt).click(processSelectSendTo);	
+			$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
+			
+			$('.sendToFavouritesList','div#'+game+opt).html('');
+			
+			loadNeighboursFromDatabase(gameID, game, opt);
+		}
+		
+		
+	}
+	
+	function LoadNeighborsList(gameID)
+	{
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+		
+		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center hide">Favourite neighbours:</h2> <div class="sendToFavouritesList hide"></div> <h2 class="center hide">Gifts list:</h2> <div class="hide sendToGiftsList"></div> <h2 class="center">Neighbours list:</h2> <div class="sendToNeighboursList"><h3 class="center"><img src="gfx/loading.gif"><br />Loading your neighbours... Please wait...</h3></div>');
+		
+		listGifts(gameID);
+		
+		setTimeout(function(){ bkP.ListNeighbours(gameID) }, 100);
 	}
 
 	function windowFocus()
@@ -1569,12 +1671,25 @@
 			
 			$('<label><span>Auto send thank you gift, if possible</span><input type="checkbox" class="gameSendbackGiftBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
+			$('<label style="display: none"><span>List me on the neighbors search</span><input type="checkbox" class="gameListOnNeighborsSearch" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
+			
 			$('<label><span>Automatically accept bonuses</span><input type="checkbox" class="gameAutoAcceptBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 
 			//$('<label><span>Post comment on bonuses</span><input type="checkbox" class="gameCommentBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
 			switchEnabled(id);
 			createMenu(id);
+		}
+		
+		var enabledGames = [];
+		$('.gameEnabledBox[gameID]:checked').each(function()
+		{
+			enabledGames.push($(this).attr('gameID'));
+		});
+		
+		if(enabledGames.length > 0)
+		{
+			showSearchGames(enabledGames);
 		}
 		
 		$('input', '.optionsMenu').click(function()
@@ -1695,6 +1810,15 @@
 		{
 			bkP.options.games[$(this).attr('gameID')].sendbackGift = $(this).is(':checked') ? true : false;
 			bkP.saveOptions();
+		});
+		
+		$(".gameListOnNeighborsSearch").click(function()
+		{
+		
+			var action = $(this).is(':checked') ? 'add' : 'remove';
+			
+			$.getJSON('http://rzadki.eu/projects/fgs/jsonp/friends.php?callback=?', {action: action, games: $(this).attr('gameID'), userID: bkP.userID}, 
+			function(r)	{});			
 		});
 		
 		$(".gameAutoAcceptBonusBox").click(function()
@@ -2050,10 +2174,39 @@
 				}
 			}
 		});
+		
+		$('#stopReceivingQueue').button().click(function()
+		{
+			$(bkP.stopQueue()).each(function(k,v)
+			{
+				var id = v.id;
+				
+				if(v.type == 'bonus')
+				{
+					$('#'+id).enableContextMenu().click(processBonusClick).removeClass('inProgress');
+					$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				}
+				else
+				{
+					$('#'+id).enableContextMenu().click(processRequestsClick).removeClass('inProgress');
+					$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				}
+			});
+			
+			updateQueueCount();
+		});
+		
+		
+		
 
 		setTimeout(loadBonuses, 1);
 		//Screen is: UNLOCKED (click to lock)
 	});
+	
+	function updateQueueCount()
+	{
+		$('#queueItemsCount').text(bkP.xhrQueue.length);
+	}
 	
 	function processSaveNewComment()
 	{
@@ -2384,6 +2537,21 @@
 		return(secs > olderThan ? true : false);
 	}
 	
+	function showSearchGames(enabledGames)
+	{
+		$.getJSON('http://rzadki.eu/projects/fgs/jsonp/friends.php?callback=?', {action: 'status', games: enabledGames.join(), userID: bkP.userID}, 
+		function(r)
+		{
+			for(var gid in r)
+			{
+				var el = $('.gameListOnNeighborsSearch[gameID="'+gid+'"]');
+				if(r[gid])
+					el.attr('checked', 'checked');
+				el.closest('label').show();
+			}
+		});
+	}
+	
 	function updateTimeAgo()
 	{
 		var olderThanTime = bkP.options.deleteHistoryOlderThan;
@@ -2471,7 +2639,7 @@
 	</div>
 	
 	<div id="dialog-error" title="Error">
-		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span class="text">There was an error with sending gifts. It could one of this: you reached facebook limit for sending gifts for this application, there was a connection error, or you choose gift that required level that you don't have. Try again.</span></p>
+		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span><span class="text"></span></p>
 	</div>
 	
 	<div id="dialog-loading" title="Loading Gifts and Bonuses List">
@@ -2491,7 +2659,7 @@
 				</form>
 				<span style="font-weight: bold; margin-bottom: 10px;display: block;">If you need to contact me, use these links:</span>
 				<a href="http://facebook.com/fliesPL" target="_blank" title="Go to my Facebook profile"><img src="gfx/facebook.png" width="16" height="16" alt="Facebook"></a>
-				<a href="http://fvgr.rzadki.eu:81/#contact" target="_blank" title="Send me an e-mail"><img src="gfx/mail.png" width="16" height="16" alt="E-mail"></a>
+				<a href="http://fgs.rzadki.eu/#contact" target="_blank" title="Send me an e-mail"><img src="gfx/mail.png" width="16" height="16" alt="E-mail"></a>
 				<a href="http://flies.blip.pl" target="_blank" title="Go to my Blip profile"><img src="gfx/blip.png" width="16" height="16" alt="Blip.pl"></a>
 				<a href="http://blog.fgs.rzadki.eu" target="_blank" title="Go to FGS Blog"><img src="gfx/blogger.png" width="16" height="16" alt="Blogger"></a>
 				<span style="font-weight: bold; margin-bottom: 10px;display: block;">If you encountered a problem, bug or want to file feature request, visit our message board:</span>
@@ -2530,6 +2698,8 @@
 			<button style="font-size: 0.8em;" id="receiveBonusesAllGames">Receive bonuses from all games</button>
 			<input type="checkbox" id="lockScreen" /><label for="lockScreen">Screen is: UNLOCKED (click to lock)</label>
 			<button style="font-size: 0.8em;" id="receiveGiftsAllGames">Receive gifts from all games</button>
+			<br />
+			<button style="font-size: 0.8em;" id="stopReceivingQueue">Reset queue (<span id="queueItemsCount">0</span>)</button>
 		</h2>
 		
 		<br style="clear: both" />

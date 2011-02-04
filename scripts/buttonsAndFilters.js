@@ -18,6 +18,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						]
 					},
@@ -38,6 +39,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						]
 					},
@@ -62,6 +64,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -81,6 +84,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -100,6 +104,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 				},
@@ -120,6 +125,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -140,6 +146,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -158,6 +165,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -174,6 +182,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -192,6 +201,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -208,6 +218,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -223,6 +234,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -242,6 +254,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -259,6 +272,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -276,6 +290,7 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 				},
@@ -293,6 +308,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -312,6 +328,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -331,6 +348,7 @@ FGS.gamesData =
 							'RequestsHistory',	
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -348,6 +366,7 @@ FGS.gamesData =
 							'RequestsHistory',
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -363,6 +382,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -380,6 +400,7 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -395,6 +416,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -412,6 +434,7 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -427,6 +450,7 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -444,6 +468,7 @@ FGS.gamesData =
 							'BonusesHistory', 
 							'RequestsPending',
 							'RequestsHistory',	
+							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
@@ -484,13 +509,21 @@ FGS.submenuButtons =
 						}, 
 	'SendFreeGifts':	{	name: 'Send free gifts',
 							submenu: {
-										'SelectFavourites': { name: 'Select favourites' },
+										'LoadNeighborsList': { name: 'Load neighbors list' },
+										'SelectFavourites': { name: 'Select favourites (max 25)' },
+										'SelectNonFavourites': { name: 'Select non-favourites (max 25)' },
+										'ClearSelection': { name: 'Clear selection' },
 										'SendGifts': { name: 'Send free gifts' },
 									}
 						}, 
 	'SendFreeGiftsHistory':	{	name: 'Show free gifts history',
 							submenu: {
 										'ClearSentFreeGifts': { name: 'Clear send gifts history' },
+									}
+						},
+	'NeighborsSearch': {	name: 'Search for neighbors',
+							submenu: {
+										'CheckIfNeighborsAvailable': { name: 'Check, if there are people waiting to be added' },
 									}
 						},
 	'GameOptionsTab':	{	name: 'Filters',

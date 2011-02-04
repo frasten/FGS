@@ -54,11 +54,11 @@ FGS.pokerFreegifts =
 					{
 						if(typeof(params.sendTo) == 'undefined')
 						{
-							FGS.sendView('errorUpdatingNeighbours');
+							FGS.sendView('updateNeighbors', false, params.gameID);
 						}
 						else
 						{
-							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 						}
 					}
 				}
@@ -73,11 +73,11 @@ FGS.pokerFreegifts =
 				{
 					if(typeof(params.sendTo) == 'undefined')
 					{
-						FGS.sendView('errorUpdatingNeighbours');
+						FGS.sendView('updateNeighbors', false, params.gameID);
 					}
 					else
 					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 					}
 				}
 			}
@@ -121,7 +121,7 @@ FGS.pokerFreegifts =
 					if(typeof(params.sendTo) == 'undefined')
 					{
 						//dump(FGS.getCurrentTime()+'[Z] Updating neighbours');
-						FGS.sendView('updateNeighbours', params.gameID, arr);
+						FGS.sendView('updateNeighbors', arr, params.gameID);
 						return;
 					}
 								
@@ -185,11 +185,11 @@ FGS.pokerFreegifts =
 					{
 						if(typeof(params.sendTo) == 'undefined')
 						{
-							FGS.sendView('errorUpdatingNeighbours');
+							FGS.sendView('updateNeighbors', false, params.gameID);
 						}
 						else
 						{
-							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 						}
 					}
 				}
@@ -204,11 +204,11 @@ FGS.pokerFreegifts =
 				{
 					if(typeof(params.sendTo) == 'undefined')
 					{
-						FGS.sendView('errorUpdatingNeighbours');
+						FGS.sendView('updateNeighbors', false, params.gameID);
 					}
 					else
 					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 					}
 				}
 			}

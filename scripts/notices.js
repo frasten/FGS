@@ -1,6 +1,6 @@
 function readNotices()
 {
-	jQuery.getJSON('http://rzadki.eu:81/projects/fgs/jsonp/notices.php?callback=?', function(data)
+	jQuery.getJSON('http://rzadki.eu/projects/fgs/jsonp/notices.php?callback=?', function(data)
 	{
 		$('#noticesContent').html('');
 		for(k in data.data)
@@ -54,7 +54,7 @@ function readChat(start)
 	
 	$.ajax({
 		type: "GET",
-		url: 'http://rzadki.eu:81/projects/fgs/jsonp/chat.php?callback=?',
+		url: 'http://rzadki.eu/projects/fgs/jsonp/chat.php?callback=?',
 		cache: false,
 		data: {action: 'read',  userName: bkP.userName, userID: bkP.userID,
 					lastPrivateID: bkP.options.chatSessions.lastPrivateID, lastPublicID: bkP.options.chatSessions.lastPublicID, sessionID: bkP.options.chatSessions.sessID},
@@ -88,7 +88,7 @@ function sendChat(msg, isPrivate)
 	
 	$.ajax({
 		type: "POST",
-		url: 'http://rzadki.eu:81/projects/fgs/jsonp/chat.php?callback=?',
+		url: 'http://rzadki.eu/projects/fgs/jsonp/chat.php?callback=?',
 		cache: false,
 		data:  {action: 'send', text: msg, userName: bkP.userName, userID: bkP.userID, private: isPrivate,
 					lastPrivateID: bkP.options.chatSessions.lastPrivateID, lastPublicID: bkP.options.chatSessions.lastPublicID, sessionID: bkP.options.chatSessions.sessID},

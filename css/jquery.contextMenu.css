@@ -355,7 +355,25 @@ h2.center, h3.center
 	text-align: center;
 }
 
-.sendToFavouritesList, .sendToNeighboursList, .sendToGiftsList, .gameOptionsFiltersList
+.friendsList
+{
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+
+
+.friendsList > a
+{
+	color: #105289;
+	text-decoration: none;
+}
+
+.friendsList > a:hover
+{
+	text-decoration: underline;
+}
+
+.sendToFavouritesList, .sendToNeighboursList, .sendToGiftsList, .gameOptionsFiltersList, .searchForPeopleList, .sendingGiftProgress
 {
 	border:1px solid #000;
 	padding: 20px;

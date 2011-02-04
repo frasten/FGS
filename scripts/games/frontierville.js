@@ -44,11 +44,11 @@ FGS.frontiervilleFreegifts =
 					{
 						if(typeof(params.sendTo) == 'undefined')
 						{
-							FGS.sendView('errorUpdatingNeighbours');
+							FGS.sendView('updateNeighbors', false, params.gameID);
 						}
 						else
 						{
-							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 						}
 					}
 				}
@@ -63,11 +63,11 @@ FGS.frontiervilleFreegifts =
 				{
 					if(typeof(params.sendTo) == 'undefined')
 					{
-						FGS.sendView('errorUpdatingNeighbours');
+						FGS.sendView('updateNeighbors', false, params.gameID);
 					}
 					else
 					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 					}
 				}
 			}
@@ -115,11 +115,11 @@ FGS.frontiervilleFreegifts =
 					{
 						if(typeof(params.sendTo) == 'undefined')
 						{
-							FGS.sendView('errorUpdatingNeighbours');
+							FGS.sendView('updateNeighbors', false, params.gameID);
 						}
 						else
 						{
-							FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 						}
 					}
 				}
@@ -134,11 +134,11 @@ FGS.frontiervilleFreegifts =
 				{
 					if(typeof(params.sendTo) == 'undefined')
 					{
-						FGS.sendView('errorUpdatingNeighbours');
+						FGS.sendView('updateNeighbors', false, params.gameID);
 					}
 					else
 					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 					}
 				}
 			}

@@ -60,89 +60,68 @@ FGS.giftsArray = {
 	'102452128776': // farmville
 	{
 		"mysterygift": { name: 'Mystery Gift'},
-		"socialplumbingmysterygift": { name: 'Special Delivery' },
+
+		"socialplumbingmysterygift": { name: 'Special Delivery'},
 		"shovel_item_01": { name: '2 Shovels'},
-		
-		"holidaytree2010_gift_1": {name: 'Holiday Gift'},
-		"holidaytree2010_gift_2": {name: 'Holiday Gift'},
-		"holidaytree2010_gift_3": {name: 'Holiday Gift'},
-		"holidaytree2010_gift_4": {name: 'Holiday Gift'},
-		"holidaytree2010_gift_5": {name: 'Holiday Gift'},
-		
-		
-		
-		"fencemarvinpicket": {name: 'Picket Fence II'},
-		
-		
-		
-		
-		"fruitcake": { name: 'Fruit Cake' },
-		"spicedcider": { name: 'Spiced Cider' },
-		"leafcandle": { name: 'Leaf Candle' },
-		"stuffing": { name: 'Stuffing' },
-		"casserole": { name: 'Casserole' },
-		
-		
-		"roseblack_seedpackage": { name: '20 Black Rose Seeds'},
-		"reindeer_randall": { name: 'Clumsy Reindeer'},
-		"mumsyellow": { name: 'Yellow Mums' },
-		
-		
-		"vehiclepart": { name: 'Vehicle Part'},
-		"brick": { name: 'Brick'},
-		"woodenboard": { name: 'Wooden Board'},
-		"nail": { name: 'Nail'},		
-		"beehive_bee": { name: 'Honeybee'},
-		"smoker": { name: 'Smoker'},		
-		"beeswax": { name: 'Beeswax'},
-		"roseblack_seedpackage": { name: '20 Black Rose Seeds'},
 		"wateringcan": { name: 'Watering Can'},
+		"valentinesbasket2011_valentine_2": { name: 'Rose Vase'},
+		"valentinesbasket2011_valentine_3": { name: 'Baby\'s Breath'},
+		"valentinesbasket2011_valentine_4": { name: 'Valentine Chocolates'},
+		"valentinesbasket2011_valentine_1": { name: 'Stuffed Cow'},
+		"valentinesbasket2011_valentine_5": { name: 'Love Letters'},
+		"vehiclepart": { name: 'Vehicle Part'},
+		"woodenboard": { name: 'Wooden Board'},
+		"nail": { name: 'Nail'},
+		"beeswax": { name: 'Beeswax'},
+		"beehive_bee": { name: 'Honeybee'},
 		"horseshoe": { name: 'Horseshoe'},
-		"harness": { name: 'Harness'},
 		"blanket": { name: 'Blanket'},
+		"greenfeather": { name: 'Green Plume'},
+		"consume_kibble": { name: 'Puppy Kibble'},
+		"consume_treat": { name: 'Dog Treat'},
+		"mysterygift": { name: 'Mystery Gift'},
+		"haybaleroundorange": { name: 'Orange Round Hay'},
+		"hilltiny": { name: 'Small Hill'},
+		"treemagnolia": { name: 'Magnolia Tree'},
+		"fencewhite": { name: 'Whitewash Fence'},
+		"fencemarvinpicket": { name: 'Picket Fence II'},
+		"hangingflowers": { name: 'Hanging Flower'},
+		"maple03": { name: 'Yellow Maple Tree'},
+		"fencemodern": { name: 'Black Iron Fence'},
+		"gulmohar": { name: 'Gulmohar Tree'},
+		"silverholidaytree": { name: 'Holiday Tree'},
+		"haystack": { name: 'Haystack'},
+		"leavesmaple03": { name: 'Yellow Maple Leaves'},
+		"banana": { name: 'Banana Tree'},
+		"tamarind": { name: 'Tamarind Tree'},
+		"holidaytree2010_gift_4": { name: 'Holiday Gift'},
+		"date": { name: 'Date Tree'},
+		
+		"brick": { name: 'Brick'},
+		"smoker": { name: 'Smoker'},		
+		"roseblack_seedpackage": { name: '20 Black Rose Seeds'},
+		"harness": { name: 'Harness'},
 		"bottle": { name: 'Bottle'},
 		
 		"needlepointfarmhouse": { name: 'Needlepoint'},
 		"dragonfly": { name: 'Dragonfly'},
 		"gloves": { name: 'Gloves'},
 		"purpleemperorbutterfly": { name: 'Emperor Butterfly'},
-		"greenfeather": { name: 'Green Plume'},
-		
-		
-		
-		
 
-		"consume_kibble": { name: 'Puppy Kibble'},
-		"consume_treat": { name: 'Dog Treat'},
-
-		"hilltiny": { name: 'Small Hill'},
-		"hangingflowers": { name: 'Hanging Flower'},
-		"fencemodern": { name: 'Black Iron Fence'},
-		"treemagnolia": { name: 'Magnolia Tree'},
 		"goose": { name: 'Brown Goose'},
-		"fencemarvinpicket": { name: 'Picket Fence II'},
 		"haybaleroundjetblack": { name: 'Jet Black Hay '},
-		"haybaleroundorange": { name: 'Orange Round Hay'},
 		"plantersingle": { name: 'Tropical Planter'},
 		"benchmodernblue": { name: 'Blue Bench'},
-		"fencewhite": { name: 'Whitewash Fence'},
 		"leavesmaple02": { name: 'Red Maple Leaves'},
 		"maple02": { name: 'Red Maple Tree'},
-		"maple03": { name: 'Yellow Maple Tree (lvl 4)'},
-		"gulmohar": { name: 'Gulmohar Tree'},
 		"haybaleroundviolet": { name: 'Purple Round Hay'},
 		"cow": { name: 'Cow'},
 		"chicken": { name: 'Chicken (lvl 4)'},
-		"haystack": { name: 'Haystack'},
-		"leavesmaple03": { name: 'Yellow Maple Leaves'},
 		"sheep": { name: 'Sheep (lvl 7)'},
 		"rabbit": { name: 'Rabbit (lvl 12)'},
-		"banana": { name: 'Banana (lvl 14)'},
 		"duck": { name: 'Duck (lvl 15)'},
-		"tamarind": { name: 'Tamarind Tree (lvl 15)'},
 		"pig": { name: 'Pig (lvl 10)'},
 		"goat": { name: 'Goat (lvl 18)'},
-		"date": { name: 'Date (lvl 20)'},
 		"horse": { name: 'Horse (lvl 21)'},
 		"olive": { name: 'Olive (lvl 32)'},
 		"mango": { name: 'Mango (lvl 40)'},
@@ -153,6 +132,10 @@ FGS.giftsArray = {
 		"rabbit_dutch": { name: 'Dutch Rabbit (lvl 90)'},
 		"jacarandatree": { name: 'Jacaranda (lvl 100)'},
 
+		
+		
+		
+		
 		"cranberrybushel": { name: 'Cranberry (B.S.W)'},
 		"blueberrybushel": { name: 'Blueberry (B.S.W)'},
 		"strawberrybushel": { name: 'Strawberry (B.S.W)'},
@@ -202,38 +185,43 @@ FGS.giftsArray = {
 	},
 	'234860566661': // treasure isle
 	{
+		"delivery_crate": { name: 'Special Delivery'},
 		"mystery_gift": { name: 'Mystery Gift'},
 		"fishing_bait_common": { name: 'Basic Bait'},
 		"fishing_bait_uncommon": { name: 'Good Bait'},
 		"oxygen_bottle": { name: 'Oxygen Bottle'},
-		"christmas_present": { name: 'Present'},
+		"item_snowflake1": { name: 'Snowflake'},
 		"fruit_cranberrysauce": { name: 'Cranberry Sauce'},
 		"key_crabcake": { name: 'Crab Cake'},
+		"construction_oil": { name: 'Oil'},
+		"construction_fire": { name: 'Fire'},
+		"construction_dye": { name: 'Dye'},
 		"construction_glue": { name: 'Glue'},
 		"construction_metal": { name: 'Metal'},
-		"construction_cloth": { name: 'Cloth'},
-		"construction_nails": { name: 'Nails'},
-		"construction_rock": { name: 'Rock'},
-		"construction_shell": { name: 'Shells'},
 		"construction_plank": { name: 'Planks'},
-		"construction_oil": { name: 'Oil'},
+		"construction_shell": { name: 'Shells'},
+		"construction_nails": { name: 'Nails'},
 		"construction_rope": { name: 'Rope'},
-		"construction_dye": { name: 'Dye'},
+		"construction_cloth": { name: 'Cloth'},
+		"construction_bolts": { name: 'Bolts'},
+		"construction_gears": { name: 'Gears'},
+		"construction_slush": { name: 'Slush'},
+		"construction_scarf": { name: 'Scarf'},
+		"construction_ice": { name: 'Ice'},
+		"construction_mittens": { name: 'Mittens'},
+		"construction_ectoplasm": { name: 'Ectoplasm'},
+		"construction_seed": { name: 'Seeds'},
 		"construction_marble": { name: 'Marble'},
+		"construction_rock": { name: 'Rock'},
 		"construction_resin": { name: 'Resin'},
 		"construction_aquavitae": { name: 'Aqua Vitae'},
-		"construction_seed": { name: 'Seeds'},
-		"construction_gears": { name: 'Gears'},
 		"construction_pillar": { name: 'Pillars'},
-		"construction_ectoplasm": { name: 'Ectoplasm'},
-		"construction_glass": { name: 'Glass'},
-		"construction_bolts": { name: 'Bolts'},
-		"construction_fire": { name: 'Fire'},
-		"construction_gumdrops": { name: 'Gumdrops'},
-		"construction_diodes": { name: 'Diodes'},
-		"construction_packedsnow": { name: 'Packed Snow'},
 		"construction_frosting": { name: 'Frosting'},
 		"construction_gingerbread": { name: 'Gingerbread'},
+		"construction_packedsnow": { name: 'Packed Snow'},
+		"construction_gumdrops": { name: 'Gumdrops'},
+		"construction_glass": { name: 'Glass'},
+		"construction_diodes": { name: 'Diodes'},
 		"construction_gold": { name: 'Gold'},
 		"construction_paint": { name: 'Paint'},
 		"coins_gift_100": { name: '100 coins'},
@@ -243,25 +231,14 @@ FGS.giftsArray = {
 		"turtleairhorn": { name: 'Airhorn'},
 		"gem_blue": { name: 'Blue Gem'},
 		"gem_red": { name: 'Red Gem'},
-		"gem_green": { name: 'Green Gem'},
 		"gem_orange": { name: 'Orange Gem'},
+		"gem_green": { name: 'Green Gem'},
 		"gem_purple": { name: 'Purple Gem'},
 		"fruit_kiwi": { name: 'Kiwis'},
 		"fruit_banana": { name: 'Bananas - lvl 10'},
 		"fruit_mango": { name: 'Mangoes - lvl 15'},
 		"fruit_lavamango": { name: 'Lava Mango'},
-		"fruit_pineapple": { name: 'Fruit Pineapple' },
-		
-		"deco_poppyfield": { name: 'Poppyfield'},
-		"deco_mnkpillar": { name: 'Short Pillar'},
-		"deco_happyyellowflower": { name: 'Yellow Flower'},
-		"deco_happypinkflower": { name: 'Pink Flower'},
-		"deco_mnkpillartall": { name: 'Tall Pillar'},
-		"deco_tallpillarvertical": { name: 'Torch Pillar'},
-		"animal_plover": { name: 'Plover'},
-		"deco_royalmnkpostrope2": { name: 'Royal Post Endcap'},
-		"deco_royalmnkpostrope": { name: 'Royal Post'},
-		"shrub_redbeachplant": { name: 'Red Beach Plant'},
+		"item_snowpack": { name: 'Snowpack'},
 	},
 	'101539264719': // cafe world
 	{
@@ -300,21 +277,21 @@ FGS.giftsArray = {
 	},
 	10979261223:  // mafia wars
 	{
-		"425": { name: 'Beats by Dre'},
-		"426": { name: 'Doctors Orders'},
-		"427": { name: 'Certified Platinum'},
-		"429": { name: 'Holiday Sack'},
-		"423": { name: 'Time Capsule'},
+		"440": { name: 'Raw Meat'},
+		"439": { name: 'Hollow Warrior'},
 		"405": { name: 'Mystery Shipment'},
-		"211": { name: 'Engine'},
 		"422": { name: 'Exotic Animal Feed'},
 		"420": { name: 'Feeding Trough'},
 		"419": { name: 'Bird Cage'},
+		"438": { name: '+2 Mafia Members'},
 		"210": { name: 'Satchel of Lira'},
 		"100": { name: 'Mystery Bag'},
 		"151": { name: 'Mystery Animal'},
 		"189": { name: 'Special Part'},
-		"152": { name: 'Rack of Chips'},
+		"401": { name: 'Italian Hardwood'},
+		"402": { name: 'Marble Slab'},
+		"164": { name: 'Construction Tool'},
+		"171": { name: 'Deposit Box'},
 		
 		
 		/*
@@ -396,23 +373,23 @@ FGS.giftsArray = {
 	},
 	151044809337: // fishville
 	{
-		"klfreefcollection1": { name: 'Live Rock'},
-		"tgvcranberryplant": { name: 'Cranberry Plant'},
+		"val11_flowerbasket": { name: 'Flower Basket'},
+		"klfkelpshoot": { name: 'Kelp Shoot'},
 		"mysterybox": { name: 'Mystery Box'},
-		"threadfinbutterflyfish": { name: 'Threadfin Butterfly'},
-		"genericcoralindigo": { name: 'Special Indigo Coral'},
-		"sweetstash_butterscotch": { name: 'Butterscotch Treat'},
+		"genericpearlgreen": { name: 'Special Green Pearl'},
+		"longspinecardinal": { name: 'Longspine Cardinal'},
+		"klfeelhideout": { name: 'Eel Hideout'},
 		"blueDevilDamselfish": { name: 'Blue Devil Damsel'},
 		"shrimpgoby_mysterybox": { name: 'Blue Mystery Egg'},
 		"foodMedicine1": { name: 'Medicine'},
-		"fantasystatuewarrior": { name: 'Warrior Statue'},
-		"phoplantflower2": { name: 'Glow Flower'},
+		"sweetstash_chips": { name: 'Chips Treat'},
 		"galhmsbeagle": { name: 'HMS Beagle'},
-		"pinkCoral": { name: 'Pink Coral'},
+		"klfreefcollection1": { name: 'Live Rock'},
+		"xmascakehouse": { name: 'Snow Cake'},
 		"gibsmithiahawaiiensis": { name: 'Gibsmithia'},
 		"latch": { name: 'Latch'},
 		"nails": { name: 'Nails'},
-		"ccurchinshells": { name: 'Urchin Shells'},
+		"pinkCoral": { name: 'Pink Coral'},
 		"neonGreenNepthea": { name: 'Green Nepthea'},
 		"organPipeCoral": { name: 'Organ Pipe Coral'},
 		"greenBubbleCoral": { name: 'Green Bubble Coral'},
@@ -420,6 +397,15 @@ FGS.giftsArray = {
 	
 	291549705119: // cityville
 	{
+		"deco_plazaflowers": { name: 'Plaza Flowers'},
+
+		"deco_baretree": { name: 'Winter Oak'},
+		"deco_chineselionstatue": { name: 'Chinese Lion Statue'},
+
+		"deco_terracottawarrior": { name: 'Terracotta Warrior'},
+		"deco_rabbitstatue": { name: 'Rabbit Statue'},
+		"deco_CNY_banners": { name: 'Hanging Banners'},
+		
 		"energy_1": { name: '+1 Energy'},
 		"energy_2": { name: '+2 Energy'},
 		"energy_3": { name: '+3 Energy'},
@@ -439,10 +425,8 @@ FGS.giftsArray = {
 		"quest_item_holiday_snowball": { name: 'Snowball' },
 		"quest_item_holiday_skates": { name: 'Skates' },
 		"quest_item_holiday_pinecones": { name: 'Pincecones' },
-		
-		
-		
-		
+
+
 		"material_marble": { name: 'Marble'},
 		"material_city_seal": { name: 'City Seal'},
 		"tree_poinciana": { name: 'Poinciana Tree - lvl 15'},
@@ -451,7 +435,7 @@ FGS.giftsArray = {
 		"tree_willow": { name: 'Willow Tree - lvl 30'},
 		"deco_fountain01": { name: 'Fountain - lvl 40'},
 		
-		
+
 		"Animal_moose1": { name: 'Moose (lvl 20)'},
 		"Animal_penguin" : { name: 'Penguin'},
 		"tree_hanging_flower" : { name: 'Hanging Flower (lvl 20)'},
@@ -462,14 +446,9 @@ FGS.giftsArray = {
 	
 	167746316127: // zoo world
 	{
-		"977": { name: 'Winter Scarf'},
-		"978": { name: 'Reindeer Headdress'},
-		"979": { name: 'Christmas Bells'},
-		"886": { name: 'Autumn Apple'},
-		"885": { name: 'Autumn Leaf'},
-		"887": { name: 'Grape'},
-		"888": { name: 'Pear'},
-		"889": { name: 'Pumpkin'},
+		"1074": { name: 'Rose Petals'},
+		"1075": { name: 'Grooming Supplies'},
+		"1077": { name: 'Valentine Cards'},
 		"564": { name: 'Red Rose'},
 		"566": { name: 'White Rose'},
 		"565": { name: 'Yellow Rose'},
@@ -481,6 +460,7 @@ FGS.giftsArray = {
 		"308": { name: 'Pear Tree'},
 		"4": { name: 'Giant Panda'},
 		"3": { name: 'Tortoise'},
+		"15": { name: 'Tree Frog'},
 		"11": { name: 'African Elephant'},
 		"9": { name: 'Bison'},
 		"1": { name: 'Bonobo'},
@@ -496,14 +476,6 @@ FGS.giftsArray = {
 		"18": { name: 'Koala'},
 		"12": { name: 'Lion'},
 		"13": { name: 'Monkey'},
-		"8": { name: 'Otter'},
-		"5": { name: 'Polar Bear'},
-		"144": { name: 'Pot-bellied Pig'},
-		"17": { name: 'Rattlesnake'},
-		"21": { name: 'Rhinoceros'},
-		"24": { name: 'Siberian Tiger'},
-		"15": { name: 'Tree Frog'},
-		"22": { name: 'Zebra'},
 	},
 	2389801228: // poker
 	{
@@ -766,7 +738,7 @@ FGS.getFBML = function(params, retry)
 				
 				if(typeof(params.sendTo) == 'undefined')
 				{
-					FGS.sendView('updateNeighbours', params.gameID, arr);
+					FGS.sendView('updateNeighbors', arr, params.gameID);
 					return;
 				}
 				
@@ -827,11 +799,11 @@ FGS.getFBML = function(params, retry)
 				//dump(FGS.getCurrentTime()+'[Z] Error: '+e.message);
 				if(typeof(params.sendTo) == 'undefined')
 				{
-					FGS.sendView('errorUpdatingNeighbours');
+					FGS.sendView('updateNeighbors', false, params.gameID);
 				}
 				else
 				{
-					FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 				}
 			}
 		},
@@ -845,11 +817,11 @@ FGS.getFBML = function(params, retry)
 			{
 				if(typeof(params.sendTo) == 'undefined')
 				{
-					FGS.sendView('errorUpdatingNeighbours');
+					FGS.sendView('updateNeighbors', false, params.gameID);
 				}
 				else
 				{
-					FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 				}
 			}
 		}
@@ -874,7 +846,7 @@ FGS.sendGift = function(params, retry)
 			
 			if(str2 > 0)
 			{
-				FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+				FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 				return;
 			}
 			
@@ -966,7 +938,7 @@ FGS.sendGift = function(params, retry)
 					}
 					else
 					{
-						FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 					}
 				}
 			});
@@ -979,7 +951,7 @@ FGS.sendGift = function(params, retry)
 			}
 			else
 			{
-				FGS.sendView('errorWithSend', (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+				FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 			}
 		}
 	});
