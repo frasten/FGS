@@ -22,6 +22,11 @@ FGS.database.createTable = function()
 {
 	FGS.database.db.transaction(function(tx)
 	{
+	
+		tx.executeSql('CREATE TABLE IF NOT EXISTS options (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, option LONGTEXT)', [],  FGS.database.onSuccess, FGS.database.onError);
+
+		tx.executeSql('INSERT OR IGNORE INTO options VALUES(1,?)', ['{}'],  FGS.database.onSuccess, FGS.database.onError);
+		
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
                   'bonuses (id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, url TEXT, time INTEGER, feedback TEXT, link_data TEXT, like_bonus INTEGER, comment_bonus INTEGER, resend_gift TEXT, error_text TEXT)', [],  FGS.database.onSuccess, FGS.database.onError);
 		
@@ -34,9 +39,6 @@ FGS.database.createTable = function()
 
 		tx.executeSql('ALTER TABLE requests ADD COLUMN resend_gift TEXT', [],  FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('ALTER TABLE requests ADD COLUMN error_text TEXT', [],  FGS.database.onSuccess, FGS.database.onError);
-		
-		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
-                  'neighbours(autoID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id INTEGER, gameID INTEGER)', [], FGS.database.onSuccess, FGS.database.onError);
 		
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
                   'freegifts(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, gameID INTEGER, friend TEXT, gift TEXT, time INTEGER, is_thank_you INTEGER)', [], FGS.database.onSuccess, FGS.database.onError);
@@ -119,7 +121,6 @@ FGS.database.clearByGameID = function(gameID)
 		tx.executeSql('DELETE FROM bonuses where gameID = ?', [gameID], FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('DELETE FROM requests where gameID = ?', [gameID], FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('DELETE FROM freegifts where gameID = ?', [gameID], FGS.database.onSuccess, FGS.database.onError);
-		tx.executeSql('DELETE FROM neighbours where gameID = ?', [gameID], FGS.database.onSuccess, FGS.database.onError);
 	});
 }
 
@@ -164,23 +165,6 @@ FGS.database.deleteOlderThan = function(table, status, time)
 		});
 	}
 }
-
-FGS.database.addFavourite = function(gameID, neighID)
-{
-	FGS.database.db.transaction(function(tx)
-	{
-		tx.executeSql('INSERT INTO neighbours (id, gameID) VALUES(?,?)', [neighID, gameID], FGS.database.onSuccess, FGS.database.onError);
-	});
-}
-
-FGS.database.delFavourite = function(gameID, neighID)
-{
-	FGS.database.db.transaction(function(tx)
-	{
-		tx.executeSql('DELETE FROM neighbours where id = ? and gameID = ?', [neighID, gameID], FGS.database.onSuccess, FGS.database.onError);
-	});
-}
-
 
 FGS.database.addFreegift = function(gameID, friend, gift, time, thankYou)
 {

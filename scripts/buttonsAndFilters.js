@@ -26,10 +26,31 @@ FGS.gamesData =
 						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/',
 						filter:
 						{	
-							bonuses: ['Fertilize their crops', 'Play Farmville Now'],
-							bonusesNewWindow: ['Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle'],
+							bonuses: ['Play Farmville Now'],
+							bonusesNewWindow: ['Fertilize their crops', 'Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle'],
 							requests: ['Toolbar_Install', 'sendcredits'],
 							requestsNewWindow: [],
+						},
+						buttons:
+						[	'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory', 
+							'RequestsPending',
+							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						]
+					},
+	156383461049284: 	{ 	
+						name: 'FarmVille Chinese',		systemName: 'farmvillechinese', link: 'http://apps.facebook.com/farmvillechinese/',
+						filter:
+						{	
+							bonuses: ['來玩FarmVille中文版', '來玩FarmVille中文版'], // fertilize their crops, watering cans, Send Materials, lend a helping hand, shelter cos, sendmaterial, quick look at the gift, cos z rabbitem, avatar clothes
+							bonusesNewWindow: ['幫助施肥！', '送出澆水罐！', '贈送材料！', '伸出援手！', '收留小牛！', '送出材料！', '快看看禮物！', '獲得兔年禮物', '你也來大改造吧！'],
+							requests: [],
+							requestsNewWindow: ['Toolbar_Install', 'sendcredits'],
 						},
 						buttons:
 						[	'BonusesPending',

@@ -1,27 +1,20 @@
 	var bkP = chrome.extension.getBackgroundPage().FGS;
 
-	
-	function loadNeighboursFromDatabase(gameID, game, opt)
+	function loadBonuses(gID)
 	{
+		if(typeof(gID) != 'undefined')
+		{
+			var whereQry = " where gameID = '"+gID+"'";
+			var andQry = " and gameID = '"+gID+"'";
+		}
+		else
+		{
+			var whereQry = '';
+			var andQry = '';
+		}
+	
 		bkP.database.db.transaction(function(tx)
 		{
-			tx.executeSql("SELECT * FROM neighbours where gameID = ?", [gameID], function(tx, res)
-			{
-				for(var i = 0; i < res.rows.length; i++)
-				{
-					$('input[neighID="'+res.rows.item(i)['id']+'"]', 'div#'+game+opt).siblings('img').trigger('click');
-				}
-				$('.sendToFavouritesList','div#'+game+opt).append('<br style="clear:both" />');
-			}, null, bkP.database.onSuccess, bkP.database.onError);
-		});
-	}
-	
-	function loadBonuses()
-	{
-		bkP.database.db.transaction(function(tx)
-		{
-			tx.executeSql('delete from neighbours where exists (select 1 from neighbours t2 where neighbours.id = t2.id and neighbours.gameID = t2.gameID and  neighbours.autoID > t2.autoID)');
-			
 			if(bkP.options.deleteHistoryOlderThan != 0)
 			{
 				var now = Math.floor(new Date().getTime()/1000);
@@ -41,7 +34,7 @@
 			}
 
 			// wczytywanie bonusow czekajacych			
-			tx.executeSql("SELECT * FROM bonuses where status = '0' order by time DESC", [], function(tx, res)
+			tx.executeSql("SELECT * FROM bonuses where status = '0' "+andQry +" order by time DESC", [], function(tx, res)
 			{
 				var htmls = {};
 				var htmlsManual = {};				
@@ -84,11 +77,11 @@
 					
 					selectFirstTab(tmp);
 				}
-				
+				updateCount();
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
 
-			tx.executeSql("SELECT * FROM requests where status = '0' order by time DESC", [], function(tx, res)
+			tx.executeSql("SELECT * FROM requests where status = '0' "+andQry +" order by time DESC", [], function(tx, res)
 			{
 				var htmls = {};
 				var htmlsManual = {};				
@@ -128,11 +121,11 @@
 					$('div#'+game+'RequestsPendingList').prepend(htmls[tmp]);
 					$('div#'+game+'RequestsPendingList').children('div').removeClass('awaitingClick').click(processRequestsClick);
 				}
-				
+				updateCount();
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
 
-			tx.executeSql("SELECT * FROM bonuses where status = '1' order by time DESC", [], function(tx, res)
+			tx.executeSql("SELECT * FROM bonuses where status = '1' "+andQry +" order by time DESC", [], function(tx, res)
 			{
 				var htmls = {};
 				
@@ -171,10 +164,11 @@
 										
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').removeClass('noErrorClass');
 				}
+				updateCount();
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
 
-			tx.executeSql("SELECT * FROM requests where status = '1' order by time DESC", [], function(tx, res)
+			tx.executeSql("SELECT * FROM requests where status = '1' "+andQry +" order by time DESC", [], function(tx, res)
 			{
 				var htmls = {};				
 				
@@ -208,13 +202,13 @@
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.sendBack').click(processSendBack);	
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').removeClass('noErrorClass');
 				}
-
+				updateCount();
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
+			
 
-			tx.executeSql("SELECT * FROM freegifts order by time DESC", [], function(tx, res)
+			tx.executeSql("SELECT * FROM freegifts "+whereQry +" order by time DESC", [], function(tx, res)
 			{
-				
 				var htmls = {};
 				
 				for(var i = 0; i < res.rows.length; i++)
@@ -241,6 +235,7 @@
 					
 					$('div#'+game+'SendFreeGiftsHistoryList').prepend(htmls[tmp]);
 				}
+				updateCount();
 				updateLoaded();
 			}, bkP.database.onSuccess, bkP.database.onError);
 		});

@@ -14,7 +14,7 @@ FGS.frontiervilleFreegifts =
 			{
 				try
 				{
-					var tst = new RegExp(/<iframe[^>].*src=\s*["].*populateFbCache\.php[?]([^"]+)/m).exec(dataStr);
+					var tst = new RegExp(/<form[^>].*action=\s*["].*populateFbCache\.php[?]([^"]+)/m).exec(dataStr);
 					if(tst == null) throw {message:'no frontierville iframe tag'}
 					
 					var zyParams = {}

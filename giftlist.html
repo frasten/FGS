@@ -2,16 +2,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.3" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.5" rel="stylesheet" />
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Friendly Gaming Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.3"></script>
-<script type="text/javascript" src="scripts/time.js?version=1.0.0.3"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.0.0.3"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.3"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.5"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.0.0.5"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.0.0.5"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.5"></script>
 <script type="text/javascript">
 	var loaded = 0;
 	
@@ -37,7 +37,7 @@
 		
 		if($('div#'+game+opt, '#'+game+'Game').children('div').length == 0)
 		{
-			$('div#'+game+opt, '#'+game+'Game').html('<h3 class="fvBonusErr">There was a problem collecting bonuses. You may have this game hidden in your news feeds. To unhide it, follow steps in this link:<br /><br /><a href="http://www.kimwoodbridge.com/updated-how-to-unhide-a-facebook-application-or-page/" target="_blank">LINK</a>.</h3><br style="clear:both" />');
+			$('div#'+game+opt, '#'+game+'Game').html('<h3 class="fvBonusErr">There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</h3><br style="clear:both" />');
 		}
 	}
 
@@ -253,9 +253,18 @@
 		var title = v.title;
 		title = title.replace(/'/gi, '');
 		
+		if(v.image.indexOf('http') != -1)
+		{
+			var url = v.image;
+		}
+		else
+		{
+			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
+		}
+		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
-
-		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
+		
+		return '<div id="'+v.id+'" gameID="'+gameID+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span>'+v.text+'</span></div>';
 	}
 	
 	
@@ -1264,11 +1273,13 @@
 			
 			if(typeof(reload) != 'undefined')
 			{
-				delete bkP.bonusLoadingProgress[gameID];
+				/*
 				bkP.database.clearByGameID(gameID);
+				bkP.options.games[gameID] = bkP.defaultGameOptions;
+				*/
+				delete bkP.bonusLoadingProgress[gameID];
 				$('div.bonusItem, div.requestItem, div.freegiftHistory, div.manualItem', $('#'+game+'Game')).remove();
 				updateCount();
-				bkP.options.games[gameID] = bkP.defaultGameOptions;
 				bkP.stopBonusesForGame(gameID);
 			}
 		}
@@ -1309,9 +1320,9 @@
 			if(typeof(reload) != 'undefined')
 			{
 				selectFirstTab(gameID);
-				updateCount();
+				loadBonuses(gameID);
 				bkP.startBonusesForGame(gameID);
-				showSearchGames([gameID])
+				showSearchGames([gameID]);				
 			}			
 		}
 	}
@@ -1471,12 +1482,12 @@
 				var html = '<h3 class="center">Currently there are no people for this game, that are looking for neighbours.</h3>';
 			else
 			{
-				var html = '<h3 class="center">These people are looking for new neighbors:</h3><ul style="font-size: 1.2em">';
+				var html = '<h3 class="center">These people are looking for new neighbors:</h3>';
 				$(status).each(function(k,v)
 				{
-					html+='<li class="friendsList"><a href="http://www.facebook.com/profile.php?id='+v+'" target="_blank">'+v+'</a></li>';
+					html+='<div class="friendsList"><a href="http://www.facebook.com/profile.php?id='+v+'" class="friendLink" target="_blank">'+v+'</a></div>';
 				});
-				html+= '</ul>';
+				html+= '<br style="clear: both" />';
 			}
 		}
 		$('div#'+game+opt, '#'+game+'Game').find('.searchForPeopleList').html(html);
@@ -1545,8 +1556,12 @@
 			$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
 			
 			$('.sendToFavouritesList','div#'+game+opt).html('');
+			$('.sendToFavouritesList','div#'+game+opt).append('<br style="clear:both" />');
 			
-			loadNeighboursFromDatabase(gameID, game, opt);
+			$(bkP.options.games[gameID].favourites).each(function(k,v)
+			{
+				$('input[neighID="'+v+'"]', 'div#'+game+opt).siblings('img').trigger('click');
+			});
 		}
 		
 		
@@ -2196,6 +2211,58 @@
 			updateQueueCount();
 		});
 		
+		$('#exportSettings').click(function()
+		{
+			var set = bkP.options;
+			var cleanSet = {}
+			
+			for(var id in set)
+			{
+				if(typeof(bkP.defaultOptions[id]) != 'undefined')
+				{
+					cleanSet[id] = set[id];
+				}
+			}	
+			var set = JSON.stringify(cleanSet);
+
+			$('#settingsTextarea').click(function(){
+				$(this).focus().select();
+			});
+			
+			$('#settingsTextarea').val(set).trigger('click');			
+		});
+		
+		$('#importSettings').click(function()
+		{
+			var txt = $('#settingsTextarea').val();
+			
+			try
+			{
+				if(txt == '') throw {}
+				var set = JSON.parse(txt);
+
+				var cleanSet = {}
+				
+				for(var id in set)
+				{
+					if(typeof(bkP.defaultOptions[id]) != 'undefined')
+					{
+						cleanSet[id] = set[id];
+					}
+				}
+				
+				alert('New data loaded. Use FGS icon to open this page again');
+				bkP.options = bkP.jQuery.extend(true,{}, bkP.defaultOptions,	cleanSet);
+				bkP.sendView('close');
+				bkP.FBloginError = null;
+				bkP.updateIcon();
+				bkP.startup();
+			}
+			catch(e)
+			{
+				alert('There was a problem importing data, make sure you have copied whole text from your file.');
+			}			
+		});
 		
 		
 
@@ -2250,11 +2317,13 @@
 	function processAddFavourite(e)
 	{
 		var gameID = $(this).siblings('input').attr('gameID');
+		var uID = $(this).siblings('input').attr('neighID');
 		
-		if(typeof(e.altKey) != 'undefined')
+		if($.inArray(uID, bkP.options.games[gameID].favourites) == -1)
 		{
-			bkP.database.addFavourite(gameID, $(this).siblings('input').attr('neighID'));
+			bkP.options.games[gameID].favourites.push(uID);
 		}
+		bkP.saveOptions();
 		
 		var prepEl = $(this).parent().parent().siblings('.sendToFavouritesList');
 
@@ -2266,13 +2335,16 @@
 	function processRemoveFavourite(e)
 	{
 		var gameID = $(this).siblings('input').attr('gameID');
-		
-		var neighID = $(this).siblings('input').attr('neighID');
+		var uID = $(this).siblings('input').attr('neighID');
 		$(this).parent().remove();
 		
-		bkP.database.delFavourite(gameID, neighID);
-
-		var el = $('input[neighID="'+neighID+'"]').parent().show().children('img').removeClass('isFavourite').addClass('addToSendFav').unbind('click', processRemoveFavourite).bind('click',processAddFavourite).attr('src', 'icons/favourite-bw.png').attr('title', 'Click to add to favourites');
+		var idx = bkP.options.games[gameID].favourites.indexOf(uID);
+		if(idx != -1)
+		{
+			bkP.options.games[gameID].favourites.splice(idx, 1);
+		}
+		bkP.saveOptions();
+		var el = $('input[neighID="'+uID+'"]').parent().show().children('img').removeClass('isFavourite').addClass('addToSendFav').unbind('click', processRemoveFavourite).bind('click',processAddFavourite).attr('src', 'icons/favourite-bw.png').attr('title', 'Click to add to favourites');
 	}
 	
 	function processLikeBonus()
@@ -2353,20 +2425,26 @@
 		$('#defaultCommentsMessages').append('<br style="clear:both" /><textarea style="margin-top: 50px;" class="newCommentText"></textarea><button id="saveNewComment">Add new comment</button>');
 		$('#saveNewComment').click(processSaveNewComment);
 		
-		$('.hiddenIconList').html('');
+		$('#hiddenIconList').html('');
+		
+		var i = 0;
 		
 		for(var gameID in bkP.options.games)
 		{
 			if(bkP.options.games[gameID].hiddenIcon)
 			{
+				i++;
 				var gameName = bkP.gamesData[gameID].name;
-				$('.hiddenIconList').append('<div style="float: left; width: 250px;margin-right: 10px;"><img src="icons/delete-16.png" gameID="'+gameID+'" style="cursor: pointer;width: 10px;height: 10px" class="unhideGameIcon'+gameID+'" title="Unhide game icon"> '+gameName+'</div>');
+				$('#hiddenIconList').append('<div style="float: left; width: 250px;margin-right: 10px;"><img src="icons/delete-16.png" gameID="'+gameID+'" style="cursor: pointer;width: 10px;height: 10px" class="unhideGameIcon'+gameID+'" title="Unhide game icon"> '+gameName+'</div>');
 				
 				$('.unhideGameIcon'+gameID).click(unhideGameIcon);
-				
 			}
 		}
-		$('.hiddenIconList').append('<br style="clear:both" /><br />');
+		if(i == 0)
+		{
+			$('#hiddenIconList').html('<h4>You have currently no game icons hidden.</h4>To hide game icon: Right click unwanted icon in the Game Selector and select "Hide icon"</h4>');
+		}
+		$('#hiddenIconList').append('<br style="clear:both" /><br />');
 	}
 	
 	function loadDebugData()
@@ -2755,10 +2833,31 @@
 			
 			<h1 class="title">Options</h1>
 			
-				<h4>Hidden game icons (right click icon to hide it)</h4>
-				<div class="hiddenIconList"></div>
-		
-				<h4>How many bonuses to display by default per game (others will be hidden)</h4>
+				<h3 class="settings">Import / export settings</h3>
+				
+				<textarea cols="40" rows="5" id="settingsTextarea"></textarea><br /><br />
+				
+				<button id="importSettings">Import</button> <button id="exportSettings">Export</button>	<br /><br /><br />
+				
+				
+				<h4>How to import:</h4>
+				- open the file with previously exported settings<br />
+				- select whole text inside it<br />
+				- paste text into the above box and press import button
+				
+				<br /><br />
+				
+				<h4>How to export:</h4>
+				- press export button<br />
+				- copy selected text to the new file
+				
+				<br /><br /><br />
+				
+				<h3 class="settings">Hidden game icons</h3>
+				<div id="hiddenIconList"></div>
+				
+						
+				<h3 class="settings">How many bonuses to display by default per game (others will be hidden)</h3>
 					<select id="displayXbonuses">
 						<option value="0">all of them</option>
 						<option value="100">100</option>
@@ -2834,7 +2933,6 @@
 				<br /><br /><br /><br />
 				<h4>Default Comments Messages</h4>
 				<div id="defaultCommentsMessages"></div>
-			
 			
 			<br style="clear: both" />
 		</div>

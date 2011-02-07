@@ -19,7 +19,6 @@ var FGS = {
 		{
 			defaultGame: '0',
 			games: {},
-			lastVisit: 0,
 			chatSessions: {},
 			
 			defaultCommentsMessages: [],
@@ -29,10 +28,10 @@ var FGS = {
 			deleteOlderThan: 0,
 			deleteHistoryOlderThan: 0,
 			displayXbonuses: 300,
-			collectXbonusesAtTheSameTime: 5,
+			collectXbonusesAtTheSameTime: 2,
 		}
 
-		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
+		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
 
 		for(var idd in FGS.gamesData)
 		{
@@ -232,8 +231,7 @@ var FGS = {
 				
 				if(FGS.optionsLoaded == false)
 				{
-					FGS.loadOptions(FGS.userID);
-					FGS.restartBonuses();
+					FGS.loadOptions(FGS.userID, FGS.finishStartup);
 				}		
 
 				if(FGS.post_form_id == '' || FGS.fb_dtsg == '')
@@ -241,16 +239,21 @@ var FGS = {
 					FGS.fb_dtsg 		= FGS.jQuery('input[name="fb_dtsg"]', data).val();
 					FGS.post_form_id 	= FGS.jQuery('input[name="post_form_id"]', data).val();
 				}
-				FGS.FBloginError = false;
-				FGS.updateIcon();
-				FGS.xhrInterval = setInterval(FGS.checkXhrQueue,100);
-				FGS.restartRequests();		
 			},
 			error: function()
 			{
 				setTimeout(FGS.startup, 3000);
 			}
 		});		
+	},
+	
+	finishStartup: function()
+	{
+		FGS.FBloginError = false;
+		FGS.updateIcon();
+		FGS.xhrInterval = setInterval(FGS.checkXhrQueue,100);
+		FGS.restartRequests();
+		FGS.restartBonuses();
 	},
 	
 	encodeHtmlEntities: function (str) 

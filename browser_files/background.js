@@ -276,20 +276,68 @@ FGS.sendView = function (msg, data, data2, data3)
 	}
 };
 
-FGS.loadOptions = function (userID)
+FGS.loadOptions = function (userID, callback)
 {
 	var lastOptions = localStorage.getItem('options_'+userID);
 	
-	if(lastOptions == null || lastOptions == undefined)
+	if(lastOptions != null && lastOptions != undefined)
 	{
-		FGS.options = FGS.jQuery.extend(true,{}, FGS.defaultOptions);
-	}
-	else
-	{
-		FGS.options = FGS.jQuery.extend(true,{}, FGS.defaultOptions, 	JSON.parse(lastOptions));
+		if(userID != null)
+		{
+			FGS.database.db.transaction(function(tx)
+			{
+				tx.executeSql("SELECT * FROM neighbours", [], function(tx, res)
+				{
+					FGS.options = FGS.jQuery.extend(true, {}, FGS.defaultOptions, JSON.parse(lastOptions));
+					localStorage.removeItem('options_'+userID);
+
+					for(var i = 0; i < res.rows.length; i++)
+					{
+						var gID = res.rows.item(i)['gameID'];
+						var uID = res.rows.item(i)['id'].toString();
+						
+						if(FGS.jQuery.inArray(uID, FGS.options.games[gID].favourites) == -1)
+						{
+							FGS.options.games[gID].favourites.push(uID);
+						}
+					}
+					FGS.optionsLoaded = true;
+					FGS.saveOptions();
+					callback();
+					
+				}, null, FGS.database.onSuccess, FGS.database.onError);
+				
+				tx.executeSql('DROP TABLE neighbours', null, FGS.database.onSuccess, FGS.database.onError);
+			});
+		}
+		return;
 	}
 	
-	FGS.optionsLoaded = true;
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql("SELECT option FROM options ORDER BY id DESC LIMIT 1", [], function(tx, res)
+		{
+			var results = [];
+			for(var i = 0; i < res.rows.length; i++)
+			{
+				results.push(res.rows.item(i)['option']);
+			}
+			
+			if(results.length == 0)
+			{
+				FGS.options = FGS.jQuery.extend(true,{}, FGS.defaultOptions);
+			}
+			else
+			{
+				FGS.options = FGS.jQuery.extend(true,{}, FGS.defaultOptions,	JSON.parse(results[0]));
+			}
+			
+			FGS.optionsLoaded = true;
+			FGS.saveOptions();
+			callback();
+			
+		}, null, FGS.database.onSuccess, FGS.database.onError);
+	});
 };
 
 FGS.saveOptions = function()
@@ -297,8 +345,11 @@ FGS.saveOptions = function()
 	if(FGS.userID != null)
 	{
 		FGS.options = FGS.jQuery.extend(true, {}, FGS.options);
-		localStorage.removeItem('options_'+FGS.userID);
-		localStorage.setItem('options_'+FGS.userID, JSON.stringify(FGS.options));
+		
+		FGS.database.db.transaction(function(tx)
+		{
+			tx.executeSql("UPDATE options SET option = ? where id = '1'", [JSON.stringify(FGS.options)], function(){}, null, FGS.database.onSuccess, FGS.database.onError);
+		});
 	}
 };
 
@@ -322,6 +373,11 @@ FGS.updateIcon = function()
 		
 		chrome.browserAction.setTitle({title: "FGS: Click to open bonuses and gifts list"});
 		chrome.browserAction.setBadgeText({text: badge.toString()});
+	}
+	else if(FGS.FBloginError == null)
+	{
+		chrome.browserAction.setBadgeText({text:"wait"});
+		chrome.browserAction.setTitle({title: "FGS is not yet loaded... Please wait..."});
 	}
 	else
 	{

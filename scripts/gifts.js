@@ -607,8 +607,49 @@ FGS.giftsArray = {
 		"175": { name: 'Raven Feathers'},
 		"169": { name: 'Tarot Death Card (lvl 22)'},
 		"171": { name: 'Map Fragment'},
-
-	}	
+	},
+	156383461049284:
+	{
+		"holidaytree2010_gift_5": { name: '兔年禮物'},
+		"holidaytree2010_gift_2": { name: '兔年禮物'},
+		"holidaytree2010_gift_1": { name: '兔年禮物'},
+		"holidaytree2010_gift_3": { name: '兔年禮物'},
+		"holidaytree2010_gift_4": { name: '兔年禮物'},
+		"lantern": { name: '燈籠'},
+		"newyearscroll": { name: '對聯'},
+		"bonfire": { name: '篝火'},
+		"luckybird": { name: '喜鵲'},
+		"redenvelopgift": { name: '神秘紅包'},
+		"shovel_item_01": { name: '兩把鐵鏟'},
+		"wateringcan": { name: '澆水罐'},
+		"vehiclepart": { name: '農耕機零件'},
+		"woodenboard": { name: '木板'},
+		"nail": { name: '釘子'},
+		"beehive_bee": { name: '蜜蜂'},
+		"beeswax": { name: '蜂蠟'},
+		"horseshoe": { name: '馬蹄鐵'},
+		"blanket": { name: '毯子'},
+		"dragonfly": { name: '蜻蜓'},
+		"consume_kibble": { name: '狗飼料'},
+		"consume_treat": { name: '狗點心'},
+		"mysterygift": { name: '神祕禮物'},
+		"fencemarvinpicket": { name: '原木柵欄 II'},
+		"arecanut": { name: '檳榔'},
+		"haybaleroundorange": { name: '橙色圓形乾草梱'},
+		"treemagnolia": { name: '木蘭樹'},
+		"fencewhite": { name: '白漆柵欄'},
+		"polesnowflake": { name: '雪花柱'},
+		"fencemodern": { name: '黑色鐵柵欄'},
+		"hangingflowers": { name: '吊掛花台'},
+		"hilltiny": { name: '小丘'},
+		"gulmohar": { name: '鳳凰木'},
+		"maple03": { name: '黃楓樹'},
+		"leavesmaple03": { name: '黃楓葉堆'},
+		"haystack": { name: '乾草束'},
+		"banana": { name: '香蕉樹'},
+		"tamarind": { name: '羅望子樹'},
+		"date": { name: '棗樹'},
+	}
 };
 
 FGS.freeGiftForGame =
@@ -628,6 +669,7 @@ FGS.freeGiftForGame =
 	129547877091100: '23',
 	163576248142: '5215',
 	25287267406: '439',
+	156383461049284: 'brick'
 }
 
 
@@ -871,10 +913,16 @@ FGS.sendGift = function(params, retry)
 					
 					if(params.gameID == '25287267406')
 					{
-						var vampGet = FGS.findIframeAfterId('#app_content_25287267406', data);
-						if(vampGet != '')
+						var pos0 = data.indexOf('forward_request($("#ajax_request_message"),"');
+						if(pos0 != -1)
 						{
-							$.get(vampGet);
+							pos0+=44;
+							var pos1 = data.indexOf('"', pos0);
+							//var newPar = '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
+							var vampUrl = data.slice(pos0, pos1);
+							var newPar = params.step3param.replace('send_gifts_mfs.php?', '');
+							$.post(vampUrl, newPar);
+							$.post('http://'+params.domain+'/index2.php', newPar);						
 						}
 					}
 					
