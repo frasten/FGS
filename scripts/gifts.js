@@ -649,6 +649,21 @@ FGS.giftsArray = {
 		"banana": { name: '香蕉樹'},
 		"tamarind": { name: '羅望子樹'},
 		"date": { name: '棗樹'},
+	},
+	21526880407:
+	{
+		"39675": { name: 'Italian Mystery Box'},
+		"39409": { name: 'Italian Table Clock'},
+		"39408": { name: 'Free Italian Red Rug'},
+		"38963": { name: 'Night Club Mystery Box'},
+		"38964": { name: 'Nightclub Mystery Gift'},
+		"34399": { name: 'Collections Mystery Box'},
+		"38133": { name: 'Yellow Fall Mystery Box'},
+		"34090": { name: 'Espresso - lvl 20'},
+		"34091": { name: 'Cappuccino - lvl 10'},
+		"31830": { name: 'Red Mystery Chest'},
+		"31829": { name: 'Blue Mystery Chest'},
+		"37394": { name: 'Hammer'},
 	}
 };
 
@@ -669,7 +684,8 @@ FGS.freeGiftForGame =
 	129547877091100: '23',
 	163576248142: '5215',
 	25287267406: '439',
-	156383461049284: 'brick'
+	156383461049284: 'brick',
+	21526880407: '37394'
 }
 
 

@@ -254,11 +254,12 @@ FGS.cityvilleFreegifts =
 						params:	'[['+str+'],"1"]',
 						cmd_id:	cmd_id,
 						app_id:	'75',
-						authHash: session,
+						authHash: FGS.Gup('zyAuthHash', params.zyParam),
 						zid:	zy_user,
 						snid:	1,
 					}
 					
+					params.altHash = session;
 					params.postData = postData;
 					params.excludeCity = exclude;
 					
@@ -314,49 +315,101 @@ FGS.cityvilleFreegifts =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
+		
+		
+		var postData = params.postData;
+		if(typeof(retry) != 'undefined')
+		{
+			postData.authHash = params.altHash;
+		}
+					
 		var outStr = params.outStr;
 		
-		
-		$.post('http://fb-client-0.cityville.zynga.com/snapi_proxy.php', params.postData, function(data2)
-		{
-		
-			var nextParams = 'api_key=291549705119&locale=en_US&sdk=joey';
-			
-			var info = JSON.parse(data2);
-			
-			var str = '';
-			
-			for(var uid in info.body)
+		$.ajax({
+			type: "POST",
+			url: 'http://fb-client-0.cityville.zynga.com/snapi_proxy.php',
+			data: postData,
+			dataType: 'text',
+			success: function(dataStr)
 			{
-				var t = info.body[uid];
-				str+= t+',';					
-			}
-			params.excludeCity = str.slice(0, -1);
-			
-			if(typeof(params.thankYou) != 'undefined')
+				try
+				{
+					var nextParams = 'api_key=291549705119&locale=en_US&sdk=joey';
+					
+					var info = JSON.parse(dataStr);
+					
+					var str = '';
+					
+					for(var uid in info.body)
+					{
+						var t = info.body[uid];
+						str+= t+',';					
+					}
+					params.excludeCity = str.slice(0, -1);
+					
+					if(typeof(params.thankYou) != 'undefined')
+					{
+						params.sendTo[0] = info.body[params.sendTo[0]];
+					}
+					
+					outStr = outStr.replace('EXCLUDE_ARRAY_LIST', params.excludeCity);
+					
+					var str = outStr;
+					
+					str = str.replace(/fbgood_/gi, 'fb:');
+					str = str.replace(/fb_req-choice/gi, 'fb:req-choice');
+					str = str.replace('/fb:req-choice', '/fb:request');
+					str = str.replace('/fb:req-choice', '/fb:req');
+					
+					var fbml = '<fb:fbml>'+str+'</fb:fbml>';
+					
+					nextParams +=  '&fbml='+encodeURIComponent(fbml);
+
+					params.nextParams = nextParams;
+
+					//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
+
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
 			{
-				params.sendTo[0] = info.body[params.sendTo[0]];
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
 			}
-			
-			outStr = outStr.replace('EXCLUDE_ARRAY_LIST', params.excludeCity);
-			
-			var str = outStr;
-			
-			str = str.replace(/fbgood_/gi, 'fb:');
-			str = str.replace(/fb_req-choice/gi, 'fb:req-choice');
-			str = str.replace('/fb:req-choice', '/fb:request');
-			str = str.replace('/fb:req-choice', '/fb:req');
-			
-			var fbml = '<fb:fbml>'+str+'</fb:fbml>';
-			
-			nextParams +=  '&fbml='+encodeURIComponent(fbml);
-
-			params.nextParams = nextParams;
-
-			//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
-
-			FGS.getFBML(params);
 		});
 	}
 };

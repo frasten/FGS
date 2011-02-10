@@ -1,4 +1,53 @@
 	var bkP = chrome.extension.getBackgroundPage().FGS;
+	
+	function loadNeighborsStats(gameID)
+	{
+		bkP.database.db.transaction(function(tx)
+		{
+			tx.executeSql("SELECT * FROM neighborStats where gameID = ?", [gameID], function(tx, res)
+			{
+				var game = bkP.gamesData[gameID].systemName;
+				var opt = 'SendFreeGiftsList';
+				
+				for(var i = 0; i < res.rows.length; i++)
+				{
+					var el = $('tr[neighID="'+res.rows.item(i).userID+'"]','div#'+game+opt);
+					var lastBonus = (res.rows.item(i).lastBonus == 0 ? 'never' : format_time_ago(res.rows.item(i).lastBonus));
+					var lastGift  = (res.rows.item(i).lastGift == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGift));
+					el.find('.lastBonus').html('<span class="hide">'+res.rows.item(i).lastBonus+'</span>'+lastBonus);
+					el.find('.lastGift').html('<span class="hide">'+res.rows.item(i).lastGift+'</span>'+lastGift);
+					el.find('.totalBonuses').html('<span class="hide">'+res.rows.item(i).totalBonuses+'</span>'+res.rows.item(i).totalBonuses);
+					el.find('.totalGifts').html('<span class="hide">'+res.rows.item(i).totalGifts+'</span>'+res.rows.item(i).totalGifts);
+				}
+				
+				$('.neighborsTable', 'div#'+game+opt).tablesorter({
+					sortList: [[1,0]],
+					textExtraction: function(node) 
+					{
+						if(node.childNodes.length > 1)
+						{
+							return node.childNodes[0].innerHTML;
+						}
+						return node.innerHTML;
+					} 
+				});
+				
+				$('.favouritesTable', 'div#'+game+opt).tablesorter({
+					sortList: [[1,0]],
+					textExtraction: function(node) 
+					{
+						if(node.childNodes.length > 1)
+						{
+							return node.childNodes[0].innerHTML;
+						}
+						return node.innerHTML;
+					} 
+				});
+				
+			}, bkP.database.onSuccess, bkP.database.onError);
+		});
+		
+	}
 
 	function loadBonuses(gID)
 	{
@@ -195,9 +244,7 @@
 					var game = bkP.gamesData[tmp].systemName;
 					
 					$('div#'+game+'RequestsHistoryList').prepend(htmls[tmp]);
-
-					$('div#'+game+'RequestsHistoryList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);
-					
+					$('div#'+game+'RequestsHistoryList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);					
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.sendBack').click(processSendBack);	
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').removeClass('noErrorClass');

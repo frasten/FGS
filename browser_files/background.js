@@ -27,6 +27,50 @@ FGS.openURI = function (url, background)
 	});
 };
 
+FGS.hideFromFeed = function(bonusID)
+{
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql("SELECT * FROM bonuses where id = ?", [bonusID], function(tx2, res)
+		{
+			var v = res.rows.item(0);
+			
+			if(!FGS.options.games[v.gameID].hideFromFeed)
+			{	
+				return;
+			}
+			
+			var tmpObj = JSON.parse(v.link_data);
+			
+			
+			var postData = { 
+				'action': 'uninteresting',
+				'post_form_id': FGS.post_form_id,
+				'fb_dtsg':	FGS.fb_dtsg,
+				'object_ids[0]': tmpObj.targets,
+				'object_ids[1]': tmpObj.app_id,
+				'story_fbids[0]': tmpObj.targets+':'+tmpObj.fbid,
+				'source': 'home',
+				'nctr[_mod]': 'pagelet_home_stream',
+				'lsd':	'',
+				'post_form_id_source':'AsyncRequest'
+			};
+			
+			var postData = FGS.jQuery.param(postData).replace(/%5B/g,'[').replace(/%5D/g,']');
+			
+			FGS.jQuery.ajax({
+				type: "POST",
+				url: 'http://www.facebook.com/ajax/feed/filter_action.php?__a=1',
+				data: postData,
+				dataType: 'text',
+				success: function(data)
+				{
+				}
+			});
+		});
+	});
+};
+
 FGS.commentBonus = function(bonusID, comment)
 {
 	FGS.database.db.transaction(function(tx)
@@ -182,6 +226,11 @@ FGS.sendView = function (msg, data, data2, data3)
 			{
 				view.close();
 			}
+			else if(msg == 'closeAndOpen')
+			{
+				view.close();
+				FGS.saveOptions(FGS.startup);
+			}
 			
 			else if(msg == 'friendsLoaded')
 			{
@@ -201,6 +250,7 @@ FGS.sendView = function (msg, data, data2, data3)
 			else if(msg == 'bonusSuccess')
 			{
 				FGS.likeBonus(data, true);
+				FGS.hideFromFeed(data);
 				view.bonusSuccess(data, data2);
 			}
 			else if(msg == 'updateLike')
@@ -276,7 +326,7 @@ FGS.sendView = function (msg, data, data2, data3)
 	}
 };
 
-FGS.loadOptions = function (userID, callback)
+FGS.loadOptions = function (userID)
 {
 	var lastOptions = localStorage.getItem('options_'+userID);
 	
@@ -303,7 +353,7 @@ FGS.loadOptions = function (userID, callback)
 					}
 					FGS.optionsLoaded = true;
 					FGS.saveOptions();
-					callback();
+					FGS.finishStartup();
 					
 				}, null, FGS.database.onSuccess, FGS.database.onError);
 				
@@ -315,7 +365,7 @@ FGS.loadOptions = function (userID, callback)
 	
 	FGS.database.db.transaction(function(tx)
 	{
-		tx.executeSql("SELECT option FROM options ORDER BY id DESC LIMIT 1", [], function(tx, res)
+		tx.executeSql("SELECT option FROM options where id = '1'", [], function(tx, res)
 		{
 			var results = [];
 			for(var i = 0; i < res.rows.length; i++)
@@ -334,13 +384,13 @@ FGS.loadOptions = function (userID, callback)
 			
 			FGS.optionsLoaded = true;
 			FGS.saveOptions();
-			callback();
+			FGS.finishStartup();
 			
 		}, null, FGS.database.onSuccess, FGS.database.onError);
 	});
 };
 
-FGS.saveOptions = function()
+FGS.saveOptions = function(callback)
 {
 	if(FGS.userID != null)
 	{
@@ -348,7 +398,14 @@ FGS.saveOptions = function()
 		
 		FGS.database.db.transaction(function(tx)
 		{
-			tx.executeSql("UPDATE options SET option = ? where id = '1'", [JSON.stringify(FGS.options)], function(){}, null, FGS.database.onSuccess, FGS.database.onError);
+			tx.executeSql("UPDATE options SET option = ? where id = '1'", [JSON.stringify(FGS.options)], function()
+			{
+				if(callback)
+				{
+					FGS.stopAll(true);
+					callback();
+				}
+			}, null, FGS.database.onSuccess, FGS.database.onError);
 		});
 	}
 };

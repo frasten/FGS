@@ -2,16 +2,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="css/blitzer/jquery-ui-1.8.4.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.5" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.7" rel="stylesheet" />
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Friendly Gaming Simplifier</title>
 <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.4.custom.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.5"></script>
-<script type="text/javascript" src="scripts/time.js?version=1.0.0.5"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.0.0.5"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.5"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.7"></script>
+<script type="text/javascript" src="scripts/jquery.tablesorter.min.js"></script>
+
+<script type="text/javascript" src="scripts/time.js?version=1.0.0.7"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.0.0.7"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.7"></script>
 <script type="text/javascript">
 	var loaded = 0;
 	
@@ -51,15 +53,14 @@
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 		
-		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
-		$('img.isFavourite', 'div#'+game+opt).prev('input[name="neighArr[]"]:lt(25)').trigger('click');
+		ClearSelection(gameID);
+		$('.favouritesTable', 'div#'+game+opt).find('input[name="neighArr[]"]:lt(25)').each(function() { $(this).click(); });
 	}
 	
 	function ClearSelection(gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
-		
 		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
 	}
 	
@@ -68,8 +69,8 @@
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 		
-		$('input[name="neighArr[]"]', 'div#'+game+opt).removeAttr('checked');
-		$('img.addToSendFav', 'div#'+game+opt).prev('input[name="neighArr[]"]:lt(25)').trigger('click');
+		ClearSelection(gameID);
+		$('.neighborsTable', 'div#'+game+opt).find('input[name="neighArr[]"]:lt(25)').each(function() { $(this).click(); });
 	}
 	
 	function listGifts(gameID)
@@ -100,7 +101,7 @@
 		var opt = 'SendFreeGiftsList';
 
 		var sendTo = [];
-
+		
 		$('input[name="neighArr[]"]:checked:visible','div#'+game+opt).each(function()
 		{
 			sendTo.push($(this).val());
@@ -1286,7 +1287,7 @@
 		else
 		{
 			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
-			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
+			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
 			
 			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
 			
@@ -1305,6 +1306,10 @@
 				$('.gameSendbackGiftBox[gameID="'+gameID+'"]').attr('checked', 'checked');			
 			}
 			
+			if(e.hideFromFeed)
+			{
+				$('.gameHideFromFeedBox[gameID="'+gameID+'"]').attr('checked', 'checked');			
+			}
 			
 			if(e.autoAcceptBonus)
 			{
@@ -1523,7 +1528,14 @@
 		}
 		else
 		{	
-			var html = '';
+			var elF = $('<table sortByIndex="1" class="favouritesTable tablesorter" style="margin: 0 auto; margin-top: 15px;" width="95%"><caption>Your favourites in '+bkP.gamesData[gameID].name+'</caption><thead><tr><th scope="col" class="first">Fav.</th><th scope="col">Name</th><th scope="col">Last bonus</th><th scope="col">Last gift</th><th scope="col">Total bonuses</th><th scope="col">Total gifts</th><th scope="col" class="last">Select</th></tr></thead><tbody></tbody></table>');
+			
+			var elN = $('<table sortByIndex="1" class="neighborsTable tablesorter" style="margin: 0 auto; margin-top: 15px;" width="95%"><caption>Your neighbors in '+bkP.gamesData[gameID].name+'</caption><thead><tr><th scope="col" class="first">Fav.</th><th scope="col">Name</th><th scope="col">Last bonus</th><th scope="col">Last gift</th><th scope="col">Total bonuses</th><th scope="col">Total gifts</th><th scope="col" class="last">Select</th></tr></thead><tbody></tbody></table>');
+			
+			var htmlNormal = '';
+			var htmlFavourites = '';
+			
+			var fCnt = nCnt = 1;
 			
 			$(users).each(function(k,val)
 			{
@@ -1533,35 +1545,46 @@
 				}
 				var v = val[id];
 				
+				if($.inArray(id, bkP.options.games[gameID].favourites) != -1)
+					var isFav = true;
+				else
+					var isFav = false;
 				
-				if(v.name.length > 20)
+				var newStr = '<tr neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'"><td style="text-align: center">'+(isFav ? '<img src="icons/favourite.png" class="toggleFavourite">' : '<img src="icons/favourite-bw.png" class="toggleFavourite">')+'</td><td>'+v.name+'</td><td class="lastBonus"><span class="hide">0</span>never</td><td class="lastGift"><span class="hide">0</span>never</td><td class="totalBonuses"><span class="hide">0</span>0</td><td class="totalGifts"><span class="hide">0</span>0</td><td class="last"><a href="#" lass="emptyDB"><input type="checkbox" value="'+id+'" class="selectNeighborToSend" name="neighArr[]"></a></td></tr>';
+				
+				if(isFav)
 				{
-					var nameText = v.name.substring(0,20)+'...';
+					htmlFavourites += newStr;
 				}
 				else
 				{
-					var nameText = v.name;
-				}
-				
-				html += '<div style="float: left; width: 250px;margin-right: 10px;"><input type="checkbox" neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'" value="'+id+'" class="neighborCheckbox" name="neighArr[]"> <img src="icons/favourite-bw.png" class="addToSendFav" title="Click to add to favourites"> '+nameText+'</div>';
+					htmlNormal += newStr;
+				}				
 			});
+			$(elF).find('tbody').html(htmlFavourites);
+			; 
+			$(elN).find('tbody').html(htmlNormal);
 			
-			html += '<br style="clear:both" />';
+			$('.sendToFavouritesList','div#'+game+opt).html(elF);
+			$('.sendToNeighboursList','div#'+game+opt).html(elN);
 			
-			$('.sendToNeighboursList','div#'+game+opt).html(html);
-			$('.sendToNeighboursList','div#'+game+opt).parent().find('.hide').removeClass('hide');
+			loadNeighborsStats(gameID);
+			
+			
+			$('.sendToNeighboursList','div#'+game+opt).parent().find('.hide').not('td > span').removeClass('hide');
 			$('#'+game+'SendFreeGiftsSubMenu > button').removeClass('hide');
 			
-			$('.neighborCheckbox', 'div#'+game+opt).click(processSelectSendTo);	
+			
+			/*
 			$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
 			
-			$('.sendToFavouritesList','div#'+game+opt).html('');
-			$('.sendToFavouritesList','div#'+game+opt).append('<br style="clear:both" />');
+			
 			
 			$(bkP.options.games[gameID].favourites).each(function(k,v)
 			{
 				$('input[neighID="'+v+'"]', 'div#'+game+opt).siblings('img').trigger('click');
 			});
+			*/
 		}
 		
 		
@@ -1605,6 +1628,27 @@
 		$( "#progressbar" ).progressbar({
 			value: 0
 		});
+		
+		
+		// poczatki ograniczenia eventow
+		
+		$(window).click(function(e)
+		{
+			var el = $(e.srcElement)
+			if(el.hasClass('toggleFavourite'))
+			{
+				return processToggleFavourite(el);
+			}
+			else if(el.hasClass('selectNeighborToSend'))
+			{
+				return processSelectNeighborToSend(el);
+			}
+		});
+		
+		
+		
+		
+		
 		
 		//database.open(userID);
 		
@@ -1684,7 +1728,9 @@
 			
 			$('<label><span>Post "I like" on bonuses</span><input type="checkbox" class="gameLikeBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
-			$('<label><span>Auto send thank you gift, if possible</span><input type="checkbox" class="gameSendbackGiftBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
+			$('<label><span>Auto send thank you gift, if possible</span><input type="checkbox" class="gameSendbackGiftBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');	
+			
+			$('<label><span>Hide successfully collected bonus from feed</span><input type="checkbox" class="gameHideFromFeedBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
 			$('<label style="display: none"><span>List me on the neighbors search</span><input type="checkbox" class="gameListOnNeighborsSearch" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
 			
@@ -1824,6 +1870,12 @@
 		$(".gameSendbackGiftBox").click(function()
 		{
 			bkP.options.games[$(this).attr('gameID')].sendbackGift = $(this).is(':checked') ? true : false;
+			bkP.saveOptions();
+		});
+		
+		$(".gameHideFromFeedBox").click(function()
+		{
+			bkP.options.games[$(this).attr('gameID')].hideFromFeed = $(this).is(':checked') ? true : false;
 			bkP.saveOptions();
 		});
 		
@@ -2253,10 +2305,9 @@
 				
 				alert('New data loaded. Use FGS icon to open this page again');
 				bkP.options = bkP.jQuery.extend(true,{}, bkP.defaultOptions,	cleanSet);
-				bkP.sendView('close');
 				bkP.FBloginError = null;
 				bkP.updateIcon();
-				bkP.startup();
+				bkP.sendView('closeAndOpen');
 			}
 			catch(e)
 			{
@@ -2295,15 +2346,15 @@
 		loadOptionsData();
 	}
 	
-	function processSelectSendTo(a)
+	function processSelectNeighborToSend(e)
 	{
-		var gameID = $(this).attr('gameID');
+		var gameID = $(e).closest('tr').attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 
 		var count = parseInt($('input[name="neighArr[]"]:checked', 'div#'+game+opt).length);
-		
-		if(a.altKey === undefined)
+
+		if(e.altKey === undefined)
 		{
 			count++;
 		}
@@ -2312,39 +2363,34 @@
 		{
 			return false;
 		}
-	}	
-	
-	function processAddFavourite(e)
-	{
-		var gameID = $(this).siblings('input').attr('gameID');
-		var uID = $(this).siblings('input').attr('neighID');
-		
-		if($.inArray(uID, bkP.options.games[gameID].favourites) == -1)
-		{
-			bkP.options.games[gameID].favourites.push(uID);
-		}
-		bkP.saveOptions();
-		
-		var prepEl = $(this).parent().parent().siblings('.sendToFavouritesList');
-
-		$(this).unbind('click', processAddFavourite).bind('click',processRemoveFavourite).removeClass('addToSendFav').addClass('isFavourite').attr('src', 'icons/favourite.png').attr('title', 'Click to remove from favourites');
-		$(this).parent().clone(true).prependTo(prepEl);
-		$(this).parent().hide();
 	}
 	
-	function processRemoveFavourite(e)
+	function processToggleFavourite(e)
 	{
-		var gameID = $(this).siblings('input').attr('gameID');
-		var uID = $(this).siblings('input').attr('neighID');
-		$(this).parent().remove();
-		
+		var srcEl	= $(e).closest('tr');
+		var gameID 	= srcEl.attr('gameID');
+		var uID		= srcEl.attr('neighID');
+		var uName	= srcEl.attr('neighName');
+				
+		var game = bkP.gamesData[gameID].systemName;
+		var opt = 'SendFreeGiftsList';
+				
 		var idx = bkP.options.games[gameID].favourites.indexOf(uID);
-		if(idx != -1)
+				
+		if(idx == -1)
+		{
+			bkP.options.games[gameID].favourites.push(uID);
+			srcEl.find('.toggleFavourite').attr('src', 'icons/favourite.png');
+			$('.favouritesTable', 'div#'+game+opt).find('tbody').append(srcEl);
+		}
+		else
 		{
 			bkP.options.games[gameID].favourites.splice(idx, 1);
+			srcEl.find('.toggleFavourite').attr('src', 'icons/favourite-bw.png');
+			$('.neighborsTable', 'div#'+game+opt).find('tbody').append(srcEl);
 		}
+		$('.neighborsTable, .favouritesTable', 'div#'+game+opt).trigger("update");
 		bkP.saveOptions();
-		var el = $('input[neighID="'+uID+'"]').parent().show().children('img').removeClass('isFavourite').addClass('addToSendFav').unbind('click', processRemoveFavourite).bind('click',processAddFavourite).attr('src', 'icons/favourite-bw.png').attr('title', 'Click to add to favourites');
 	}
 	
 	function processLikeBonus()

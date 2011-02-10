@@ -38,7 +38,7 @@
 				var cnt = 0;
 				for(var i = 0; i < res.rows.length; i++)
 				{
-					var re = new RegExp('(^__|sqlite)', "i");
+					var re = new RegExp('(^__|sqlite|options)', "i");
 					var r = res.rows.item(i);
 					if(!re.test(r.name))
 					{

@@ -239,6 +239,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -487,6 +489,38 @@ FGS.gamesData =
 							'BonusesPending',
 							'ManualBonuses',
 							'BonusesHistory', 
+							'RequestsPending',
+							'RequestsHistory',	
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	94483022361:	{ 	name: 'Island Paradise',	systemName: 'islandparadise', link: 'http://apps.facebook.com/myownisland/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'ManualBonuses',
+							'RequestsPending',
+							'RequestsHistory',	
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	272810543124:	{ 	name: 'Pot Farm',	systemName: 'potfarm', link: 'http://apps.facebook.com/mypotfarm/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'ManualBonuses',
 							'RequestsPending',
 							'RequestsHistory',	
 							'NeighborsSearch',
