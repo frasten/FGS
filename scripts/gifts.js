@@ -669,7 +669,7 @@ FGS.giftsArray = {
 
 FGS.freeGiftForGame =
 {
-	201278444497: 'meal1',
+	201278444497: 'picnic_basket',
 	102452128776: 'brick',
 	234860566661: 'construction_gears',
 	101539264719: '2548',
