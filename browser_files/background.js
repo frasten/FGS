@@ -328,41 +328,6 @@ FGS.sendView = function (msg, data, data2, data3)
 
 FGS.loadOptions = function (userID)
 {
-	var lastOptions = localStorage.getItem('options_'+userID);
-	
-	if(lastOptions != null && lastOptions != undefined)
-	{
-		if(userID != null)
-		{
-			FGS.database.db.transaction(function(tx)
-			{
-				tx.executeSql("SELECT * FROM neighbours", [], function(tx, res)
-				{
-					FGS.options = FGS.jQuery.extend(true, {}, FGS.defaultOptions, JSON.parse(lastOptions));
-					localStorage.removeItem('options_'+userID);
-
-					for(var i = 0; i < res.rows.length; i++)
-					{
-						var gID = res.rows.item(i)['gameID'];
-						var uID = res.rows.item(i)['id'].toString();
-						
-						if(FGS.jQuery.inArray(uID, FGS.options.games[gID].favourites) == -1)
-						{
-							FGS.options.games[gID].favourites.push(uID);
-						}
-					}
-					FGS.optionsLoaded = true;
-					FGS.saveOptions();
-					FGS.finishStartup();
-					
-				}, null, FGS.database.onSuccess, FGS.database.onError);
-				
-				tx.executeSql('DROP TABLE neighbours', null, FGS.database.onSuccess, FGS.database.onError);
-			});
-		}
-		return;
-	}
-	
 	FGS.database.db.transaction(function(tx)
 	{
 		tx.executeSql("SELECT option FROM options where id = '1'", [], function(tx, res)
@@ -383,31 +348,28 @@ FGS.loadOptions = function (userID)
 			}
 			
 			FGS.optionsLoaded = true;
-			FGS.saveOptions();
 			FGS.finishStartup();
+			FGS.saveOptions();
 			
-		}, null, FGS.database.onSuccess, FGS.database.onError);
+		}, FGS.database.onSuccess, FGS.database.onError);
 	});
 };
 
 FGS.saveOptions = function(callback)
 {
-	if(FGS.userID != null)
+	FGS.options = FGS.jQuery.extend(true, {}, FGS.options);
+	
+	FGS.database.db.transaction(function(tx)
 	{
-		FGS.options = FGS.jQuery.extend(true, {}, FGS.options);
-		
-		FGS.database.db.transaction(function(tx)
+		tx.executeSql("UPDATE options SET option = ? where id = '1'", [JSON.stringify(FGS.options)], function()
 		{
-			tx.executeSql("UPDATE options SET option = ? where id = '1'", [JSON.stringify(FGS.options)], function()
+			if(callback)
 			{
-				if(callback)
-				{
-					FGS.stopAll(true);
-					callback();
-				}
-			}, null, FGS.database.onSuccess, FGS.database.onError);
-		});
-	}
+				FGS.stopAll(true);
+				callback();
+			}
+		}, FGS.database.onSuccess, FGS.database.onError);
+	});
 };
 
 FGS.updateIcon = function()
@@ -537,10 +499,9 @@ FGS.loadLibraries = function(context)
 		cache: false,
 		url: chrome.extension.getURL("scripts/gifts.js"),
 		type: "GET",
-		success: function(){},
+		success: function(d){},
 		dataType: 'script'
-	});
-	
+	});	
 	
 	var arr = [];
 	for(var ids in FGS.gamesData)
@@ -563,8 +524,6 @@ FGS.loadLibraries = function(context)
 			arr.push(FGS.gamesData[ids].systemName+' request');
 		}
 	}
-	
-	//dump(arr.sort());
 
 	var jQuery = window.jQuery.noConflict(true);
 	if( typeof(jQuery.fn._init) == 'undefined') { jQuery.fn._init = jQuery.fn.init; }

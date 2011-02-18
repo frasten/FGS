@@ -45,8 +45,7 @@
 				});
 				
 			}, bkP.database.onSuccess, bkP.database.onError);
-		});
-		
+		});		
 	}
 
 	function loadBonuses(gID)
@@ -110,8 +109,8 @@
 						htmlsManual[gameID] += getNewManualBonusRow(gameID, v);
 					}
 					else
-					{		
-						htmls[gameID] += getNewBonusRow(gameID, v);
+					{
+						htmls[gameID] += getNewBonusRow(gameID, v, true);
 					}
 				}
 				
@@ -123,8 +122,6 @@
 					
 					$('div#'+game+'BonusesPendingList').prepend(htmls[tmp]);
 					$('div#'+game+'BonusesPendingList').children('div').removeClass('awaitingClick').click(processBonusClick);
-					
-					selectFirstTab(tmp);
 				}
 				updateCount();
 				updateLoaded();
@@ -177,7 +174,8 @@
 			tx.executeSql("SELECT * FROM bonuses where status = '1' "+andQry +" order by time DESC", [], function(tx, res)
 			{
 				var htmls = {};
-				
+				var htmlsError = {};
+
 				for(var i = 0; i < res.rows.length; i++)
 				{
 					var v = res.rows.item(i);
@@ -191,10 +189,15 @@
 					if(typeof(htmls[gameID]) == 'undefined')
 					{
 						htmls[gameID] = '';
+						htmlsError[gameID] = '';
 					}
 					
+					var tmp = getBonusHistoryRow(v);
 					
-					htmls[gameID] += getBonusHistoryRow(v);
+					if(tmp.indexOf('noErrorClass') != -1)
+						htmls[gameID] += tmp;
+					else
+						htmlsError[gameID] += tmp;					
 				}
 				
 				for(var tmp in htmls)
@@ -202,9 +205,9 @@
 					var game = bkP.gamesData[tmp].systemName;
 					
 					$('div#'+game+'BonusesHistoryList').prepend(htmls[tmp]);
+					$('div#'+game+'FailedBonusesList').prepend(htmlsError[tmp]);	
 					
-					
-					$('div#'+game+'BonusesHistoryList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualBonusClick);
+					$('div#'+game+'FailedBonusesList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualBonusClick);
 					
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.likeBonus').click(processLikeBonus);
@@ -219,7 +222,8 @@
 
 			tx.executeSql("SELECT * FROM requests where status = '1' "+andQry +" order by time DESC", [], function(tx, res)
 			{
-				var htmls = {};				
+				var htmls = {};	
+				var htmlsError = {};	
 				
 				for(var i = 0; i < res.rows.length; i++)
 				{
@@ -234,9 +238,15 @@
 					if(typeof(htmls[gameID]) == 'undefined')
 					{
 						htmls[gameID] = '';
+						htmlsError[gameID] = '';
 					}
 
-					htmls[gameID] += getRequestHistoryRow(v);
+					var tmp = getRequestHistoryRow(v);
+					
+					if(tmp.indexOf('noErrorClass') != -1)
+						htmls[gameID] += tmp;
+					else
+						htmlsError[gameID] += tmp;		
 				}
 
 				for(var tmp in htmls)
@@ -244,7 +254,9 @@
 					var game = bkP.gamesData[tmp].systemName;
 					
 					$('div#'+game+'RequestsHistoryList').prepend(htmls[tmp]);
-					$('div#'+game+'RequestsHistoryList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);					
+					$('div#'+game+'FailedGiftsList').prepend(htmlsError[tmp]);
+					
+					$('div#'+game+'FailedGiftsList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);					
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.sendBack').click(processSendBack);	
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').removeClass('noErrorClass');

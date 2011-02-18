@@ -1,0 +1,127 @@
+.settings
+{
+	margin-top: 20px;
+}
+
+.disabledComment, .disabledLike
+{
+	cursor: default !important;
+}
+
+.section
+{
+	background-color: #F8FAFF;
+	border: 1px solid #666;
+	border-bottom-left-radius: 10px 10px;
+	border-bottom-right-radius: 10px 10px;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
+	margin: 20px;
+	padding: 10px;
+}
+
+.bonusItem, .requestItem, .manualItem 
+{
+	overflow: hidden;
+	cursor:pointer;
+	border: 1px solid #000;
+	text-align: center;
+	width: 120px;
+	height: 170px;
+	max-height: 170px;
+	margin: 5px;
+	padding: 5px;
+	float: left;
+}
+
+.bonusItem > img, .requestItem > img, .manualItem > img
+{
+	width: 64px;
+	height:64px
+}
+
+.bonusItem > .timeAgo, .requestItem > .timeAgo, .manualItem > .timeAgo
+{
+	display: block;
+	height: 12px;
+}
+.bonusItem.disabled, .requestItem.disabled
+{
+	cursor: default !important;
+}
+
+
+.bonusError
+{
+	display: block;
+	height: 12px;
+}
+
+.bonusItem > .title, .requestItem > .title, .manualItem > .title
+{
+	font-weight: bolder;
+	font-size: 1.1em;
+	display: block;
+}
+
+
+.bonusName
+{
+	font-weight: bolder;
+}
+
+.friendsList
+{
+	float: left;
+	width: 175px;
+	margin-right: 10px;
+}
+
+a.friendLink
+{
+	color: #105289;
+	text-decoration: none;
+}
+
+a.friendLink:visited
+{
+	color: #f06 !important;
+	text-decoration: underline;
+}
+
+a.friendLink:hover
+{
+	text-decoration: underline;
+}
+
+.addToSendFav, .isFavourite
+{
+	cursor: pointer;
+}
+
+.freegiftHistory
+{
+	overflow: hidden;
+	border: 1px solid #000;
+	text-align: center;
+	width: 120px;
+	height: 90px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	float: left;
+	text-align:center
+}
+
+.fvBonusErr
+{
+	background: #fff;
+	border: 1px dashed red;
+	clear: both;
+	width: 50%;
+	margin: 10px auto;
+	font-size: 12px;
+	text-align: center;
+	color: red;
+	padding: 8px;
+}

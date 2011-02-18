@@ -10,55 +10,127 @@ sub,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoo
 
 body
 {
-	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
 	font-size: 10px;
 }
 
-table
+.center
 {
-	font-size: 10px;
+	text-align: center;
 }
 
-caption 
+.bonusItem, .requestItem, .manualItem 
 {
-	background: #EEE;
-	border: solid #B2B2B2;
-	border-width: 1px 0px 2px;
-	font: normal normal normal 1.1em/normal Georgia, Times, serif;
-	padding: 0.25em;
+	overflow: hidden;
+	cursor:pointer;
+	border: 1px solid #000;
+	text-align: center;
+	width: 100px;
+	height: 115px;
+	max-height: 115px;
+	margin: 5px;
+	padding: 5px;
+	float: left;
 }
 
-thead th
+.bonusItem.withDesc, .requestItem.withDesc, .manualItem.withDesc
 {
-	text-align: left;
-	text-transform: uppercase;
+	width: 120px;
+	height: 170px;
+	max-height: 170px;
 }
 
-th, td
+.bonusItem > img, .requestItem > img, .manualItem > img
 {
-	border: solid #CCC;
-	border-width: 0px 1px 1px;
-	padding: 0.25em 0.5em;
+	width: 64px;
+	height:64px
 }
 
-.settings
+.bonusItem > .timeAgo, .requestItem > .timeAgo, .manualItem > .timeAgo
 {
-	margin-top: 20px;
+	display: block;
+	height: 12px;
 }
-
-#gameSelector > label
-{
-	/*min-width: 100px;*/
-}
-
-.disabledComment, .disabledLike
+.bonusItem.disabled, .requestItem.disabled
 {
 	cursor: default !important;
 }
 
-.hideScreenLocked
+
+.bonusError
 {
-	display: none;
+	display: block;
+	height: 12px;
+}
+
+.bonusItem > .title, .requestItem > .title, .manualItem > .title
+{
+	font-weight: bolder;
+	display: block;
+}
+
+
+.optionsGameDiv
+{
+	float: left;
+	width: 285px; 
+	padding: 3px;
+	border: 1px dotted #000;
+	margin: 3px;
+}
+
+.section
+{
+	background-color: #F8FAFF;
+	border: 1px solid #666;
+	border-bottom-left-radius: 10px 10px;
+	border-bottom-right-radius: 10px 10px;
+	border-top-left-radius: 10px 10px;
+	border-top-right-radius: 10px 10px;
+	margin: 5px;
+	padding: 10px;
+}
+
+.sendToFavouritesList, .sendToNeighboursList, .sendToGiftsList, .gameOptionsFiltersList, .searchForPeopleList, .sendingGiftProgress
+{
+	border:1px solid #000;
+	padding: 20px;
+	margin: 20px;
+	/*text-align: center;*/
+}
+
+
+.toggleFavourite
+{
+	cursor: pointer;
+}
+
+.selectGiftToSend
+{
+	cursor:pointer;
+	overflow: hidden;
+	border: 1px solid #000;
+	text-align: center;
+	width: 59px;
+	height: 65px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+	float: left;
+	text-align:center
+}
+
+.selectGiftToSend.selected
+{
+	background-color: #C6F284;
+}
+
+.submenu
+{
+	margin-top:	10px;
+	margin-bottom: 10px;
+	display: block;
+	text-align:center;
 }
 
 .icon
@@ -73,20 +145,14 @@ th, td
 	display: none;
 }
 
-.notEnabledInfo
+.hideScreenLocked
 {
-	font-size: 1.4em;
+	display: none;
 }
 
-h1
+.gameContent
 {
 	margin: 10px;
-}
-
-h1.title
-{
-	text-align:center;
-	margin: 0px;
 }
 
 .ui-state-active
@@ -94,37 +160,6 @@ h1.title
 	background: #FAFFAF;
 }
 
-.section
-{
-	background-color: #F8FAFF;
-	border: 1px solid #666;
-	border-bottom-left-radius: 10px 10px;
-	border-bottom-right-radius: 10px 10px;
-	border-top-left-radius: 10px 10px;
-	border-top-right-radius: 10px 10px;
-	margin: 20px;
-	padding: 10px;
-}
-
-div.leftBox
-{
-	text-align: center;
-}
-
-.optionsMenu
-{
-	margin-top: 20px;
-	display: block;
-	text-align:center;
-}
-
-.submenu
-{
-	margin-top: 20px;
-	margin-bottom: 20px;
-	display: block;
-	text-align:center;
-}
 
 
 /* CHAT */
@@ -229,62 +264,77 @@ div.leftBox
 }
 
 
-.badgeGames
+/* tables */
+table.tablesorter {
+    font-family:arial;
+    background-color: #CDCDCD;
+    margin:10px 0pt 15px;
+    font-size: 8pt;
+    width: 100%;
+    text-align: left;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    background-color: #e6EEEE;
+    border: 1px solid #FFF;
+    font-size: 8pt;
+    padding: 4px;
+}
+table.tablesorter thead tr .header {
+    background-image: url(bg.gif);
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+}
+table.tablesorter tbody td {
+    color: #3D3D3D;
+    padding: 4px;
+    background-color: #FFF;
+    vertical-align: top;
+}
+table.tablesorter tbody tr.odd td {
+    background-color:#F0F0F6;
+}
+table.tablesorter thead tr .headerSortUp {
+    background-image: url(asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+    background-image: url(desc.gif);
+}
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+background-color: #8dbdd8;
+}
+
+
+
+
+
+.badgeDiv
 {
+	width: 48px;
+	height: 48px;
 	position: absolute;
-	bottom: 2px;
-	right:5px;
-	width: 25px;
-	height: 15px;
-	background-color: #435EE0;
-	/*border: 1px solid #000;*/
-	color: #fff;
-	border-radius: 6px 6px;
-	/*display: inline-block;*/
-}
-
-.bonusItem, .requestItem, .manualItem 
-{
+	left: 1em;
+	top: 0.4em;
+	text-decoration: none;
+	opacity: 1;
+	z-index: 20;
 	overflow: hidden;
-	cursor:pointer;
-	border: 1px solid #000;
-	text-align: center;
-	width: 120px;
-	height: 170px;
-	max-height: 170px;
-	margin: 5px;
-	padding: 5px;
-	float: left;
 }
 
-.bonusItem > img, .requestItem > img, .manualItem > img
+.badgeDiv span
 {
-	width: 64px;
-	height:64px
-}
-
-.bonusItem > .timeAgo, .requestItem > .timeAgo, .manualItem > .timeAgo
-{
-	display: block;
-	height: 12px;
-}
-.bonusItem.disabled, .requestItem.disabled
-{
-	cursor: default !important;
-}
-
-
-.bonusError
-{
-	display: block;
-	height: 12px;
-}
-
-.bonusItem > .title, .requestItem > .title, .manualItem > .title
-{
-	font-weight: bolder;
-	font-size: 1.1em;
-	display: block;
+	height: 15px;
+	position: absolute;
+	text-decoration: none;
+	font-weight: bold;
+	
+	bottom: 0px;
+	
+	
+	width: 48px;
+	color: #fff;
+	background-color:#EE2D00;
+	opacity: 1;
 }
 
 
@@ -347,170 +397,3 @@ div.leftBox
 .contextMenu LI.receive A { background-image: url(../context/receive.png); }
 .contextMenu LI.delete A { background-image: url(../context/delete.png); }
 .contextMenu LI.goToGame A { background-image: url(../context/goToGame.png); }
-
-.bonusName
-{
-	font-weight: bolder;
-}
-
-h2.center, h3.center
-{
-	text-align: center;
-}
-
-.friendsList
-{
-	float: left;
-	width: 175px;
-	margin-right: 10px;
-}
-
-a.friendLink
-{
-	color: #105289;
-	text-decoration: none;
-}
-
-a.friendLink:visited
-{
-	color: #f06 !important;
-	text-decoration: underline;
-}
-
-a.friendLink:hover
-{
-	text-decoration: underline;
-}
-
-.sendToFavouritesList, .sendToNeighboursList, .sendToGiftsList, .gameOptionsFiltersList, .searchForPeopleList, .sendingGiftProgress
-{
-	border:1px solid #000;
-	padding: 20px;
-	margin: 20px;
-	/*text-align: center;*/
-}
-
-.addToSendFav, .isFavourite
-{
-	cursor: pointer;
-}
-
-.selectGiftToSend
-{
-	cursor:pointer;
-	overflow: hidden;
-	border: 1px solid #000;
-	text-align: center;
-	width: 59px;
-	height: 65px;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-bottom: 10px;
-	float: left;
-	text-align:center
-}
-
-.freegiftHistory
-{
-	overflow: hidden;
-	border: 1px solid #000;
-	text-align: center;
-	width: 120px;
-	height: 90px;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-bottom: 10px;
-	float: left;
-	text-align:center
-}
-
-.selectGiftToSend.selected
-{
-	background-color: #C6F284;
-}
-
-
-
-h1.title .input-text
-{
-	border:1px solid #3b6e22;
-	color:#666666;
-}
-
-h1.title label
-{
-	margin-top: 10px;
-	display:block;
-	width: 200px;
-	margin-bottom:10px;
-	color:#555555;
-	float: left;
-}
-
-h1.title label span
-{
-	display:block;
-	float:left;
-	padding-right:6px;
-	width:150px;
-	text-align:right;
-	font-weight:bold;
-	font-size: 12px;
-}
-.toggleFavourite
-{
-	cursor: pointer;
-}
-
-.fvBonusErr
-{
-	background: #fff;
-	border: 1px dashed red;
-	clear: both;
-	width: 50%;
-	margin: 10px auto;
-	font-size: 12px;
-	text-align: center;
-	color: red;
-	padding: 8px;
-}
-
-/* tables */
-table.tablesorter {
-    font-family:arial;
-    background-color: #CDCDCD;
-    margin:10px 0pt 15px;
-    font-size: 8pt;
-    width: 100%;
-    text-align: left;
-}
-table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-    background-color: #e6EEEE;
-    border: 1px solid #FFF;
-    font-size: 8pt;
-    padding: 4px;
-}
-table.tablesorter thead tr .header {
-    background-image: url(bg.gif);
-    background-repeat: no-repeat;
-    background-position: center right;
-    cursor: pointer;
-}
-table.tablesorter tbody td {
-    color: #3D3D3D;
-    padding: 4px;
-    background-color: #FFF;
-    vertical-align: top;
-}
-table.tablesorter tbody tr.odd td {
-    background-color:#F0F0F6;
-}
-table.tablesorter thead tr .headerSortUp {
-    background-image: url(asc.gif);
-}
-table.tablesorter thead tr .headerSortDown {
-    background-image: url(desc.gif);
-}
-table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #8dbdd8;
-}
