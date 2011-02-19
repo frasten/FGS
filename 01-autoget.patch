@@ -2,9 +2,9 @@ Index: giftlist.html
 ===================================================================
 --- giftlist.html	(revisione 134)
 +++ giftlist.html	(copia locale)
-@@ -328,6 +328,11 @@
- 			$('.optionsMenu', $('#'+game+'Game')).buttonset('refresh');
+@@ -354,6 +354,11 @@
  		}
+ 		
  		updateCount(gameID);
 +		
 +		/* Autoaccept bonuses */
@@ -14,16 +14,16 @@ Index: giftlist.html
  	}
  	
  	function processBonusClick(e)
-@@ -1234,7 +1239,7 @@
+@@ -1195,7 +1200,7 @@
  		else
  		{
  			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
--			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"]').removeAttr('checked');
-+			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
+-			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"]').removeAttr('checked');
++			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
  			
  			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
  			
-@@ -1254,6 +1259,11 @@
+@@ -1220,6 +1225,11 @@
  			}
  			
  			
@@ -35,38 +35,46 @@ Index: giftlist.html
  			$(el).removeClass('hide');
  			$('img', 'label[for="'+gameID+'Selected"]').attr('src', 'icons/menu/'+game+'.png');
  			$('div.content', 		$('#'+game+'Game')).removeClass('hide');
-@@ -1543,6 +1553,8 @@
- 			
- 			$('<label><span>Auto send thank you gift, if possible</span><input type="checkbox" class="gameSendbackGiftBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
- 			
-+			$('<label><span>Automatically accept bonuses</span><input type="checkbox" class="gameAutoAcceptBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
+@@ -1550,6 +1560,7 @@
+ 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.sendbackGift ? 'checked="checked"':'')+' class="gameSendbackGiftBox" gameID="'+gameID+'" /> <label>Send thank you gift</label><br />'
+ 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses on Facebook</label><br />'
+ 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.listOnSearch? 'checked="checked"':'')+'  class="gameListOnNeighborsSearch" gameID="'+gameID+'" /> <label>List me on neighbors search</label><br />'
++	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.autoAcceptBonus? 'checked="checked"':'')+'  class="gameAutoAcceptBonusBox" gameID="'+gameID+'" /> <label>Automatically accept bonuses</label><br />'
+ 	+ '</span></div>');
+ 
+ 	var gs = $('#gameOptionsTab');	
+@@ -1793,6 +1804,12 @@
+ 	bkP.saveOptions();
+ }
+ 
++function processGameAutoAcceptBonusInput(el)
++{
++	bkP.options.games[$(el).attr('gameID')].autoAcceptBonus = $(el).is(':checked') ? true : false;
++	bkP.saveOptions();
++}
 +
- 			//$('<label><span>Post comment on bonuses</span><input type="checkbox" class="gameCommentBonusBox" sysID="'+d.systemName+'" gameID="'+id+'" /></label>').appendTo('#'+d.systemName+'Game > h1 > .checkOptions');
- 			
- 			switchEnabled(id);
-@@ -1669,6 +1681,12 @@
- 			bkP.saveOptions();
- 		});
- 		
-+		$(".gameAutoAcceptBonusBox").click(function()
-+		{
-+			bkP.options.games[$(this).attr('gameID')].autoAcceptBonus = $(this).is(':checked') ? true : false;
-+			bkP.saveOptions();
-+		});
-+
- 		//$(".gameCommentBonusBox").click(function()
- 		//{
- 			//bkP.options.games[$(this).attr('gameID')].commentBonus = $(this).is(':checked') ? true : false;
+ function processGameHideFromFeedInput(el)
+ {
+ 	bkP.options.games[$(el).attr('gameID')].hideFromFeed = $(el).is(':checked') ? true : false;
+@@ -2118,6 +2135,8 @@
+ 				return processGameSendbackGiftInput(el);
+ 			else if(el.hasClass('gameHideFromFeedBox'))
+ 				return processGameHideFromFeedInput(el);
++			else if(el.hasClass('gameAutoAcceptBonusBox'))
++				return processGameAutoAcceptBonusInput(el);
+ 			else if(el.hasClass('gameListOnNeighborsSearch'))
+ 				return processGameListOnNeighborsSearch(el);
+ 			else if(el.hasClass('deleteComment'))
 Index: fgs.js
 ===================================================================
 --- fgs.js	(revisione 134)
 +++ fgs.js	(copia locale)
-@@ -32,7 +32,7 @@
- 			collectXbonusesAtTheSameTime: 5,
+@@ -31,7 +31,7 @@
+ 			collectXbonusesAtTheSameTime: 2,
  		}
  
--		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, filter: [], defaultGift: 0, hiddenIcon: false };
-+		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, filter: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
+-		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, hideFromFeed: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false };
++		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, hideFromFeed: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
  
  		for(var idd in FGS.gamesData)
  		{

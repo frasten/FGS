@@ -80,6 +80,73 @@ var FGS = {
 		return num;
 	},
 	
+	getRequestLink: function(id, dataPost, retry)
+	{
+		if(FGS.Gup('secondLink', dataPost) == 1)
+			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
+		else
+			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
+		
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg;
+		
+		
+		FGS.jQuery.ajax({
+			type: "POST",
+			url: url,
+			data: dataPost2,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+					
+					var dataObj = JSON.parse(parseStr.slice(9));
+					
+					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
+					
+					var found = false;
+					
+					FGS.jQuery(dataObj.onload).each(function(k,v)
+					{
+						if(v.indexOf('goURI') != -1)
+						{
+							parseStr = v;
+							found = true;
+							return false;
+						}
+					});
+					
+					if(!found) throw {message:"no URI"}
+				
+					var pos1 = parseStr.indexOf('goURI');
+					var pos2 = parseStr.indexOf(');',pos1);
+					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
+
+					eval("parseStr =" + parseStr);
+					
+					parseStr = parseStr.replace(/\\u0025/g, '%');
+					
+					var URI = JSON.parse(parseStr);
+					
+					FGS.openURI(URI, true);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					FGS.getRequestLink(id, dataPost, true);
+				}
+			}
+		});
+	},
+	
 	prepareLinkForGame: function(game, id, dataPost, retry)
 	{
 		var $ = FGS.jQuery;
@@ -87,12 +154,18 @@ var FGS = {
 		var currentType	= 'request';
 		var info = {}
 		
-		dataPost+='&nctr[_mod]=pagelet_requests';
+		if(FGS.Gup('secondLink', dataPost) == 1)
+			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
+		else
+			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
 		
-		$.ajax({
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests';
+		
+		
+		FGS.jQuery.ajax({
 			type: "POST",
-			url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
-			data: dataPost,
+			url: url,
+			data: dataPost2,
 			dataType: 'text',
 			success: function(data)
 			{
@@ -158,12 +231,20 @@ var FGS = {
 		});
 	},
 	
-	emptyUnwantedGifts: function(post)
+	emptyUnwantedGifts: function(dataPost)
 	{
+		if(FGS.Gup('secondLink', dataPost) == 1)
+			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
+		else
+			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
+		
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests';
+		
+		
 		FGS.jQuery.ajax({
 			type: "POST",
-			url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
-			data: post+'&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests',
+			url: url,
+			data: dataPost2,
 			dataType: 'text',
 			success: function(data)
 			{}
@@ -376,7 +457,7 @@ var FGS = {
 	
 	checkForNotFound: function(url)
 	{
-		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home', '/cafeworld/?ref=requests'];
+		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home', '/cafeworld/?ref=requests', '/cityofwonder/gift/?track=bookmark'];
 		
 		// tutaj regexp jescze np. http://apps.facebook.com/cafeworld/
 		
@@ -615,43 +696,60 @@ var FGS = {
 
 					var el = $(this);
 					
-					var dataPost = 
-						'charset_test='			+$(el).children('input[name=charset_test]').val() +
-						'&id='					+$(el).children('input[name=id]').val() +
-						'&type='				+$(el).children('input[name=type]').val() +
-						'&status_div_id='		+$(el).children('input[name=status_div_id]').val()	+
-						'&params[from_id]='		+$(el).find('input[name="params\[from_id\]"]').val() +
-						'&params[app_id]='		+ APPID +
-						'&params[req_type]='	+$(el).find('input[name="params\[req_type\]"]').val() +
-						'&params[is_invite]='	+$(el).find('input[name="params\[is_invite\]"]').val() +
-						'&lsd' +
-						'&post_form_id_source=AsyncRequest';
-				
+					
+					if($(this).attr('action') == '/ajax/games/apprequest/apprequest.php')
+					{
+						var dataPost = 
+							'charset_test='			+$(el).children('input[name=charset_test]').val() +
+							'&id='					+$(el).children('input[name=id]').val() +							
+							'&params[from_id]='		+$(el).find('input[name="params\[from_id\]"]').val() +
+							'&params[app_id]='		+ APPID +
+							'&div_id='		+$(el).children('input[name=div_id]').val()	+
+							'&nctr[_mod]=pagelet_requests' +
+							'&lsd=' +
+							'&actions[accept]=Akceptuj' +
+							'&post_form_id_source=AsyncRequest&secondLink=1';
+						
+						var typeText = '';
+					}
+					else
+					{
+						var dataPost = 
+							'charset_test='			+$(el).children('input[name=charset_test]').val() +
+							'&id='					+$(el).children('input[name=id]').val() +
+							'&type='				+$(el).children('input[name=type]').val() +
+							'&status_div_id='		+$(el).children('input[name=status_div_id]').val()	+
+							'&params[from_id]='		+$(el).find('input[name="params\[from_id\]"]').val() +
+							'&params[app_id]='		+ APPID +
+							'&params[req_type]='	+$(el).find('input[name="params\[req_type\]"]').val() +
+							'&params[is_invite]='	+$(el).find('input[name="params\[is_invite\]"]').val() +
+							'&lsd' +
+							'&post_form_id_source=AsyncRequest';
+							
+						var typeText = $(el).find('input[type="submit"]').attr('name');
+						
+						var ret = false;
+						
+						$(FGS.gamesData[APPID].filter.requests).each(function(k,v)
+						{
+							var re = new RegExp(v, "i") ;
+							
+							if(re.test(typeText))
+							{
+								dataPost += '&actions[reject]=Ignore&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg;
+								FGS.emptyUnwantedGifts(dataPost);
+								ret = true;
+								return false;
+							}
+						});
+						
+						if(ret) return;
+						
+						dataPost += '&'+escape($(el).find('input[type="submit"]:first').attr('name'))+'='+$(el).find('input[type="submit"]:first').attr('value');
+					}
 
 					var elID = $(el).children('input[name=id]').val();
 					var newText = $(el).find('.appRequestBody').text();
-					
-					
-					var typeText = $(el).find('input[type="submit"]').attr('name');
-					
-					var ret = false;
-					
-					$(FGS.gamesData[APPID].filter.requests).each(function(k,v)
-					{
-						var re = new RegExp(v, "i") ;
-						
-						if(re.test(typeText))
-						{
-							dataPost += '&actions[reject]=Ignore&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg;
-							FGS.emptyUnwantedGifts(dataPost);
-							ret = true;
-							return false;
-						}
-					});
-					
-					if(ret) return;
-					
-					dataPost += '&'+escape($(el).find('input[type="submit"]:first').attr('name'))+'='+$(el).find('input[type="submit"]:first').attr('value');
 					
 					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1)
 					{
@@ -1012,64 +1110,7 @@ var FGS = {
 		}
 	},
 	
-	getRequestLink: function(id, dataPost, retry)
-	{
-		FGS.jQuery.ajax({
-			type: "POST",
-			url: 'http://www.facebook.com/ajax/reqs.php?__a=1',
-			data: dataPost,
-			dataType: 'text',
-			success: function(data)
-			{
-				try
-				{
-					var parseStr = data;
-					
-					var dataObj = JSON.parse(parseStr.slice(9));
-					
-					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
-					
-					var found = false;
-					
-					FGS.jQuery(dataObj.onload).each(function(k,v)
-					{
-						if(v.indexOf('goURI') != -1)
-						{
-							parseStr = v;
-							found = true;
-							return false;
-						}
-					});
-					
-					if(!found) throw {message:"no URI"}
-				
-					var pos1 = parseStr.indexOf('goURI');
-					var pos2 = parseStr.indexOf(');',pos1);
-					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
 
-					eval("parseStr =" + parseStr);
-					
-					parseStr = parseStr.replace(/\\u0025/g, '%');
-					
-					var URI = JSON.parse(parseStr);
-					
-					FGS.openURI(URI, true);
-				}
-				catch(err)
-				{
-					//dump(err);
-					//dump(err.message);
-				}
-			},
-			error: function()
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					FGS.getRequestLink(id, dataPost, true);
-				}
-			}
-		});
-	},
 	
 	searchForNeighbors:
 	{

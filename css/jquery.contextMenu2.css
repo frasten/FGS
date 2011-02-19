@@ -70,48 +70,14 @@
 	font-weight: bolder;
 }
 
-.friendsList
-{
-	float: left;
-	width: 175px;
-	margin-right: 10px;
-}
 
-a.friendLink
-{
-	color: #105289;
-	text-decoration: none;
-}
-
-a.friendLink:visited
-{
-	color: #f06 !important;
-	text-decoration: underline;
-}
-
-a.friendLink:hover
-{
-	text-decoration: underline;
-}
 
 .addToSendFav, .isFavourite
 {
 	cursor: pointer;
 }
 
-.freegiftHistory
-{
-	overflow: hidden;
-	border: 1px solid #000;
-	text-align: center;
-	width: 120px;
-	height: 90px;
-	margin-left: 5px;
-	margin-right: 5px;
-	margin-bottom: 10px;
-	float: left;
-	text-align:center
-}
+
 
 .fvBonusErr
 {

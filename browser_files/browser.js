@@ -118,10 +118,7 @@
 				{
 					var game = bkP.gamesData[tmp].systemName;
 					$('div#'+game+'ManualBonusesList').prepend(htmlsManual[tmp]);
-					$('div#'+game+'ManualBonusesList').children('div.manualBonus').removeClass('awaitingClick').click(processManualBonusClick);
-					
 					$('div#'+game+'BonusesPendingList').prepend(htmls[tmp]);
-					$('div#'+game+'BonusesPendingList').children('div').removeClass('awaitingClick').click(processBonusClick);
 				}
 				updateCount();
 				updateLoaded();
@@ -162,10 +159,7 @@
 				{
 					var game = bkP.gamesData[tmp].systemName;
 					$('div#'+game+'ManualBonusesList').prepend(htmlsManual[tmp]);
-					$('div#'+game+'ManualBonusesList').children('div.manualRequest').removeClass('awaitingClick').click(processManualRequestClick);
-					
 					$('div#'+game+'RequestsPendingList').prepend(htmls[tmp]);
-					$('div#'+game+'RequestsPendingList').children('div').removeClass('awaitingClick').click(processRequestsClick);
 				}
 				updateCount();
 				updateLoaded();
@@ -207,13 +201,9 @@
 					$('div#'+game+'BonusesHistoryList').prepend(htmls[tmp]);
 					$('div#'+game+'FailedBonusesList').prepend(htmlsError[tmp]);	
 					
-					$('div#'+game+'FailedBonusesList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualBonusClick);
+					$('div#'+game+'FailedBonusesList').children('div.processManualBonusClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
 					
-					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
-					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.likeBonus').click(processLikeBonus);
-					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.commentBonus').click(processCommentBonus);
-					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.sendBack').click(processSendBack);	
-										
+					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');								
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').removeClass('noErrorClass');
 				}
 				updateCount();
@@ -256,9 +246,9 @@
 					$('div#'+game+'RequestsHistoryList').prepend(htmls[tmp]);
 					$('div#'+game+'FailedGiftsList').prepend(htmlsError[tmp]);
 					
-					$('div#'+game+'FailedGiftsList').children('div.receivingErrorClass').removeClass('receivingErrorClass').css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);					
+					$('div#'+game+'FailedGiftsList').children('div.processManualRequestClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
+					
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
-					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.sendBack').click(processSendBack);	
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').removeClass('noErrorClass');
 				}
 				updateCount();

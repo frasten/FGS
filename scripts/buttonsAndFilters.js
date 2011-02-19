@@ -396,10 +396,12 @@ FGS.gamesData =
 						},
 						buttons: [
 							'BonusesPending',
-							'ManualBonuses',
-							'BonusesHistory', 
 							'RequestsPending',
-							'RequestsHistory',	
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
 							'NeighborsSearch',
@@ -583,6 +585,7 @@ FGS.submenuButtons =
 	
 	'FailedGifts':	{	name: 'Failed gifts',
 							submenu: {
+								'ClearCollectedRequestsLimitError': { name: 'Clear gifts with "Limit error"' },
 								'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 							}
 	},

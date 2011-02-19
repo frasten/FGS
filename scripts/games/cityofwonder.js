@@ -15,13 +15,15 @@ FGS.cityofwonderRequests =
 				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
+				if(FGS.checkForNotFound(currentURL) === true)
+				{
+					FGS.endWithError('not found', currentType, id);
+					return;
+				}
+				
 				if(redirectUrl != false)
 				{
-					if(FGS.checkForNotFound(redirectUrl) === true)
-					{
-						FGS.endWithError('not found', currentType, id);
-					}
-					else if(typeof(retry) == 'undefined')
+					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, redirectUrl, true);
 					}
@@ -41,8 +43,8 @@ FGS.cityofwonderRequests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					dump(err);
+					dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -66,6 +68,7 @@ FGS.cityofwonderRequests =
 			}
 		});
 	},
+	
 	Click2: function(currentType, id, currentURL, retry)
 	{
 		var $ = FGS.jQuery;
@@ -80,9 +83,21 @@ FGS.cityofwonderRequests =
 			{
 				try
 				{
+					var pos1 = dataStr.indexOf("top.location.href = '");
+					
+					if(pos1 != -1)
+					{
+						var pos2 = dataStr.indexOf("'", pos1+21);
+						var url = dataStr.slice(pos1+21, pos2);
+						FGS.cityofwonderRequests.Click(currentType, id, url, true);
+						return;
+					}				
+				
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
-					if(tst == null) throw {message:'no fbml tag'}
-					var data = tst[1];
+					if(tst == null)
+						var data = dataStr;
+					else
+						var data = tst[1];
 					
 					var dataHTML = FGS.HTMLParser(data);
 					

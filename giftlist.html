@@ -62,11 +62,18 @@ function addDataToScreenLocked(callback, id, data)
 	function hiddenFeed(gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
-		var opt = 'BonusesPendingList';
+		var el1		= $('div#'+game+'BonusesPendingList');
+		var el2 	= $('div#'+game+'ManualBonusesList');
+				
+		var text = '<strong>There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</strong><br /><br />';
 		
-		if($('div#'+game+opt, '#'+game+'Game').children('div').length == 0)
+		if(el1.length > 0)
 		{
-			$('div#'+game+opt, '#'+game+'Game').html('<h3 class="fvBonusErr">There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</h3><br style="clear:both" />');
+			$(el1).prev().css('height', 'auto !important').find('.submenuInfo').html(text);
+		}
+		else if(el2.length > 0)
+		{
+			$(el2).prev().css('height', 'auto !important').find('.submenuInfo').html(text);			
 		}
 	}
 	
@@ -100,21 +107,23 @@ function addDataToScreenLocked(callback, id, data)
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 		
+		var el = $('.sendToGiftsList','div#'+game+opt);
+		
 		for(var id in bkP.giftsArray[gameID])
 		{
 			var v = bkP.giftsArray[gameID][id];
-			$('.sendToGiftsList','div#'+game+opt).append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
+			el.append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
 		}
 		
 		if(bkP.options.games[gameID].defaultGift == 0)
 		{
-			$('.sendToGiftsList','div#'+game+opt).children('div:first').addClass('selected');
+			el.children('div:first').addClass('selected');
 		}
 		else
 		{
-			$('.sendToGiftsList','div#'+game+opt).children('div[giftID="'+bkP.options.games[gameID].defaultGift+'"]').addClass('selected');
+			el.children('div[giftID="'+bkP.options.games[gameID].defaultGift+'"]').addClass('selected');
 		}
-		$('.sendToGiftsList','div#'+game+opt).append('<br class="clear" style="clear:both"/>');
+		el.append('<br class="clear" style="clear:both"/>');
 	}
 	
 	function SendGifts(gameID)
@@ -235,7 +244,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';		
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem '+classHide+' showContext updateTimeAgo awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem '+classHide+' showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewRequestRow(gameID, v)
@@ -255,7 +264,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem '+classHide+' showContextRequests updateTimeAgo awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem '+classHide+' showContextRequests updateTimeAgo processRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewManualBonusRow(gameID, v)
@@ -265,7 +274,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem '+classHide+' showContextManual updateTimeAgo manualBonus awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem '+classHide+' showContextManual updateTimeAgo manualBonus processManualBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewManualRequestRow(gameID, v)
@@ -285,30 +294,29 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest awaitingClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest processManualRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	
-	function processManualBonusClick(e)
+	function processManualBonusClick(el)
 	{
-		var gameID = $(e.currentTarget).attr('gameID');
-		$(e.currentTarget).unbind('click');
-		var URI = $(e.currentTarget).attr('url');
-		$(e.currentTarget).remove();
-		bkP.database.deleteItem('bonuses', gameID, $(e.currentTarget).attr('id'), 0);
-		bkP.database.deleteItem('bonuses', gameID, $(e.currentTarget).attr('id'), 1);
+		var gameID = el.attr('gameID');
+		el.unbind('click');
+		var URI = el.attr('url');
+		el.remove();
+		bkP.database.deleteItem('bonuses', gameID, el.attr('id'), 0);
+		bkP.database.deleteItem('bonuses', gameID, el.attr('id'), 1);
 		bkP.openURI(URI, true);
 		updateCount(gameID);
 	}
 	
-	function processManualRequestClick(e)
+	function processManualRequestClick(el)
 	{
-		var gameID = $(e.currentTarget).attr('gameID');
-		$(e.currentTarget).unbind('click');
-		bkP.database.deleteItem('requests', gameID, $(e.currentTarget).attr('id'), 0);
-		bkP.database.deleteItem('requests', gameID, $(e.currentTarget).attr('id'), 1);
-		bkP.getRequestLink($(e.currentTarget).attr('id'), $(e.currentTarget).attr('postData')+'&post_form_id='+bkP.post_form_id+'&fb_dtsg='+bkP.fb_dtsg);
-		$(e.currentTarget).remove();
+		var gameID = el.attr('gameID');
+		bkP.database.deleteItem('requests', gameID, el.attr('id'), 0);
+		bkP.database.deleteItem('requests', gameID, el.attr('id'), 1);
+		bkP.getRequestLink(el.attr('id'), el.attr('postData'));
+		el.remove();
 		updateCount(gameID);
 	}
 	
@@ -317,7 +325,8 @@ function addDataToScreenLocked(callback, id, data)
 		var gameID = data2[0][1];
 		var game = bkP.gamesData[gameID].systemName;
 		
-		$('div#'+game+'BonusesPendingList', '#'+game+'Game').find('.fvBonusErr').remove();		
+		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().find('.submenuInfo').html('');
+		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().find('.submenuInfo').html('');
 		
 		var html = '';
 		var htmlManual = '';
@@ -338,10 +347,7 @@ function addDataToScreenLocked(callback, id, data)
 		});
 
 		$('div#'+game+'ManualBonusesList').prepend(htmlManual);
-		$('div#'+game+'ManualBonusesList').children('div.manualBonus.awaitingClick').removeClass('awaitingClick').click(processManualBonusClick);
-		
 		$('div#'+game+'BonusesPendingList').prepend(html);
-		$('div#'+game+'BonusesPendingList').children('div.awaitingClick').removeClass('awaitingClick').click(processBonusClick);
 
 		if($('div#'+game+'BonusesPendingList:visible').length > 0)
 		{
@@ -361,14 +367,16 @@ function addDataToScreenLocked(callback, id, data)
 		}
 	}
 	
-	function processBonusClick(e)
+	function processBonusClick(el)
 	{
-		var gameID = $(e.currentTarget).attr('gameID');
+		if(el.hasClass('inProgress')) return;
+		
+		var gameID = el.attr('gameID');
 		var game =  bkP.gamesData[gameID].systemName;
 		
-		$(e.currentTarget).disableContextMenu().unbind('click').addClass('inProgress');
+		el.disableContextMenu().unbind('click').addClass('inProgress');
 		
-		var img = $(e.currentTarget).find('img:last');
+		var img = el.find('img:last');
 		
 		if(img.attr('src'))
 			var orig = img.attr('src');
@@ -383,26 +391,28 @@ function addDataToScreenLocked(callback, id, data)
 		img.attr('orig-src', orig).attr('src', 'gfx/dl.gif').css({ width: '64px', height: '64px'});
 		
 		var obj = {
-					id: $(e.currentTarget).attr('id'),
-					url: $(e.currentTarget).attr('url'),
+					id: el.attr('id'),
+					url: el.attr('url'),
 					game: game,
 					type: 'bonus',
-					title: $(e.currentTarget).attr('search-title')
+					title: el.attr('search-title')
 				}
 		
 		bkP.xhrQueue.push(obj);
 		updateQueueCount();
 	}
 	
-	function processRequestsClick(e)
+	function processRequestClick(el)
 	{
-		var gameID = $(e.currentTarget).attr('gameID');
+		if(el.hasClass('inProgress')) return;
+		
+		var gameID = el.attr('gameID');
 		var game =  bkP.gamesData[gameID].systemName;
 		
-		$(e.currentTarget).disableContextMenu().unbind('click').addClass('inProgress');
+		el.disableContextMenu().unbind('click').addClass('inProgress');
 		
 		
-		var img = $(e.currentTarget).find('img:last');
+		var img = el.find('img:last');
 		
 		if(img.attr('src'))
 			var orig = img.attr('src');
@@ -417,24 +427,22 @@ function addDataToScreenLocked(callback, id, data)
 		img.attr('orig-src', orig).attr('src', 'gfx/dl.gif').css({ width: '64px', height: '64px'});
 		
 		var obj = {
-					id: $(e.currentTarget).attr('id'),
-					post: $(e.currentTarget).attr('postData')+'&post_form_id='+bkP.post_form_id+'&fb_dtsg='+bkP.fb_dtsg,
+					id: el.attr('id'),
+					post: el.attr('postData'),
 					game: game,
 					type: 'request',
-					title: $(e.currentTarget).attr('search-title')
+					title: el.attr('search-title')
 				}
 		
 		bkP.xhrQueue.push(obj);
 		updateQueueCount();
-		
-		//bkP.prepareLinkForGame(game,$(e.currentTarget).attr('id'), );
 	}
 	
 	function ReceivePendingBonuses(gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
-			$(this).trigger('click');
+			processBonusClick(this);
 		});
 	}
 	
@@ -442,20 +450,20 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
-			$(this).trigger('click');
+			processRequestClick(this);
 		});
 	}
 	
 	function bonusError(id, data)
 	{
-	
-		$('#'+id).find('img:last').attr('src', 'gfx/90px-cancel.png');
+		var el = $('#'+id);
+		el.find('img:last').attr('src', 'gfx/90px-cancel.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined' && data.error_text != '' ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
 		
-		$('#'+id).find('.bonusError').html('('+data.error+' error)'+error_text);
+		el.find('.bonusError').html('('+data.error+' error)'+error_text);
 		
-		var gameID = $('#'+id).attr('gameID');
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		updateQueueCount();
@@ -472,29 +480,30 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function bonusErrorFinish(id, data)
 	{
-		var gameID = $('#'+id).attr('gameID');
+		var el = $('#'+id);
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		if(data.error == 'connection' || data.error == 'other')
 		{
 			setTimeout(function() {
-				$('#'+id).enableContextMenu().click(processBonusClick).removeClass('inProgress');
-				$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				el.enableContextMenu().removeClass('inProgress');
+				el.find('img:last').attr('src', el.find('img:last').attr('orig-src'));
 			}, 1000);
 		}
 		else
 		{
 			setTimeout(function()
 			{
-				$('#'+id).addClass('withDesc');
-				$('#'+id).unbind('mousedown').unbind('contextmenu').unbind('mouseup').die().prependTo('#'+game+'FailedBonusesList');
-				$('#'+id).removeClass('hide').attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
-				
-				$('#'+id).find('.description').removeClass('hide');
+				el.addClass('withDesc');
+				el.unbind('mousedown').unbind('contextmenu').unbind('mouseup').die().prependTo('#'+game+'FailedBonusesList');
+				el.removeClass('hide').attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
+				el.find('.description').removeClass('hide');
+				el.removeClass('processBonusClick');
 				
 				if(data.error == 'receiving')
 				{
-					$('div#'+id).css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualBonusClick);
+					el.addClass('processManualBonusClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
 				}
 				
 				updateCount(gameID);
@@ -509,13 +518,14 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function bonusSuccess(id, data)
 	{
-		$('#'+id).find('img:last').attr('src', 'gfx/90px-check.png');
+		var el = $('#'+id);
+		el.find('img:last').attr('src', 'gfx/90px-check.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined' && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
 		
-		$('#'+id).find('.bonusError').html(error_text);
+		el.find('.bonusError').html(error_text);
 		
-		var gameID = $('#'+id).attr('gameID');
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		updateQueueCount();
@@ -532,28 +542,29 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function bonusSuccessFinish(id, data)
 	{
-		var gameID = $('#'+id).attr('gameID');
+		var el = $('#'+id);
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 	
 		setTimeout(function() 
 		{
-			$('#'+id).addClass('withDesc');
-			$('#'+id).prependTo('#'+game+'BonusesHistoryList');
-			$('#'+id).removeClass('hide').removeClass('inProgress');
+			el.addClass('withDesc');
+			el.prependTo('#'+game+'BonusesHistoryList');
+			el.removeClass('hide').removeClass('inProgress');
 
 			if(data.image !== '')
 			{
-				$('#'+id).find('img:last').attr('src', data.image);
+				el.find('img:last').attr('src', data.image);
 			}
 			else
 			{
-				$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				el.find('img:last').attr('src', el.find('img:last').attr('orig-src'));
 			}
 			
 			
 			if(data.title != '')
 			{
-				$('#'+id).find('.title').text(data.title);
+				el.find('.title').text(data.title);
 			}
 			
 			
@@ -564,30 +575,28 @@ function addDataToScreenLocked(callback, id, data)
 				infoAdd = JSON.stringify(data.thanks);
 			}
 			
-			$('#'+id).find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false));
-			$('#'+id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
-			$('#'+id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
-			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);
+			el.find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false));
 			
-			if(typeof $('#'+id).attr('isLiked') !== 'undefined')
+			if(typeof el.attr('isLiked') !== 'undefined')
 			{
 				updateLikeState('#'+id, 0);
 			}
 			
-			if(typeof $('#'+id).attr('isCommented') !== 'undefined')
+			if(typeof el.attr('isCommented') !== 'undefined')
 			{
 				updateCommentState('#'+id, 0);
 			}
 			
-			$('#'+id).find('.description').removeClass('hide');
+			el.find('.description').removeClass('hide');
 			
 			if(data.text != '')
 			{
-				$('#'+id).attr('title', data.text);
-				$('#'+id).find('.description').removeClass('hide').html(data.text);
+				el.attr('title', data.text);
+				el.find('.description').removeClass('hide').html(data.text);
 			}
 			
-			$('#'+id).attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
+			el.removeClass('processBonusClick');
+			el.attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
 			updateCount(gameID);
 			
 			if($('div#'+game+'BonusesPendingList:visible').length > 0)
@@ -660,13 +669,14 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function requestError(id, data)
 	{
-		$('#'+id).find('img:last').attr('src', 'gfx/90px-cancel.png');
+		var el = $('#'+id);
+		el.find('img:last').attr('src', 'gfx/90px-cancel.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined'  && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
 		
-		$('#'+id).find('.bonusError').html('('+data.error+' error)'+error_text);
+		el.find('.bonusError').html('('+data.error+' error)'+error_text);
 		
-		var gameID = $('#'+id).attr('gameID');
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		updateQueueCount();
@@ -684,29 +694,29 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function requestErrorFinish(id, data)
 	{
-		var gameID = $('#'+id).attr('gameID');
+		var el = $('#'+id);
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		if(data.error == 'connection')
 		{
 			setTimeout(function() {
-				$('#'+id).enableContextMenu().click(processRequestsClick).removeClass('inProgress');
-				$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				el.enableContextMenu().removeClass('inProgress');
+				el.find('img:last').attr('src', el.find('img:last').attr('orig-src'));
 			}, 1000);
 		}
 		else
 		{
 			setTimeout(function() {
-				$('#'+id).addClass('withDesc').unbind('mousedown').unbind('contextmenu').unbind('mouseup').die().prependTo('#'+game+'FailedGiftsList');
-				$('#'+id).attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
-				
-				$('#'+id).find('.description').removeClass('hide');
+				el.addClass('withDesc').unbind('mousedown').unbind('contextmenu').unbind('mouseup').die().prependTo('#'+game+'FailedGiftsList');
+				el.attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
+				el.find('.description').removeClass('hide');
+				el.removeClass('processRequestClick');
 				
 				if(data.error == 'receiving')
 				{
-					$('div#'+id).css('cursor', 'pointer !important').attr('title', 'Click to manually receive').click(processManualRequestClick);
+					el.addClass('processManualRequestClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
 				}				
-				
 				updateCount(gameID);
 			}, 1000);
 		}
@@ -714,12 +724,13 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function requestSuccess(id, data)
 	{
-		$('#'+id).find('img:last').attr('src', 'gfx/90px-check.png');
+		var el = $('#'+id);
+		el.find('img:last').attr('src', 'gfx/90px-check.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined'  && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');		
-		$('#'+id).find('.bonusError').html(error_text);
+		el.find('.bonusError').html(error_text);
 		
-		var gameID = $('#'+id).attr('gameID');
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		updateQueueCount();
@@ -738,26 +749,28 @@ function addDataToScreenLocked(callback, id, data)
 	
 	function requestSuccessFinish(id, data)
 	{
-		var gameID = $('#'+id).attr('gameID');
+		var el = $('#'+id);
+		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		
 		setTimeout(function() {
-			$('#'+id).prependTo('#'+game+'RequestsHistoryList');
-			$('#'+id).addClass('withDesc').removeClass('inProgress');
+			el.prependTo('#'+game+'RequestsHistoryList');
+			el.addClass('withDesc').removeClass('inProgress');
+			el.removeClass('processRequestClick');
 			
 			if(data.image !== '')
 			{
-				$('#'+id).find('img:last').attr('src', data.image);
+				el.find('img:last').attr('src', data.image);
 			}
 			else
 			{
-				$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
+				el.find('img:last').attr('src', el.find('img:last').attr('orig-src'));
 			}
 			
 			
 			if(data.title != '')
 			{
-				$('#'+id).find('.title').text(data.title);
+				el.find('.title').text(data.title);
 			}
 
 			
@@ -767,24 +780,21 @@ function addDataToScreenLocked(callback, id, data)
 			{
 				if(data.thanks != '' && typeof(data.thanks.gift) != 'undefined' && data.image != '')
 				{
-					if($('#'+id).attr('isMissingImage'))
+					if(el.attr('isMissingImage'))
 						$.getJSON('http://rzadki.eu/projects/fgs/jsonp/gifts.php?callback=?', {gameID: gameID, gift: data.thanks.gift, image: data.image});
 				}
 				infoAdd = JSON.stringify(data.thanks);
 			}
 			
-			$('#'+id).find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false, true));
-			$('#'+id).find('.bonusError').find('.likeBonus').click(processLikeBonus);
-			$('#'+id).find('.bonusError').find('.commentBonus').click(processCommentBonus);
-			$('#'+id).find('.bonusError').find('.sendBack').click(processSendBack);	
+			el.find('.bonusError').css('height', '23px').html(addLikeRow(false, infoAdd, false, true));
 			
-			if(typeof $('#'+id).attr('SendbackInProgress') !== 'undefined')
+			if(typeof el.attr('SendbackInProgress') !== 'undefined')
 			{
 				updateSendbackState('#'+id);
 			}
 			
-			$('#'+id).find('.title').next('span').removeClass('hide').text(data.text);
-			$('#'+id).attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
+			el.find('.title').next('span').removeClass('hide').text(data.text);
+			el.attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
 			updateCount(gameID);
 		}, 1000);
 	}
@@ -1136,10 +1146,7 @@ function addDataToScreenLocked(callback, id, data)
 		{
 			var game = bkP.gamesData[tmp].systemName;
 			$('div#'+game+'ManualBonusesList').prepend(htmlsManual[tmp]);
-			$('div#'+game+'ManualBonusesList').children('div.manualRequest.awaitingClick').removeClass('awaitingClick').click(processManualRequestClick);
-			
 			$('div#'+game+'RequestsPendingList').prepend(htmls[tmp]);
-			$('div#'+game+'RequestsPendingList').children('div.awaitingClick').removeClass('awaitingClick').click(processRequestsClick);
 		}
 		
 		if($('div#'+game+'RequestsPendingList:visible').length > 0)
@@ -1303,9 +1310,9 @@ function addDataToScreenLocked(callback, id, data)
 
 		var error_text = (errorText != '' ? ' <img src="gfx/info.png" title="'+errorText+'" />' : '');		
 		
-		var err = (v.error == error_text ? addLikeRow(v.like_bonus, v.resend_gift, v.comment_bonus) : '('+v.error+' error)'+error_text);
+		var err = (v.error == error_text ? addLikeRow(v.like_bonus, v.resend_gift, v.comment_bonus) : '('+v.error+' error)'+error_text)
 		
-		if(v.image == 'undefined' && err == '')
+		if(v.image == 'undefined' && error_text == '')
 		{
 			var showImage = 'gfx/90px-check.png';
 		}
@@ -1319,7 +1326,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(v.error == 'receiving')
 		{
-			addClass = ' receivingErrorClass ';
+			addClass = ' processManualBonusClick ';
 		}
 		else if(v.error == '')
 		{
@@ -1348,7 +1355,7 @@ function addDataToScreenLocked(callback, id, data)
 		var addClass = '';
 		if(v.error == 'receiving')
 		{
-			addClass = ' receivingErrorClass ';
+			addClass = ' processManualRequestClick ';
 		}
 		else if(v.error == '')
 		{
@@ -1368,7 +1375,7 @@ function addDataToScreenLocked(callback, id, data)
 		else
 		{
 			if(status.length == 0)
-				var html = '<h3 class="center">Currently there are no people for this game, that are looking for neighbours.</h3>';
+				var html = '<h3 class="center">Currently there are no people for this game, that are looking for neighbors.</h3>';
 			else
 			{
 				var html = '<h3 class="center">These people are looking for new neighbors:</h3>';
@@ -1393,7 +1400,7 @@ function addDataToScreenLocked(callback, id, data)
 			return;
 		}
 		
-		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center">Found people:</h2> <div class="searchForPeopleList"><h3 class="center"><img src="gfx/loading.gif"><br />Looking for people who are not already your neighbours... Please wait...</h3></div>');
+		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center">Found people:</h2> <div class="searchForPeopleList"><h3 class="center"><img src="gfx/loading.gif"><br />Looking for people who are not already your neighbors... Please wait...</h3></div>');
 		
 		bkP.searchForNeighbors.Step1(gameID);
 	}
@@ -1457,18 +1464,6 @@ function addDataToScreenLocked(callback, id, data)
 			
 			$('.sendToNeighboursList','div#'+game+opt).parent().find('.hide').not('td > span').removeClass('hide');
 			$('#'+game+'SendFreeGifts > .submenu > button').removeClass('hide');
-			
-			
-			/*
-			$('.addToSendFav',$('.sendToNeighboursList','div#'+game+opt)).bind('click',processAddFavourite);
-			
-			
-			
-			$(bkP.options.games[gameID].favourites).each(function(k,v)
-			{
-				$('input[neighID="'+v+'"]', 'div#'+game+opt).siblings('img').trigger('click');
-			});
-			*/
 		}
 		
 		
@@ -1479,7 +1474,7 @@ function addDataToScreenLocked(callback, id, data)
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 		
-		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center hide">Favourite neighbours:</h2> <div class="sendToFavouritesList hide"></div> <h2 class="center hide">Gifts list:</h2> <div class="hide sendToGiftsList"></div> <h2 class="center">Neighbours list:</h2> <div class="sendToNeighboursList"><h3 class="center"><img src="gfx/loading.gif"><br />Loading your neighbours... Please wait...</h3></div>');
+		$('div#'+game+opt, '#'+game+'Game').html('<h2 class="center hide">Favourite neighbors:</h2> <div class="sendToFavouritesList hide"></div> <h2 class="center hide">Gifts list:</h2> <div class="hide sendToGiftsList"></div> <h2 class="center">Neighbors list:</h2> <div class="sendToNeighboursList"><h3 class="center"><img src="gfx/loading.gif"><br />Loading your neighbors... Please wait...</h3></div>');
 		
 		listGifts(gameID);
 		
@@ -1962,7 +1957,7 @@ function processSwitchItemsDisplay(gameID, target)
 	
 	if($('input.ShowAllItems', elSub).button().is(':checked'))
 	{
-		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL bonuses</h3>');
+		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
 		el.children('div').not('.hideScreenLocked').removeClass('hide');		
 		appendSrcToImages(el.attr('id'));
 		switchDescriptions(el.attr('id'), showDesc);
@@ -1971,12 +1966,12 @@ function processSwitchItemsDisplay(gameID, target)
 	
 	if(total > 100)
 	{
-		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing 100 bonuses (total: '+total+')</h3>');
+		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing 100 items (total: '+total+')</h3>');
 		$('input.ShowAllItems', elSub).next().removeClass('hide');
 	}
 	else
 	{
-		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL bonuses</h3>');
+		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
 		$('input.ShowAllItems', elSub).next().addClass('hide');
 	}
 	el.children('div:gt(99)').not('.hideScreenLocked').addClass('hide');
@@ -2122,7 +2117,7 @@ function updateTimeAgo(target)
 		$(window).click(function(e)
 		{
 			var el = $(e.srcElement);
-		
+			
 			if(el.hasClass('gameSelectorInput'))
 				return processGameSelectorInput(el);
 			else if(el.hasClass('gameEnabledBox'))
@@ -2154,6 +2149,24 @@ function updateTimeAgo(target)
 			else if(el.hasClass('ShowAllItems') || el.hasClass('ShowDescriptions'))
 				return processSwitchItemsDisplay(el.attr('gameID'), el.attr('processTab'));
 			
+			else if(el.closest('div').hasClass('processManualRequestClick'))
+				return processManualRequestClick(el.closest('div'));
+				
+			else if(el.closest('div').hasClass('processManualBonusClick'))
+				return processManualBonusClick(el.closest('div'));
+			
+			else if(el.closest('div').hasClass('processBonusClick'))
+				return processBonusClick(el.closest('div'));
+			else if(el.closest('div').hasClass('processRequestClick'))
+				return processRequestClick(el.closest('div'));
+			
+			else if(el.hasClass('likeBonus'))
+				return processLikeBonus(el);
+			else if(el.hasClass('sendBack'))
+				return processSendBack(el);
+			else if(el.hasClass('likeBonus'))
+				return processCommentBonus(el);
+				
 			if(el.attr('id') == 'saveNewComment')
 				return processSaveNewComment(el);
 		})
@@ -2228,17 +2241,19 @@ function updateTimeAgo(target)
 				
 				if(action == 'receive')
 				{
-					$(el).trigger('click');
+					processBonusClick(el);
 				}
 				else if(action == 'receiveSimilar')
 				{
-					$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').trigger('click');
+					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
+						processBonusClick(this);
+					});
 				}
 				else if(action == 'delete')
 				{
-					$(el).remove();
-					bkP.database.deleteItem('bonuses', $(el).attr('gameID'), $(el).attr('id'), 0);
-					updateCount($(el).attr('gameID'));
+					el.remove();
+					bkP.database.deleteItem('bonuses', el.attr('gameID'), el.attr('id'), 0);
+					updateCount(el.attr('gameID'));
 				}
 				else if(action == 'deleteSimilar')
 				{
@@ -2247,12 +2262,12 @@ function updateTimeAgo(target)
 						{
 							"Delete all items": function()
 							{
-								$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
-								bkP.database.deleteItemByTitle('bonuses', $(el).attr('gameID'), $(el).attr('search-title'), 0);
-								updateCount($(el).attr('gameID'));
+								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('search-title'), 0);
+								updateCount(el.attr('gameID'));
 								
 								$( this ).dialog( "close" );
 							},
@@ -2270,14 +2285,14 @@ function updateTimeAgo(target)
 						{
 							"Stop collecting": function()
 							{
-								bkP.options.games[$(el).attr('gameID')].filter.push($(el).attr('search-title'));
+								bkP.options.games[el.attr('gameID')].filter.push(el.attr('search-title'));
 								bkP.saveOptions();
-								$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
-								bkP.database.deleteItemByTitle('bonuses', $(el).attr('gameID'), $(el).attr('search-title'), 0);
-								updateCount($(el).attr('gameID'));
+								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('search-title'), 0);
+								updateCount(el.attr('gameID'));
 								
 								$( this ).dialog( "close" );
 							},
@@ -2290,10 +2305,81 @@ function updateTimeAgo(target)
 				}
 				else if(action == 'debug')
 				{
-					bkP.openURI($(el).attr('url'), true);
+					bkP.openURI(el.attr('url'), true);
 				}
 			});
 		});
+		
+		$(".showContextRequests").live('mouseenter', function()
+		{
+			if($(this).hasClass('hasContextMenu'))
+			{
+				return;
+			}
+			$(this).addClass('hasContextMenu').contextMenu({
+				menu: 'myMenuRequests'
+			}, function(action, el, pos) {
+				
+				if(action == 'receive')
+				{
+					processRequestClick(el);
+				}
+				else if(action == 'receiveSimilar')
+				{
+					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
+						processRequestClick(this);
+					});
+				}
+				else if(action == 'delete')
+				{
+					var postData = el.attr('postData');
+					var pos1 = postData.indexOf('&actions%5B');
+					
+					var postData = postData.slice(0,pos1);
+					postData += '&actions[reject]=Ignore';
+					el.remove();
+					bkP.database.deleteItem('requests', el.attr('gameID'), el.attr('id'), 0);
+					updateCount(el.attr('gameID'));
+					
+					bkP.emptyUnwantedGifts(postData);
+				}
+				else if(action == 'deleteSimilar')
+				{
+					$('#dialog-confirm').dialog({
+						buttons:
+						{
+							"Delete all items": function()
+							{
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								{
+									var postData = $(this).attr('postData');
+									var pos1 = postData.indexOf('&actions%5B');
+									
+									var postData = postData.slice(0,pos1);
+									postData += '&actions[reject]=Ignore';
+									$(this).remove();
+									bkP.emptyUnwantedGifts(postData);
+								});
+								
+								bkP.database.deleteItemByTitle('requests', el.attr('gameID'), el.attr('origTitle'), 0);
+								updateCount(el.attr('gameID'));
+								
+								$( this ).dialog( "close" );
+							},
+							Cancel: function() {
+								$( this ).dialog( "close" );
+							}
+					}});
+					
+					$('#dialog-confirm').dialog('open');
+				}
+				else if(action == 'debug')
+				{
+					bkP.getRequestLink(el.attr('id'), el.attr('postData'));
+				}
+			});
+		});
+		
 		
 		$(".showContextManual").live('mouseenter', function()
 		{
@@ -2312,14 +2398,14 @@ function updateTimeAgo(target)
 						{
 							"Stop collecting": function()
 							{
-								bkP.options.games[$(el).attr('gameID')].filter.push($(el).attr('search-title'));
+								bkP.options.games[el.attr('gameID')].filter.push(el.attr('search-title'));
 								bkP.saveOptions();
-								$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
-								bkP.database.deleteItemByTitle('bonuses', $(el).attr('gameID'), $(el).attr('title-search'), 0);
-								updateCount($(el).attr('gameID'));
+								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('title-search'), 0);
+								updateCount(el.attr('gameID'));
 								
 								$( this ).dialog( "close" );
 							},
@@ -2344,86 +2430,16 @@ function updateTimeAgo(target)
 			{
 				if(action == 'selectDefault')
 				{
-					$(el).siblings(".selectGiftToSend").removeClass('selected');
-					$(el).addClass('selected');
+					el.siblings(".selectGiftToSend").removeClass('selected');
+					el.addClass('selected');
 					
-					bkP.options.games[$(el).attr('gameID')].defaultGift = $(el).attr('giftID');					
+					bkP.options.games[el.attr('gameID')].defaultGift = el.attr('giftID');					
 					bkP.saveOptions();
 				}
 			}).click(function(){
 				$(this).siblings("div.selectGiftToSend").removeClass('selected');
 				$(this).addClass('selected');
 			});
-		});
-		
-		$(".showContextRequests").live('mouseenter', function()
-		{
-			if($(this).hasClass('hasContextMenu'))
-			{
-				return;
-			}
-			$(this).addClass('hasContextMenu').contextMenu({
-				menu: 'myMenuRequests'
-			}, function(action, el, pos) {
-				
-				if(action == 'receive')
-				{
-					$(el).trigger('click');
-				}
-				else if(action == 'receiveSimilar')
-				{
-					$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').trigger('click');
-				}
-				else if(action == 'delete')
-				{
-					var postData = $(el).attr('postData');
-					var pos1 = postData.indexOf('&actions%5B');
-					
-					var postData = postData.slice(0,pos1);
-					postData += '&actions[reject]=Ignore';
-					$(el).remove();
-					bkP.database.deleteItem('requests', $(el).attr('gameID'), $(el).attr('id'), 0);
-					updateCount($(el).attr('gameID'));
-					
-					bkP.emptyUnwantedGifts(postData);
-				}
-				else if(action == 'deleteSimilar')
-				{
-					$('#dialog-confirm').dialog({
-						buttons:
-						{
-							"Delete all items": function()
-							{
-								$(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
-								{
-									var postData = $(this).attr('postData');
-									var pos1 = postData.indexOf('&actions%5B');
-									
-									var postData = postData.slice(0,pos1);
-									postData += '&actions[reject]=Ignore';
-									$(this).remove();
-									bkP.emptyUnwantedGifts(postData);
-								});
-								
-								bkP.database.deleteItemByTitle('requests', $(el).attr('gameID'), $(el).attr('origTitle'), 0);
-								updateCount($(el).attr('gameID'));
-								
-								$( this ).dialog( "close" );
-							},
-							Cancel: function() {
-								$( this ).dialog( "close" );
-							}
-					}});
-					
-					$('#dialog-confirm').dialog('open');
-				}
-				else if(action == 'debug')
-				{
-					bkP.getRequestLink($(el).attr('id'), $(el).attr('postData')+'&post_form_id='+bkP.post_form_id+'&fb_dtsg='+bkP.fb_dtsg);
-				}
-			});
-			
-			
 		});
 
 		$( "#dialog-confirm" ).dialog({
@@ -2434,6 +2450,13 @@ function updateTimeAgo(target)
 		});
 		
 		$( "#dialog-error" ).dialog({
+			resizable: false,
+			autoOpen: false,
+			height:'auto',
+			modal: true
+		});
+		
+		$( "#dialog-normal" ).dialog({
 			resizable: false,
 			autoOpen: false,
 			height:'auto',
@@ -2497,12 +2520,12 @@ function updateTimeAgo(target)
 				
 				if(v.type == 'bonus')
 				{
-					$('#'+id).enableContextMenu().click(processBonusClick).removeClass('inProgress');
+					$('#'+id).enableContextMenu().removeClass('inProgress');
 					$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
 				}
 				else
 				{
-					$('#'+id).enableContextMenu().click(processRequestsClick).removeClass('inProgress');
+					$('#'+id).enableContextMenu().removeClass('inProgress');
 					$('#'+id).find('img:last').attr('src', $('#'+id).find('img:last').attr('orig-src'));
 				}
 			});
@@ -2626,17 +2649,17 @@ function updateTimeAgo(target)
 		bkP.saveOptions();
 	}
 	
-	function processLikeBonus()
+	function processLikeBonus(el)
 	{
-		if(!$(this).hasClass('disabledLike'))
+		if(!el.hasClass('disabledLike'))
 		{
-			var bonusID = $(this).parent().parent().parent().parent().attr('id');
-			$(this).attr('src', 'gfx/act_indicator.gif');
+			var bonusID = el.parent().parent().parent().parent().attr('id');
+			el.addClass('disabledLike').attr('src', 'gfx/act_indicator.gif');
 			bkP.likeBonus(bonusID);
 		}
 	}
 
-	function processCommentBonus()
+	function processCommentBonus(el)
 	{
 		if(bkP.options.defaultCommentsMessages.length == 0)
 		{
@@ -2644,26 +2667,26 @@ function updateTimeAgo(target)
 		}
 		else
 		{
-			if(!$(this).hasClass('disabledComment'))
+			if(!el.hasClass('disabledComment'))
 			{
 				var randNum = Math.floor(Math.random()*(bkP.options.defaultCommentsMessages.length));
-				var bonusID = $(this).parent().parent().parent().parent().attr('id');
-				$(this).attr('src', 'gfx/act_indicator.gif');
+				var bonusID = el.parent().parent().parent().parent().attr('id');
+				el.addClass('disabledComment').attr('src', 'gfx/act_indicator.gif');
 				bkP.commentBonus(bonusID, bkP.options.defaultCommentsMessages[randNum]);
 			}
 		}
 	}
 	
-	function processSendBack()
+	function processSendBack(el)
 	{
-		if(!$(this).hasClass('disabledSendback'))
+		if(!el.hasClass('disabledSendback'))
 		{
-			var bonusID = $(this).parent().parent().parent().parent().attr('id');
-			$(this).attr('src', 'gfx/act_indicator.gif');
+			var bonusID = el.parent().parent().parent().parent().attr('id');
+			el.addClass('disabledSendback').attr('src', 'gfx/act_indicator.gif');
 
-			var gameID =  $(this).parent().parent().parent().parent().attr('gameID');
+			var gameID =  el.parent().parent().parent().parent().attr('gameID');
 			
-			var tempData = JSON.parse($(this).next().text());
+			var tempData = JSON.parse(el.next().text());
 			
 			var params = {
 				gift: tempData.gift,
@@ -2672,7 +2695,7 @@ function updateTimeAgo(target)
 				sendToName: tempData.destName,
 				thankYou: true,
 				bonusID: bonusID,	
-				isRequest: $(this).parent().parent().parent().parent().hasClass('bonusItem') ? false : true
+				isRequest: el.parent().parent().parent().parent().hasClass('bonusItem') ? false : true
 			};
 			
 			var game = bkP.gamesData[gameID].systemName;
@@ -2685,11 +2708,11 @@ function updateTimeAgo(target)
 	{
 		if(success)
 		{
-			$('img.sendBack', '#'+bonusID).removeClass('sendBack').attr('src', 'gfx/sendback-off.png').css('cursor', 'default').attr('title', 'You already sent gift back');
+			$('img.sendBack', '#'+bonusID).addClass('disabledSendback').removeClass('sendBack').attr('src', 'gfx/sendback-off.png').css('cursor', 'default').attr('title', 'You already sent gift back');
 		}
 		else
 		{
-			$('img.sendBack', '#'+bonusID).attr('src', 'gfx/sendback.png');
+			$('img.sendBack', '#'+bonusID).removeClass('disabledSendback').attr('src', 'gfx/sendback.png');
 		}
 	}
 	
@@ -2719,7 +2742,7 @@ function updateTimeAgo(target)
 		}
 		else
 		{
-			$('img.likeBonus', selector).attr('src', 'gfx/like.png');
+			$('img.likeBonus', selector).removeClass('disabledLike').attr('src', 'gfx/like.png');
 		}
 	}
 	
@@ -2731,7 +2754,7 @@ function updateTimeAgo(target)
 		}
 		else
 		{
-			$('img.commentBonus', selector).attr('src', 'gfx/comment.png');
+			$('img.commentBonus', selector).removeClass('disabledComment').attr('src', 'gfx/comment.png');
 		}
 	}
 	
@@ -2995,6 +3018,10 @@ function compareTime(itemTime, olderThan)
 		<h3 class="center"><img src="gfx/dl.gif"><br />FGS is loading... Please wait.</h3><br /><br />
 		<span>(It may take a few minutes if you've got many bonuses in the database. If it takes very long - consider using Panic Button option)</span><br />
 		<div id="progressbar"></div>
+	</div>
+	
+	<div id="dialog-normal" title="Information window">
+		
 	</div>
 
 
