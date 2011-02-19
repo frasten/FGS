@@ -1,4 +1,4 @@
-﻿FGS.farmvillechineseFreegifts = 
+FGS.farmvillechinese.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -17,7 +17,7 @@
 					var tst = new RegExp(/<iframe[^>].*src=\s*["](.*farmvillechinese.com\/flash.php.*[^"]+)[^>]*>*?.*?<\/iframe>/gm).exec(dataStr);
 					if(tst == null) throw {message:'no farmvillechinese iframe tag'}
 					params.click2url = $(FGS.HTMLParser('<p class="link" href="'+tst[1]+'">abc</p>')).find('p.link').attr('href');
-					FGS.farmvillechineseFreegifts.Click2(params);
+					FGS.farmvillechinese.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -82,7 +82,7 @@
 					if(tst == null) throw {message:'no zy_params'}
 					params.zyParam = tst[1];
 					
-					FGS.farmvillechineseFreegifts.Click3(params);
+					FGS.farmvillechinese.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -201,7 +201,7 @@
 };
 
 
-FGS.farmvillechineseRequests = 
+FGS.farmvillechinese.Requests = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -372,7 +372,7 @@ FGS.farmvillechineseRequests =
 };
 
 
-FGS.farmvillechineseBonuses = 
+FGS.farmvillechinese.Bonuses = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{

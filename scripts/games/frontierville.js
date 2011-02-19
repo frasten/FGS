@@ -1,4 +1,4 @@
-FGS.frontiervilleFreegifts = 
+FGS.frontierville.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -14,23 +14,17 @@ FGS.frontiervilleFreegifts =
 			{
 				try
 				{
-					var tst = new RegExp(/<form[^>].*action=\s*["].*populateFbCache\.php[?]([^"]+)/m).exec(dataStr);
-					if(tst == null) throw {message:'no frontierville iframe tag'}
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).attr('action');
+					var params2 = $('form[target]', dataHTML).serialize();
 					
-					var zyParams = {}
+					if(!url) throw {message: 'fail'}
 					
-					var qry = tst[1].replace(/&amp;/g,'&');
+					params.step1url = url;
+					params.step1params = params2;
 					
-					for(var idd in FGS.jQuery.unparam(qry))
-					{
-						if(idd.indexOf('zy') == 0)
-						{
-							zyParams[idd] = FGS.jQuery.unparam(qry)[idd];
-						}
-					}
-					params.zyParam = $.param(zyParams);
-					
-					FGS.frontiervilleFreegifts.Click2(params);
+					FGS.frontierville.Freegifts.ClickForm(params);
 				}
 				catch(err)
 				{
@@ -73,6 +67,84 @@ FGS.frontiervilleFreegifts =
 			}
 		});
 	},
+	
+	ClickForm: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var dataHTML = FGS.HTMLParser(dataStr);
+				
+					var tst = new RegExp(/<iframe[^>].*src=\s*["].*populateFbCache\.php[?]([^"]+)/m).exec(dataStr);
+					if(tst == null) throw {message:'no frontierville iframe tag'}
+					
+					var zyParams = {}
+					
+					var qry = tst[1].replace(/&amp;/g,'&');
+					
+					for(var idd in FGS.jQuery.unparam(qry))
+					{
+						if(idd.indexOf('zy') == 0)
+						{
+							zyParams[idd] = FGS.jQuery.unparam(qry)[idd];
+						}
+					}
+					params.zyParam = $.param(zyParams);
+					
+					FGS.frontierville.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
 	Click2: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -146,7 +218,7 @@ FGS.frontiervilleFreegifts =
 	}
 };
 
-FGS.frontiervilleRequests = 
+FGS.frontierville.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -165,13 +237,77 @@ FGS.frontiervilleRequests =
 				
 				if(redirectUrl != false)
 				{
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
+				
+				try
+				{
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					FGS.frontierville.Requests.Click2(currentType, id, url, params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
+	
+	Click2: function(currentType, id, currentURL, params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var info = {}
+		
+		$.ajax({
+			type: "POST",
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
+				
+				if(redirectUrl != false)
+				{
 					if(FGS.checkForNotFound(redirectUrl) === true)
 					{
 						FGS.endWithError('not found', currentType, id);
 					}
 					else if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, redirectUrl, true);
+						retryThis(currentType, id, redirectUrl, params, true);
 					}
 					else
 					{
@@ -242,7 +378,7 @@ FGS.frontiervilleRequests =
 					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -254,7 +390,7 @@ FGS.frontiervilleRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -265,7 +401,7 @@ FGS.frontiervilleRequests =
 	}
 };
 
-FGS.frontiervilleBonuses = 
+FGS.frontierville.Bonuses = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -300,7 +436,7 @@ FGS.frontiervilleBonuses =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.frontiervilleBonuses.Click2(currentType, id, url, params);
+					FGS.frontierville.Bonuses.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -352,7 +488,7 @@ FGS.frontiervilleBonuses =
 						var pos2 = dataStr.indexOf('"', pos1+21);
 						var url = dataStr.slice(pos1+21, pos2);
 						
-						FGS.frontiervilleBonuses.Click3(currentType, id, url);
+						FGS.frontierville.Bonuses.Click3(currentType, id, url);
 					}
 					else
 					{
@@ -420,7 +556,7 @@ FGS.frontiervilleBonuses =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.frontiervilleBonuses.Click4(currentType, id, url, params);
+					FGS.frontierville.Bonuses.Click4(currentType, id, url, params);
 				}
 				catch(err)
 				{

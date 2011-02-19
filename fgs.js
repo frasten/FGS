@@ -80,74 +80,7 @@ var FGS = {
 		return num;
 	},
 	
-	getRequestLink: function(id, dataPost, retry)
-	{
-		if(FGS.Gup('secondLink', dataPost) == 1)
-			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
-		else
-			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
-		
-		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg;
-		
-		
-		FGS.jQuery.ajax({
-			type: "POST",
-			url: url,
-			data: dataPost2,
-			dataType: 'text',
-			success: function(data)
-			{
-				try
-				{
-					var parseStr = data;
-					
-					var dataObj = JSON.parse(parseStr.slice(9));
-					
-					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
-					
-					var found = false;
-					
-					FGS.jQuery(dataObj.onload).each(function(k,v)
-					{
-						if(v.indexOf('goURI') != -1)
-						{
-							parseStr = v;
-							found = true;
-							return false;
-						}
-					});
-					
-					if(!found) throw {message:"no URI"}
-				
-					var pos1 = parseStr.indexOf('goURI');
-					var pos2 = parseStr.indexOf(');',pos1);
-					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
-
-					eval("parseStr =" + parseStr);
-					
-					parseStr = parseStr.replace(/\\u0025/g, '%');
-					
-					var URI = JSON.parse(parseStr);
-					
-					FGS.openURI(URI, true);
-				}
-				catch(err)
-				{
-					//dump(err);
-					//dump(err.message);
-				}
-			},
-			error: function()
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					FGS.getRequestLink(id, dataPost, true);
-				}
-			}
-		});
-	},
-	
-	prepareLinkForGame: function(game, id, dataPost, retry)
+	prepareLinkForGame: function(game, id, dataPost, newWindow, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
@@ -173,35 +106,22 @@ var FGS = {
 				{
 					var parseStr = data;
 					
-					var dataObj = JSON.parse(parseStr.slice(9));
-					
-					if(typeof(dataObj.onload) == 'undefined') throw {message:"no URI"}
-					
-					var found = false;
-					
-					$(dataObj.onload).each(function(k,v)
-					{
-						if(v.indexOf('goURI') != -1)
-						{
-							parseStr = v;
-							found = true;
-							return false;
-						}
-					});
-					
-					if(!found) throw {message:"no URI"}
-				
 					var pos1 = parseStr.indexOf('goURI');
+					if(!pos1 == -1) throw {message:"no URI"}
+					
 					var pos2 = parseStr.indexOf(');',pos1);
-					parseStr = "'"+parseStr.slice(pos1+6,pos2)+"'";
+					parseStr = '{"abc":"'+parseStr.slice(pos1+8,pos2-2)+'"}';
+
+					var parseStr = JSON.parse(parseStr);
 					
-					eval("parseStr =" + parseStr);
+					var parseStr = parseStr.abc.replace(/\\u0025/g, '%');
 					
-					parseStr = parseStr.replace(/\\u0025/g, '%');
+					var URI = JSON.parse('"'+parseStr+'"');
 					
-					var URI = JSON.parse(parseStr);
-					
-					eval('FGS.'+game+'Requests.Click("request", "'+id+'","'+URI+'")');
+					if(newWindow)
+						FGS.openURI(URI, true);
+					else
+						FGS[game].Requests.Click("request", id, URI);
 				}
 				catch(err)
 				{
@@ -209,7 +129,7 @@ var FGS = {
 					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(game, id, dataPost, true);
+						retryThis(game, id, dataPost, newWindow, true);
 					}
 					else
 					{
@@ -221,7 +141,7 @@ var FGS = {
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(game, id, dataPost, true);
+					retryThis(game, id, dataPost, newWindow, true);
 				}
 				else
 				{
@@ -301,9 +221,10 @@ var FGS = {
 				if(FGS.userID == null || FGS.userName == null)
 				{
 					var pos1 = data2.indexOf('Env={')+4;
-					var pos2 = data2.indexOf('};', pos1)+1;
-					eval('var tmpObj = '+data2.slice(pos1,pos2)+';');
-					FGS.userID = tmpObj.user;
+					var pos2 = data2.indexOf('user:', pos1)+5;
+					var pos3 = data2.indexOf(',', pos2);
+
+					FGS.userID = data2.slice(pos2, pos3);
 					FGS.userName = FGS.jQuery('#navAccountName', data).text();
 				}
 				
@@ -572,14 +493,14 @@ var FGS = {
 				if(FGS.xhrQueue[0].type == 'request')
 				{
 					FGS.xhrWorkingQueue[FGS.xhrQueue[0].id] = FGS.xhrQueue[0];
-					FGS.prepareLinkForGame(FGS.xhrQueue[0].game, FGS.xhrQueue[0].id, FGS.xhrQueue[0].post);
+					FGS.prepareLinkForGame(FGS.xhrQueue[0].game, FGS.xhrQueue[0].id, FGS.xhrQueue[0].post, false);
 					FGS.xhrQueue = FGS.xhrQueue.slice(1);
 					FGS.xhrWorking++;
 				}
 				else if(FGS.xhrQueue[0].type == 'bonus')
 				{
 					FGS.xhrWorkingQueue[FGS.xhrQueue[0].id] = FGS.xhrQueue[0];
-					eval('FGS.'+FGS.xhrQueue[0].game+'Bonuses.Click("bonus","'+FGS.xhrQueue[0].id+'","'+FGS.xhrQueue[0].url+'")');
+					FGS[FGS.xhrQueue[0].game].Bonuses.Click("bonus", FGS.xhrQueue[0].id, FGS.xhrQueue[0].url);
 					FGS.xhrQueue = FGS.xhrQueue.slice(1);
 					FGS.xhrWorking++;
 				}
@@ -642,16 +563,16 @@ var FGS = {
 				{
 					var pos1 = data.indexOf('"content":{"pagelet_requests":"')+10;
 					var pos2 = data.indexOf('"}});', pos1)+2;				
-					eval('var tempD = '+data.slice(pos1,pos2));
-					
+					var tempD = JSON.parse(data.slice(pos1,pos2));
+
 					data = tempD.pagelet_requests;				
 				}
 				else if(data.indexOf("content: {pagelet_requests: '") != -1)
 				{
 					var pos1 = data.indexOf("content: {pagelet_requests: '")+9;
 					var pos2 = data.indexOf("'}});", pos1)+2;
-					eval('var tempD = '+data.slice(pos1,pos2));
-
+					var tempD = JSON.parse(data.slice(pos1,pos2));
+					
 					data = tempD.pagelet_requests;	
 				}
 				
@@ -862,7 +783,7 @@ var FGS = {
 		
 		if(FGS.options.games[gameID].enabled)
 		{
-			eval('FGS.'+game+'Freegifts.Click(params)');
+			FGS[game].Freegifts.Click(params);
 		}
 	},
 	
@@ -908,7 +829,7 @@ var FGS = {
 				{
 					var str = data.substring(9);
 					var error = parseInt(JSON.parse(str).error);
-					
+
 					if(error == 1357001)
 					{
 						//dump(FGS.getCurrentTime()+'[B] Error: logged out');
@@ -928,7 +849,7 @@ var FGS = {
 					
 					var data = data.slice(pos1,pos2);
 					
-					eval('var tmpData = {"html": "'+data+'"}');
+					var tmpData = JSON.parse('{"html": "'+data+'"}');
 					
 					if(tmpData.html == "")
 					{
@@ -959,7 +880,7 @@ var FGS = {
 
 						var data = $(this).find('input[name="feedback_params"]').val();
 						
-						eval('var bonusData = '+data);
+						var bonusData = JSON.parse(data);
 						
 						var bonusTimeTmp = new Date($(el).find('abbr').attr('data-date')).getTime();					
 						var bonusTime = Math.round(bonusTimeTmp / 1000);

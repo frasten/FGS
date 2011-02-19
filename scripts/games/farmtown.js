@@ -1,4 +1,4 @@
-FGS.farmtownRequests = 
+FGS.farmtown.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

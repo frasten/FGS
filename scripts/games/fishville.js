@@ -1,4 +1,4 @@
-FGS.fishvilleFreegifts = 
+FGS.fishville.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -19,7 +19,7 @@ FGS.fishvilleFreegifts =
 					var pos1 = paramTmp.lastIndexOf('/')+2;
 
 					params.step2params = paramTmp.slice(pos1);
-					FGS.fishvilleFreegifts.Click2(params);
+					FGS.fishville.Freegifts.Click2(params);
 					
 				}
 				catch(err)
@@ -137,7 +137,7 @@ FGS.fishvilleFreegifts =
 };
 
 
-FGS.fishvilleRequests = 
+FGS.fishville.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -171,7 +171,7 @@ FGS.fishvilleRequests =
 				{
 					var src = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.fishvilleRequests.Click2(currentType, id, src);
+					FGS.fishville.Requests.Click2(currentType, id, src);
 				}				
 				catch(err)
 				{

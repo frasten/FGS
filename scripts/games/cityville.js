@@ -1,4 +1,4 @@
-FGS.cityvilleFreegifts = 
+FGS.cityville.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -14,12 +14,83 @@ FGS.cityvilleFreegifts =
 			{
 				try
 				{
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).attr('action');
+					var params2 = $('form[target]', dataHTML).serialize();
+					
+					if(!url) throw {message: 'fail'}
+					
+					params.step1url = url;
+					params.step1params = params2;
+					
+					FGS.cityville.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					//dump(err);
+					//dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	ClickForm: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+
+		$.ajax({
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+			
+				console.log(dataStr);
+				try
+				{
 					var src = FGS.findIframeAfterId('#app_content_291549705119', dataStr);
 					if(src == '') throw {message:'No iframe found'}
 					
 					params.step2url = src;
 					
-					FGS.cityvilleFreegifts.Click2(params);		
+					FGS.cityville.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -70,15 +141,17 @@ FGS.cityvilleFreegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
-			url: params.step2url+''+addAntiBot,
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params,
+			//url: params.step2url+''+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-					params.domain = params.step2url.match(re)[1].toString();
+					params.domain = params.step1url.match(re)[1].toString();
 					
 					var nextUrl = 'http://'+params.domain+'/';					
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
@@ -88,7 +161,7 @@ FGS.cityvilleFreegifts =
 						var pos2 = dataStr.indexOf("'", pos1)+1;
 						var pos3 = dataStr.indexOf("'", pos2);
 						
-						params.step2url = nextUrl+dataStr.slice(pos2,pos3).replace(nextUrl, '');
+						params.step1url = nextUrl+dataStr.slice(pos2,pos3).replace(nextUrl, '');
 						retryThis(params, true);
 						return;
 					}
@@ -98,13 +171,13 @@ FGS.cityvilleFreegifts =
 					pos1+=7;
 					var pos2 = dataStr.indexOf('},', pos1)+1;
 					
-					eval('var zyParam ='+dataStr.slice(pos1,pos2));
+					var zyParam = JSON.parse(dataStr.slice(pos1,pos2));
 					
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-					params.domain = params.step2url.match(re)[1].toString();
+					params.domain = params.step1url.match(re)[1].toString();
 					params.zyParam = FGS.jQuery.param(zyParam);
 					
-					FGS.cityvilleFreegifts.Click3(params);
+					FGS.cityville.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -265,7 +338,7 @@ FGS.cityvilleFreegifts =
 					
 					params.outStr = outStr;
 
-					FGS.cityvilleFreegifts.Click4(params);
+					FGS.cityville.Freegifts.Click4(params);
 					
 				}
 				catch(err)
@@ -415,12 +488,12 @@ FGS.cityvilleFreegifts =
 };
 
 
-FGS.cityvilleRequests =
+FGS.cityville.Requests =
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
 		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
+		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
@@ -434,11 +507,7 @@ FGS.cityvilleRequests =
 				
 				if(redirectUrl != false)
 				{
-					if(FGS.checkForNotFound(redirectUrl) === true)
-					{
-						FGS.endWithError('not found', currentType, id);
-					}
-					else if(typeof(retry) == 'undefined')
+					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, redirectUrl, true);
 					}
@@ -451,10 +520,11 @@ FGS.cityvilleRequests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_291549705119', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					FGS.cityvilleRequests.Click2(currentType, id, src);
-				} 
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					FGS.cityville.Requests.Click2(currentType, id, url, params);
+				}
 				catch(err)
 				{
 					//dump(err);
@@ -483,14 +553,15 @@ FGS.cityvilleRequests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -517,7 +588,7 @@ FGS.cityvilleRequests =
 					
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 
-					FGS.cityvilleRequests.Click3(currentType, id, nextUrl);
+					FGS.cityville.Requests.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
@@ -525,7 +596,7 @@ FGS.cityvilleRequests =
 					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -537,7 +608,7 @@ FGS.cityvilleRequests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -712,7 +783,7 @@ FGS.cityvilleRequests =
 	},
 };
 
-FGS.cityvilleBonuses = 
+FGS.cityville.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -744,9 +815,10 @@ FGS.cityvilleBonuses =
 
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_291549705119', dataStr);
-					if(src == '') throw {message: 'No iframe'}
-					FGS.cityvilleBonuses.Click2(currentType, id, src);
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					FGS.cityville.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -776,20 +848,20 @@ FGS.cityvilleBonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				var dataHTML = FGS.HTMLParser(dataStr);
-				
 				
 				try
 				{
@@ -812,7 +884,7 @@ FGS.cityvilleBonuses =
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 					
 					
-					FGS.cityvilleBonuses.Click3(currentType, id, nextUrl);
+					FGS.cityville.Bonuses.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
@@ -820,7 +892,7 @@ FGS.cityvilleBonuses =
 					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -832,7 +904,7 @@ FGS.cityvilleBonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

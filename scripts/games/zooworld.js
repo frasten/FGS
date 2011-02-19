@@ -1,4 +1,4 @@
-FGS.zooworldFreegifts = 
+FGS.zooworld.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -39,7 +39,7 @@ FGS.zooworldFreegifts =
 					params.param2 = postParams;
 					//http://fbeq.rockyou.com/facebook_apps/zoo/giftInIframe.php?service=dsplygiftinvite&giftId=977&appname=zooparent&appId=74&fb_sig_in_iframe=1&fb_sig_base_domain=rockyou.com&fb_sig_locale=pl_PL&fb_sig_in_new_facebook=1&fb_sig_time=1293477719.0314&fb_sig_added=1&fb_sig_profile_update_time=1291727948&fb_sig_expires=1293483600&fb_sig_user=100001178615702&fb_sig_session_key=2.CXT_hOTef4C_zohaK3MG1w__.3600.1293483600-100001178615702&fb_sig_ss=5ptmukWpwN3GOKXxHq2u8g__&fb_sig_cookie_sig=d7f71a284392c238406d31b01a9a8118&fb_sig_country=pl&fb_sig_api_key=daa4b920374244da1829a0df63cd815f&fb_sig_app_id=167746316127&fb_sig=b174aef00662d0cb251ceae3d091da82
 
-					FGS.zooworldFreegifts.Click2(params);
+					FGS.zooworld.Freegifts.Click2(params);
 				
 				}
 				catch(err)
@@ -158,7 +158,7 @@ FGS.zooworldFreegifts =
 	}
 };
 
-FGS.zooworldRequests = 
+FGS.zooworld.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -300,7 +300,7 @@ FGS.zooworldRequests =
 };
 
 
-FGS.zooworldBonuses = 
+FGS.zooworld.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -342,7 +342,7 @@ FGS.zooworldBonuses =
 					}
 
 					if (src == '') throw {message:"no iframe"}
-					FGS.zooworldBonuses.Click2(currentType, id, src);
+					FGS.zooworld.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -407,7 +407,7 @@ FGS.zooworldBonuses =
 						
 						if(dataStr.slice(pos1, pos2).indexOf('zooparent') != -1 || dataStr.slice(pos1, pos2).indexOf('"hugme"') != -1)
 						{
-							eval('var tempVars = '+dataStr.slice(pos1,pos2));
+							var tempVars = JSON.parse(dataStr.slice(pos1,pos2));
 							break;
 						}
 					}
@@ -432,7 +432,7 @@ FGS.zooworldBonuses =
 					var nextUrl = domain+dataStr.slice(pos3,pos4)+getStr;
 					var params = tempVars;
 					
-					FGS.zooworldBonuses.Click3(currentType, id, nextUrl, params);
+					FGS.zooworld.Bonuses.Click3(currentType, id, nextUrl, params);
 				}
 				catch(err)
 				{

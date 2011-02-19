@@ -1,4 +1,4 @@
-FGS.pokerFreegifts = 
+FGS.poker.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -40,7 +40,7 @@ FGS.pokerFreegifts =
 						post_form_id_source: 'AsyncRequest'
 					}
 					
-					FGS.pokerFreegifts.Click2(params);
+					FGS.poker.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -217,7 +217,7 @@ FGS.pokerFreegifts =
 };
 
 
-FGS.pokerRequests = 
+FGS.poker.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

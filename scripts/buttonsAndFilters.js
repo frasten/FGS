@@ -578,6 +578,7 @@ FGS.submenuButtons =
 {
 	'FailedBonuses':	{	name: 'Failed bonuses',
 							submenu: {
+								'ClearAllFailedBonuses': { name: 'Clear everything' },
 								'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
 								'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
 							}
@@ -585,6 +586,7 @@ FGS.submenuButtons =
 	
 	'FailedGifts':	{	name: 'Failed gifts',
 							submenu: {
+								'ClearAllFailedRequests': { name: 'Clear everything' },
 								'ClearCollectedRequestsLimitError': { name: 'Clear gifts with "Limit error"' },
 								'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
 							}

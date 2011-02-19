@@ -1,4 +1,4 @@
-FGS.crimecityFreegifts = 
+FGS.crimecity.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -18,7 +18,7 @@ FGS.crimecityFreegifts =
 					if (src == '') throw {message:"no iframe"}
 					params.click2url = src;
 					
-					FGS.crimecityFreegifts.Click2(params);
+					FGS.crimecity.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -84,7 +84,7 @@ FGS.crimecityFreegifts =
 					if(tst == null) throw {message:'no token tag'}
 					params.token = tst[1];
 					
-					FGS.crimecityFreegifts.Click3(params);
+					FGS.crimecity.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -203,7 +203,7 @@ FGS.crimecityFreegifts =
 	}
 };
 
-FGS.crimecityRequests = 
+FGS.crimecity.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -237,7 +237,7 @@ FGS.crimecityRequests =
 				{
 					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.crimecityRequests.Click2(currentType, id, src);
+					FGS.crimecity.Requests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -365,7 +365,7 @@ FGS.crimecityRequests =
 	},
 };
 
-FGS.crimecityBonuses = 
+FGS.crimecity.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -400,7 +400,7 @@ FGS.crimecityBonuses =
 					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.crimecityBonuses.Click2(currentType, id, src);
+					FGS.crimecity.Bonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{

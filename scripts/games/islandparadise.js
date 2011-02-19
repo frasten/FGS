@@ -1,4 +1,4 @@
-FGS.islandparadiseRequests = 
+FGS.islandparadise.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -37,7 +37,7 @@ FGS.islandparadiseRequests =
 					var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.islandparadiseRequests.Click2(currentType, id, src);
+					FGS.islandparadise.Requests.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{
@@ -88,7 +88,7 @@ FGS.islandparadiseRequests =
 					{
 						var pos2 = dataStr.indexOf("'", pos1+26);
 						var url = dataStr.slice(pos1+19, pos2);
-						FGS.islandparadiseRequests.Click2(currentType, id, url, true);
+						FGS.islandparadise.Requests.Click2(currentType, id, url, true);
 						return;
 					}
 					
@@ -108,7 +108,7 @@ FGS.islandparadiseRequests =
 					}
 					else
 					{
-						FGS.islandparadiseRequests.Click2(currentType, id, src, true);
+						FGS.islandparadise.Requests.Click2(currentType, id, src, true);
 						return;
 					}
 					

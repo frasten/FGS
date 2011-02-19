@@ -1,4 +1,4 @@
-FGS.castleageFreegifts =
+FGS.castleage.Freegifts =
 {
 	Click: function(params, retry)
 	{
@@ -7,7 +7,7 @@ FGS.castleageFreegifts =
 	},
 };
 
-FGS.castleageRequests = 
+FGS.castleage.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

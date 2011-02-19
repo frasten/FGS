@@ -199,7 +199,7 @@ FGS.sendbackGift = function (bonusID, sendbackData)
 			
 			var game = FGS.gamesData[gameID].systemName;
 			
-			eval('FGS.'+game+'Freegifts.Click(params)');			
+			FGS[game].Freegifts.Click(params);			
 		});
 	});
 };
@@ -505,7 +505,9 @@ FGS.loadLibraries = function(context)
 	
 	var arr = [];
 	for(var ids in FGS.gamesData)
-	{		
+	{
+		FGS[FGS.gamesData[ids].systemName] = {};
+		
 		$.ajax({
 			async: false,
 			cache: false,

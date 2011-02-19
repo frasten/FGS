@@ -1,4 +1,4 @@
-FGS.cafeworldFreegifts = 
+FGS.cafeworld.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -65,7 +65,7 @@ FGS.cafeworldFreegifts =
 	},
 };
 
-FGS.cafeworldRequests = 
+FGS.cafeworld.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -215,7 +215,7 @@ FGS.cafeworldRequests =
 	}
 };
 
-FGS.cafeworldBonuses = 
+FGS.cafeworld.Bonuses = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{

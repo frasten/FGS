@@ -1,4 +1,4 @@
-FGS.bakinglifeFreegifts =
+FGS.bakinglife.Freegifts =
 {
 	Click: function(params, retry)
 	{
@@ -8,7 +8,7 @@ FGS.bakinglifeFreegifts =
 	},
 };
 
-FGS.bakinglifeRequests = 
+FGS.bakinglife.Requests = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -48,7 +48,7 @@ FGS.bakinglifeRequests =
 					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.bakinglifeRequests.Click2(currentType, id, src);
+					FGS.bakinglife.Requests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -191,7 +191,7 @@ FGS.bakinglifeRequests =
 	}
 };
 
-FGS.bakinglifeBonuses = 
+FGS.bakinglife.Bonuses = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -226,7 +226,7 @@ FGS.bakinglifeBonuses =
 				{
 					var src = FGS.findIframeAfterId('#app_content_338051018849', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.bakinglifeBonuses.Click2(currentType, id, src);
+					FGS.bakinglife.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{

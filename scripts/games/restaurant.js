@@ -1,4 +1,4 @@
-FGS.restaurantRequests = 
+FGS.restaurant.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

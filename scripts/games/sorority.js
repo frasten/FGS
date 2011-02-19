@@ -1,4 +1,4 @@
-FGS.sororityRequests = 
+FGS.sorority.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

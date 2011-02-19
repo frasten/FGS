@@ -158,7 +158,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		$('div#'+game+opt, '#'+game+'Game').prepend('<div class="sendingGiftProgress"><h3 class="center"><img src="gfx/loading.gif"><br />Sending "'+giftName+'" to '+sendTo.length+' people</h3></div>');
 				
-		eval('bkP.'+game+'Freegifts.Click(params)');
+		bkP[game].Freegifts.Click(params);
 	}
 	
 	function freegiftSuccess(data, data2)
@@ -315,7 +315,7 @@ function addDataToScreenLocked(callback, id, data)
 		var gameID = el.attr('gameID');
 		bkP.database.deleteItem('requests', gameID, el.attr('id'), 0);
 		bkP.database.deleteItem('requests', gameID, el.attr('id'), 1);
-		bkP.getRequestLink(el.attr('id'), el.attr('postData'));
+		bkP.prepareLinkForGame('', el.attr('id'), el.attr('postData'), true);
 		el.remove();
 		updateCount(gameID);
 	}
@@ -442,7 +442,7 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
-			processBonusClick(this);
+			processBonusClick($(this));
 		});
 	}
 	
@@ -450,7 +450,7 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
-			processRequestClick(this);
+			processRequestClick($(this));
 		});
 	}
 	
@@ -1021,6 +1021,51 @@ function addDataToScreenLocked(callback, id, data)
 		$('#dialog-confirm').dialog('open');
 	}
 	
+	function ClearAllFailedBonuses(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete failed bonuses": function()
+				{
+					var game = bkP.gamesData[gameID].systemName;
+					$('#'+game+'FailedBonusesList').children('div').each(function(){
+						$(this).remove();
+					});
+					bkP.database.clearFailedBonuses(gameID);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
+	function ClearAllFailedRequests(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete failed gifts": function()
+				{
+					var game = bkP.gamesData[gameID].systemName;
+					$('#'+game+'FailedGiftsList').children('div').each(function(){
+						$(this).remove();
+					});
+					//('<br style="clear:both" />');
+					bkP.database.clearFailedGifts(gameID);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
 	function ClearCollectedBonusesReceivingError(gameID)
 	{
 		$('#dialog-confirm').dialog({
@@ -1072,6 +1117,33 @@ function addDataToScreenLocked(callback, id, data)
 		
 		$('#dialog-confirm').dialog('open');
 	}
+	
+	function ClearCollectedRequestsLimitError(gameID)
+	{
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete limit errors": function()
+				{
+					var game = bkP.gamesData[gameID].systemName;
+					$('#'+game+'FailedGiftsList').children('div').each(function(){
+						if($(this).find('.bonusError').text().indexOf('limit') != -1)
+						{
+							$(this).remove();
+						}
+					});
+					//('<br style="clear:both" />');
+					bkP.database.clearRequestLimitErrors(gameID);
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
+		
+		$('#dialog-confirm').dialog('open');
+	}
+	
 	
 	function ClearCollectedRequests(gameID)
 	{
@@ -1902,7 +1974,15 @@ function processDeleteComment(el)
 
 function processSubmenuClick(el)
 {
-	eval($(el).attr('sysID')+'("'+$(el).attr('gameID')+'")');
+	try
+	{
+		window[$(el).attr('sysID')]($(el).attr('gameID'));
+
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
 function processLoadFiltersForGame(gameID, opt)
@@ -2112,11 +2192,11 @@ function updateTimeAgo(target)
 			value: 0
 		});
 		
-		loadBonuses();		
+		loadBonuses();
 		
 		$(window).click(function(e)
 		{
-			var el = $(e.srcElement);
+			var el = $(e.srcElement || e.target);
 			
 			if(el.hasClass('gameSelectorInput'))
 				return processGameSelectorInput(el);
@@ -2246,7 +2326,7 @@ function updateTimeAgo(target)
 				else if(action == 'receiveSimilar')
 				{
 					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
-						processBonusClick(this);
+						processBonusClick($(this));
 					});
 				}
 				else if(action == 'delete')
@@ -2327,7 +2407,7 @@ function updateTimeAgo(target)
 				else if(action == 'receiveSimilar')
 				{
 					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
-						processRequestClick(this);
+						processRequestClick($(this));
 					});
 				}
 				else if(action == 'delete')
@@ -2375,7 +2455,8 @@ function updateTimeAgo(target)
 				}
 				else if(action == 'debug')
 				{
-					bkP.getRequestLink(el.attr('id'), el.attr('postData'));
+					bkP.prepareLinkForGame('', el.attr('id'), el.attr('postData'), true);
+					//el.remove();
 				}
 			});
 		});
@@ -2700,7 +2781,7 @@ function updateTimeAgo(target)
 			
 			var game = bkP.gamesData[gameID].systemName;
 			
-			eval('bkP.'+game+'Freegifts.Click(params)');
+			bkP[game].Freegifts.Click(params);
 		}
 	}
 	
@@ -2835,7 +2916,7 @@ function compareTime(itemTime, olderThan)
 			
 		
 			<div id="fbLike" style="float: right; margin-top: 6px;">
-				<iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FFGS%2F150480078326371&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
+				<iframe type="content" src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FFGS%2F150480078326371&amp;layout=button_count&amp;show_faces=true&amp;width=100&amp;action=like&amp;font=verdana&amp;colorscheme=light&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
 			</div>
 			
 		</h1>

@@ -63,15 +63,15 @@ FGS.database.createTable = function()
 	});
 }
 
-FGS.database.updateStats = function(tx, type, data2)
+FGS.database.updateStats = function(type, data2)
 {
 	for(var ids in data2)
 	{
-		FGS.database.addStats(tx, type, ids, data2[ids]);
+		FGS.database.addStats(type, ids, data2[ids]);
 	}
 }
 
-FGS.database.addStats = function(tx, type, ids, data)
+FGS.database.addStats = function(type, ids, data)
 {
 	var x = ids.split('_');
 	var userID = parseInt(x[0]);
@@ -98,14 +98,17 @@ FGS.database.addStats = function(tx, type, ids, data)
 		var totalGifts = count;
 	}
 	
-	tx.executeSql('INSERT OR IGNORE INTO neighborStats (userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts) VALUES(?,?,?,?,?,?)', [userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts],		
-		function(tx, r)
-		{
-			if(r.rowsAffected == 0)
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql('INSERT OR IGNORE INTO neighborStats (userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts) VALUES(?,?,?,?,?,?)', [userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts],		
+			function(tx2, r)
 			{
-				tx.executeSql("UPDATE neighborStats SET "+qry+"  where gameID = ? AND userID = ?", [time, gameID, userID], FGS.database.onSuccess, FGS.database.onError);
-			}
-		}, FGS.database.onError);
+				if(r.rowsAffected == 0)
+				{
+					tx2.executeSql("UPDATE neighborStats SET "+qry+"  where gameID = ? AND userID = ?", [time, gameID, userID], FGS.database.onSuccess, FGS.database.onError);
+				}
+			}, FGS.database.onError);
+	});
 };
 
 FGS.database.likeBonus = function(bonusID)
@@ -144,6 +147,22 @@ FGS.database.clearTable = function(table, gameID, status)
 	}
 }
 
+FGS.database.clearFailedBonuses = function(gameID)
+{
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM bonuses where status = 1 and gameID = ? and error != "" and error IS NOT NULL', [gameID], FGS.database.onSuccess, FGS.database.onError);
+	});
+}
+
+FGS.database.clearFailedGifts = function(gameID)
+{
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM requests where status = 1 and gameID = ? and error != "" and error IS NOT NULL', [gameID], FGS.database.onSuccess, FGS.database.onError);
+	});
+}
+
 FGS.database.clearLimitErrors = function(gameID)
 {
 	FGS.database.db.transaction(function(tx)
@@ -165,6 +184,14 @@ FGS.database.clearRequestReceivingErrors = function(gameID)
 	FGS.database.db.transaction(function(tx)
 	{
 		tx.executeSql('DELETE FROM requests where status = 1 and gameID = ? and error = "receiving"', [gameID], FGS.database.onSuccess, FGS.database.onError);
+	});
+}
+
+FGS.database.clearRequestLimitErrors = function(gameID)
+{
+	FGS.database.db.transaction(function(tx)
+	{
+		tx.executeSql('DELETE FROM requests where status = 1 and gameID = ? and error = "limit"', [gameID], FGS.database.onSuccess, FGS.database.onError);
 	});
 }
 
@@ -369,7 +396,7 @@ FGS.database.addBonus = function(data2)
 					if(outArr.length > 0)
 					{
 						FGS.sendView('addNewBonus', '', '', outArr);
-						FGS.database.updateStats(tx, 'bonus', updStatObj);
+						FGS.database.updateStats('bonus', updStatObj);
 					}
 					FGS.updateIcon();
 				}				
@@ -433,7 +460,7 @@ FGS.database.addRequest = function(data2)
 					if(outArr.length > 0)
 					{
 						FGS.sendView('addNewRequest', '', '', outArr);
-						FGS.database.updateStats(tx, 'requests', updStatObj);
+						FGS.database.updateStats('requests', updStatObj);
 					}
 					FGS.updateIcon();
 				}

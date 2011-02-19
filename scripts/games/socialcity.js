@@ -1,4 +1,4 @@
-FGS.socialcityRequests = 
+FGS.socialcity.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -39,7 +39,7 @@ FGS.socialcityRequests =
 					
 					src = src.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
 					
-					FGS.socialcityRequests.Click2(currentType, id, src);
+					FGS.socialcity.Requests.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{
@@ -119,7 +119,7 @@ FGS.socialcityRequests =
 
 					var newUrl = 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php?'+FGS.jQuery.param(postParams)+'&extra='+JSON.stringify(extra)+'&rtype=ajax&p='+page+'&a='+aaa+'&auth_key='+auth_key+'&auth_time='+auth_time+'&ts='+new Date().getTime();
 					
-					FGS.socialcityRequests.Click3(currentType, id, newUrl);
+					FGS.socialcity.Requests.Click3(currentType, id, newUrl);
 				}
 				catch(err)
 				{
@@ -163,7 +163,7 @@ FGS.socialcityRequests =
 			{
 				try
 				{
-					eval('var dataTMP = '+dataStr.slice(dataStr.indexOf('{'),dataStr.lastIndexOf('}')+1));
+					var dataTMP = JSON.parse(dataStr.slice(dataStr.indexOf('{'),dataStr.lastIndexOf('}')+1));
 					
 					var dataHTML = FGS.HTMLParser(dataTMP.html);
 										

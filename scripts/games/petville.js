@@ -1,4 +1,4 @@
-FGS.petvilleFreegifts = 
+FGS.petville.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -23,7 +23,7 @@ FGS.petvilleFreegifts =
 					
 					
 					params.pv_session = paramTmp.slice(pos1, pos2);
-					FGS.petvilleFreegifts.Click2(params);
+					FGS.petville.Freegifts.Click2(params);
 					
 				}
 				catch(err)
@@ -191,7 +191,7 @@ FGS.petvilleFreegifts =
 					
 					
 					
-					FGS.petvilleFreegifts.Click3(params);
+					FGS.petville.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -288,7 +288,7 @@ FGS.petvilleFreegifts =
 	}
 };
 
-FGS.petvilleRequests = 
+FGS.petville.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -327,7 +327,7 @@ FGS.petvilleRequests =
 					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
 					if (src == '') throw {message:"no iframe"}
 				
-					FGS.petvilleRequests.Click2(currentType, id, src);
+					FGS.petville.Requests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -388,7 +388,7 @@ FGS.petvilleRequests =
 					nextUrl = nextUrl+dataStr.slice(pos2,pos3);
 					
 					
-					FGS.petvilleRequests.Click3(currentType, id, nextUrl);
+					FGS.petville.Requests.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
@@ -510,7 +510,7 @@ FGS.petvilleRequests =
 	},
 };
 
-FGS.petvilleBonuses =
+FGS.petville.Bonuses =
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -545,7 +545,7 @@ FGS.petvilleBonuses =
 					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
 					if (src == '') throw {message:"no iframe"}
 
-					FGS.petvilleBonuses.Click2(currentType, id, src);
+					FGS.petville.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -611,7 +611,7 @@ FGS.petvilleBonuses =
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 					
 					
-					FGS.petvilleBonuses.Click3(currentType, id, nextUrl);
+					FGS.petville.Bonuses.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{

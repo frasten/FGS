@@ -1,4 +1,4 @@
-FGS.cityofwonderRequests = 
+FGS.cityofwonder.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -39,12 +39,12 @@ FGS.cityofwonderRequests =
 					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.cityofwonderRequests.Click2(currentType, id, src);
+					FGS.cityofwonder.Requests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
-					dump(err);
-					dump(err.message);
+					//dump(err);
+					//dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -89,9 +89,9 @@ FGS.cityofwonderRequests =
 					{
 						var pos2 = dataStr.indexOf("'", pos1+21);
 						var url = dataStr.slice(pos1+21, pos2);
-						FGS.cityofwonderRequests.Click(currentType, id, url, true);
+						FGS.cityofwonder.Requests.Click(currentType, id, url, true);
 						return;
-					}				
+					}
 				
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
 					if(tst == null)
@@ -102,7 +102,13 @@ FGS.cityofwonderRequests =
 					var dataHTML = FGS.HTMLParser(data);
 					
 					// Oops! you cannot accept this request!
-										
+					
+					if($('.ally_accept', dataHTML).length  == 0)
+					{
+						FGS.endWithError('not found', currentType, id);
+						return;
+					}
+					
 					info.image = $('.ally_accept', dataHTML).find('img:first').attr('src');
 					var txt = $('.ally_accept', dataHTML).find('h1').text();
 					
@@ -160,7 +166,7 @@ FGS.cityofwonderRequests =
 	}
 };
 
-FGS.cityofwonderBonuses = 
+FGS.cityofwonder.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -194,7 +200,7 @@ FGS.cityofwonderBonuses =
 				{
 					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.cityofwonderBonuses.Click2(currentType, id, src);
+					FGS.cityofwonder.Bonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{

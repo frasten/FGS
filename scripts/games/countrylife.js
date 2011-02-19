@@ -1,4 +1,4 @@
-FGS.countrylifeRequests = 
+FGS.countrylife.Requests = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{

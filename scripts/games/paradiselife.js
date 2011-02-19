@@ -1,4 +1,4 @@
-FGS.paradiselifeRequests = 
+FGS.paradiselife.Requests = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -37,7 +37,7 @@ FGS.paradiselifeRequests =
 				{
 					var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.paradiselifeRequests.Click2(currentType, id, src);
+					FGS.paradiselife.Requests.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -161,7 +161,7 @@ FGS.paradiselifeRequests =
 	}
 };
 
-FGS.paradiselifeBonuses = 
+FGS.paradiselife.Bonuses = 
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -196,7 +196,7 @@ FGS.paradiselifeBonuses =
 				{
 					var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
 					if (src == '') throw {message:"no iframe"}
-					FGS.paradiselifeBonuses.Click2(currentType, id, src);
+					FGS.paradiselife.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{

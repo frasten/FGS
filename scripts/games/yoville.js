@@ -1,4 +1,4 @@
-FGS.yovilleFreegifts = 
+FGS.yoville.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -8,7 +8,7 @@ FGS.yovilleFreegifts =
 };
 
 
-FGS.yovilleRequests = 
+FGS.yoville.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

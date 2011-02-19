@@ -1,4 +1,4 @@
-FGS.vampirewarsFreegifts = 
+FGS.vampirewars.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -22,7 +22,7 @@ FGS.vampirewarsFreegifts =
 					var pos1 = paramTmp.lastIndexOf('?')+1;
 					params.step2param = paramTmp.slice(pos1);
 					
-					FGS.vampirewarsFreegifts.Click2(params);
+					FGS.vampirewars.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -97,7 +97,7 @@ FGS.vampirewarsFreegifts =
 					
 					params.step3param = dataStr.slice(pos1,pos2).replace('"+mfsID+"', 5);
 					
-					FGS.vampirewarsFreegifts.Click3(params);
+					FGS.vampirewars.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -206,7 +206,7 @@ FGS.vampirewarsFreegifts =
 	},
 };
 
-FGS.vampirewarsRequests = 
+FGS.vampirewars.Requests = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{
@@ -227,7 +227,7 @@ FGS.vampirewarsRequests =
 					{
 						var pos2 = dataStr.indexOf('"', pos1+28);
 						var url = dataStr.slice(pos1+21, pos2);
-						FGS.vampirewarsRequests.Login(currentType, id, url);
+						FGS.vampirewars.Requests.Login(currentType, id, url);
 						return;
 					}
 					throw {message: dataStr}
@@ -297,7 +297,7 @@ FGS.vampirewarsRequests =
 					var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.vampirewarsRequests.Click4(currentType, id, src);
+					FGS.vampirewars.Requests.Click4(currentType, id, src);
 				}
 				catch(err)
 				{

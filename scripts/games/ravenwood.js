@@ -1,4 +1,4 @@
-FGS.ravenwoodFreegifts = 
+FGS.ravenwood.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -18,7 +18,7 @@ FGS.ravenwoodFreegifts =
 					if (src == '') throw {message:"no iframe"}
 					params.step2url = src;
 
-					FGS.ravenwoodFreegifts.Click2(params);
+					FGS.ravenwood.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -80,7 +80,7 @@ FGS.ravenwoodFreegifts =
 					params.step3params = '?ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(pos1+11, pos2));
 					params.step3url = 'http://www.ravenwoodfair.com/app/1/gift/send';
 					
-					FGS.ravenwoodFreegifts.Click3(params);
+					FGS.ravenwood.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -142,7 +142,7 @@ FGS.ravenwoodFreegifts =
 					var pos2 = dataStr.indexOf('"', pos1+18);
 					params.step4url = dataStr.slice(pos1+18, pos2);
 				
-					FGS.ravenwoodFreegifts.Click4(params);
+					FGS.ravenwood.Freegifts.Click4(params);
 				
 				}
 				catch(err)
@@ -254,7 +254,7 @@ FGS.ravenwoodFreegifts =
 };
 
 
-FGS.ravenwoodRequests = 
+FGS.ravenwood.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

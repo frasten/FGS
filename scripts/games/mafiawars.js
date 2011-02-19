@@ -1,4 +1,4 @@
-FGS.mafiawarsFreegifts = 
+FGS.mafiawars.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -17,7 +17,7 @@ FGS.mafiawarsFreegifts =
 					var src = FGS.findIframeByName('mafiawars', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					params.click2url = src;					
-					FGS.mafiawarsFreegifts.Click2(params);
+					FGS.mafiawars.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -126,7 +126,7 @@ FGS.mafiawarsFreegifts =
 					params.click3param = nextParams;
 					params.click3url = 'http://facebook.mafiawars.com/mwfb/remote/html_server.php?xw_controller=requests&xw_action=friend_selector&xw_city=1&req_controller=freegifts&free_gift_id='+params.gift+'&free_gift_cat=1&xw_client_id=8&ajax=1&liteload=1&fbml_iframe=1&xw_person='+useridfin+tmpTmp+tmpCb;
 				
-					FGS.mafiawarsFreegifts.Click3(params);
+					FGS.mafiawars.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -245,7 +245,7 @@ FGS.mafiawarsFreegifts =
 };
 
 
-FGS.mafiawarsRequests = 
+FGS.mafiawars.Requests = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{
@@ -285,7 +285,7 @@ FGS.mafiawarsRequests =
 					var src = FGS.findIframeByName('mafiawars', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.mafiawarsRequests.Click3(currentType, id, src);
+					FGS.mafiawars.Requests.Click3(currentType, id, src);
 				} 
 				catch(err)
 				{
@@ -365,7 +365,7 @@ FGS.mafiawarsRequests =
 						isBoost = true;
 					}
 					
-					FGS.mafiawarsRequests.Click4(currentType, id, tmpUrl, nextParams, isBoost);
+					FGS.mafiawars.Requests.Click4(currentType, id, tmpUrl, nextParams, isBoost);
 				}
 				catch(err)
 				{
@@ -578,7 +578,7 @@ FGS.mafiawarsRequests =
 };
 
 
-FGS.mafiawarsBonuses = 
+FGS.mafiawars.Bonuses = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{
@@ -613,7 +613,7 @@ FGS.mafiawarsBonuses =
 					var src = FGS.findIframeByName('mafiawars', dataStr);
 					if (src == '') throw {message:"no iframe"}
 
-					FGS.mafiawarsBonuses.Click2(currentType, id, src);
+					FGS.mafiawars.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
@@ -690,7 +690,7 @@ FGS.mafiawarsBonuses =
 						nextParams += tmpName+escape(v.slice(pos1,pos2));
 					});
 					
-					FGS.mafiawarsBonuses.Click3(currentType, id, tmpUrl, nextParams);
+					FGS.mafiawars.Bonuses.Click3(currentType, id, tmpUrl, nextParams);
 				}
 				catch(err)
 				{

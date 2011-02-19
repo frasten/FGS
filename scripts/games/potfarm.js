@@ -1,4 +1,4 @@
-FGS.potfarmRequests = 
+FGS.potfarm.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -37,7 +37,7 @@ FGS.potfarmRequests =
 					var src = FGS.findIframeAfterId('#app_content_272810543124', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.potfarmRequests.Click2(currentType, id, src);
+					FGS.potfarm.Requests.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{

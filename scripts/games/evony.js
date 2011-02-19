@@ -1,4 +1,4 @@
-FGS.evonyRequests = 
+FGS.evony.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -67,7 +67,7 @@ FGS.evonyRequests =
 						
 						var nextURL = domain+$('.prompt', dataHTML).find('form:first').attr('action')+'?'+nextParams;
 
-						FGS.evonyRequests.Click2(currentType, id, nextURL);
+						FGS.evony.Requests.Click2(currentType, id, nextURL);
 					}
 					else
 					{
@@ -153,7 +153,7 @@ FGS.evonyRequests =
 	},
 };
 
-FGS.evonyBonuses = 
+FGS.evony.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{

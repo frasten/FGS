@@ -1,4 +1,4 @@
-FGS.treasureFreegifts = 
+FGS.treasure.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -18,7 +18,7 @@ FGS.treasureFreegifts =
 					if(tst == null) throw {message:'no treasure iframe tag'}
 					params.nextUrl = $(FGS.HTMLParser('<p class="link" href="'+tst[1]+'">abc</p>')).find('p.link').attr('href');
 					
-					FGS.treasureFreegifts.Click2(params);
+					FGS.treasure.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -86,11 +86,11 @@ FGS.treasureFreegifts =
 					pos2 = dataStr.indexOf('"},', pos1)+2;
 					var dataParam	= dataStr.slice(pos1,pos2);				
 					
-					eval('var dataStrTmp = '+dataParam);
+					var dataStrTmp = JSON.parse(dataParam);
 					
 					params.zyParam = $.param(dataStrTmp);
 
-					FGS.treasureFreegifts.Click3(params);
+					FGS.treasure.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -207,7 +207,7 @@ FGS.treasureFreegifts =
 	}
 };
 
-FGS.treasureRequests = 
+FGS.treasure.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -307,7 +307,7 @@ FGS.treasureRequests =
 					{
 						var URL = unescape($('.acceptButtons', dataHTML).children('a:first').attr('href'));
 						
-						FGS.treasureRequests.Click2(currentType, id, URL);
+						FGS.treasure.Requests.Click2(currentType, id, URL);
 						return;
 					}
 					else
@@ -403,7 +403,7 @@ FGS.treasureRequests =
 };
 
 
-FGS.treasureBonuses = 
+FGS.treasure.Bonuses = 
 {
 	Click:	function(currentType, id, currentURL, retry)
 	{
@@ -446,7 +446,7 @@ FGS.treasureBonuses =
 					if(typeof(URL) == 'undefined') throw {message: 'no url'}
 					var URL = unescape(URL);
 					
-					FGS.treasureBonuses.Click2(currentType, id, URL);
+					FGS.treasure.Bonuses.Click2(currentType, id, URL);
 				}
 				catch(err)
 				{

@@ -1,4 +1,4 @@
-FGS.fantasyRequests = 
+FGS.fantasy.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -37,7 +37,7 @@ FGS.fantasyRequests =
 					var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.fantasyRequests.Click2(currentType, id, src);
+					FGS.fantasy.Requests.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{
@@ -141,7 +141,7 @@ FGS.fantasyRequests =
 	},
 };
 
-FGS.fantasyBonuses = 
+FGS.fantasy.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -180,7 +180,7 @@ FGS.fantasyBonuses =
 					var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
-					FGS.fantasyBonuses.Click2(currentType, id, src);
+					FGS.fantasy.Bonuses.Click2(currentType, id, src);
 				} 
 				catch(err)
 				{

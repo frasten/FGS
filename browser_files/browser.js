@@ -191,7 +191,7 @@
 					if(tmp.indexOf('noErrorClass') != -1)
 						htmls[gameID] += tmp;
 					else
-						htmlsError[gameID] += tmp;					
+						htmlsError[gameID] += tmp;
 				}
 				
 				for(var tmp in htmls)
