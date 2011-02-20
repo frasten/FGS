@@ -737,13 +737,75 @@ FGS.mafiawars.Bonuses =
 
 				try
 				{
-					if(dataStr.indexOf('Sorry, you already collected on this stash!') != -1 || dataStr.indexOf('secret stashes today, and have to wait') != -1 || dataStr.indexOf('You cannot claim this reward') != -1 || dataStr.indexOf('You have already received your free boost') != -1 || dataStr.indexOf('You have already helped') != -1 || dataStr.indexOf('has already paid out the bounty on this target') != -1 || dataStr.indexOf('This user has already received the maximum amount of help') != -1 || dataStr.indexOf('has already got their Energy Pack for today') != -1 || dataStr.indexOf('You cannot gift this item to people not in your mafia') != -1 || dataStr.indexOf('has received all the help allowed for today') != -1 || dataStr.indexOf('All of the available boosts have already been claimed') != -1 || dataStr.indexOf('This stash has already been found') != -1 || dataStr.indexOf('has passed out all available') != -1 || dataStr.indexOf('You already helped this user') != -1 || dataStr.indexOf('You can only receive') != -1 || dataStr.indexOf('cannot receive any more parts') != -1 || dataStr.indexOf('has no more free boosts to hand out') != -1 || dataStr.indexOf(', come back tomorrow to help out more') != -1 || dataStr.indexOf('You are too late to claim a reward') != -1 || dataStr.indexOf('You have already claimed the maximum number of') != -1) // You are too late to help
+					var limitArr = [
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'Sorry, you already collected on this stash!', error: 'Sorry, you already collected on this stash!' },
+						{ search: 'You cannot claim this reward', error: 'You cannot claim this reward.' },
+						{ search: 'You have already received your free boost', error: 'You have already received your free boost' },
+						{ search: 'You have already helped', error: 'You have already helped.' },
+						{ search: 'This user has already received the maximum amount of help', error: 'This user has already received the maximum amount of help.' },
+						{ search: 'has received all the help allowed for today', error: 'This user has received all the help allowed for today.' },
+						{ search: 'All of the available boosts have already been claimed', error: 'All of the available boosts have already been claimed.' },
+						{ search: 'You already helped this user', error: 'You already helped this user.' },
+						{ search: 'cannot receive any more parts', error: 'You cannot receive any more parts.' },
+						{ search: 'has no more free boosts to hand out', error: 'This user has no more free boosts to hand out.' },
+						{ search: 'You have already claimed the maximum number of', error: 'You have already claimed the maximum number of this item.' },
+						{ search: 'This stash has already been found', error: 'This stash has already been found.' },
+						{ search: 'has already paid out the bounty on this target', error: 'This user has already paid out the bounty on this target.' },
+						{ search: 'You cannot gift this item to people not in your mafia', error: 'You cannot gift this item to people not in your mafia.' },
+						{ search: ', come back tomorrow to help out more', error: 'You cannot help. Come back tomorrow to help out more.' },
+						{ search: 'has already got their Energy Pack for today', error: 'This user has already got their Energy Pack for today.' },
+						{ search: 'You are too late to help', error: 'You are too late to help.' },
+						{ search: 'Sorry, you may only collect from a feed once', error: 'Sorry, you may only collect from a feed once.' },
+						{ search: 'has already had too many friends help today', error: 'This user has already had too many friends help today.' },
+						
+						{ search: 'the max number of people have already collected from this post', error: 'Sorry, the max number of people have already collected from this post.' },
+						
+						{ search: 'You have already claimed your reward', error: 'You have already claimed your reward.' },
+						
+						{ search: 'You have already collected from this feed', error: 'You have already collected from this feed.' },
+						{ search: 'Sorry, you may only accept 10 rewards a day', error: 'Sorry, you may only accept 10 rewards a day.' },
+						{ search: 'You collected the max number of Broken Hearts from this type of feed', error: 'You collected the max number of Broken Hearts from this type of feed. Try again tomorrow.' },
+						{ search: 'collected on 10 secret stashes today, and have to wait', error: 'You have collected on 10 secret stashes today, and have to wait.' },
+						{ search: 'You are too late to help', error: 'You are too late to help.' },
+						{ search: 'You are too late to help', error: 'You are too late to help.' },
+					
+					];
+					
+					
+					var isLimit = false;
+					
+					$(limitArr).each(function(k,v)
+					{
+						if(dataStr.indexOf(v.search) != -1)
+						{
+							FGS.endWithError('limit', currentType, id, v.error);
+							isLimit = true;
+							return false;
+						}
+					});
+					
+					if(isLimit) return;
+					
+					if(dataStr.indexOf('has passed out all available') != -1 || dataStr.indexOf('You can only receive') != -1)
 					{
 						FGS.endWithError('limit', currentType, id);
 						return;
+					}			
+
+					if(dataStr.indexOf('You just received 5 Loyalty Points for helping out your friend!') != -1)
+					{
+						info.image = 'gfx/90px-check.png';
+						info.text  = 'You just received 5 Loyalty Points for helping out your friend!';
+						info.title = 'Loyalty Points';
 					}
-					
-					if(dataStr.indexOf('>Congratulations</div>') != -1) // Get Reward
+					else if(dataStr.indexOf('You got a Broken Heart. Collect as many as you can to earn prizes') != -1)
+					{
+						info.image = 'gfx/90px-check.png';
+						info.text  = 'You got a Broken Heart. Collect as many as you can to earn prizes';
+						info.title = 'Broken Heart';
+					}
+					else if(dataStr.indexOf('>Congratulations</div>') != -1) // Get Reward
 					{
 						var pos1 = dataStr.indexOf('>Congratulations</div>');
 						var pos2 = dataStr.indexOf('You Have Received', pos1);

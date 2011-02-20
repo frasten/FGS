@@ -60,7 +60,8 @@ FGS.giftsArray = {
 	'102452128776': // farmville
 	{
 		"mysterygift": { name: 'Mystery Gift'},
-
+		"consume_lucky_penny" : { name: 'Lucky Penny'},
+		
 		"socialplumbingmysterygift": { name: 'Special Delivery'},
 		"shovel_item_01": { name: '2 Shovels'},
 		"wateringcan": { name: 'Watering Can'},
@@ -946,7 +947,8 @@ FGS.sendGift = function(params, retry)
 
 					var found = false;
 					
-					FGS.ListNeighbours(params.gameID);
+					if(typeof(params.thankYou) == 'undefined')
+						FGS.ListNeighbours(params.gameID);
 					
 					$(params.items).each(function(k,val)
 					{

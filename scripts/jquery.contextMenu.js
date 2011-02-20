@@ -84,7 +84,7 @@ if(jQuery)( function() {
 							
 							if($(menu).find('.bonusName').length != 0)
 							{
-								var countBonus = $(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').length;
+								var countBonus = $(el).parent().find('div[search-title="'+$(el).attr('search-title')+'"]').not('.inProgress').length;
 								
 								$(menu).find('.bonusName').text($(el).attr('search-title'));
 								$(menu).find('.bonusNameCount').text(countBonus);

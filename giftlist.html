@@ -7,8 +7,8 @@
 
 <link type="text/css" href="css/redmond/jquery-ui-1.8.9.custom.css" rel="stylesheet" />
 <link type="text/css" href="css/share.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.0.0.10" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.0.0.10" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.0" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.0" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.9.custom.min.js"></script>
@@ -16,12 +16,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.0.0.10"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.0"></script>
 <script type="text/javascript" src="scripts/jquery.tablesorter.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.0.0.10"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.0.0.10"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.0.0.10"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.0"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.0"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.0"></script>
 
 
 <script type="text/javascript">
@@ -69,11 +69,11 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(el1.length > 0)
 		{
-			el1.prev().css('height', 'auto').find('.submenuInfo').html(text);
+			el1.prev().height(300).find('.submenuInfo').html(text);
 		}
 		else if(el2.length > 0)
 		{
-			el2.prev().css('height', 'auto').find('.submenuInfo').html(text);			
+			el2.prev().height(300).find('.submenuInfo').html(text);			
 		}
 	}
 	
@@ -242,9 +242,7 @@ function addDataToScreenLocked(callback, id, data)
 
 		var newUrl = v.url;
 		
-		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';		
-		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem '+classHide+' showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewRequestRow(gameID, v)
@@ -262,9 +260,7 @@ function addDataToScreenLocked(callback, id, data)
 			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
 		}
 		
-		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
-		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem '+classHide+' showContextRequests updateTimeAgo processRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem showContextRequests updateTimeAgo processRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewManualBonusRow(gameID, v)
@@ -272,9 +268,7 @@ function addDataToScreenLocked(callback, id, data)
 		var title = v.title;
 		title = title.replace(/'/gi, '');
 		
-		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
-		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem '+classHide+' showContextManual updateTimeAgo manualBonus processManualBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem showContextManual updateTimeAgo manualBonus processManualBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewManualRequestRow(gameID, v)
@@ -292,9 +286,7 @@ function addDataToScreenLocked(callback, id, data)
 			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
 		}
 		
-		var classHide = isScreenLocked ? ' hideScreenLocked ' : '';
-		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem '+classHide+' updateTimeAgo manualRequest processManualRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem updateTimeAgo manualRequest processManualRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	
@@ -349,15 +341,7 @@ function addDataToScreenLocked(callback, id, data)
 		$('div#'+game+'ManualBonusesList').prepend(htmlManual);
 		$('div#'+game+'BonusesPendingList').prepend(html);
 
-		if($('div#'+game+'BonusesPendingList:visible').length > 0)
-		{
-			processSwitchItemsDisplay(gameID, game+'BonusesPending');
-		}
-		
-		if($('div#'+game+'ManualBonusesList:visible').length > 0)
-		{
-			processSwitchItemsDisplay(gameID, game+'ManualBonuses');
-		}
+		processSwitchItemsDisplay();
 		
 		updateCount(gameID);
 		
@@ -441,7 +425,7 @@ function addDataToScreenLocked(callback, id, data)
 	function ReceivePendingBonuses(gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
-		$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
+		$('#'+game+'BonusesPendingList').children('div').not('.inProgress').each(function(){
 			processBonusClick($(this));
 		});
 	}
@@ -449,7 +433,7 @@ function addDataToScreenLocked(callback, id, data)
 	function ReceivePendingRequests(gameID)
 	{
 		var game = bkP.gamesData[gameID].systemName;
-		$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
+		$('#'+game+'RequestsPendingList').children('div').not('.inProgress').each(function(){
 			processRequestClick($(this));
 		});
 	}
@@ -508,10 +492,7 @@ function addDataToScreenLocked(callback, id, data)
 				
 				updateCount(gameID);
 				
-				if($('div#'+game+'BonusesPendingList:visible').length > 0)
-				{
-					processSwitchItemsDisplay(gameID, game+'BonusesPending');
-				}				
+				processSwitchItemsDisplay();
 			}, 1000);
 		}
 	}
@@ -599,10 +580,7 @@ function addDataToScreenLocked(callback, id, data)
 			el.attr('time', data.time).find('.timeAgo').text(format_time_ago(data.time));
 			updateCount(gameID);
 			
-			if($('div#'+game+'BonusesPendingList:visible').length > 0)
-			{
-				processSwitchItemsDisplay(gameID, game+'BonusesPending');
-			}
+			processSwitchItemsDisplay();
 			
 		}, 1000);
 	}
@@ -806,7 +784,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var delReqArr = delBonArr = [];
 
-		$('#'+game+'ManualBonusesList').children('div').not('.hideScreenLocked').each(function()
+		$('#'+game+'ManualBonusesList').children('div').each(function()
 		{
 			var elID = $(this).attr('id');
 			if($(this).hasClass('manualRequest'))
@@ -827,6 +805,8 @@ function addDataToScreenLocked(callback, id, data)
 			
 			$(this).remove();
 		});
+		
+		processSwitchItemsDisplay();
 		updateCount(gameID);
 		
 		while(delReqArr.length > 0)
@@ -860,7 +840,7 @@ function addDataToScreenLocked(callback, id, data)
 					var game = bkP.gamesData[gameID].systemName;
 					var delArr = [];
 
-					$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function()
+					$('#'+game+'BonusesPendingList').children('div').not('.inProgress').each(function()
 					{
 						delArr.push($(this).attr('id'));
 						$(this).remove();
@@ -876,6 +856,7 @@ function addDataToScreenLocked(callback, id, data)
 						delArr = delArr.slice(500);						
 					}
 					updateCount(gameID);
+					processSwitchItemsDisplay();
 					
 					
 					$( this ).dialog( "close" );
@@ -899,7 +880,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 					var delArr = [];
 					
-					$('#'+game+'RequestsPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function()
+					$('#'+game+'RequestsPendingList').children('div').not('.inProgress').each(function()
 					{
 						var postData = $(this).attr('postData');
 						var pos1 = postData.indexOf('&actions%5B');
@@ -921,6 +902,7 @@ function addDataToScreenLocked(callback, id, data)
 						delArr = delArr.slice(500);						
 					}
 					
+					processSwitchItemsDisplay();
 					updateCount(gameID);
 
 					$( this ).dialog( "close" );
@@ -966,7 +948,7 @@ function addDataToScreenLocked(callback, id, data)
 					var delArr = [];
 					
 					
-					$('#'+game+'BonusesPendingList').children('div').not('.hideScreenLocked').not('.inProgress').each(function(){
+					$('#'+game+'BonusesPendingList').children('div').not('.inProgress').each(function(){
 						if($(this).find('.bonusError').text().indexOf('other error') != -1)
 						{
 							delArr.push($(this).attr('id'));
@@ -984,6 +966,7 @@ function addDataToScreenLocked(callback, id, data)
 						delArr = delArr.slice(500);						
 					}
 					updateCount(gameID);
+					processSwitchItemsDisplay()
 					
 					$( this ).dialog( "close" );
 				},
@@ -1221,15 +1204,8 @@ function addDataToScreenLocked(callback, id, data)
 			$('div#'+game+'RequestsPendingList').prepend(htmls[tmp]);
 		}
 		
-		if($('div#'+game+'RequestsPendingList:visible').length > 0)
-		{
-			processSwitchItemsDisplay(gameID, game+'RequestsPending');
-		}
 		
-		if($('div#'+game+'ManualBonusesList:visible').length > 0)
-		{
-			processSwitchItemsDisplay(gameID, game+'ManualBonuses');
-		}
+		processSwitchItemsDisplay();
 		
 		updateCount();
 	}
@@ -1352,9 +1328,9 @@ function addDataToScreenLocked(callback, id, data)
 			
 			var totCount = 0;
 			
-			var bCount = $('#'+game+'BonusesPendingList > div').not('.hideScreenLocked').length;
-			var rCount = $('#'+game+'RequestsPendingList > div').not('.hideScreenLocked').length;
-			var mCount = $('#'+game+'ManualBonusesList > div').not('.hideScreenLocked').length;
+			var bCount = $('#'+game+'BonusesPendingList > div').length;
+			var rCount = $('#'+game+'RequestsPendingList > div').length;
+			var mCount = $('#'+game+'ManualBonusesList > div').length;
 			
 			totCount += bCount;
 			totCount += rCount;
@@ -1695,7 +1671,7 @@ function addGameMenu(gameID)
 	var game = bkP.gamesData[gameID].systemName;
 	
 		
-	var el = $('<div id="'+game+'Game" class="gameContent hide"><ul></ul></div>');
+	var el = $('<div id="'+game+'Game" gameID="'+gameID+'" class="gameContent hide"><ul></ul></div>');
 	var elOpt = el.children('ul');
 	
 	$(bkP.gamesData[gameID].buttons).each(function(k,id)
@@ -1709,7 +1685,7 @@ function addGameMenu(gameID)
 		
 		if(id == 'BonusesPending' || id == 'ManualBonuses' || id == 'RequestsPending')
 		{
-			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input processTab="'+game+id+'" type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input processTab="'+game+id+'" type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br /><br /></div>');
+			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br /><br /></div>');
 		}
 		
 		if(id == 'NeighborsSearch')
@@ -1745,8 +1721,7 @@ function addGameMenu(gameID)
 			if(ui.tab.hash.match(/gameOptionsTab$/gi))
 				return processLoadFiltersForGame($(ui.tab).attr('gameID'), ui.panel.id);
 			
-			if(ui.tab.hash.match(/(BonusesPending|ManualBonuses|RequestsPending)$/gi))
-				return processSwitchItemsDisplay($(ui.tab).attr('gameID'), ui.panel.id);
+			processSwitchItemsDisplay();
 		}
 	});
 }
@@ -1807,8 +1782,7 @@ function processGameSelectorInput(el)
 		
 		var tab = $('#'+d.systemName+'Game').removeClass('hide');
 		
-		
-		processSwitchItemsDisplay($(el).attr('gameID'), tab.children('div').not('.hide').attr('id'));
+		processSwitchItemsDisplay();
 		updateTimeAgo(tab.children('div').not('.hide').attr('id'));
 		return;
 	}
@@ -2024,26 +1998,41 @@ function processDeleteFilter(el)
 	processLoadFiltersForGame(gameID, game+'GameOptionsTab');
 }
 
-function processSwitchItemsDisplay(gameID, target)
+function processSwitchItemsDisplay()
 {
+	var gc = $('.gameContent:visible');
+	
+	if(gc == undefined)
+		return;
+	
+	var gameID = gc.attr('gameID');
+
+	var target = gc.children('div:visible').attr('id');
+	
+	if(target == undefined)
+		return;
+	
+	if(!target.match(/(BonusesPending|ManualBonuses|RequestsPending)$/gi))
+		return;	
+	
 	var game = bkP.gamesData[gameID].systemName;
 	var el = $('#'+target+'List');
-	var total = el.children('div').not('.hideScreenLocked').length;
+	var total = el.children('div').length;
 	var elSub  = el.prev('.submenu');
 	
-	if(el.prev('.submenu').height() < 55)
+	if(elSub.height() < 55)
 	{
-		elSub.css('height', '55px');
+		elSub.height(55);
 	}
 	
 	var showDesc = $('input.ShowDescriptions', elSub).button().is(':checked');
 	
-	el.children('div').not('.hideScreenLocked').addClass('hide');
+	el.children('div').addClass('hide');
 	
 	if($('input.ShowAllItems', elSub).button().is(':checked'))
 	{
 		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
-		el.children('div').not('.hideScreenLocked').removeClass('hide');		
+		el.children('div').removeClass('hide');		
 		appendSrcToImages(el.attr('id'));
 		switchDescriptions(el.attr('id'), showDesc);
 		return;
@@ -2059,8 +2048,8 @@ function processSwitchItemsDisplay(gameID, target)
 		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
 		$('input.ShowAllItems', elSub).next().addClass('hide');
 	}
-	el.children('div:gt(99)').not('.hideScreenLocked').addClass('hide');
-	el.children('div:lt(100)').not('.hideScreenLocked').removeClass('hide');
+	el.children('div:gt(99)').addClass('hide');
+	el.children('div:lt(100)').removeClass('hide');
 
 	appendSrcToImages(el.attr('id'));
 	switchDescriptions(el.attr('id'), showDesc);
@@ -2073,17 +2062,17 @@ function switchDescriptions(id, test)
 {
 	if(test)
 	{
-		$('#'+id).children('div').not('.hideScreenLocked').not('.hide').not('.withDesc').addClass('withDesc').find('.description').removeClass('hide');
+		$('#'+id).children('div').not('.hide').not('.withDesc').addClass('withDesc').find('.description').removeClass('hide');
 	}
 	else
 	{
-		$('#'+id).children('div.withDesc').not('.hideScreenLocked').not('.hide').removeClass('withDesc').find('.description').addClass('hide');
+		$('#'+id).children('div.withDesc').not('.hide').removeClass('withDesc').find('.description').addClass('hide');
 	}
 }
 
 function appendSrcToImages(id)
 {
-	$('#'+id).children('div').not('.hideScreenLocked').not('.hide').each(function(k,v)
+	$('#'+id).children('div').not('.hide').each(function(k,v)
 	{
 		var img = $(this).find('img[nosrc]');
 		if(img.length > 0)
@@ -2234,7 +2223,7 @@ function updateTimeAgo(target)
 			else if(el.hasClass('deleteFilter'))
 				return processDeleteFilter(el);
 			else if(el.hasClass('ShowAllItems') || el.hasClass('ShowDescriptions'))
-				return processSwitchItemsDisplay(el.attr('gameID'), el.attr('processTab'));
+				return processSwitchItemsDisplay();
 			
 			else if(el.closest('div').hasClass('processManualRequestClick'))
 				return processManualRequestClick(el.closest('div'));
@@ -2251,7 +2240,7 @@ function updateTimeAgo(target)
 				return processLikeBonus(el);
 			else if(el.hasClass('sendBack'))
 				return processSendBack(el);
-			else if(el.hasClass('likeBonus'))
+			else if(el.hasClass('commentBonus'))
 				return processCommentBonus(el);
 				
 			if(el.attr('id') == 'saveNewComment')
@@ -2332,7 +2321,7 @@ function updateTimeAgo(target)
 				}
 				else if(action == 'receiveSimilar')
 				{
-					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
+					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function(){
 						processBonusClick($(this));
 					});
 				}
@@ -2349,7 +2338,7 @@ function updateTimeAgo(target)
 						{
 							"Delete all items": function()
 							{
-								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
@@ -2374,7 +2363,7 @@ function updateTimeAgo(target)
 							{
 								bkP.options.games[el.attr('gameID')].filter.push(el.attr('search-title'));
 								bkP.saveOptions();
-								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
@@ -2413,7 +2402,7 @@ function updateTimeAgo(target)
 				}
 				else if(action == 'receiveSimilar')
 				{
-					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function(){
+					el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function(){
 						processRequestClick($(this));
 					});
 				}
@@ -2437,7 +2426,7 @@ function updateTimeAgo(target)
 						{
 							"Delete all items": function()
 							{
-								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
 								{
 									var postData = $(this).attr('postData');
 									var pos1 = postData.indexOf('&actions%5B');
@@ -2488,7 +2477,7 @@ function updateTimeAgo(target)
 							{
 								bkP.options.games[el.attr('gameID')].filter.push(el.attr('search-title'));
 								bkP.saveOptions();
-								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.hideScreenLocked').not('.inProgress').each(function()
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
 								{
 									$(this).remove();
 								});
@@ -2565,7 +2554,6 @@ function updateTimeAgo(target)
 			else
 			{
 				$(this).button('option', 'label', 'Screen is: UNLOCKED (click to lock)');
-				$('div.hideScreenLocked').removeClass('hideScreenLocked');
 				updateCount();
 				var procArr = screenLockedData;
 				screenLockedData = [];

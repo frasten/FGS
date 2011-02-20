@@ -77,7 +77,7 @@ FGS.gamesData =
 						filter:		
 						{	
 							bonuses: ['Play Mafia Wars'],		
-							bonusesNewWindow: ['^Help','Play Slots', 'Send Mystery Bag', 'Send Satchel of Lira', 'Be all you can be', 'Get uniforms', 'Get a uniform', 'Send a uniform', 'Send Army uniform', 'Go sailing', 'Check your Respect Meter', 'Click image to win', 'Goooooooal', 'Send Mystery Shipment', 'Enter now', 'Claim Halloween Reward', 'Send Anvil', 'Join Operation', 'Get the bounty', 'Send Ornaments', 'Send a present', 'Send LE parts'],
+							bonusesNewWindow: ['^Help','Play Slots', 'Send Mystery Bag', 'Send Satchel of Lira', 'Be all you can be', 'Get uniforms', 'Get a uniform', 'Send a uniform', 'Send Army uniform', 'Go sailing', 'Check your Respect Meter', 'Click image to win', 'Goooooooal', 'Send Mystery Shipment', 'Enter now', 'Claim Halloween Reward', 'Send Anvil', 'Join Operation', 'Get the bounty', 'Send Ornaments', 'Send a present', 'Send LE parts', 'Buy before time runs out.', 'Send LE part', 'Send some lovin', 'Überprüfe deine Respektan'],
 							requests: [],
 							requestsNewWindow: [
 								'Join me on a crime spree and find out what we loot',
@@ -125,7 +125,7 @@ FGS.gamesData =
 						filter:		
 						{
 							bonuses: ['Play Now', 'Look at my bouquet'],
-							bonusesNewWindow: [],
+							bonusesNewWindow: ['Help (.*) buy Cupid'],
 							requests: [],
 							requestsNewWindow: []
 						},
@@ -196,7 +196,7 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['(.*)'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['Please help me by accepting this request and sending me a gift']
 						},
 						buttons: [
 							'RequestsPending',
