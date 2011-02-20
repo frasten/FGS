@@ -64,16 +64,16 @@ function addDataToScreenLocked(callback, id, data)
 		var game = bkP.gamesData[gameID].systemName;
 		var el1		= $('div#'+game+'BonusesPendingList');
 		var el2 	= $('div#'+game+'ManualBonusesList');
-				
-		var text = '<strong>There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</strong><br /><br />';
+		
+		var text = '<strong>There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</strong><br /><br /><br /><br />';
 		
 		if(el1.length > 0)
 		{
-			$(el1).prev().css('height', 'auto !important').find('.submenuInfo').html(text);
+			el1.prev().css('height', 'auto').find('.submenuInfo').html(text);
 		}
 		else if(el2.length > 0)
 		{
-			$(el2).prev().css('height', 'auto !important').find('.submenuInfo').html(text);			
+			el2.prev().css('height', 'auto').find('.submenuInfo').html(text);			
 		}
 	}
 	
@@ -325,8 +325,8 @@ function addDataToScreenLocked(callback, id, data)
 		var gameID = data2[0][1];
 		var game = bkP.gamesData[gameID].systemName;
 		
-		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().find('.submenuInfo').html('');
-		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().find('.submenuInfo').html('');
+		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
+		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
 		
 		var html = '';
 		var htmlManual = '';
@@ -2029,7 +2029,12 @@ function processSwitchItemsDisplay(gameID, target)
 	var game = bkP.gamesData[gameID].systemName;
 	var el = $('#'+target+'List');
 	var total = el.children('div').not('.hideScreenLocked').length;
-	var elSub  = el.prev('.submenu').css('height', '55px');
+	var elSub  = el.prev('.submenu');
+	
+	if(el.prev('.submenu').height() < 55)
+	{
+		elSub.css('height', '55px');
+	}
 	
 	var showDesc = $('input.ShowDescriptions', elSub).button().is(':checked');
 	
@@ -2197,6 +2202,8 @@ function updateTimeAgo(target)
 		$(window).click(function(e)
 		{
 			var el = $(e.srcElement || e.target);
+			
+			if(e.which != 1) return;
 			
 			if(el.hasClass('gameSelectorInput'))
 				return processGameSelectorInput(el);

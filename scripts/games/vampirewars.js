@@ -20,9 +20,9 @@ FGS.vampirewars.Freegifts =
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
 					params.domain = paramTmp.match(re)[1].toString();
 					var pos1 = paramTmp.lastIndexOf('?')+1;
-					params.step2param = paramTmp.slice(pos1);
+					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5source=normal&'+paramTmp.slice(pos1);
 					
-					FGS.vampirewars.Freegifts.Click2(params);
+					FGS.vampirewars.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -73,8 +73,8 @@ FGS.vampirewars.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
-			url: 'http://'+params.domain+'/send_gifts.php',
+			type: "POST",
+			url: 'http://'+params.domain+'/send_gifts.php?ajax=1',
 			data: params.step2param+'&next=send_gifts.php&action=recruit_gift_friends&giftId='+params.gift+'&skipLink=index.php'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
@@ -159,7 +159,13 @@ FGS.vampirewars.Freegifts =
 					if(tst == null) throw {message:'no fbml tag'}
 					var fbml = tst[1];
 					
-					params.nextParams += encodeURIComponent(fbml);
+					var app_key = '25287267406';
+					var channel_url = 'http://static.ak.fbcdn.net/connect/xd_proxy.php';
+					
+	
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
 										
 					FGS.getFBML(params);
 				}

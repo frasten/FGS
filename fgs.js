@@ -657,7 +657,7 @@ var FGS = {
 							
 							if(re.test(typeText))
 							{
-								dataPost += '&actions[reject]=Ignore&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg;
+								dataPost += '&actions[reject]=Ignore';
 								FGS.emptyUnwantedGifts(dataPost);
 								ret = true;
 								return false;

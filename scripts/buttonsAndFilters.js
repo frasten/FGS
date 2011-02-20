@@ -54,8 +54,8 @@ FGS.gamesData =
 						{	
 							bonuses: ['來玩FarmVille中文版', '來玩FarmVille中文版'], // fertilize their crops, watering cans, Send Materials, lend a helping hand, shelter cos, sendmaterial, quick look at the gift, cos z rabbitem, avatar clothes
 							bonusesNewWindow: ['幫助施肥！', '送出澆水罐！', '贈送材料！', '伸出援手！', '收留小牛！', '送出材料！', '快看看禮物！', '獲得兔年禮物', '你也來大改造吧！'],
-							requests: [],
-							requestsNewWindow: ['Toolbar_Install', 'sendcredits'],
+							requests: ['Toolbar_Install', 'sendcredits'],
+							requestsNewWindow: [],
 						},
 						buttons:
 						[

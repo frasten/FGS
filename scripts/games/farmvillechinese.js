@@ -263,7 +263,18 @@ FGS.farmvillechinese.Requests =
 							FGS.endWithError('limit', currentType, id, error_text);							
 							return;
 						}
-						
+						if($('.main_giftConfirm_cont', dataHTML).text().indexOf('我們現在似乎無法把禮物送到你的朋友手中。') != -1)
+						{
+							var error_text = "我們現在似乎無法把禮物送到你的朋友手中。";
+							FGS.endWithError('limit', currentType, id, error_text);							
+							return;
+						}
+						if($('.main_giftConfirm_cont', dataHTML).text().indexOf('抱歉喔，你已經和這位朋友約會過，請選擇另一位朋友約會吧') != -1)
+						{
+							var error_text = "抱歉喔，你已經和這位朋友約會過，請選擇另一位朋友約會吧";
+							FGS.endWithError('limit', currentType, id, error_text);							
+							return;
+						}
 					}
 					
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length > 0)
