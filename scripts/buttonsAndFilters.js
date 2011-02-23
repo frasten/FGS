@@ -284,28 +284,6 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	167746316127: 	{ 	name: 'Zoo World',		systemName: 'zooworld', link: 'http://apps.facebook.com/playzoo/zoo/home.php',
-						filter:		
-						{
-							bonuses: [],
-							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
-							requests: [],
-							requestsNewWindow: []
-						},
-						buttons: [
-							'BonusesPending',
-							'RequestsPending',
-							'ManualBonuses',
-							'BonusesHistory',
-							'RequestsHistory',
-							'FailedBonuses',
-							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
-							'NeighborsSearch',
-							'GameOptionsTab'
-						],
-					},
 	25287267406: 	{ 	name: 'Vampire Wars',		systemName: 'vampirewars', link: 'http://apps.facebook.com/vampiresgame/',
 						filter:	
 						{
@@ -556,6 +534,153 @@ FGS.gamesData =
 						],
 					},
 	272810543124:	{ 	name: 'Pot Farm',	systemName: 'potfarm', link: 'http://apps.facebook.com/mypotfarm/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'RequestsPending',
+							'ManualBonuses',
+							'RequestsHistory',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	166309140062981: { 	name: 'Puzzled Hearts',	systemName: 'puzzledhearts', link: 'http://apps.facebook.com/phearts/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	167746316127: 	{ 	name: 'Zoo World',		systemName: 'zooworld', link: 'http://apps.facebook.com/playzoo/zoo/home.php',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	2405948328: { 	name: 'Likeness',	systemName: 'likeness', link: 'http://apps.facebook.com/likeness/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	2345673396: 	{ 	name: 'Hug me',		systemName: 'hugme', link: 'http://apps.facebook.com/doittome/zoo/home.php',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	2339854854: 	{ 	name: 'Horoscopes',		systemName: 'horoscopes', link: 'http://apps.facebook.com/horoscopes/zoo/home.php',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	14852940614: 	{ 	name: 'Birthday Cards',		systemName: 'birthdaycards', link: 'http://apps.facebook.com/rybirthday/zoo/home.php',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	256799621935:	{ 	name: 'Car Town',	systemName: 'cartown', link: 'http://apps.facebook.com/cartown/',
 						filter:	
 						{
 							bonuses: [],

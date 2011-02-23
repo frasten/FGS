@@ -551,14 +551,22 @@ var FGS = {
 	},
 	
 	
-	checkRequests: function()
+	checkRequests: function(apps)
 	{
+		if(typeof(apps) == 'undefined')
+			var urlIK = 'http://www.facebook.com/games';
+		else
+			var urlIK = 'http://www.facebook.com/?sk=apps&ap=1';
+	
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/games',
+			url: urlIK,
 			timeout: 180000,
 			success: function(data)
 			{
+				if(typeof(apps) == 'undefined')
+					FGS.checkRequests(true);
+				
 				if(data.indexOf('"content":{"pagelet_requests":"') != -1)
 				{
 					var pos1 = data.indexOf('"content":{"pagelet_requests":"')+10;
@@ -609,14 +617,13 @@ var FGS = {
 				FGS.jQuery('input[name="params\[app_id\]"]',data).parent('form').each(function()
 				{
 					var APPID = $(this).find('input[name="params\[app_id\]"]').val();
-					
+
 					if(FGS.options.games[APPID] == undefined || FGS.options.games[APPID].enabled == false)
 					{
 						return;
 					}
 
 					var el = $(this);
-					
 					
 					if($(this).attr('action') == '/ajax/games/apprequest/apprequest.php')
 					{
@@ -670,7 +677,20 @@ var FGS = {
 					}
 
 					var elID = $(el).children('input[name=id]').val();
-					var newText = $(el).find('.appRequestBody').text();
+
+					var testEl = $(el).find('.UIImageBlock_ICON_Content:first');
+					
+					if(testEl.children().length > 1)
+					{
+						var txtP1 = '<span style="color: blue;font-weight: bold;">'+testEl.children(':last').text()+'</span><br />';
+						var txtP2 = testEl.children(':first').text();
+						
+						var newText = txtP1 + txtP2;
+					}
+					else
+					{
+						var newText = testEl.text();
+					}
 					
 					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1)
 					{
@@ -686,7 +706,7 @@ var FGS = {
 						{
 							var searchStr = 'gid';
 						}
-						else if(APPID == 167746316127)
+						else if(APPID == 167746316127 || APPID == 2405948328 || APPID == 2345673396 || APPID == 2339854854 || APPID == 14852940614)
 						{
 							var searchStr = 'giftId';
 						}
@@ -810,9 +830,6 @@ var FGS = {
 		}
 		
 		var downAppID = appID;
-		
-		if(appID == '167746316127')
-			downAppID = appID+'_2345673396';
 		
 		
 		//dump(FGS.getCurrentTime()+'[B] Starting. Checking for '+number+' bonuses for game '+appID);

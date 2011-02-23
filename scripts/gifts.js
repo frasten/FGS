@@ -478,6 +478,140 @@ FGS.giftsArray = {
 		"12": { name: 'Lion'},
 		"13": { name: 'Monkey'},
 	},
+	2405948328: // zoo world
+	{
+		"1074": { name: 'Rose Petals'},
+		"1075": { name: 'Grooming Supplies'},
+		"1077": { name: 'Valentine Cards'},
+		"564": { name: 'Red Rose'},
+		"566": { name: 'White Rose'},
+		"565": { name: 'Yellow Rose'},
+		"563": { name: 'Blue Rose'},
+		"562": { name: 'Glass Panel'},
+		"559": { name: 'Glass Pillar'},
+		"560": { name: 'Planting Pot'},
+		"325": { name: 'Frog Sculpture'},
+		"308": { name: 'Pear Tree'},
+		"4": { name: 'Giant Panda'},
+		"3": { name: 'Tortoise'},
+		"15": { name: 'Tree Frog'},
+		"11": { name: 'African Elephant'},
+		"9": { name: 'Bison'},
+		"1": { name: 'Bonobo'},
+		"16": { name: 'Camel'},
+		"23": { name: 'Caribbean Flamingo'},
+		"6": { name: 'Caribou'},
+		"7": { name: 'Emperor Penguin'},
+		"19": { name: 'Gazelle'},
+		"10": { name: 'Giraffe'},
+		"2": { name: 'Hippopotamus'},
+		"14": { name: 'Jaguar'},
+		"20": { name: 'Kangaroo'},
+		"18": { name: 'Koala'},
+		"12": { name: 'Lion'},
+		"13": { name: 'Monkey'},
+	},
+	2345673396: // zoo world
+	{
+		"1074": { name: 'Rose Petals'},
+		"1075": { name: 'Grooming Supplies'},
+		"1077": { name: 'Valentine Cards'},
+		"564": { name: 'Red Rose'},
+		"566": { name: 'White Rose'},
+		"565": { name: 'Yellow Rose'},
+		"563": { name: 'Blue Rose'},
+		"562": { name: 'Glass Panel'},
+		"559": { name: 'Glass Pillar'},
+		"560": { name: 'Planting Pot'},
+		"325": { name: 'Frog Sculpture'},
+		"308": { name: 'Pear Tree'},
+		"4": { name: 'Giant Panda'},
+		"3": { name: 'Tortoise'},
+		"15": { name: 'Tree Frog'},
+		"11": { name: 'African Elephant'},
+		"9": { name: 'Bison'},
+		"1": { name: 'Bonobo'},
+		"16": { name: 'Camel'},
+		"23": { name: 'Caribbean Flamingo'},
+		"6": { name: 'Caribou'},
+		"7": { name: 'Emperor Penguin'},
+		"19": { name: 'Gazelle'},
+		"10": { name: 'Giraffe'},
+		"2": { name: 'Hippopotamus'},
+		"14": { name: 'Jaguar'},
+		"20": { name: 'Kangaroo'},
+		"18": { name: 'Koala'},
+		"12": { name: 'Lion'},
+		"13": { name: 'Monkey'},
+	},
+	2339854854: // zoo world
+	{
+		"1074": { name: 'Rose Petals'},
+		"1075": { name: 'Grooming Supplies'},
+		"1077": { name: 'Valentine Cards'},
+		"564": { name: 'Red Rose'},
+		"566": { name: 'White Rose'},
+		"565": { name: 'Yellow Rose'},
+		"563": { name: 'Blue Rose'},
+		"562": { name: 'Glass Panel'},
+		"559": { name: 'Glass Pillar'},
+		"560": { name: 'Planting Pot'},
+		"325": { name: 'Frog Sculpture'},
+		"308": { name: 'Pear Tree'},
+		"4": { name: 'Giant Panda'},
+		"3": { name: 'Tortoise'},
+		"15": { name: 'Tree Frog'},
+		"11": { name: 'African Elephant'},
+		"9": { name: 'Bison'},
+		"1": { name: 'Bonobo'},
+		"16": { name: 'Camel'},
+		"23": { name: 'Caribbean Flamingo'},
+		"6": { name: 'Caribou'},
+		"7": { name: 'Emperor Penguin'},
+		"19": { name: 'Gazelle'},
+		"10": { name: 'Giraffe'},
+		"2": { name: 'Hippopotamus'},
+		"14": { name: 'Jaguar'},
+		"20": { name: 'Kangaroo'},
+		"18": { name: 'Koala'},
+		"12": { name: 'Lion'},
+		"13": { name: 'Monkey'},
+	},
+	14852940614: // zoo world
+	{
+		"1074": { name: 'Rose Petals'},
+		"1075": { name: 'Grooming Supplies'},
+		"1077": { name: 'Valentine Cards'},
+		"564": { name: 'Red Rose'},
+		"566": { name: 'White Rose'},
+		"565": { name: 'Yellow Rose'},
+		"563": { name: 'Blue Rose'},
+		"562": { name: 'Glass Panel'},
+		"559": { name: 'Glass Pillar'},
+		"560": { name: 'Planting Pot'},
+		"325": { name: 'Frog Sculpture'},
+		"308": { name: 'Pear Tree'},
+		"4": { name: 'Giant Panda'},
+		"3": { name: 'Tortoise'},
+		"15": { name: 'Tree Frog'},
+		"11": { name: 'African Elephant'},
+		"9": { name: 'Bison'},
+		"1": { name: 'Bonobo'},
+		"16": { name: 'Camel'},
+		"23": { name: 'Caribbean Flamingo'},
+		"6": { name: 'Caribou'},
+		"7": { name: 'Emperor Penguin'},
+		"19": { name: 'Gazelle'},
+		"10": { name: 'Giraffe'},
+		"2": { name: 'Hippopotamus'},
+		"14": { name: 'Jaguar'},
+		"20": { name: 'Kangaroo'},
+		"18": { name: 'Koala'},
+		"12": { name: 'Lion'},
+		"13": { name: 'Monkey'},
+	},
+	
+	
 	2389801228: // poker
 	{
 		"chips": { name: "Chips" }
@@ -678,7 +812,6 @@ FGS.freeGiftForGame =
 	120563477996213: '329',
 	151044809337: 'mysterybox',
 	291549705119: 'energy_1',
-	167746316127: '562',
 	2389801228: 'chips',
 	338051018849: 'Stanchion',
 	46755028429: '1',
@@ -686,7 +819,13 @@ FGS.freeGiftForGame =
 	163576248142: '5215',
 	25287267406: '439',
 	156383461049284: 'brick',
-	21526880407: '37394'
+	21526880407: '37394',
+	
+	167746316127: '562',
+	2405948328: '562',
+	2345673396: '562',
+	2339854854: '562',
+	14852940614: '562',
 }
 
 
@@ -729,7 +868,7 @@ FGS.getFBML = function(params, retry)
 				var reqData =
 				{
 					prefill: true,
-					message: '',
+					message: (params.messageToAdd ? params.messageToAdd : ''),
 					preview: false,
 					donot_send: false,
 					__d: 1,
@@ -753,9 +892,18 @@ FGS.getFBML = function(params, retry)
 				reqData.content = tst[1];
 				reqData.prefill = true;
 
-				var tst = new RegExp(/var items=({.*});/gm).exec(dataStr);
+				
+				var dataCheck = dataStr;
+				
+				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
+				{
+					dataCheck = dataStr.slice(dataStr.lastIndexOf('var items='));
+				}
+				
+				var tst = new RegExp(/var items=({.*});/gm).exec(dataCheck);
 				if(tst == null) throw {message:'no items'}
 				var tst = tst[1];
+				
 				
 				var tst = tst.match(/("[0-9]+":{"name":\s*["][^"]+[^}]})/g);
 				if(tst == null) throw {message:'no friends'}
@@ -837,7 +985,7 @@ FGS.getFBML = function(params, retry)
 					sendGiftParams += '&'+$('form[type]', data).serialize();
 				}
 				
-				if(params.gameID == '167746316127')
+				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
 				{
 					sendGiftParams += '&giftId='+params.gift;
 				}

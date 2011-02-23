@@ -5,16 +5,25 @@ FGS.zooworld.Freegifts =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		
+		if(!params.zooAppId	)
+		{
+			params.zooAppname = 'zooparent';
+			params.zooAppId	  = '74';
+			params.checkID = '167746316127';
+			params.gameName = 'playzoo';
+		}
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/playzoo/zoo/home.php'+addAntiBot,
+			url: 'http://apps.facebook.com/'+params.gameName+'/zoo/home.php'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_167746316127', dataStr);
+					
+					var src = FGS.findIframeAfterId('#app_content_'+params.checkID, dataStr);
 					if (src == '') throw {message:"no iframe"}
 					
 					var pos1 = src.indexOf('?');
@@ -26,14 +35,14 @@ FGS.zooworld.Freegifts =
 					{
 						if(idd.indexOf('fb_') != -1)
 						{
-							postParams[idd] = $.unparam(src)[idd];
+							postParams[idd] = unescape($.unparam(src)[idd]);
 						}
 					}
 					
 					postParams['service'] 	= 'dsplygiftinvite';
 					postParams['giftId'] 	= params.gift;
-					postParams['appname']	= 'zooparent';
-					postParams['appId'] 	= '74';
+					postParams['appname']	= params.zooAppname;
+					postParams['appId'] 	= params.zooAppId;
 					//postParams['straightToGift'] = '1';
 					
 					params.param2 = postParams;
@@ -105,7 +114,8 @@ FGS.zooworld.Freegifts =
 					var app_key = tst[1];
 					var channel_url = tst[2];
 					
-					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/mg).exec(dataStr);					
 					if(tst == null) throw {message:'no fbml tag'}
 					var fbml = tst[1];
 					
@@ -194,9 +204,39 @@ FGS.zooworld.Requests =
 				
 				try
 				{
-					// <h3>Cannot accept gift. // <h3>This promotion is over.
+					if(dataStr.indexOf('<h3>Cannot accept gift.') != -1)
+					{
+						var error_text = 'This gift is too old.';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					if(dataStr.indexOf('<h3>This promotion is over.') != -1)
+					{
+						var error_text = 'This promotion is over.';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
 				
-					var testStr = $('#app_content_167746316127', dataHTML).find('h1:first').text();
+					if($('#app_content_2405948328', dataHTML).length > 0)
+					{
+						var testStr = $('#app_content_2405948328', dataHTML).find('h1:first').text();
+					}
+					else if($('#app_content_2345673396', dataHTML).length > 0)
+					{
+						var testStr = $('#app_content_2345673396', dataHTML).find('h1:first').text();
+					}
+					else if($('#app_content_2339854854', dataHTML).length > 0)
+					{
+						var testStr = $('#app_content_2339854854', dataHTML).find('h1:first').text();
+					}
+					else if($('#app_content_14852940614', dataHTML).length > 0)
+					{
+						var testStr = $('#app_content_14852940614', dataHTML).find('h1:first').text();
+					}
+					else
+					{
+						var testStr = $('#app_content_167746316127', dataHTML).find('h1:first').text();
+					}
 					
 					if(testStr.indexOf('You are now ZooMates') != -1)
 					{
@@ -332,13 +372,29 @@ FGS.zooworld.Bonuses =
 				
 				try
 				{
-					if($('#app_content_167746316127', dataHTML).length > 0)
+					if($('#app_content_2405948328', dataHTML).length > 0)
+					{
+						var src = FGS.findIframeAfterId('#app_content_2405948328', dataStr);
+					}
+					else if($('#app_content_2345673396', dataHTML).length > 0)
+					{
+						var src = FGS.findIframeAfterId('#app_content_2345673396', dataStr);
+					}
+					else if($('#app_content_2339854854', dataHTML).length > 0)
+					{
+						var src = FGS.findIframeAfterId('#app_content_2339854854', dataStr);
+					}
+					else if($('#app_content_14852940614', dataHTML).length > 0)
+					{
+						var src = FGS.findIframeAfterId('#app_content_14852940614', dataStr);
+					}
+					else if($('#app_content_167746316127', dataHTML).length > 0)
 					{
 						var src = FGS.findIframeAfterId('#app_content_167746316127', dataStr);
 					}
 					else
 					{
-						var src = FGS.findIframeAfterId('#app_content_2345673396', dataStr);
+						throw {message: 'not zoo?'}
 					}
 
 					if (src == '') throw {message:"no iframe"}
@@ -405,7 +461,7 @@ FGS.zooworld.Bonuses =
 						var pos2 = dataStr.indexOf('},', pos1)+1;
 						lastPos = pos2;
 						
-						if(dataStr.slice(pos1, pos2).indexOf('zooparent') != -1 || dataStr.slice(pos1, pos2).indexOf('"hugme"') != -1)
+						if(dataStr.slice(pos1, pos2).indexOf('zooparent') != -1 || dataStr.slice(pos1, pos2).indexOf('"hugme"') != -1 || dataStr.slice(pos1, pos2).indexOf('"likeness"') != -1 || dataStr.slice(pos1, pos2).indexOf('"birthdays"') != -1 || dataStr.slice(pos1, pos2).indexOf('"horoscope"') != -1)
 						{
 							var tempVars = JSON.parse(dataStr.slice(pos1,pos2));
 							break;
@@ -415,7 +471,7 @@ FGS.zooworld.Bonuses =
 					if(typeof(tempVars) == 'undefined') throw {message: 'no tempvars zooworld'}
 					
 					var getStr = '?oauth_consumer_key=facebook.com&oauth_signature=1&vip&version=100';
-					
+										
 					for(var idd in tempVars)
 					{
 						if(idd.indexOf('fb_') != -1)

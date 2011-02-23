@@ -7,8 +7,8 @@
 
 <link type="text/css" href="css/redmond/jquery-ui-1.8.9.custom.css" rel="stylesheet" />
 <link type="text/css" href="css/share.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.0" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.0" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.1" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.1" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui-1.8.9.custom.min.js"></script>
@@ -16,12 +16,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.0"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.1"></script>
 <script type="text/javascript" src="scripts/jquery.tablesorter.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.0"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.0"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.0"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.1"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.1"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.1"></script>
 
 
 <script type="text/javascript">
@@ -65,7 +65,7 @@ function addDataToScreenLocked(callback, id, data)
 		var el1		= $('div#'+game+'BonusesPendingList');
 		var el2 	= $('div#'+game+'ManualBonusesList');
 		
-		var text = '<strong>There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />- Click "Friends" on the left side under the Facebook icon<br />- Click "Status Updates" under "Friends"<br />- Scroll all the way to the bottom and click "Edit Options" (The one on the status updates page is different from the news feed one)<br />- Click the "Applications" tab and click "Add To News Feed" on the one you wish to unhide.</strong><br /><br /><br /><br />';
+		var text = '<strong>There was a problem collecting bonuses. You may have this game hidden in your news feeds.<br /><br />To unhide it, follow this steps: <br /><br />Go to the Facebook homepage. Select news feed. Scroll down until you reach the bottom of the page. There (just above the copyright Facebook information) is an option bar (if you haven\'t reached the bottom yet it displays a timer of 3 flashing bars). This bar has 2 options -1- older post (to read further back) and -2- edit options. Select -2- and you will get a popup screen where you can select what you want to see in your news feeds and what persons/applications are hidden from your newsfeed, you can deselect the application there (Thanks to Raymond for the guide).</strong><br /><br /><br /><br />';
 		
 		if(el1.length > 0)
 		{
@@ -109,11 +109,14 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var el = $('.sendToGiftsList','div#'+game+opt);
 		
+		el.append('<h3 style="text-align: center">Add message to your gift: <input type="text" name="messageToAdd" class="messageToAddToGift" /></h3><br /><br class="clear" style="clear:both"/>');
+		
 		for(var id in bkP.giftsArray[gameID])
 		{
 			var v = bkP.giftsArray[gameID][id];
 			el.append('<div class="selectGiftToSend" gameID="'+gameID+'" title="'+v.name+'" alt="'+v.name+'" giftID="'+id+'"><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+id+'.png"><div style="font-size: 11px;">'+v.name+'</div></div>');
 		}
+		
 		
 		if(bkP.options.games[gameID].defaultGift == 0)
 		{
@@ -143,14 +146,17 @@ function addDataToScreenLocked(callback, id, data)
 			alert('You must select at least one person');
 			return;
 		}
-				
+		
+		var messageToAddToGift = $('.sendToGiftsList > h3 > input.messageToAddToGift','div#'+game+opt).val();
+
 		var gift 	 = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('giftID');
 		var giftName = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('title');
 		
 		var params = {
 			gift: gift,
 			gameID:	gameID,
-			sendTo: sendTo
+			sendTo: sendTo,
+			messageToAdd: messageToAddToGift
 		};
 		
 		$('div#'+game+opt, '#'+game+'Game').children().addClass('hide');
@@ -316,6 +322,13 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var gameID = data2[0][1];
 		var game = bkP.gamesData[gameID].systemName;
+		
+		if(isScreenLocked)
+		{
+			addDataToScreenLocked(addNewBonus, '', data2);
+			return;
+		}
+		
 		
 		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
 		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
@@ -1174,6 +1187,12 @@ function addDataToScreenLocked(callback, id, data)
 		var htmls = {};
 		var htmlsManual = {};
 		
+		if(isScreenLocked)
+		{
+			addDataToScreenLocked(addNewRequest, '', data2);
+			return;
+		}
+		
 		$(data2).each(function(ind,data)
 		{
 			var v = {	id: data[0],	title: data[2],	text: data[3],	image: data[4], post: data[5],	time: data[6]	}
@@ -1309,7 +1328,7 @@ function addDataToScreenLocked(callback, id, data)
 
 		if(typeof(gameID) == 'undefined')
 		{
-			for(var idd in bkP.options.games)
+			for(var idd in bkP.gamesData)
 			{
 				if(bkP.options.games[idd].enabled)
 				{
@@ -1429,7 +1448,7 @@ function addDataToScreenLocked(callback, id, data)
 				var html = '<h3 class="center">These people are looking for new neighbors:</h3>';
 				$(status).each(function(k,v)
 				{
-					html+='<div class="friendsList"><a href="http://www.facebook.com/profile.php?id='+v+'" class="friendLink" target="_blank">'+v+'</a></div>';
+					html+='<div class="friendsList"><a href="http://www.facebook.com/addfriend.php?id='+v+'&fromFGS='+escape(bkP.gamesData[gameID].name)+'" class="friendLink" target="_blank">'+v+'</a></div>';
 				});
 				html+= '<br style="clear: both" />';
 			}
@@ -1565,7 +1584,7 @@ function startup()
 
 function prepareGameSelector()
 {
-	for(var gameID in bkP.options.games)
+	for(var gameID in bkP.gamesData)
 	{
 		addIconToGameSelector(gameID);
 		addIconToOptionsMenu(gameID);
@@ -1580,6 +1599,29 @@ function prepareGameSelector()
 	
 	$('<input type="radio" class="gameSelectorInput" name="gameSelectorInput" id="optionsSelected" /><label gameName="Options" for="optionsSelected"><img src="icons/menu/options.png"></label>').appendTo('#gameSelector');
 	
+	$('#gameSelector').children('label').contextMenu({
+			menu: 'myMenuGameIcon'
+		}, function(action, el, pos)
+		{
+			if(action == 'hideIcon')
+			{
+				var gameID = $(el).prev().attr('gameID');
+				$(el).addClass('hide');
+				bkP.options.games[gameID].hiddenIcon = true;					
+				bkP.saveOptions();
+				
+				if(!$('#options').hasClass('hide'))
+					loadOptionsData();					
+			}
+			else if(action == 'goToGame')
+			{
+				var gameID = $(el).prev().attr('gameID');
+				bkP.openURI(bkP.gamesData[gameID].link, false);
+			}
+	});
+	
+	$('#gameSelector').children('[gamename="Contact"], [gamename="Chat"], [gamename="Options"]').disableContextMenu();
+	
 	$('#gameSelector').children('label').tooltip({
 		delay: 0,
 		track: true,
@@ -1587,7 +1629,7 @@ function prepareGameSelector()
 		positionLeft: true,
 		showURL: false
 	});
-	
+		
 	$("#gameSelector").buttonset();
 }
 
@@ -2291,10 +2333,6 @@ function updateTimeAgo(target)
 		{
 			bkP.options.displayXbonuses = $('option:selected', this).val();
 			bkP.saveOptions();
-			for(var id in bkP.options.games)
-			{
-				//selectFirstTab(id);
-			}
 		});
 		
 		$('#collectXbonusesAtTheSameTime > option[value="'+bkP.options.collectXbonusesAtTheSameTime+'"]').attr('selected', 'selected');
@@ -2560,7 +2598,10 @@ function updateTimeAgo(target)
 				
 				$(procArr).each(function(k,v)
 				{
-					v.callback(v.id, v.data);					
+					if(v.id == '')
+						v.callback(v.data);
+					else
+						v.callback(v.id, v.data);					
 				});
 			}
 		});
@@ -2568,7 +2609,7 @@ function updateTimeAgo(target)
 		
 		$('#receiveBonusesAllGames').button().click(function()
 		{
-			for(var idd in bkP.options.games)
+			for(var idd in bkP.gamesData)
 			{
 				if(bkP.options.games[idd].enabled)
 				{
@@ -2579,7 +2620,7 @@ function updateTimeAgo(target)
 		
 		$('#receiveGiftsAllGames').button().click(function()
 		{
-			for(var idd in bkP.options.games)
+			for(var idd in bkP.gamesData)
 			{
 				if(bkP.options.games[idd].enabled)
 				{
@@ -2968,6 +3009,7 @@ function compareTime(itemTime, olderThan)
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
+							<option value="4">4</option>
 							<option value="5">5</option>
 							<option value="10">10</option>
 							<option value="15">15</option>
@@ -2981,10 +3023,15 @@ function compareTime(itemTime, olderThan)
 							<option value="30">30 seconds</option>
 							<option value="60">1 minute</option>
 							<option value="120">2 minutes</option>
+							<option value="180">3 minutes</option>
 							<option value="300">5 minutes</option>
 							<option value="600">10 minutes</option>
+							<option value="900">15 minutes</option>
+							<option value="1800">30 minutes</option>
+							<option value="3600">60 minutes</option>
+							<option value="10800">180 minutes</option>
 						</select>
-					<!--
+					<!---
 					<h4>Gifts check timeout</h4>
 						<select id="checkRequestsTimeout">
 							<option value="15">15 seconds</option>
@@ -3014,6 +3061,9 @@ function compareTime(itemTime, olderThan)
 							<option value="86400">1 day</option>
 							<option value="172800">2 days</option>
 							<option value="259200">3 days</option>
+							<option value="604800">7 days</option>
+							<option value="1209600">14 days</option>
+							<option value="2592000">30 days</option>
 						</select>
 					<h4>Delete history older than</h4>
 						<select id="deleteHistoryOlderThan">
@@ -3026,7 +3076,10 @@ function compareTime(itemTime, olderThan)
 							<option value="43200">12 hours</option>
 							<option value="86400">1 day</option>
 							<option value="172800">2 days</option>
-							<option value="259200">3 days</option>					
+							<option value="259200">3 days</option>		
+							<option value="604800">7 days</option>
+							<option value="1209600">14 days</option>
+							<option value="2592000">30 days</option>
 						</select>
 					
 					<br /><br /><br /><br />
@@ -3125,6 +3178,10 @@ function compareTime(itemTime, olderThan)
 	
 	<ul id="myMenuDefaultGift" class="contextMenu">
 		<li class="receive"><a href="#selectDefault">Select as default gift</a></li>
+	</ul>
+	
+	<ul id="myMenuGameIcon" class="contextMenu">
+		<li class="goToGame"><a href="#goToGame"><strong>Go to this game!</strong></a></li>
 	</ul>
 </body>
 </html>
