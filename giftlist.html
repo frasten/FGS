@@ -1727,7 +1727,7 @@ function addGameMenu(gameID)
 		
 		if(id == 'BonusesPending' || id == 'ManualBonuses' || id == 'RequestsPending')
 		{
-			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br /><br /></div>');
+			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" '+ ( bkP.options.showDescriptionsOnStartup == 1 ? ' checked="checked"' : '')+' /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br /><br /></div>');
 		}
 		
 		if(id == 'NeighborsSearch')
@@ -2341,6 +2341,14 @@ function updateTimeAgo(target)
 			bkP.options.collectXbonusesAtTheSameTime = $('option:selected', this).val();
 			bkP.saveOptions();
 		});
+		
+		$('#showDescriptionsOnStartup > option[value="'+bkP.options.showDescriptionsOnStartup+'"]').attr('selected', 'selected');
+		$('#showDescriptionsOnStartup').change(function()
+		{
+			bkP.options.showDescriptionsOnStartup = $('option:selected', this).val();
+			bkP.saveOptions();
+		});
+		
 		
 		
 		$(".showContext").live('mouseenter', function()
@@ -3016,6 +3024,13 @@ function compareTime(itemTime, olderThan)
 							<option value="25">25</option>
 							<option value="30">30</option>
 						</select>
+					
+					<h4>Show descriptions on FGS startup</h4>
+						<select id="showDescriptionsOnStartup">
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+					
 
 					<h4>Bonuses check timeout</h4>
 						<select id="checkBonusesTimeout">

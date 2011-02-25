@@ -253,6 +253,9 @@ FGS.frontierville.Requests =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
 					
+					
+					console.log($('form[target]', dataHTML));
+					
 					FGS.frontierville.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
@@ -293,6 +296,7 @@ FGS.frontierville.Requests =
 		$.ajax({
 			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{

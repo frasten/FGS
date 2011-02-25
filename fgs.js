@@ -28,6 +28,7 @@ var FGS = {
 			deleteOlderThan: 0,
 			deleteHistoryOlderThan: 0,
 			displayXbonuses: 300,
+			showDescriptionsOnStartup: 0,
 			collectXbonusesAtTheSameTime: 2,
 		}
 

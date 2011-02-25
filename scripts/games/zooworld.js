@@ -480,9 +480,18 @@ FGS.zooworld.Bonuses =
 						}
 					}
 					
+					var fpos1 = dataStr.indexOf('var iframeLoaded = ');
+					if(fpos1!= -1)
+					{
+						fpos1 += 19;
+						var fpos2 = dataStr.indexOf(';', fpos1);
+						tempVars.iframeLoad = dataStr.slice(fpos1,fpos2);
+					}
+					
 					var pos3 = dataStr.indexOf('url: "', pos2);
 					pos3+=6;
 					var pos4 = dataStr.indexOf('"', pos3);
+					
 					
 					
 					var nextUrl = domain+dataStr.slice(pos3,pos4)+getStr;
