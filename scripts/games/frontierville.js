@@ -19,7 +19,12 @@ FGS.frontierville.Freegifts =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params2 = $('form[target]', dataHTML).serialize();
 					
-					if(!url) throw {message: 'fail'}
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_201278444497', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
 					
 					params.step1url = url;
 					params.step1params = params2;
@@ -28,8 +33,8 @@ FGS.frontierville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -105,8 +110,8 @@ FGS.frontierville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -177,8 +182,8 @@ FGS.frontierville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -253,15 +258,19 @@ FGS.frontierville.Requests =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
 					
-					
-					console.log($('form[target]', dataHTML));
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_201278444497', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
 					
 					FGS.frontierville.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -378,8 +387,8 @@ FGS.frontierville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
@@ -440,12 +449,19 @@ FGS.frontierville.Bonuses =
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
 					
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_201278444497', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
 					FGS.frontierville.Bonuses.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -501,8 +517,8 @@ FGS.frontierville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
@@ -559,13 +575,20 @@ FGS.frontierville.Bonuses =
 				{
 					var url = $('form[target]', dataHTML).attr('action');
 					var params = $('form[target]', dataHTML).serialize();
+
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_201278444497', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
 					
 					FGS.frontierville.Bonuses.Click4(currentType, id, url, params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -692,8 +715,8 @@ FGS.frontierville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);

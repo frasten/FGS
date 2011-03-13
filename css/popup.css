@@ -16,6 +16,14 @@ body * {
 	white-space: nowrap;
 }
 
+caption {
+	background: #EEE;
+	border: solid #B2B2B2;
+	font: normal normal normal 1.1em/normal Georgia, Times, serif;
+	padding: 0.25em;
+	border-width: 1px 0px 2px;
+}
+
 hr {
 	height: 0px;
 	margin: 0px 0px;

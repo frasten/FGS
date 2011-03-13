@@ -14,15 +14,25 @@ FGS.farmville.Freegifts =
 			{
 				try
 				{
-					var tst = new RegExp(/<iframe[^>].*src=\s*["](.*farmville.com\/flash.php.*[^"]+)[^>]*>*?.*?<\/iframe>/gm).exec(dataStr);
-					if(tst == null) throw {message:'no farmville iframe tag'}
-					params.click2url = $(FGS.HTMLParser('<p class="link" href="'+tst[1]+'">abc</p>')).find('p.link').attr('href');
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var url = $('form[target="flashAppIframe"]', dataHTML).attr('action');
+					params.click2params = $('form[target="flashAppIframe"]', dataHTML).serialize();
+					params.click2url = url;
+					
+					if(!url)
+					{
+						var tst = new RegExp(/<iframe[^>].*src=\s*["](.*farmville.com\/flash.php.*[^"]+)[^>]*>*?.*?<\/iframe>/gm).exec(dataStr);
+						if(tst == null) throw {message:'no farmville iframe tag'}
+						params.click2url = $(FGS.HTMLParser('<p class="link" href="'+tst[1]+'">abc</p>')).find('p.link').attr('href');
+					}
+					
 					FGS.farmville.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -68,8 +78,9 @@ FGS.farmville.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: params.click2url+''+addAntiBot,
+			data: params.click2params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -86,8 +97,8 @@ FGS.farmville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -158,8 +169,8 @@ FGS.farmville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -337,8 +348,8 @@ FGS.farmville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -379,6 +390,7 @@ FGS.farmville.Bonuses =
 			'need to use some of your fuel to be eligible to find more': [],
 			'All that lightning fast clicking is leaving the bits': [],
 			'trying to claim too many rewards from your friends at once': [],
+			'trying to claim rewards from your friends too quickly!': [],
 		}
 		
 		$.ajax({
@@ -496,8 +508,8 @@ FGS.farmville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);

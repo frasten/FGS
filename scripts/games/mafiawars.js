@@ -14,15 +14,25 @@ FGS.mafiawars.Freegifts =
 			{
 				try
 				{
-					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					params.click2url = src;					
+					var dataHTML = FGS.HTMLParser(dataStr);					
+					
+					var src = $('form[target]', dataHTML).attr('action');
+					var paramsTmp = $('form[target]', dataHTML).serialize();
+					
+					if(!src)
+					{
+						var src = FGS.findIframeByName('mafiawars', dataStr);
+						if (src == '') throw {message:"no iframe"}
+					}
+					
+					params.click2url = src;	
+					params.click2param = paramsTmp;
 					FGS.mafiawars.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -67,8 +77,9 @@ FGS.mafiawars.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: params.click2url+''+addAntiBot,
+			data: params.click2param,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -130,8 +141,8 @@ FGS.mafiawars.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -203,8 +214,8 @@ FGS.mafiawars.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -282,15 +293,23 @@ FGS.mafiawars.Requests =
 				try
 				{
 				
-					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var dataHTML = FGS.HTMLParser(dataStr);					
 					
-					FGS.mafiawars.Requests.Click3(currentType, id, src);
+					var src = $('form[target]', dataHTML).attr('action');
+					var paramsTmp = $('form[target]', dataHTML).serialize();
+					
+					if(!src)
+					{
+						var src = FGS.findIframeByName('mafiawars', dataStr);
+						if (src == '') throw {message:"no iframe"}
+					}
+					
+					FGS.mafiawars.Requests.Click3(currentType, id, src, paramsTmp);
 				} 
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -315,15 +334,16 @@ FGS.mafiawars.Requests =
 		});
 	},
 	
-	Click3:	function(currentType, id, currentURL, retry)
+	Click3:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -369,11 +389,11 @@ FGS.mafiawars.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -385,7 +405,7 @@ FGS.mafiawars.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -550,8 +570,8 @@ FGS.mafiawars.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, isBoost, true);
@@ -610,15 +630,23 @@ FGS.mafiawars.Bonuses =
 				
 				try
 				{
-					var src = FGS.findIframeByName('mafiawars', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var dataHTML = FGS.HTMLParser(dataStr);					
+					
+					var src = $('form[target]', dataHTML).attr('action');
+					var paramsTmp = $('form[target]', dataHTML).serialize();
+					
+					if(!src)
+					{
+						var src = FGS.findIframeByName('mafiawars', dataStr);
+						if (src == '') throw {message:"no iframe"}
+					}
 
-					FGS.mafiawars.Bonuses.Click2(currentType, id, src);
+					FGS.mafiawars.Bonuses.Click2(currentType, id, src, paramsTmp);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -643,15 +671,16 @@ FGS.mafiawars.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			//dataType: 'text',
 			success: function(dataStr)
 			{
@@ -694,11 +723,11 @@ FGS.mafiawars.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -710,7 +739,7 @@ FGS.mafiawars.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -893,6 +922,19 @@ FGS.mafiawars.Bonuses =
 							$.post(tmpUrl, currentParams+'&ajax=1&liteload=1', function(){});				
 						}
 					}
+					else if(dataStr.indexOf('message_body">You got ') != -1)
+					{
+						var pos1 = dataStr.indexOf('message_body">You got ');
+						var pos2 = dataStr.indexOf('<', pos1);
+						var newT = dataStr.slice(pos1+14, pos2);
+						
+						var pos1 = 8;
+						var pos2 = newT.indexOf('.');
+						
+						info.image = 'gfx/90px-check.png';
+						info.text  = newT;
+						info.title = newT.slice(pos1, pos2);
+					}
 					else if(dataStr.indexOf('You collected a') != -1)
 					{
 						var pos1 = dataStr.indexOf('You collected a');
@@ -914,8 +956,8 @@ FGS.mafiawars.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, true);

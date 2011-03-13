@@ -28,8 +28,8 @@ FGS.cityville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -81,8 +81,6 @@ FGS.cityville.Freegifts =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-			
-				console.log(dataStr);
 				try
 				{
 					var src = FGS.findIframeAfterId('#app_content_291549705119', dataStr);
@@ -94,8 +92,8 @@ FGS.cityville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -162,7 +160,7 @@ FGS.cityville.Freegifts =
 						var pos3 = dataStr.indexOf("'", pos2);
 						
 						params.step1url = nextUrl+dataStr.slice(pos2,pos3).replace(nextUrl, '');
-						retryThis(params, true);
+						retryThis(params);
 						return;
 					}
 					
@@ -181,8 +179,8 @@ FGS.cityville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -343,8 +341,8 @@ FGS.cityville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -440,14 +438,14 @@ FGS.cityville.Freegifts =
 
 					params.nextParams = nextParams;
 
-					//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
+					FGS.dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
 
 					FGS.getFBML(params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -527,8 +525,8 @@ FGS.cityville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -592,8 +590,8 @@ FGS.cityville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
@@ -756,8 +754,8 @@ FGS.cityville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -822,8 +820,8 @@ FGS.cityville.Bonuses =
 				} 
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -888,8 +886,8 @@ FGS.cityville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
@@ -947,8 +945,8 @@ FGS.cityville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);

@@ -14,22 +14,26 @@ FGS.petville.Freegifts =
 			{
 				try
 				{
-					var paramTmp = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
-					if(paramTmp == '') throw {message: 'no iframe'}
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).attr('action');
+					var params2 = $('form[target]', dataHTML).serialize();
 					
-					var pos1 = paramTmp.indexOf('pv_session=')+11;
-					var pos2 = paramTmp.indexOf('&', pos1);
+					if(!url) throw {message: 'fail'}
 					
 					
+
+					var pos1 = url.indexOf('pv_session=')+11;
+					var pos2 = url.indexOf('&', pos1);
 					
-					params.pv_session = paramTmp.slice(pos1, pos2);
+					params.pv_session = url.slice(pos1, pos2);
 					FGS.petville.Freegifts.Click2(params);
 					
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -67,6 +71,7 @@ FGS.petville.Freegifts =
 			}
 		});
 	},
+
 	Click2: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -195,8 +200,8 @@ FGS.petville.Freegifts =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(params, true);
@@ -281,7 +286,7 @@ FGS.petville.Freegifts =
 
 			params.nextParams = nextParams;
 
-			//dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
+			FGS.dump(FGS.getCurrentTime()+'[Z] FBMLinfo - OK');
 
 			FGS.getFBML(params);
 		});
@@ -324,15 +329,15 @@ FGS.petville.Requests =
 				
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
-					if (src == '') throw {message:"no iframe"}
-				
-					FGS.petville.Requests.Click2(currentType, id, src);
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					FGS.petville.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -357,15 +362,16 @@ FGS.petville.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -392,11 +398,11 @@ FGS.petville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -408,7 +414,7 @@ FGS.petville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -483,8 +489,8 @@ FGS.petville.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -542,15 +548,17 @@ FGS.petville.Bonuses =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_163576248142', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					FGS.petville.Bonuses.Click2(currentType, id, url, params);
 
-					FGS.petville.Bonuses.Click2(currentType, id, src);
+					//FGS.petville.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -575,15 +583,16 @@ FGS.petville.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -615,11 +624,11 @@ FGS.petville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -631,7 +640,7 @@ FGS.petville.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -747,8 +756,8 @@ FGS.petville.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);

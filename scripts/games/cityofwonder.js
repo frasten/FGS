@@ -43,8 +43,8 @@ FGS.cityofwonder.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -139,8 +139,8 @@ FGS.cityofwonder.Requests =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -204,8 +204,8 @@ FGS.cityofwonder.Bonuses =
 				} 
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
@@ -268,7 +268,7 @@ FGS.cityofwonder.Bonuses =
 						pos1+=23;
 						var pos2 = dataStr.indexOf("'", pos1);					
 						var link = dataStr.slice(pos1, pos2);
-						//dump(link);
+						FGS.dump(link);
 						$.get(link);
 					}
 					
@@ -276,8 +276,8 @@ FGS.cityofwonder.Bonuses =
 				}
 				catch(err)
 				{
-					//dump(err);
-					//dump(err.message);
+					FGS.dump(err);
+					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);

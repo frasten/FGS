@@ -5,26 +5,38 @@
 <link rel="shortcut icon" href="gfx/favicon.ico" />
 <title>Friendly Gaming Simplifier</title>
 
-<link type="text/css" href="css/redmond/jquery-ui-1.8.9.custom.css" rel="stylesheet" />
-<link type="text/css" href="css/share.css" rel="stylesheet" />	
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.1" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.1" rel="stylesheet" />
+<link type="text/css" href="css/redmond/jquery-ui-1.8.10.custom.css" rel="stylesheet" />
+<link type="text/css" href="css/share.css" rel="stylesheet" />
+<link type="text/css" href="css/demo_page.css" rel="stylesheet" />
+<link type="text/css" href="css/demo_table.css" rel="stylesheet" />
+<link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.5" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.5" rel="stylesheet" />
 
-<script type="text/javascript" src="scripts/jquery-1.5.min.js"></script>
-<script type="text/javascript" src="scripts/jquery-ui-1.8.9.custom.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.tooltip.min.js"></script>
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.1"></script>
-<script type="text/javascript" src="scripts/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.5"></script>
+<script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.1"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.1"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.1"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.5"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.5"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.5"></script>
 
 
 <script type="text/javascript">
+
+$.fn.dataTableExt.afnSortData['dom-text'] = function  ( oSettings, iColumn )
+{
+	var aData = [];
+	$( 'td:eq('+iColumn+') span', oSettings.oApi._fnGetTrNodes(oSettings) ).each( function () {
+		aData.push( $(this).text() );
+	} );
+	return aData;
+}
 
 var loaded = 0;
 var isScreenLocked = false;
@@ -266,7 +278,7 @@ function addDataToScreenLocked(callback, id, data)
 			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
 		}
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem showContextRequests updateTimeAgo processRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="requestItem showContextRequests updateTimeAgo processRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+url+'" onError="processImageError(this)"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
 	function getNewManualBonusRow(gameID, v)
@@ -292,9 +304,14 @@ function addDataToScreenLocked(callback, id, data)
 			var url = 'http://fgs.rzadki.eu/reqs/'+game+'/'+v.image+'.png';
 		}
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem updateTimeAgo manualRequest processManualRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');$(this).closest(\'div\').attr(\'isMissingImage\', true);"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" origTitle="'+v.title+'" time="'+v.time+'" postdata="'+v.post+'" class="manualItem updateTimeAgo manualRequest processManualRequestClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img src="'+url+'" onError="processImageError(this)"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
 	}
 	
+	function processImageError(e)
+	{
+		var el = $(e);
+		el.attr('src', 'icons/reqs/noimage.png');
+	}
 	
 	function processManualBonusClick(el)
 	{
@@ -1429,7 +1446,7 @@ function addDataToScreenLocked(callback, id, data)
 			addClass = ' noErrorClass ';
 		}
 		
-		return '<div id="'+v.id+'" gameID="'+v.gameID+'" time="'+v.time+'" postData="'+v.post+'" class="withDesc requestItem disabled updateTimeAgo'+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+v.image+'" onError="$(this).attr(\'src\', \'icons/reqs/noimage.png\');"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+v.gameID+'" time="'+v.time+'" postData="'+v.post+'" class="withDesc requestItem disabled updateTimeAgo'+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+v.image+'" onError="processImageError(this)"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
 	}
 	
 	function friendsLoaded(gameID, status)
@@ -1485,15 +1502,10 @@ function addDataToScreenLocked(callback, id, data)
 			$('.sendToNeighboursList','div#'+game+opt).html(html);
 		}
 		else
-		{	
-			var elF = $('<table sortByIndex="1" class="favouritesTable tablesorter" style="margin: 0 auto; margin-top: 15px;" width="95%"><caption>Your favourites in '+bkP.gamesData[gameID].name+'</caption><thead><tr><th scope="col" class="first">Fav.</th><th scope="col">Name</th><th scope="col">Last bonus</th><th scope="col">Last gift</th><th scope="col">Total bonuses</th><th scope="col">Total gifts</th><th scope="col" class="last">Select</th></tr></thead><tbody></tbody></table>');
-			
-			var elN = $('<table sortByIndex="1" class="neighborsTable tablesorter" style="margin: 0 auto; margin-top: 15px;" width="95%"><caption>Your neighbors in '+bkP.gamesData[gameID].name+'</caption><thead><tr><th scope="col" class="first">Fav.</th><th scope="col">Name</th><th scope="col">Last bonus</th><th scope="col">Last gift</th><th scope="col">Total bonuses</th><th scope="col">Total gifts</th><th scope="col" class="last">Select</th></tr></thead><tbody></tbody></table>');
-			
-			var htmlNormal = '';
-			var htmlFavourites = '';
-			
-			var fCnt = nCnt = 1;
+		{
+			var favArr = [], norArr = [];
+			var favObj = {}, norObj = {}
+			var favCnt = norCnt = 0;
 			
 			$(users).each(function(k,val)
 			{
@@ -1504,33 +1516,45 @@ function addDataToScreenLocked(callback, id, data)
 				var v = val[id];
 				
 				if($.inArray(id, bkP.options.games[gameID].favourites) != -1)
-					var isFav = true;
-				else
-					var isFav = false;
-				
-				var newStr = '<tr neighName="'+v.name+'" gameID="'+gameID+'" neighID="'+id+'"><td style="text-align: center">'+(isFav ? '<img src="icons/favourite.png" class="toggleFavourite">' : '<img src="icons/favourite-bw.png" class="toggleFavourite">')+'</td><td>'+v.name+'</td><td class="lastBonus"><span class="hide">0</span>never</td><td class="lastGift"><span class="hide">0</span>never</td><td class="totalBonuses"><span class="hide">0</span>0</td><td class="totalGifts"><span class="hide">0</span>0</td><td class="last"><input type="checkbox" value="'+id+'" class="selectNeighborToSend" name="neighArr[]"></td></tr>';
-				
-				if(isFav)
 				{
-					htmlFavourites += newStr;
+					favObj[id] = favCnt;
+					favCnt++;
+					favArr.push([
+						'<img src="icons/favourite.png" gameID="'+gameID+'" neighID="'+id+'" class="toggleFavourite">',
+						v.name,
+						'<span class="hide">0</span>never',
+						'<span class="hide">0</span>never',
+						'<span class="hide">0</span>0',
+						'<span class="hide">0</span>0',
+						'<input type="checkbox" value="'+id+'" gameID="'+gameID+'" neighID="'+id+'" class="selectNeighborToSend" name="neighArr[]">'
+					]);
 				}
 				else
 				{
-					htmlNormal += newStr;
-				}				
+					norObj[id] = norCnt;
+					norCnt++;
+					
+					norArr.push([
+						'<img src="icons/favourite-bw.png" gameID="'+gameID+'" neighID="'+id+'" class="toggleFavourite">', 
+						v.name,
+						'<span class="hide">0</span>never',
+						'<span class="hide">0</span>never',
+						'<span class="hide">0</span>0',
+						'<span class="hide">0</span>0',
+						'<input type="checkbox" value="'+id+'" gameID="'+gameID+'" neighID="'+id+'" class="selectNeighborToSend" name="neighArr[]">'
+					]);
+				}	
 			});
-			$(elF).find('tbody').html(htmlFavourites);
-			; 
-			$(elN).find('tbody').html(htmlNormal);
 			
-			$('.sendToFavouritesList','div#'+game+opt).html(elF);
-			$('.sendToNeighboursList','div#'+game+opt).html(elN);
+			var data = 
+			{
+				nor: norObj,
+				fav: favObj,
+				norArr: norArr,
+				favArr: favArr
+			}
 			
-			loadNeighborsStats(gameID);
-			
-			
-			$('.sendToNeighboursList','div#'+game+opt).parent().find('.hide').not('td > span').removeClass('hide');
-			$('#'+game+'SendFreeGifts > .submenu > button').removeClass('hide');
+			loadNeighborsStats(gameID, data);
 		}
 		
 		
@@ -2527,7 +2551,7 @@ function updateTimeAgo(target)
 								{
 									$(this).remove();
 								});
-								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('title-search'), 0);
+								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('search-title'), 0);
 								updateCount(el.attr('gameID'));
 								
 								$( this ).dialog( "close" );
@@ -2729,7 +2753,7 @@ function updateTimeAgo(target)
 	
 	function processSelectNeighborToSend(e)
 	{
-		var gameID = $(e).closest('tr').attr('gameID');
+		var gameID = $(e).attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 
@@ -2748,11 +2772,11 @@ function updateTimeAgo(target)
 	
 	function processToggleFavourite(e)
 	{
-		var srcEl	= $(e).closest('tr');
+		var srcEl	= $(e);
 		var gameID 	= srcEl.attr('gameID');
 		var uID		= srcEl.attr('neighID');
-		var uName	= srcEl.attr('neighName');
-				
+		var srcEl	= srcEl.closest('tr');
+		
 		var game = bkP.gamesData[gameID].systemName;
 		var opt = 'SendFreeGiftsList';
 				
@@ -2761,16 +2785,39 @@ function updateTimeAgo(target)
 		if(idx == -1)
 		{
 			bkP.options.games[gameID].favourites.push(uID);
-			srcEl.find('.toggleFavourite').attr('src', 'icons/favourite.png');
-			$('.favouritesTable', 'div#'+game+opt).find('tbody').append(srcEl);
+			
+			var arr =
+				[
+					'<img src="icons/favourite.png" gameID="'+gameID+'" neighID="'+uID+'" class="toggleFavourite">',
+					srcEl.children('td:nth-child(2)').html(),
+					srcEl.children('td:nth-child(3)').html(),
+					srcEl.children('td:nth-child(4)').html(),
+					srcEl.children('td:nth-child(5)').html(),
+					srcEl.children('td:nth-child(6)').html(),
+					srcEl.children('td:nth-child(7)').html()
+				];
+
+			$('.favouritesTable', 'div#'+game+opt).dataTable().fnAddData(arr);
+			$('.neighborsTable', 'div#'+game+opt).dataTable().fnDeleteRow( srcEl[0] );
 		}
 		else
 		{
 			bkP.options.games[gameID].favourites.splice(idx, 1);
-			srcEl.find('.toggleFavourite').attr('src', 'icons/favourite-bw.png');
-			$('.neighborsTable', 'div#'+game+opt).find('tbody').append(srcEl);
+			
+			var arr =
+				[
+					'<img src="icons/favourite-bw.png" gameID="'+gameID+'" neighID="'+uID+'" class="toggleFavourite">', 
+					srcEl.children('td:nth-child(2)').html(),
+					srcEl.children('td:nth-child(3)').html(),
+					srcEl.children('td:nth-child(4)').html(),
+					srcEl.children('td:nth-child(5)').html(),
+					srcEl.children('td:nth-child(6)').html(),
+					srcEl.children('td:nth-child(7)').html()
+				];
+			
+			$('.neighborsTable', 'div#'+game+opt).dataTable().fnAddData(arr);
+			$('.favouritesTable', 'div#'+game+opt).dataTable().fnDeleteRow( srcEl[0] );
 		}
-		$('.neighborsTable, .favouritesTable', 'div#'+game+opt).trigger("update");
 		bkP.saveOptions();
 	}
 	
