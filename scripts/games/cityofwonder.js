@@ -36,10 +36,17 @@ FGS.cityofwonder.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.cityofwonder.Requests.Click2(currentType, id, src);
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						url = src;
+					}
+					
+					FGS.cityofwonder.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -69,14 +76,15 @@ FGS.cityofwonder.Requests =
 		});
 	},
 	
-	Click2: function(currentType, id, currentURL, retry)
+	Click2: function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -143,7 +151,7 @@ FGS.cityofwonder.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -155,7 +163,7 @@ FGS.cityofwonder.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -198,9 +206,16 @@ FGS.cityofwonder.Bonuses =
 				
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					FGS.cityofwonder.Bonuses.Click2(currentType, id, src);
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						url = src;
+					}
+					FGS.cityofwonder.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -230,14 +245,15 @@ FGS.cityofwonder.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -280,7 +296,7 @@ FGS.cityofwonder.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -292,7 +308,7 @@ FGS.cityofwonder.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

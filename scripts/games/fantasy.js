@@ -34,10 +34,20 @@ FGS.fantasy.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					FGS.fantasy.Requests.Click2(currentType, id, src);
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						
+						url = src;
+					}
+					
+					FGS.fantasy.Requests.Click2(currentType, id, url, paramTmp);
 				} 
 				catch(err)
 				{
@@ -67,14 +77,15 @@ FGS.fantasy.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -118,7 +129,7 @@ FGS.fantasy.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -130,7 +141,7 @@ FGS.fantasy.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -177,10 +188,20 @@ FGS.fantasy.Bonuses =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					FGS.fantasy.Bonuses.Click2(currentType, id, src);
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						
+						url = src;
+					}
+					
+					FGS.fantasy.Bonuses.Click2(currentType, id, url, paramTmp);
 				} 
 				catch(err)
 				{
@@ -210,14 +231,15 @@ FGS.fantasy.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -238,7 +260,7 @@ FGS.fantasy.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -250,7 +272,7 @@ FGS.fantasy.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

@@ -179,15 +179,24 @@ FGS.socialcity.Requests =
 						info.title = 'New neighbour';
 						info.text = tmpTitle.slice(pos1+5);
 					}
-					else
+					else if($('#neighbor_title', dataHTML).length > 0)
 					{
-
 						info.image = $('#acceptInfo', dataHTML).children('img').attr('src');
 						info.title = $("#infoText > .highlight" ,dataHTML).text();
 						var txt =  $("#infoText", dataHTML).text();
 						var pos1 = txt.indexOf('from');
 						
 						info.text  = txt.slice(pos1+5);
+					}
+					else if($('.landing-msg', dataHTML).length > 0)
+					{
+						info.title = '';
+						info.text  = $('.landing-msg', dataHTML).text();
+						info.image = $('.landing-gift-pic', dataHTML).children().attr('src');
+					}
+					else
+					{
+						throw {message: dataStr}
 					}
 					info.time = Math.round(new Date().getTime() / 1000);
 					

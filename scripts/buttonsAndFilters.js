@@ -254,7 +254,7 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['(.*)'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['(.*)YoVille and need just a few more materials to finish(.*)']
 						},
 						buttons: [
 							'RequestsPending',
@@ -309,16 +309,13 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['^Send'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['(.*)']
 						},
 						buttons: [
 							'BonusesPending',
-							'RequestsPending',
 							'ManualBonuses',
 							'BonusesHistory',
-							'RequestsHistory',
 							'FailedBonuses',
-							'FailedGifts',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -370,16 +367,13 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: [],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['(.*)']
 						},
 						buttons: [
 							'BonusesPending',
-							'RequestsPending',
 							'ManualBonuses',
 							'BonusesHistory',
-							'RequestsHistory',
 							'FailedBonuses',
-							'FailedGifts',
 							'SendFreeGifts',
 							'SendFreeGiftsHistory',
 							'NeighborsSearch',

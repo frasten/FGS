@@ -797,7 +797,9 @@ FGS.mafiawars.Bonuses =
 						{ search: 'You collected the max number of Broken Hearts from this type of feed', error: 'You collected the max number of Broken Hearts from this type of feed. Try again tomorrow.' },
 						{ search: 'collected on 10 secret stashes today, and have to wait', error: 'You have collected on 10 secret stashes today, and have to wait.' },
 						{ search: 'You are too late to help', error: 'You are too late to help.' },
-						{ search: 'You are too late to help', error: 'You are too late to help.' },
+						{ search: 'your friend has already completed the mission', error: 'Thanks, but your friend has already completed the mission.' },
+						{ search: 'have been claimed. Look out for more', error: 'You are too late. All of these items have been claimed. Look out for more.' },
+						
 					
 					];
 					

@@ -34,10 +34,17 @@ FGS.islandparadise.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.islandparadise.Requests.Click2(currentType, id, src);
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						url = src;
+					}
+					
+					FGS.islandparadise.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -67,14 +74,15 @@ FGS.islandparadise.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -88,7 +96,7 @@ FGS.islandparadise.Requests =
 					{
 						var pos2 = dataStr.indexOf("'", pos1+26);
 						var url = dataStr.slice(pos1+19, pos2);
-						FGS.islandparadise.Requests.Click2(currentType, id, url, true);
+						FGS.islandparadise.Requests.Click(currentType, id, url, true);
 						return;
 					}
 					
@@ -123,7 +131,7 @@ FGS.islandparadise.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -135,7 +143,7 @@ FGS.islandparadise.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

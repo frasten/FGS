@@ -332,17 +332,24 @@ FGS.ravenwood.Requests =
 							info.thanks = sendInfo;
 							
 							
-						
-							info.title = $(el).text();				
 							
-							var pos1 = $(el).text().indexOf('You just accepted this');
-							if(pos1 != -1)
+							var oldEl = el;
+							
+							var el = $('div:contains("You just accepted this"):last', dataHTML);							
+							
+							if(el.length > 0)
 							{
-								var pos2 = $(el).text().indexOf(' from ', pos1);
-								info.title = $(el).text().slice(pos1+22, pos2);
+								var pos2 = el.text().indexOf(' from ');
+								info.title = el.text().slice(22, pos2);
+								info.image = el.find('img').attr("src");
+							}
+							else
+							{
+								info.title = oldEL.text();	
+								info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
 							}
 							
-							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
+							
 							info.text  = $(el).text();
 							info.time = Math.round(new Date().getTime() / 1000);
 						}

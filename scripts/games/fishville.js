@@ -14,11 +14,23 @@ FGS.fishville.Freegifts =
 			{
 				try
 				{
-					var paramTmp = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
-					if(paramTmp == '') throw {message: 'no iframe'}
-					var pos1 = paramTmp.lastIndexOf('/')+2;
-
-					params.step2params = paramTmp.slice(pos1);
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var pos1 = paramTmp.lastIndexOf('/')+2;
+						params.step2params = paramTmp.slice(pos1);
+					}
+					else
+					{
+						params.step2params = paramTmp;
+					}
+					
 					FGS.fishville.Freegifts.Click2(params);
 					
 				}
@@ -169,9 +181,17 @@ FGS.fishville.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					FGS.fishville.Requests.Click2(currentType, id, src);
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						url = src;
+					}
+					
+					FGS.fishville.Requests.Click2(currentType, id, url, paramTmp);
 				}				
 				catch(err)
 				{
@@ -201,14 +221,15 @@ FGS.fishville.Requests =
 		});
 	},
 	
-	Click2: function(currentType, id, currentURL, retry)
+	Click2: function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -281,7 +302,7 @@ FGS.fishville.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -293,7 +314,7 @@ FGS.fishville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

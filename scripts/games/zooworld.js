@@ -22,13 +22,24 @@ FGS.zooworld.Freegifts =
 			{
 				try
 				{
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					var src = FGS.findIframeAfterId('#app_content_'+params.checkID, dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
 					
-					var pos1 = src.indexOf('?');
-					src = src.slice(pos1+1);
-										
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_'+params.checkID, dataStr);
+						if (src == '') throw {message:"no iframe"}
+					
+						var pos1 = src.indexOf('?');
+						src = src.slice(pos1+1);
+					}
+					else
+					{
+						src = paramTmp;
+					}
+					
 					var postParams = {}
 					
 					for(var idd in $.unparam(src))
@@ -43,10 +54,10 @@ FGS.zooworld.Freegifts =
 					postParams['giftId'] 	= params.gift;
 					postParams['appname']	= params.zooAppname;
 					postParams['appId'] 	= params.zooAppId;
-					//postParams['straightToGift'] = '1';
+						
+						//postParams['straightToGift'] = '1';
 					
 					params.param2 = postParams;
-					//http://fbeq.rockyou.com/facebook_apps/zoo/giftInIframe.php?service=dsplygiftinvite&giftId=977&appname=zooparent&appId=74&fb_sig_in_iframe=1&fb_sig_base_domain=rockyou.com&fb_sig_locale=pl_PL&fb_sig_in_new_facebook=1&fb_sig_time=1293477719.0314&fb_sig_added=1&fb_sig_profile_update_time=1291727948&fb_sig_expires=1293483600&fb_sig_user=100001178615702&fb_sig_session_key=2.CXT_hOTef4C_zohaK3MG1w__.3600.1293483600-100001178615702&fb_sig_ss=5ptmukWpwN3GOKXxHq2u8g__&fb_sig_cookie_sig=d7f71a284392c238406d31b01a9a8118&fb_sig_country=pl&fb_sig_api_key=daa4b920374244da1829a0df63cd815f&fb_sig_app_id=167746316127&fb_sig=b174aef00662d0cb251ceae3d091da82
 
 					FGS.zooworld.Freegifts.Click2(params);
 				
@@ -372,33 +383,41 @@ FGS.zooworld.Bonuses =
 				
 				try
 				{
-					if($('#app_content_2405948328', dataHTML).length > 0)
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var params = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
 					{
-						var src = FGS.findIframeAfterId('#app_content_2405948328', dataStr);
-					}
-					else if($('#app_content_2345673396', dataHTML).length > 0)
-					{
-						var src = FGS.findIframeAfterId('#app_content_2345673396', dataStr);
-					}
-					else if($('#app_content_2339854854', dataHTML).length > 0)
-					{
-						var src = FGS.findIframeAfterId('#app_content_2339854854', dataStr);
-					}
-					else if($('#app_content_14852940614', dataHTML).length > 0)
-					{
-						var src = FGS.findIframeAfterId('#app_content_14852940614', dataStr);
-					}
-					else if($('#app_content_167746316127', dataHTML).length > 0)
-					{
-						var src = FGS.findIframeAfterId('#app_content_167746316127', dataStr);
-					}
-					else
-					{
-						throw {message: 'not zoo?'}
+						if($('#app_content_2405948328', dataHTML).length > 0)
+						{
+							var src = FGS.findIframeAfterId('#app_content_2405948328', dataStr);
+						}
+						else if($('#app_content_2345673396', dataHTML).length > 0)
+						{
+							var src = FGS.findIframeAfterId('#app_content_2345673396', dataStr);
+						}
+						else if($('#app_content_2339854854', dataHTML).length > 0)
+						{
+							var src = FGS.findIframeAfterId('#app_content_2339854854', dataStr);
+						}
+						else if($('#app_content_14852940614', dataHTML).length > 0)
+						{
+							var src = FGS.findIframeAfterId('#app_content_14852940614', dataStr);
+						}
+						else if($('#app_content_167746316127', dataHTML).length > 0)
+						{
+							var src = FGS.findIframeAfterId('#app_content_167746316127', dataStr);
+						}
+						else
+						{
+							throw {message: 'not zoo?'}
+						}
+						url = src;
 					}
 
-					if (src == '') throw {message:"no iframe"}
-					FGS.zooworld.Bonuses.Click2(currentType, id, src);
+					if (url == '') throw {message:"no iframe"}
+					
+					FGS.zooworld.Bonuses.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -428,14 +447,15 @@ FGS.zooworld.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -505,7 +525,7 @@ FGS.zooworld.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -517,7 +537,7 @@ FGS.zooworld.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

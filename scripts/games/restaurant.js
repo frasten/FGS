@@ -40,17 +40,36 @@ FGS.restaurant.Requests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
-
+					
 					var tempText = $('#app43016202276_gift_text', dataHTML).text();
+					
+					if(!tempText || tempText == '')
+					{
+						tempText = $('app43016202276_request_text', dataHTML).text();
+					}
+					
 					info.text = tempText;
 					
-					var pos1 = tempText.indexOf('You have accepted ');
+					var pos1 =  tempText.indexOf('You have accepted ');
+					var pos11 = tempText.indexOf('You have sent ');
 					if(pos1 != -1)
 					{
 						var pos2 = tempText.indexOf('from', pos1);
 						if(pos2 != -1)
 						{
 							info.title = tempText.slice(pos1+18,pos2);
+						}
+						else
+						{
+							info.title = tempText;
+						}
+					}
+					else if(pos11 != -1)
+					{
+						var pos2 = tempText.indexOf('to ', pos11);
+						if(pos2 != -1)
+						{
+							info.title = tempText.slice(pos1+14,pos2);
 						}
 						else
 						{

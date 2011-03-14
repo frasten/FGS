@@ -14,13 +14,27 @@ FGS.vampirewars.Freegifts =
 			{
 				try
 				{
-					var paramTmp = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
-					if(paramTmp == '') throw {message: 'no iframe'}
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var url = $('form[target]:first', dataHTML).attr('action');
+					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var url = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
+						if(url == '') throw {message: 'no iframe'}
+						var pos1 = url.lastIndexOf('/')+2;
+						params.step2params = url.slice(pos1);
+					}
+					else
+					{
+						params.step2params = paramTmp;
+					}
 					
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-					params.domain = paramTmp.match(re)[1].toString();
-					var pos1 = paramTmp.lastIndexOf('?')+1;
-					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5source=normal&'+paramTmp.slice(pos1);
+					params.domain = url.match(re)[1].toString();
+					var pos1 = url.lastIndexOf('?')+1;
+					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5source=normal&'+url.slice(pos1);
 					
 					FGS.vampirewars.Freegifts.Click3(params);
 				}
@@ -148,7 +162,7 @@ FGS.vampirewars.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: 'http://'+params.domain+'/'+params.step3param,
 			dataType: 'text',
 			success: function(dataStr)
@@ -279,6 +293,7 @@ FGS.vampirewars.Requests =
 			success: function(dataStr)
 			{
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				if(typeof(retry) == 'undefined')
 				{
@@ -300,10 +315,17 @@ FGS.vampirewars.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.vampirewars.Requests.Click4(currentType, id, src);
+					if(!url)
+					{
+						var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
+						if (src == '') throw {message:"no iframe"}
+						url = src;
+					}
+					
+					FGS.vampirewars.Requests.Click4(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -333,22 +355,39 @@ FGS.vampirewars.Requests =
 		});
 	},
 	
-	Click4:	function(currentType, id, currentURL, retry)
+	Click4:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				var dataHTML = FGS.HTMLParser(dataStr);
-				
+
 				try
 				{
+					var redirectUrl = FGS.checkForLocationReload(dataStr);
+					
+					if(redirectUrl != false)
+					{
+						if(typeof(retry) == 'undefined')
+						{
+							FGS.vampirewars.Requests.Login(currentType, id, redirectUrl, true);
+						}
+						else
+						{
+							FGS.endWithError('receiving', currentType, id);
+						}
+						return;
+					}
+					
+					
 					if($('div.title', dataHTML).text().indexOf('You must accept gifts within') != -1)
 					{
 						var error_text = $.trim($('div.title', dataHTML).text());
@@ -394,7 +433,7 @@ FGS.vampirewars.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -406,7 +445,7 @@ FGS.vampirewars.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

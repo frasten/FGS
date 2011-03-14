@@ -338,6 +338,13 @@ FGS.wildwesttown.Requests =
 							return;
 						}
 						
+						if(txt.indexOf('Position not accepted') != -1)
+						{
+							var error_text = 'Position not accepted, this building is already fully staffed!';
+							FGS.endWithError('limit', currentType, id, error_text);					
+							return;
+						}
+						
 						var pos1 = txt.indexOf('!');
 						var txt = txt.slice(0, pos1+1);
 						var txt = txt.replace(/\'s/i,"");

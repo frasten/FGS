@@ -51,6 +51,13 @@ FGS.castleage.Requests =
 						return;
 					}
 					
+					if(dataStr.indexOf('You may have already accepted this gift') != -1)
+					{
+						var error_text = 'You may have already accepted this gift';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
 					var el = $('#app46755028429_results_main_wrapper', dataHTML);
 					
 					var tmpTxt = $(el).text();
