@@ -410,6 +410,7 @@ FGS.farmville.Bonuses =
 					}
 					else
 					{
+						FGS.setNewFarmvilleBonus();
 						FGS.endWithError('receiving', currentType, id);
 					}
 					return;
@@ -429,6 +430,8 @@ FGS.farmville.Bonuses =
 								if($(".main_giftConfirm_cont", dataHTML).find('h3').text().indexOf(checkStr) != -1)
 								{
 									var error_text = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
+									
+									FGS.setNewFarmvilleBonus();
 									FGS.endWithError('other', currentType, id, error_text);
 									stop = true;
 									break;
@@ -439,6 +442,8 @@ FGS.farmville.Bonuses =
 						if(stop) return;			
 						
 						var error_text = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
+						
+						FGS.setNewFarmvilleBonus();
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
@@ -485,6 +490,7 @@ FGS.farmville.Bonuses =
 							{
 								info.time = Math.round(new Date().getTime() / 1000);
 								
+								FGS.setNewFarmvilleBonus();
 								FGS.endWithSuccess(currentType, id, info);
 							},
 							error: function()
@@ -495,6 +501,7 @@ FGS.farmville.Bonuses =
 								}
 								else
 								{
+									FGS.setNewFarmvilleBonus();
 									FGS.endWithError('connection', currentType, id);
 								}
 							}
@@ -516,6 +523,7 @@ FGS.farmville.Bonuses =
 					}
 					else
 					{
+						FGS.setNewFarmvilleBonus();
 						FGS.endWithError('receiving', currentType, id);
 					}
 				}
@@ -528,6 +536,7 @@ FGS.farmville.Bonuses =
 				}
 				else
 				{
+					FGS.setNewFarmvilleBonus();
 					FGS.endWithError('connection', currentType, id);
 				}
 			}

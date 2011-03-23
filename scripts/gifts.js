@@ -913,6 +913,7 @@ FGS.getFBML = function(params, retry)
 				
 				var tst = new RegExp(/var items=({.*});/gm).exec(dataCheck);
 				if(tst == null) throw {message:'no items'}
+				
 				var tst = tst[1];
 				
 				
@@ -924,6 +925,7 @@ FGS.getFBML = function(params, retry)
 				{
 					arr.push(JSON.parse('{'+v+'}'));
 				});
+		
 
 				if(typeof(params.cafeUrl) != 'undefined')
 				{
@@ -1060,9 +1062,10 @@ FGS.sendGift = function(params, retry)
 		success: function(data)
 		{
 			var str = data.substring(9);
-			var str2 = parseInt(JSON.parse(str).error.toString());
 			
-			if(str2 > 0)
+			var str2 = JSON.parse(str).error;			
+			
+			if(typeof(str2) != 'undefined')
 			{
 				FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
 				return;

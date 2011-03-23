@@ -30,10 +30,17 @@ FGS.puzzledhearts.Bonuses =
 				
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.puzzledhearts.Bonuses.Click2(currentType, id, src);
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					FGS.puzzledhearts.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -63,15 +70,16 @@ FGS.puzzledhearts.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -144,7 +152,7 @@ FGS.puzzledhearts.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -156,7 +164,7 @@ FGS.puzzledhearts.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{
@@ -199,10 +207,17 @@ FGS.puzzledhearts.Requests =
 				
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.puzzledhearts.Requests.Click2(currentType, id, src);
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					FGS.puzzledhearts.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -232,15 +247,16 @@ FGS.puzzledhearts.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -262,6 +278,12 @@ FGS.puzzledhearts.Requests =
 						return;
 					}
 					
+					if(dataStr.indexOf('but this gift cannot be accepted because it is too old') != -1)
+					{
+						var error_text = 'This gift cannot be accepted because it is too old';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
 					
 					if($('.ui-icon-info', dataHTML).length > 0)
 					{ 
@@ -310,7 +332,7 @@ FGS.puzzledhearts.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -322,7 +344,7 @@ FGS.puzzledhearts.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

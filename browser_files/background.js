@@ -104,7 +104,7 @@ FGS.commentBonus = function(bonusID, comment)
 					var str = data.substring(9);
 					var error = parseInt(JSON.parse(str).error);
 					
-					if(error == 0)
+					if(typeof(error) == 'undefined')
 					{
 						FGS.database.commentBonus(bonusID);
 					}
@@ -158,7 +158,7 @@ FGS.likeBonus = function (bonusID, autolike)
 					var str = data.substring(9);
 					var error = parseInt(JSON.parse(str).error);
 					
-					if(error == 0)
+					if(typeof(error) == 'undefined')
 					{
 						FGS.database.likeBonus(bonusID);
 					}
@@ -208,8 +208,14 @@ FGS.sendView = function (msg, data, data2, data3)
 {
 	if(msg == 'requestError' || msg == 'requestSuccess' || msg == 'bonusError' || msg == 'bonusSuccess')
 	{
-		FGS.xhrWorking--;
-		delete(FGS.xhrWorkingQueue[data]);
+		if(data == FGS.xhrFarmWorking)
+		{
+			FGS.xhrFarmWorking = 0;
+		}
+		else
+		{
+			FGS.xhrWorking--;
+		}
 	}
 
 	var viewTabUrl = chrome.extension.getURL('giftlist.html');

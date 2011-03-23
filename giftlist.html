@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.7" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.7" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.8" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.8" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.7"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.8"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.7"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.7"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.7"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.8"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.8"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.8"></script>
 
 
 <script type="text/javascript">
@@ -37,6 +37,10 @@ $.fn.dataTableExt.afnSortData['dom-text'] = function  ( oSettings, iColumn )
 	} );
 	return aData;
 }
+
+jQuery.expr[':'].Contains = function(a,i,m){
+     return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0;
+};
 
 var loaded = 0;
 var isScreenLocked = false;
@@ -177,6 +181,8 @@ function addDataToScreenLocked(callback, id, data)
 		$('div#'+game+opt, '#'+game+'Game').prepend('<div class="sendingGiftProgress"><h3 class="center"><img src="gfx/loading.gif"><br />Sending "'+giftName+'" to '+sendTo.length+' people</h3></div>');
 				
 		bkP[game].Freegifts.Click(params);
+		
+		//bkP.frontierville.Freegifts.Click({gift:'care_package', gameID: '201278444497', sendTo: ['100001178615702']});
 	}
 	
 	function freegiftSuccess(data, data2)
@@ -347,8 +353,8 @@ function addDataToScreenLocked(callback, id, data)
 		}
 		
 		
-		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
-		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().height(55).find('.submenuInfo').html('');
+		$('div#'+game+'BonusesPendingList', '#'+game+'Game').prev().height(85).find('.submenuInfo').html('');
+		$('div#'+game+'ManualBonusesList', '#'+game+'Game').prev().height(85).find('.submenuInfo').html('');
 		
 		var html = '';
 		var htmlManual = '';
@@ -411,6 +417,17 @@ function addDataToScreenLocked(callback, id, data)
 					type: 'bonus',
 					title: el.attr('search-title')
 				}
+		
+		
+		if(game == 'farmville')
+		{
+			if(bkP.options.games[gameID].useRandomTimeoutOnBonuses)
+			{
+				bkP.xhrFarmQueue.push(obj);
+				updateQueueCount();
+				return;
+			}		
+		}		
 		
 		bkP.xhrQueue.push(obj);
 		updateQueueCount();
@@ -1662,6 +1679,13 @@ function addIconToOptionsMenu(gameID)
 	var d =  bkP.gamesData[gameID];
 	var e =  bkP.options.games[gameID];
 	
+	var addSpecOpt = '<br style="line-height: 19px;" />';
+	
+	if(gameID == '102452128776')
+	{
+		addSpecOpt = '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.useRandomTimeoutOnBonuses ? 'checked="checked"':'')+'  class="gameUseRandomTimeoutOnBonuses" gameID="'+gameID+'" /> <label>Use random timeout on bonuses</label><br />';
+	}
+	
 	var el = $('<div gameName="'+d.name+'" class="optionsGameDiv"><img style="float: left" src="icons/menu/48'+d.systemName+'.png" /><span style="float: left;">'
 	+ '<input type="checkbox" '+(e.enabled ? 'checked="checked"':'')+' class="gameEnabledBox" gameID="'+gameID+'" /> <label>Enable <strong>'+d.name+'</strong></label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(gameID == bkP.options.defaultGame ? 'checked="checked"':'')+' class="gameDefaultBox" gameID="'+gameID+'" /> <label>Go to this game on FGS startup</label><br />'
@@ -1670,6 +1694,7 @@ function addIconToOptionsMenu(gameID)
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses on Facebook</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.listOnSearch? 'checked="checked"':'')+'  class="gameListOnNeighborsSearch" gameID="'+gameID+'" /> <label>List me on neighbors search</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.autoAcceptBonus? 'checked="checked"':'')+'  class="gameAutoAcceptBonusBox" gameID="'+gameID+'" /> <label>Automatically accept bonuses</label><br />'
+	+ addSpecOpt
 	+ '</span></div>');
 
 	var gs = $('#gameOptionsTab');	
@@ -1751,7 +1776,9 @@ function addGameMenu(gameID)
 		
 		if(id == 'BonusesPending' || id == 'ManualBonuses' || id == 'RequestsPending')
 		{
-			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" '+ ( bkP.options.showDescriptionsOnStartup == 1 ? ' checked="checked"' : '')+' /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br /><br /></div>');
+			var addSearch = '<h3>Simple filter</h3> <input type="text" class="filterBonusText" /> <select class="searchWhat"><option value="1">Only title</option><option value="2">Only description</option><option value="0" selected="selected">Both</option>';
+		
+			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" '+ ( bkP.options.showDescriptionsOnStartup == 1 ? ' checked="checked"' : '')+' /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br />'+addSearch+'<br /></div>');
 		}
 		
 		if(id == 'NeighborsSearch')
@@ -1923,6 +1950,12 @@ function processGameHideFromFeedInput(el)
 	bkP.saveOptions();
 }
 
+function processGameUseRandomTimeoutOnBonuses(el)
+{
+	bkP.options.games[$(el).attr('gameID')].useRandomTimeoutOnBonuses = $(el).is(':checked') ? true : false;
+	bkP.saveOptions();
+}
+
 function processGameListOnNeighborsSearch(el)
 {
 	if(typeof(el) != 'undefined')
@@ -1967,7 +2000,7 @@ function switchEnabled(gameID, reload)
 		{
 			loadBonuses(gameID);
 			bkP.startBonusesForGame(gameID);
-		}			
+		}
 	}
 }
 
@@ -2086,27 +2119,46 @@ function processSwitchItemsDisplay()
 	var total = el.children('div').length;
 	var elSub  = el.prev('.submenu');
 	
-	if(elSub.height() < 55)
+	if(elSub.height() < 85)
 	{
-		elSub.height(55);
+		elSub.height(85);
 	}
 	
 	var showDesc = $('input.ShowDescriptions', elSub).button().is(':checked');
+	var textFilter = $('input.filterBonusText', elSub).val();
+	var filterType = $('select.searchWhat option:selected', elSub).val();
+	el.children('div').addClass('hide');	
 	
-	el.children('div').addClass('hide');
+	var matchingItems = el.children('div').filter(function()
+	{
+		var tstTitle = $('.title:Contains("'+textFilter+'")', this).length > 0;
+		var tstDesc = $('.description:Contains("'+textFilter+'")', this).length > 0;
+		
+		if(filterType == 0)
+			return tstTitle || tstDesc;
+		else if(filterType == 1)
+			return tstTitle;
+		else
+			return tstDesc;
+	});
 	
 	if($('input.ShowAllItems', elSub).button().is(':checked'))
 	{
 		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
-		el.children('div').removeClass('hide');		
+		matchingItems.removeClass('hide');		
 		appendSrcToImages(el.attr('id'));
 		switchDescriptions(el.attr('id'), showDesc);
 		return;
 	}
 	
-	if(total > 100)
+	if(total > 100 && total == matchingItems.length)
 	{
 		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing 100 items (total: '+total+')</h3>');
+		$('input.ShowAllItems', elSub).next().removeClass('hide');
+	}
+	else if(total > 100 && total != matchingItems.length)
+	{
+		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing '+matchingItems.length+' items (filtered: '+(total-matchingItems.length)+')</h3>');
 		$('input.ShowAllItems', elSub).next().removeClass('hide');
 	}
 	else
@@ -2114,8 +2166,7 @@ function processSwitchItemsDisplay()
 		$('input.ShowAllItems', elSub).prev('span').html('<h3>Showing ALL items</h3>');
 		$('input.ShowAllItems', elSub).next().addClass('hide');
 	}
-	el.children('div:gt(99)').addClass('hide');
-	el.children('div:lt(100)').removeClass('hide');
+	matchingItems.slice(0, 99).removeClass('hide');
 
 	appendSrcToImages(el.attr('id'));
 	switchDescriptions(el.attr('id'), showDesc);
@@ -2276,6 +2327,8 @@ function updateTimeAgo(target)
 				return processGameAutoAcceptBonusInput(el);
 			else if(el.hasClass('gameListOnNeighborsSearch'))
 				return processGameListOnNeighborsSearch(el);
+			else if(el.hasClass('gameUseRandomTimeoutOnBonuses'))
+				return processGameUseRandomTimeoutOnBonuses(el);
 			else if(el.hasClass('deleteComment'))
 				return processDeleteComment(el);
 			else if(el.hasClass('toggleFavourite'))
@@ -2373,6 +2426,11 @@ function updateTimeAgo(target)
 			bkP.saveOptions();
 		});
 		
+		$('.filterBonusText').data('timeout', null).keyup(function()
+		{
+            clearTimeout(jQuery(this).data('timeout'));
+            jQuery(this).data('timeout', setTimeout(processSwitchItemsDisplay, 500));
+        });		
 		
 		
 		$(".showContext").live('mouseenter', function()
@@ -2738,7 +2796,7 @@ function updateTimeAgo(target)
 	
 	function updateQueueCount()
 	{
-		$('#queueItemsCount').text(bkP.xhrQueue.length);
+		$('#queueItemsCount').text((bkP.xhrQueue.length+bkP.xhrFarmQueue.length));
 	}
 
 	

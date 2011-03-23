@@ -397,10 +397,17 @@ FGS.crimecity.Bonuses =
 				
 				try 
 				{
-					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.crimecity.Bonuses.Click2(currentType, id, src);
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					FGS.crimecity.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -430,15 +437,16 @@ FGS.crimecity.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -469,7 +477,7 @@ FGS.crimecity.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -481,7 +489,7 @@ FGS.crimecity.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

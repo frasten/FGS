@@ -101,7 +101,7 @@ FGS.poker.Freegifts =
 					var str = dataStr.substring(9);
 					var error = parseInt(JSON.parse(str).error);
 
-					if(error > 0) throw {message: dataStr}
+					if(typeof(error) != 'undefined') throw {message: dataStr}
 					
 					var x = JSON.parse(str);
 					
