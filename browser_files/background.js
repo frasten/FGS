@@ -102,12 +102,15 @@ FGS.commentBonus = function(bonusID, comment)
 				success: function(data)
 				{
 					var str = data.substring(9);
-					var error = parseInt(JSON.parse(str).error);
+					var error = JSON.parse(str).error;
 					
 					if(typeof(error) == 'undefined')
 					{
+						error = 0;
 						FGS.database.commentBonus(bonusID);
 					}
+					else
+						error = 1;
 
 					FGS.sendView('updateComment', bonusID, error);
 				}
@@ -156,12 +159,15 @@ FGS.likeBonus = function (bonusID, autolike)
 				success: function(data)
 				{
 					var str = data.substring(9);
-					var error = parseInt(JSON.parse(str).error);
+					var error = JSON.parse(str).error;
 					
 					if(typeof(error) == 'undefined')
 					{
+						error = 0;
 						FGS.database.likeBonus(bonusID);
 					}
+					else
+						error = 1;
 
 					FGS.sendView('updateLike', bonusID, error);
 				}
