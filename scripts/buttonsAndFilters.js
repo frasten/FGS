@@ -747,37 +747,37 @@ FGS.submenuButtons =
 						},
 	'BonusesHistory': 	{	name: 'Collected bonuses',
 							submenu: {
-										'ClearCollectedBonuses': { name: 'Clear bonuses history' },
+										'ClearCollectedBonuses': { name: 'Clear history' },
 									}
 						},
 	'RequestsPending':	{	name: 'Gifts (<span>?</span>)',
 							submenu: {
 										'ReceivePendingRequests': { name: 'Receive all gifts' },
-										'ClearPendingRequests': 	{ name: 'Clear all requests' },
+										'ClearPendingRequests': 	{ name: 'Clear all gifts' },
 									}
 						}, 
 	'RequestsHistory':	{	name: 'Collected gifts',
 							submenu: {
-										'ClearCollectedRequests': { name: 'Clear gifts history' },
+										'ClearCollectedRequests': { name: 'Clear history' },
 									}
 						}, 
-	'SendFreeGifts':	{	name: 'Send gift',
+	'SendFreeGifts':	{	name: 'Send gifts',
 							submenu: {
 										'LoadNeighborsList': { name: 'Load neighbors list' },
 										'SelectFavourites': { name: 'Select favourites (max 25)' },
 										'SelectNonFavourites': { name: 'Select non-favourites (max 25)' },
 										'ClearSelection': { name: 'Clear selection' },
-										'SendGifts': { name: 'Send free gifts' },
+										'SendGifts': { name: 'Send gifts' },
 									}
 						}, 
 	'SendFreeGiftsHistory':	{	name: 'Sent gifts history',
 							submenu: {
-										'ClearSentFreeGifts': { name: 'Clear send gifts history' },
+										'ClearSentFreeGifts': { name: 'Clear history' },
 									}
 						},
 	'NeighborsSearch': {	name: 'Find neighbors',
 							submenu: {
-										'CheckIfNeighborsAvailable': { name: 'Check, if there are people waiting to be added' },
+										'CheckIfNeighborsAvailable': { name: 'Find new neighbors' },
 									}
 						},
 	'GameOptionsTab':	{	name: 'Filters',

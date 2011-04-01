@@ -702,7 +702,11 @@ var FGS = {
 				if(data.indexOf('"content":{"pagelet_requests":"') != -1)
 				{
 					var pos1 = data.indexOf('"content":{"pagelet_requests":"')+10;
-					var pos2 = data.indexOf('"}});', pos1)+2;				
+					var pos2 = data.indexOf('"}});', pos1)+2;
+					var pos2a = data.indexOf('"},', pos1)+2;
+					if(pos2a < pos2)
+						pos2 = pos2a;
+					
 					var tempD = JSON.parse(data.slice(pos1,pos2));
 
 					data = tempD.pagelet_requests;				
@@ -711,10 +715,16 @@ var FGS = {
 				{
 					var pos1 = data.indexOf("content: {pagelet_requests: '")+9;
 					var pos2 = data.indexOf("'}});", pos1)+2;
+					var pos2a = data.indexOf("'},", pos1)+2;
+					if(pos2a < pos2)
+						pos2 = pos2a;
+					
 					var tempD = JSON.parse(data.slice(pos1,pos2));
 					
 					data = tempD.pagelet_requests;	
 				}
+				
+				FGS.dump('gifts work fine');
 				
 				var data = FGS.HTMLParser(data);	
 

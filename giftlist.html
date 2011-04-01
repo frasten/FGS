@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.11" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.11" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.13" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.13" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.11"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.13"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.11"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.11"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.11"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.13"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.13"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.13"></script>
 
 
 <script type="text/javascript">
@@ -492,6 +492,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var error_text = (typeof(data.error_text) != 'undefined' && data.error_text != '' ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
 		
+		el.attr('error', data.error);		
 		el.find('.bonusError').html('('+data.error+' error)'+error_text);
 		
 		var gameID = el.attr('gameID');
@@ -548,10 +549,6 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var el = $('#'+id);
 		el.find('img:last').attr('src', 'gfx/90px-check.png');
-		
-		var error_text = (typeof(data.error_text) != 'undefined' && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
-		
-		el.find('.bonusError').html(error_text);
 		
 		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
@@ -699,6 +696,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		var error_text = (typeof(data.error_text) != 'undefined'  && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
 		
+		el.attr('error', data.error);		
 		el.find('.bonusError').html('('+data.error+' error)'+error_text);
 		
 		var gameID = el.attr('gameID');
@@ -751,9 +749,6 @@ function addDataToScreenLocked(callback, id, data)
 	{
 		var el = $('#'+id);
 		el.find('img:last').attr('src', 'gfx/90px-check.png');
-		
-		var error_text = (typeof(data.error_text) != 'undefined'  && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');		
-		el.find('.bonusError').html(error_text);
 		
 		var gameID = el.attr('gameID');
 		var game = bkP.gamesData[gameID].systemName;
@@ -995,8 +990,10 @@ function addDataToScreenLocked(callback, id, data)
 					var delArr = [];
 					
 					
-					$('#'+game+'BonusesPendingList').children('div').not('.inProgress').each(function(){
-						if($(this).find('.bonusError').text().indexOf('other error') != -1)
+					$('#'+game+'BonusesPendingList').children('div').not('.inProgress').each(function()
+					{
+					
+						if($(this).attr('error') == 'other')
 						{
 							delArr.push($(this).attr('id'));
 							$(this).remove();
@@ -1034,7 +1031,7 @@ function addDataToScreenLocked(callback, id, data)
 				{
 					var game = bkP.gamesData[gameID].systemName;
 					$('#'+game+'FailedBonusesList').children('div').each(function(){
-						if($(this).find('.bonusError').text().indexOf('limit') != -1)
+						if($(this).attr('error') == 'limit')
 						{
 							$(this).remove();
 						}
@@ -1104,8 +1101,9 @@ function addDataToScreenLocked(callback, id, data)
 				"Delete receiving errors": function()
 				{
 					var game = bkP.gamesData[gameID].systemName;
-					$('#'+game+'FailedBonusesList').children('div').each(function(){
-						if($(this).find('.bonusError').text().indexOf('receiving') != -1)
+					$('#'+game+'FailedBonusesList').children('div').each(function()
+					{
+						if($(this).attr('error') == 'receiving')
 						{
 							$(this).remove();
 						}
@@ -1131,7 +1129,7 @@ function addDataToScreenLocked(callback, id, data)
 				{
 					var game = bkP.gamesData[gameID].systemName;
 					$('#'+game+'FailedGiftsList').children('div').each(function(){
-						if($(this).find('.bonusError').text().indexOf('receiving') != -1)
+						if($(this).attr('error') == 'receiving')
 						{
 							$(this).remove();
 						}
@@ -1157,7 +1155,7 @@ function addDataToScreenLocked(callback, id, data)
 				{
 					var game = bkP.gamesData[gameID].systemName;
 					$('#'+game+'FailedGiftsList').children('div').each(function(){
-						if($(this).find('.bonusError').text().indexOf('limit') != -1)
+						if($(this).attr('error' ) == 'limit')
 						{
 							$(this).remove();
 						}
@@ -1434,7 +1432,7 @@ function addDataToScreenLocked(callback, id, data)
 			addClass = ' noErrorClass ';
 		}
 		
-		return '<div id="'+v.id+'" gameID="'+v.gameID+'" time="'+v.time+'" url="'+v.url+'" title="'+v.text+'" class="bonusItem withDesc disabled updateTimeAgo '+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+showImage+'"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" error='+v.error+' gameID="'+v.gameID+'" time="'+v.time+'" url="'+v.url+'" title="'+v.text+'" class="bonusItem withDesc disabled updateTimeAgo '+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+showImage+'"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
 	}
 	
 	function getRequestHistoryRow(v)
@@ -1463,7 +1461,7 @@ function addDataToScreenLocked(callback, id, data)
 			addClass = ' noErrorClass ';
 		}
 		
-		return '<div id="'+v.id+'" gameID="'+v.gameID+'" time="'+v.time+'" postData="'+v.post+'" class="withDesc requestItem disabled updateTimeAgo'+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+v.image+'" onError="processImageError(this)"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" error="'+v.error+'" gameID="'+v.gameID+'" time="'+v.time+'" postData="'+v.post+'" class="withDesc requestItem disabled updateTimeAgo'+addClass+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError">'+err+'</span><img src="'+v.image+'" onError="processImageError(this)"><span class="title">'+v.title+'</span><span class="description">'+v.text+'</span></div>';
 	}
 	
 	function friendsLoaded(gameID, status)
