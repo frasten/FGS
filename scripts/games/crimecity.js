@@ -5,7 +5,7 @@ FGS.crimecity.Freegifts =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
+		
 		$.ajax({
 			type: "GET",
 			url: 'http://apps.facebook.com/crimecitygame/'+addAntiBot,
@@ -14,9 +14,20 @@ FGS.crimecity.Freegifts =
 			{
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					params.click2url = src;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).attr('action');
+					var params2 = $('form[target]', dataHTML).serialize();
+
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					params.step1url = url;
+					params.step1params = params2;
 					
 					FGS.crimecity.Freegifts.Click2(params);
 				}
@@ -69,8 +80,9 @@ FGS.crimecity.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
-			url: params.click2url+addAntiBot,
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -127,6 +139,7 @@ FGS.crimecity.Freegifts =
 			}
 		});
 	},
+	
 	Click3: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -134,31 +147,27 @@ FGS.crimecity.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "POST",
-			url: 'http://prod-cc-app-lb-1877943370.us-east-1.elb.amazonaws.com/crimetown/index.php/gifts/choose/'+addAntiBot,
-			data: {gift_id: params.gift, cc_fbuid: params.cc_fbuid, token: params.token},
+			type: "GET",
+			url: 'http://prod-cc-app-lb-1877943370.us-east-1.elb.amazonaws.com/crimetown/index.php/frame/gift_frame/'+addAntiBot,
+			data: params.step1params+'&'+$.param({gift_id: params.gift, cc_fbuid: params.cc_fbuid, token: params.token}),
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{	
-					var tst = new RegExp(/var api_key = "(.*)"/).exec(dataStr);
-					if(tst == null) throw {message:'no api_key tag'}
-					var api_key = tst[1];
+					var reqData = {};
 					
-					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
-					if(tst == null) throw {message:'no fbml tag'}
-					var fbml = tst[1];
-
-					var tst = new RegExp(/var channel_path = "(.*)"/).exec(dataStr);
-					if(tst == null) throw {message:'no channel_path tag'}
-					var channel_path = tst[1];
+					var tst = new RegExp(/requestDialogParams\[\'data\'\] = \'(.*)\'\;/).exec(dataStr);
+					if(tst == null) throw {message:'no data tag'}
+					reqData.data = tst[1];
 					
-					var paramsStr = 'app_key='+api_key+'&channel_url='+encodeURIComponent(channel_path)+'&fbml='+encodeURIComponent(fbml);
+					var tst = new RegExp(/requestDialogParams\[\'message\'\] = \'(.*)\'\;/).exec(dataStr);
+					if(tst == null) throw {message:'no message tag'}
+					reqData.message = tst[1];
 					
-					params.nextParams = paramsStr;
+					params.reqData = reqData;
 					
-					FGS.getFBML(params);
+					FGS.crimecity.Freegifts.ClickRequest(params);
 				}
 				catch(err)
 				{
@@ -200,7 +209,20 @@ FGS.crimecity.Freegifts =
 				}
 			}
 		});
-	}
+	},
+	
+	ClickRequest: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		
+		var channel = 'http://prod-cc-app-lb-1877943370.us-east-1.elb.amazonaws.com/crimetown/index.php/requestchannel';
+		
+		params.getToken = 'api_key=129547877091100&app_id=129547877091100&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
+		
+		FGS.getAppAccessTokenForSending(params, function(){});
+	},
 };
 
 FGS.crimecity.Requests = 

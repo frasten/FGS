@@ -6,6 +6,9 @@ FGS.potfarm.Requests =
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
+		
+		currentURL = currentURL.replace('http://www.thepotfarmgame.com/', 'http://apps.facebook.com/mypotfarm/');
+		
 		$.ajax({
 			type: "GET",
 			url: currentURL,
@@ -34,10 +37,17 @@ FGS.potfarm.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_272810543124', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					FGS.potfarm.Requests.Click2(currentType, id, src);
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_272810543124', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					FGS.potfarm.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -67,15 +77,16 @@ FGS.potfarm.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
 		
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{

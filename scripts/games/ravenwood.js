@@ -14,9 +14,20 @@ FGS.ravenwood.Freegifts =
 			{
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_120563477996213', dataStr);
-					if (src == '') throw {message:"no iframe"}
-					params.step2url = src;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).attr('action');
+					var params2 = $('form[target]', dataHTML).serialize();
+					
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_120563477996213', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					params.step2url = url;
+					params.step2params = params2;
 
 					FGS.ravenwood.Freegifts.Click2(params);
 				}
@@ -68,8 +79,9 @@ FGS.ravenwood.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 
 		$.ajax({
-			type: "GET",
+			type: "POST",
 			url: params.step2url+''+addAntiBot,
+			data: params.step2params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -77,7 +89,7 @@ FGS.ravenwood.Freegifts =
 				{
 					var pos1 = dataStr.indexOf('fbparams: "');
 					var pos2 = dataStr.indexOf('"', pos1+11);
-					params.step3params = '?ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(pos1+11, pos2));
+					params.step3params = 'ask_gift=-1&item_id='+params.gift+'&recipient_id=&thankyou_gift=0&default_tab=game&'+unescape(dataStr.slice(pos1+11, pos2));
 					params.step3url = 'http://www.ravenwoodfair.com/app/1/gift/send';
 					
 					FGS.ravenwood.Freegifts.Click3(params);

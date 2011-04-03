@@ -31,7 +31,10 @@ FGS.database.createTable = function()
                   'bonuses (id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, url TEXT, time INTEGER, feedback TEXT, link_data TEXT, like_bonus INTEGER, comment_bonus INTEGER, resend_gift TEXT, error_text TEXT)', [],  FGS.database.onSuccess, FGS.database.onError);
 		
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
-                  'neighborStats (userID INTEGER, gameID INTEGER, lastBonus INTEGER,  lastGift INTEGER, totalBonuses INTEGER, totalGifts INTEGER, PRIMARY KEY(userID, gameID))', [],  FGS.database.onSuccess, FGS.database.onError);
+                  'neighborStats (userID INTEGER, gameID INTEGER, lastBonus INTEGER,  lastGift INTEGER, totalBonuses INTEGER, totalGifts INTEGER, lastGiftSent INTEGER, totalGiftsSent INTEGER, PRIMARY KEY(userID, gameID))', [],  FGS.database.onSuccess, FGS.database.onError);
+			
+		tx.executeSql('ALTER TABLE neighborStats ADD COLUMN lastGiftSent INTEGER', [],  FGS.database.onSuccess, FGS.database.onError);
+		tx.executeSql('ALTER TABLE neighborStats ADD COLUMN totalGiftsSent INTEGER', [],  FGS.database.onSuccess, FGS.database.onError);
 		
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN comment_bonus INTEGER', [],  FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN resend_gift TEXT', [],  FGS.database.onSuccess, FGS.database.onError);
@@ -87,6 +90,18 @@ FGS.database.addStats = function(type, ids, data)
 		var lastGift  = 0;
 		var totalBonuses = count;
 		var totalGifts = 0;
+		var lastGiftSent = 0;
+		var totalGiftsSent = 0;
+	}
+	else if(type == 'giftSent')
+	{
+		var qry = ' totalGiftsSent = totalGiftsSent + '+count+', lastGiftSent = ?';
+		var lastBonus = 0;
+		var lastGift  = 0;
+		var totalBonuses = 0;
+		var totalGifts = 0;
+		var lastGiftSent = time;
+		var totalGiftsSent = count;
 	}
 	else
 	{
@@ -96,11 +111,13 @@ FGS.database.addStats = function(type, ids, data)
 		var lastGift  = time;
 		var totalBonuses = 0;
 		var totalGifts = count;
+		var lastGiftSent = 0;
+		var totalGiftsSent = 0;
 	}
 	
 	FGS.database.db.transaction(function(tx)
 	{
-		tx.executeSql('INSERT OR IGNORE INTO neighborStats (userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts) VALUES(?,?,?,?,?,?)', [userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts],		
+		tx.executeSql('INSERT OR IGNORE INTO neighborStats (userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts, lastGiftSent, totalGiftsSent) VALUES(?,?,?,?,?,?,?,?)', [userID, gameID, lastBonus, lastGift, totalBonuses, totalGifts, lastGiftSent, totalGiftsSent],		
 			function(tx2, r)
 			{
 				if(r.rowsAffected == 0)

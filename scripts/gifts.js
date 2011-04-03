@@ -990,7 +990,7 @@ FGS.getFBML = function(params, retry)
 				
 				if(params.gameID == '120563477996213')
 				{
-					sendGiftParams += '&'+ $('form[type="Ravenwood Fair Gift"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
+					sendGiftParams += '&'+ $('form[type="Ravenwood Fair"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
 				}
 				
 				if(params.gameID == '129547877091100')
@@ -1143,8 +1143,10 @@ FGS.sendGift = function(params, retry)
 								gift: params.gift,
 								gameID: params.gameID,
 								friend: v.name,
-								time: curTime
+								time: curTime,
+								friendID: id
 							};
+							
 							FGS.database.addFreegift(params.gameID, v.name, params.gift, curTime, typeof(params.thankYou));
 							
 							if(typeof(params.thankYou) != 'undefined')
@@ -1166,7 +1168,8 @@ FGS.sendGift = function(params, retry)
 							gift: params.gift,
 							gameID: params.gameID,
 							friend: params.sendToName,
-							time: curTime
+							time: curTime,
+							friendID: id
 						};
 						
 						FGS.database.addFreegift(params.gameID, params.sendToName, params.gift, curTime, typeof(params.thankYou));

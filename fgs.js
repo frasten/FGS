@@ -144,6 +144,405 @@ var FGS = {
 		});
 	},
 	
+	getSendingForm: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {}
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'https://www.facebook.com/dialog/apprequests',
+			data: $.param(params.reqData)+'&'+$.param(params.access)+'&'+params.getToken+'&sdk=joey&display=iframe&locale=en_US',
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var tst = new RegExp(/["]bootstrapData["]:(.*)[\,]["]boo/).exec(dataStr);
+					if(tst == null) throw {message:'no bootstrap tag'}					
+					
+					var postD = JSON.parse(tst[1]); 
+					
+					var newPost =
+					{
+						viewer: postD.viewer,
+						token: postD.token,
+					}
+					
+					var i = 0;
+					for(var id in postD.filter)
+					{
+						newPost['filter['+i+']'] = postD.filter[id];
+						i++;
+					}
+					
+					var i = 0;
+					for(var id in postD.options)
+					{
+						newPost['options['+i+']'] = postD.options[id];
+						i++;
+					}
+					
+					params.requestPost = $.param(newPost).replace(/%5B/g,'[').replace(/%5D/g,']');
+					
+					var tmpObj = {}
+					var parStr = '';
+					
+					$(params.sendTo).each(function(k,v)
+					{
+						tmpObj[v] = 1;
+						parStr += '&checkableitems[]='+v;
+					});
+					
+					$('input[name="profileChooserItems"]', dataHTML).remove();
+					
+					params.formUrl = $('#uiserver_form', dataHTML).attr('action');
+					params.formParam = $('#uiserver_form', dataHTML).serialize()+parStr+'&profileChooserItems='+encodeURIComponent(JSON.stringify(tmpObj));
+					
+					FGS.getFriendsFromRequest(params, callback);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	getFriendsFromRequest: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {}
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'https://www.facebook.com/ajax/typeahead/first_degree.php?__a=1',
+			data: params.requestPost,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var str = dataStr.substring(9);
+					var str2 = JSON.parse(str).error;
+					
+					var data = JSON.parse(str);
+					
+					if(typeof(str2) != 'undefined')
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						return;
+					}
+					
+					var arr = {};
+					
+					$(data.payload.entries).each(function(k,v)
+					{
+						arr[v.uid] = {name: v.text};
+					});
+					
+					params.tmpFriends = arr;
+					
+					FGS.getFriendsFromGame(params, callback);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	getFriendsFromGame: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {}
+		
+		FGS.jQuery.ajax({
+			type: "POST",
+			url: 'https://www.facebook.com/ajax/chooser/list/friends/app_user/?__a=1&app_id='+params.gameID,
+			data: 'post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&lsd&post_form_id_source=AsyncRequest',
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var str = dataStr.substring(9);
+					var str2 = JSON.parse(str).error;
+					
+					var data = JSON.parse(str);
+					
+					if(typeof(str2) != 'undefined')
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						return;
+					}
+					
+					var finalArr = [];
+					
+					$(data.payload.ids).each(function(k, v)
+					{
+						var x = {};
+						x[v] = params.tmpFriends[v];
+						finalArr.push(x);						
+					});
+					
+					params.items = finalArr;
+					
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', finalArr, params.gameID);
+						return;
+					}
+					
+					$.post(params.formUrl, params.formParam+'&ok_clicked=Send%20Requests', function()
+					{
+						var curTime = Math.round(new Date().getTime() / 1000);
+
+						var found = false;
+						
+						if(typeof(params.thankYou) == 'undefined')
+							FGS.ListNeighbours(params.gameID);
+						
+						$(params.items).each(function(k,val)
+						{
+							for(var i in val)
+							{
+								var id = i;
+							}
+							var v = val[id];					
+							
+							if($.inArray(id, params.sendTo) > -1)
+							{
+								var sendHistory = {
+									gift: params.gift,
+									gameID: params.gameID,
+									friend: v.name,
+									time: curTime,
+									friendID: id
+								};
+								FGS.database.addFreegift(params.gameID, v.name, params.gift, curTime, typeof(params.thankYou));
+								
+								if(typeof(params.thankYou) != 'undefined')
+								{
+									FGS.database.updateItemGiftBack((params.isRequest ? 'requests' : 'bonuses'), params.bonusID);
+								}
+								
+								FGS.sendView('freegiftSuccess', sendHistory, (typeof(params.thankYou) != 'undefined' ? params.bonusID : ''));
+								
+								found = true;
+							}
+							i++;
+						});
+						
+						if(!found && typeof(params.thankYou) != 'undefined')
+						{
+							//thank you gift
+							var sendHistory = {
+								gift: params.gift,
+								gameID: params.gameID,
+								friend: params.sendToName,
+								time: curTime,
+								friendID: id
+							};
+							
+							FGS.database.addFreegift(params.gameID, params.sendToName, params.gift, curTime, typeof(params.thankYou));
+							FGS.database.updateItemGiftBack((params.isRequest ? 'requests' : 'bonuses'), params.bonusID);
+							
+							FGS.sendView('freegiftSuccess', sendHistory, (typeof(params.thankYou) != 'undefined' ? params.bonusID : ''));
+						}
+					});
+					
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	getAppAccessTokenForSending: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+					
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
+			data: params.getToken,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+
+					var pos1 = parseStr.indexOf('var config = {');
+					if(pos1 == -1) throw {message:"no URI"}
+					
+					var pos2 = parseStr.indexOf('};',pos1);
+					
+					parseStr = parseStr.slice(pos1+13,pos2+1);
+					var parseStr = JSON.parse(parseStr);
+					
+					params.access = {access_token: parseStr.session.access_token};
+					
+					FGS.getSendingForm(params, callback);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
 	getAppAccessToken: function(currentType, id, currentURL, params, callback, retry)
 	{
 		var $ = FGS.jQuery;

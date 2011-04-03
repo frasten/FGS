@@ -260,12 +260,55 @@ FGS.farmville.Requests =
 				
 				try
 				{
-					if($('.main_giftConfirm_cont', dataHTML).length > 0)
+				
+					var limitArr = [
+						{ search: 'seem to send that gift to your friend right now', error: 'Sorry, farmer. We can\'t seem to send that gift to your friend right now.' },
+						{ search: 'duckling has already been helped.', error: 'Sorry, farmer. Looks like duckling has already been helped.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },
+						{ search: 'You are too late to claim a reward', error: 'You are too late to claim a reward.' },				
+					];
+					
+					
+					var isLimit = false;
+					
+					$(limitArr).each(function(k,v)
 					{
-						if($('.main_giftConfirm_cont', dataHTML).text().indexOf('seem to send that gift to your friend right now') != -1)
+						if(dataStr.indexOf(v.search) != -1)
 						{
-							var error_text = "Sorry, farmer. We can't seem to send that gift to your friend right now.";
-							FGS.endWithError('limit', currentType, id, error_text);							
+							FGS.endWithError('limit', currentType, id, v.error);
+							isLimit = true;
+							return false;
+						}
+					});
+					
+					if(isLimit) return;
+				//Sorry, farmer. We can't seem to send that gift to your friend right now.
+				// <h3>Thanks for helping Matan survey their land!<br /><br />Matan has helped you survey as well. Be sure to claim your England farm and expand it!</h3>
+				
+					var newUrl = $('form[target="flashAppIframe"]', dataHTML).attr('action');
+					var newParams = $('form[target="flashAppIframe"]', dataHTML).serialize();
+					
+					if(newUrl)
+					{
+						FGS.farmville.Requests.Click2(currentType, id, newUrl, newParams);
+						return;
+					}
+					var tmpText = $('.main_giftConfirm_cont',dataHTML).find('h3').text();
+					
+					
+					if(tmpText != undefined && tmpText != '')
+					{
+						if(tmpText.indexOf(' survey their land!') != -1 || tmpText.indexOf('has helped you survey as well') != -1)
+						{
+							info.image = 'gfx/90px-check.png';
+							info.title = 'Survey their land';
+							info.text  = tmpText;
+							info.time = Math.round(new Date().getTime() / 1000);
+							FGS.endWithSuccess(currentType, id, info);
 							return;
 						}
 					}
@@ -331,6 +374,9 @@ FGS.farmville.Requests =
 						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text  = $(".padding_content",dataHTML).find('h3').text();
+						if(info.text == undefined || info.text == '')
+							info.text = $('.main_giftConfirm_cont',dataHTML).find('h3').text();
+						
 						info.time = Math.round(new Date().getTime() / 1000);
 
 						FGS.endWithSuccess(currentType, id, info);
@@ -372,7 +418,85 @@ FGS.farmville.Requests =
 				}
 			}
 		});
+	},
+	
+	Click2: function(currentType, id, currentURL, params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "POST",
+			url: currentURL,
+			data: params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
+					
+					if(pos1 != -1)
+					{
+						var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+						var domain = currentURL.match(re)[1].toString();
+						
+						var nextUrl = 'http://'+domain+'/';	
+						
+						var pos2 = dataStr.indexOf("'", pos1)+1;
+						var pos3 = dataStr.indexOf("'", pos2);
+						
+						var newUrl = nextUrl+dataStr.slice(pos2,pos3).replace(nextUrl, '');
+						
+						var pos1 = dataStr.indexOf('new ZY(');
+						if(pos1 == -1) throw {message: 'No new ZY'}
+						pos1+=7;
+						var pos2 = dataStr.indexOf('},', pos1)+1;
+						var zyParam = JSON.parse(dataStr.slice(pos1,pos2));
+						
+						
+						FGS.farmville.Requests.Click(currentType, id, newUrl+'&'+$.param(zyParam));
+						return;
+					}
+					else
+					{
+						throw {message: dataStr}
+					}
+				
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
 	}
+	
+	
+	
 };
 
 

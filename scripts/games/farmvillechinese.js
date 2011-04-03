@@ -260,6 +260,14 @@ FGS.farmvillechinese.Requests =
 
 				try
 				{
+					var newUrl = $('form[target="flashAppIframe"]', dataHTML).attr('action');
+					var newParams = $('form[target="flashAppIframe"]', dataHTML).serialize();
+					
+					if(newUrl)
+					{
+						FGS.farmvillechinese.Requests.Click2(currentType, id, newUrl, newParams);
+						return;
+					}
 					if($('.main_giftConfirm_cont', dataHTML).length > 0)
 					{
 						if($('.main_giftConfirm_cont', dataHTML).text().indexOf('看來你已經接受過這份禮物') != -1)
@@ -383,6 +391,81 @@ FGS.farmvillechinese.Requests =
 				if(typeof(retry) == 'undefined')
 				{
 					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
+	Click2: function(currentType, id, currentURL, params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "POST",
+			url: currentURL,
+			data: params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
+					
+					if(pos1 != -1)
+					{
+						var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+						var domain = currentURL.match(re)[1].toString();
+						
+						var nextUrl = 'http://'+domain+'/';	
+						
+						var pos2 = dataStr.indexOf("'", pos1)+1;
+						var pos3 = dataStr.indexOf("'", pos2);
+						
+						var newUrl = nextUrl+dataStr.slice(pos2,pos3).replace(nextUrl, '');
+						
+						var pos1 = dataStr.indexOf('new ZY(');
+						if(pos1 == -1) throw {message: 'No new ZY'}
+						pos1+=7;
+						var pos2 = dataStr.indexOf('},', pos1)+1;
+						var zyParam = JSON.parse(dataStr.slice(pos1,pos2));
+						
+						
+						FGS.farmvillechinese.Requests.Click(currentType, id, newUrl+'&'+$.param(zyParam));
+						return;
+					}
+					else
+					{
+						throw {message: dataStr}
+					}
+				
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

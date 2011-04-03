@@ -308,6 +308,10 @@ FGS.sendView = function (msg, data, data2, data3)
 			}		
 			else if(msg == 'freegiftSuccess')
 			{
+				if(typeof(data.friendID) != 'undefined')
+				{
+					FGS.database.addStats('giftSent', data.friendID+'_'+data.gameID, {time: Math.round(new Date().getTime() / 1000), count: 1});
+				}
 				if(data2 != '')
 				{
 					view.updateSendback(data2, true);

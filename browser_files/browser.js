@@ -33,12 +33,17 @@
 					{
 						var lastBonus = (res.rows.item(i).lastBonus == 0 ? 'never' : format_time_ago(res.rows.item(i).lastBonus));
 						var lastGift  = (res.rows.item(i).lastGift == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGift));
+						var lastGiftSent  = (res.rows.item(i).lastGiftSent == 0 || res.rows.item(i).lastGiftSent == null ? 'never' : format_time_ago(res.rows.item(i).lastGiftSent));
 						
+						if(res.rows.item(i).totalGiftsSent == null)
+							res.rows.item(i).totalGiftsSent = 0;
 						
 						data[array][arrInd][2] = '<span class="hide">'+res.rows.item(i).lastBonus+'</span>'+lastBonus;
 						data[array][arrInd][3] = '<span class="hide">'+res.rows.item(i).lastGift+'</span>'+lastGift;
-						data[array][arrInd][4] = '<span class="hide">'+res.rows.item(i).totalBonuses+'</span>'+res.rows.item(i).totalBonuses;
-						data[array][arrInd][5] = '<span class="hide">'+res.rows.item(i).totalGifts+'</span>'+res.rows.item(i).totalGifts;
+						data[array][arrInd][4] = '<span class="hide">'+res.rows.item(i).lastGiftSent+'</span>'+lastGiftSent;
+						data[array][arrInd][5] = '<span class="hide">'+res.rows.item(i).totalBonuses+'</span>'+res.rows.item(i).totalBonuses;
+						data[array][arrInd][6] = '<span class="hide">'+res.rows.item(i).totalGifts+'</span>'+res.rows.item(i).totalGifts;
+						data[array][arrInd][7] = '<span class="hide">'+res.rows.item(i).totalGiftsSent+'</span>'+res.rows.item(i).totalGiftsSent;						
 					}
 				}
 
@@ -53,8 +58,10 @@
 						{ "sTitle": "Name" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last bonus" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift" },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift sent" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total bonuses" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts" },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts sent" },
 						{ "sTitle": "Select", "bSortable": false }
 					],
 					"aaSorting": [[ 1, "asc" ]],
@@ -72,8 +79,10 @@
 						{ "sTitle": "Name" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last bonus" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift" },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift sent" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total bonuses" },
 						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts" },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts sent" },
 						{ "sTitle": "Select", "bSortable": false }
 					],
 					"aaSorting": [[ 1, "asc" ]],

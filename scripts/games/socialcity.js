@@ -34,12 +34,13 @@ FGS.socialcity.Requests =
 				
 				try
 				{
-					var src = FGS.findIframeAfterId('#app_content_163965423072', dataStr);
-					if (src == '') throw {message:"no iframe"}
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
 					
-					src = src.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
+					url = url.replace('http://city-fb-apache-active-vip.playdom.com/', 'http://city-fb-apache-active-vip.playdom.com/lib/playdom/facebook/facebook_iframe.php');
 					
-					FGS.socialcity.Requests.Click2(currentType, id, src);
+					
+					FGS.socialcity.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -69,7 +70,7 @@ FGS.socialcity.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, retry)
+	Click2:	function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
@@ -77,6 +78,7 @@ FGS.socialcity.Requests =
 		
 		$.ajax({
 			type: "GET",
+			data: params,
 			url: currentURL,
 			dataType: 'text',
 			success: function(dataStr)
@@ -85,6 +87,16 @@ FGS.socialcity.Requests =
 				
 				try
 				{
+					var url = $('form[target]', dataHTML).attr('action');
+					var params = $('form[target]', dataHTML).serialize();
+					
+					if(url)
+					{
+						FGS.socialcity.Requests.Click2(currentType, id, url, params);
+						return;
+					}
+				
+				
 					var src = currentURL;
 					
 					var pos1 = src.indexOf('?');
@@ -127,7 +139,7 @@ FGS.socialcity.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 					}
 					else
 					{
@@ -139,7 +151,7 @@ FGS.socialcity.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
 				}
 				else
 				{

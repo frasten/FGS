@@ -437,6 +437,13 @@ FGS.mafiawars.Requests =
 					if(data.indexOf('Something has gone wrong') != -1)  throw {message:"Something is wrong"}
 					if(data.indexOf('This gift is expired') != -1)		throw {message:"Gift expired"}
 					
+					
+					if(dataStr.indexOf('this request has expired') != -1 || dataStr.indexOf('This gift is expired') != -1)
+					{
+						FGS.endWithError('limit', currentType, id, 'This request has expired');
+						return;
+					}
+					
 					info.text = '';
 					
 					if(isBoost)

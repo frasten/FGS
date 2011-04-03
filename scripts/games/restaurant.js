@@ -41,6 +41,14 @@ FGS.restaurant.Requests =
 						return;
 					}
 					
+					if(dataStr.indexOf('Sorry, the gift request from') != -1)
+					{
+						var error_text = 'You have already accepted this gift or it has expired.';					
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
+					
 					var tempText = $('#app43016202276_gift_text', dataHTML).text();
 					
 					if(!tempText || tempText == '')

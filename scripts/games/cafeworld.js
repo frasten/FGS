@@ -138,6 +138,13 @@ FGS.cafeworld.Requests =
 						return;
 					}
 					
+					if(dataStr.indexOf('sorry but it seems that something went wrong in the kitchen') != -1)
+					{
+						var error_text = 'Sorry, but it seems that something went wrong in the kitchen';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
 					if(dataStr.indexOf('is now your neighbor!') != -1)
 					{
 						info.image = '';

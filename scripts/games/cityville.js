@@ -151,7 +151,10 @@ FGS.cityville.Freegifts =
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
 					params.domain = params.step1url.match(re)[1].toString();
 					
-					var nextUrl = 'http://'+params.domain+'/';					
+					var nextUrl = 'http://'+params.domain+'/';			
+
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
+					
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
 					if(pos1 != -1)
@@ -574,6 +577,8 @@ FGS.cityville.Requests =
 					var pos2 = URL.lastIndexOf('/')+1;
 					
 					var nextUrl = URL.slice(pos1,pos2);
+					
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
 
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
@@ -869,6 +874,8 @@ FGS.cityville.Bonuses =
 					var pos2 = URL.lastIndexOf('/')+1;
 					
 					var nextUrl = URL.slice(pos1,pos2);
+					
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
 
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
@@ -932,6 +939,13 @@ FGS.cityville.Bonuses =
 					if($('.errorMessage', dataHTML).length > 0)
 					{ 
 						var error_text = $.trim($('.errorMessage', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);	
+						return;
+					}
+					
+					if(dataStr.indexOf('The train has already finished its trip') != -1)
+					{
+						var error_text = 'The train has already finished its trip';
 						FGS.endWithError('limit', currentType, id, error_text);	
 						return;
 					}
