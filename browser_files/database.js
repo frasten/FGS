@@ -39,6 +39,9 @@ FGS.database.createTable = function()
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN comment_bonus INTEGER', [],  FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN resend_gift TEXT', [],  FGS.database.onSuccess, FGS.database.onError);
 		tx.executeSql('ALTER TABLE bonuses ADD COLUMN error_text TEXT', [],  FGS.database.onSuccess, FGS.database.onError);
+		
+		tx.executeSql("UPDATE neighborStats SET lastGiftSent = ? where lastGiftSent IS NULL", [0], FGS.database.onSuccess, FGS.database.onError);
+		tx.executeSql("UPDATE neighborStats SET totalGiftsSent = ? where totalGiftsSent IS NULL", [0], FGS.database.onSuccess, FGS.database.onError);
 
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
 				'requests(id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, post TEXT, time INTEGER, resend_gift TEXT, error_text TEXT)', [],  FGS.database.onSuccess, FGS.database.onError);

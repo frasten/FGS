@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.14" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.14" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.15" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.15" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.14"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.15"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.14"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.14"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.14"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.15"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.15"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.15"></script>
 
 
 <script type="text/javascript">
@@ -266,7 +266,7 @@ function addDataToScreenLocked(callback, id, data)
 
 		var newUrl = v.url;
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span><span class="deleteIcon" title="Click to delete"></span></div>';
 	}
 	
 	function getNewRequestRow(gameID, v)
@@ -292,7 +292,7 @@ function addDataToScreenLocked(callback, id, data)
 		var title = v.title;
 		title = title.replace(/'/gi, '');
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem showContextManual updateTimeAgo manualBonus processManualBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span></div>';
+		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title="'+title+'" title="'+title+'" time="'+v.time+'" url="'+v.url+'" class="manualItem showContextManual updateTimeAgo manualBonus processManualBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span><span class="deleteIcon" title="Click to delete"></span></div>';
 	}
 	
 	function getNewManualRequestRow(gameID, v)
@@ -488,6 +488,7 @@ function addDataToScreenLocked(callback, id, data)
 	function bonusError(id, data)
 	{
 		var el = $('#'+id);
+		el.find('.deleteIcon').remove();
 		el.find('img:last').attr('src', 'gfx/90px-cancel.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined' && data.error_text != '' ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
@@ -548,6 +549,7 @@ function addDataToScreenLocked(callback, id, data)
 	function bonusSuccess(id, data)
 	{
 		var el = $('#'+id);
+		el.find('.deleteIcon').remove();
 		el.find('img:last').attr('src', 'gfx/90px-check.png');
 		
 		var gameID = el.attr('gameID');
@@ -692,6 +694,7 @@ function addDataToScreenLocked(callback, id, data)
 	function requestError(id, data)
 	{
 		var el = $('#'+id);
+		el.find('.deleteIcon').remove();
 		el.find('img:last').attr('src', 'gfx/90px-cancel.png');
 		
 		var error_text = (typeof(data.error_text) != 'undefined'  && data.error_text != ''  ? ' <img src="gfx/info.png" title="'+data.error_text+'" />' : '');
@@ -748,6 +751,7 @@ function addDataToScreenLocked(callback, id, data)
 	function requestSuccess(id, data)
 	{
 		var el = $('#'+id);
+		el.find('.deleteIcon').remove();
 		el.find('img:last').attr('src', 'gfx/90px-check.png');
 		
 		var gameID = el.attr('gameID');
@@ -2346,6 +2350,9 @@ function updateTimeAgo(target)
 			else if(el.hasClass('ShowAllItems') || el.hasClass('ShowDescriptions'))
 				return processSwitchItemsDisplay();
 			
+			else if(el.hasClass('deleteIcon'))
+				return processSingleBonusRemove(el.closest('div'));
+			
 			else if(el.closest('div').hasClass('processManualRequestClick'))
 				return processManualRequestClick(el.closest('div'));
 				
@@ -2457,9 +2464,7 @@ function updateTimeAgo(target)
 				}
 				else if(action == 'delete')
 				{
-					el.remove();
-					bkP.database.deleteItem('bonuses', el.attr('gameID'), el.attr('id'), 0);
-					updateCount(el.attr('gameID'));
+					processSingleBonusRemove(el);
 				}
 				else if(action == 'deleteSimilar')
 				{
@@ -2508,6 +2513,15 @@ function updateTimeAgo(target)
 					}});
 					
 					$('#dialog-confirm').dialog('open');
+				}
+				else if(action == 'copylink')
+				{
+					bkP.copyLink(el.attr('url'));
+				}
+				else if(action == 'openAndDelete')
+				{
+					bkP.openURI(el.attr('url'), true);
+					processSingleBonusRemove(el);
 				}
 				else if(action == 'debug')
 				{
@@ -2598,7 +2612,35 @@ function updateTimeAgo(target)
 				menu: 'myMenuManualBonuses'
 			}, function(action, el, pos)
 			{
-				if(action == 'stopCollect')
+				if(action == 'delete')
+				{
+					el.remove();
+					bkP.database.deleteItem('bonuses', el.attr('gameID'), el.attr('id'), 0);
+					updateCount(el.attr('gameID'));
+				}
+				else if(action == 'deleteSimilar')
+				{
+					$('#dialog-confirm').dialog({
+						buttons:
+						{
+							"Delete all items": function()
+							{
+								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
+								{
+									$(this).remove();
+								});
+								bkP.database.deleteItemByTitle('bonuses', el.attr('gameID'), el.attr('search-title'), 0);
+								updateCount(el.attr('gameID'));
+								$( this ).dialog( "close" );
+							},
+							Cancel: function() {
+								$( this ).dialog( "close" );
+							}
+					}});
+					
+					$('#dialog-confirm').dialog('open');
+				}
+				else if(action == 'stopCollect')
 				{
 					$('#dialog-confirm').dialog({
 						buttons:
@@ -2621,6 +2663,10 @@ function updateTimeAgo(target)
 							}
 					}});
 					$('#dialog-confirm').dialog('open');
+				}
+				else if(action == 'copylink')
+				{
+					bkP.copyLink(el.attr('url'));
 				}
 			});
 		});
@@ -2830,6 +2876,13 @@ function updateTimeAgo(target)
 		}
 	}
 	
+	function processSingleBonusRemove(el)
+	{
+		el.remove();
+		bkP.database.deleteItem('bonuses', el.attr('gameID'), el.attr('id'), 0);
+		updateCount(el.attr('gameID'));
+	}
+	
 	function processToggleFavourite(e)
 	{
 		var srcEl	= $(e);
@@ -2854,7 +2907,9 @@ function updateTimeAgo(target)
 					srcEl.children('td:nth-child(4)').html(),
 					srcEl.children('td:nth-child(5)').html(),
 					srcEl.children('td:nth-child(6)').html(),
-					srcEl.children('td:nth-child(7)').html()
+					srcEl.children('td:nth-child(7)').html(),
+					srcEl.children('td:nth-child(8)').html(),
+					srcEl.children('td:nth-child(9)').html()
 				];
 
 			$('.favouritesTable', 'div#'+game+opt).dataTable().fnAddData(arr);
@@ -2872,7 +2927,9 @@ function updateTimeAgo(target)
 					srcEl.children('td:nth-child(4)').html(),
 					srcEl.children('td:nth-child(5)').html(),
 					srcEl.children('td:nth-child(6)').html(),
-					srcEl.children('td:nth-child(7)').html()
+					srcEl.children('td:nth-child(7)').html(),
+					srcEl.children('td:nth-child(8)').html(),
+					srcEl.children('td:nth-child(9)').html()
 				];
 			
 			$('.neighborsTable', 'div#'+game+opt).dataTable().fnAddData(arr);
@@ -3283,11 +3340,16 @@ function compareTime(itemTime, olderThan)
 		<li class="delete separator"><a href="#delete">Delete this bonus</a></li>
 		<li class="delete"><a href="#deleteSimilar">Delete all "<span class="bonusName"></span> (<span class="bonusNameCount"></span>)"</a></li>
 		<li class="delete separator"><a href="#stopCollect">Don't collect this type of bonuses "<span class="bonusName"></span>"</a></li>
-		<li class="debug"><a href="#debug">Debug (for developer)</a></li>
+		<li class="copy separator"><a href="#copylink">Copy link</a></li>
+		<li class="open separator"><a href="#openAndDelete">Open in new tab and delete</a></li>
+		<li class="debug separator"><a href="#debug">Debug (for developer)</a></li>
 	</ul>
 	
 	<ul id="myMenuManualBonuses" class="contextMenu">
-		<li class="delete"><a href="#stopCollect">Don't collect this type of bonuses "<span class="bonusName"></span>"</a></li>
+		<li class="delete separator"><a href="#delete">Delete this bonus</a></li>
+		<li class="delete"><a href="#deleteSimilar">Delete all "<span class="bonusName"></span> (<span class="bonusNameCount"></span>)"</a></li>
+		<li class="delete separator"><a href="#stopCollect">Don't collect this type of bonuses "<span class="bonusName"></span>"</a></li>
+		<li class="copy separator"><a href="#copylink">Copy link</a></li>
 	</ul>
 	
 	<ul id="myMenuRequests" class="contextMenu">

@@ -21,6 +21,7 @@ body
 
 .bonusItem, .requestItem, .manualItem 
 {
+	position: relative;
 	overflow: hidden;
 	cursor:pointer;
 	border: 1px solid #000;
@@ -31,6 +32,19 @@ body
 	margin: 5px;
 	padding: 5px;
 	float: left;
+}
+
+.bonusItem .deleteIcon, .manualItem .deleteIcon
+{
+	cursor: pointer;
+	border-left: 1px #000 solid;
+	border-bottom: 1px #000 solid;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 10px;
+	height: 10px;
+	background-image: url(../icons/delete-10.png);
 }
 
 .bonusItem.withDesc, .requestItem.withDesc, .manualItem.withDesc
@@ -434,5 +448,7 @@ background-color: #8dbdd8;
 */
 
 .contextMenu LI.receive A { background-image: url(../context/receive.png); }
+.contextMenu LI.copy A { background-image: url(../context/copylink.png); }
+.contextMenu LI.open A { background-image: url(../context/open.png); }
 .contextMenu LI.delete A { background-image: url(../context/delete.png); }
 .contextMenu LI.goToGame A { background-image: url(../context/goToGame.png); }

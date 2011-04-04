@@ -33,10 +33,7 @@
 					{
 						var lastBonus = (res.rows.item(i).lastBonus == 0 ? 'never' : format_time_ago(res.rows.item(i).lastBonus));
 						var lastGift  = (res.rows.item(i).lastGift == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGift));
-						var lastGiftSent  = (res.rows.item(i).lastGiftSent == 0 || res.rows.item(i).lastGiftSent == null ? 'never' : format_time_ago(res.rows.item(i).lastGiftSent));
-						
-						if(res.rows.item(i).totalGiftsSent == null)
-							res.rows.item(i).totalGiftsSent = 0;
+						var lastGiftSent  = (res.rows.item(i).lastGiftSent == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGiftSent));
 						
 						data[array][arrInd][2] = '<span class="hide">'+res.rows.item(i).lastBonus+'</span>'+lastBonus;
 						data[array][arrInd][3] = '<span class="hide">'+res.rows.item(i).lastGift+'</span>'+lastGift;

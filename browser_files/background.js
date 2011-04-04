@@ -11,6 +11,16 @@ FGS.HTMLParser = function (aHTMLString)
 	return html;
 };
 
+FGS.copyLink = function(msg)
+{
+	FGS.jQuery('body').append('<textarea id="ta"></textarea>');
+	var ta = document.getElementById('ta');
+	ta.value = msg;
+	ta.select();
+	document.execCommand("copy", false, null);
+	$('#ta').remove();
+};
+
 FGS.openURI = function (url, background)
 {
 	chrome.tabs.getAllInWindow(null, function tabSearch(tabs)

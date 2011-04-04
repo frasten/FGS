@@ -360,7 +360,8 @@ var FGS = {
 					{
 						var x = {};
 						x[v] = params.tmpFriends[v];
-						finalArr.push(x);						
+						if(typeof(x[v]) != 'undefined')
+							finalArr.push(x);						
 					});
 					
 					params.items = finalArr;

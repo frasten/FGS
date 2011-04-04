@@ -691,6 +691,24 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+					/*
+	137827210650:	{ 	name: 'Ninja Saga',	systemName: 'ninjasaga', link: 'http://apps.facebook.com/ninjasaga/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+					*/
 	102518706469143:	{ 	name: 'Wild West Town',	systemName: 'wildwesttown', link: 'http://apps.facebook.com/wildwesttown/',
 						filter:	
 						{
