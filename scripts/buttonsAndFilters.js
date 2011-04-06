@@ -737,30 +737,32 @@ FGS.submenuButtons =
 {
 	'FailedBonuses':	{	name: 'Failed bonuses',
 							submenu: {
-								'ClearAllFailedBonuses': { name: 'Clear everything' },
-								'ClearCollectedBonusesLimitError': { name: 'Clear bonuses with "Limit error"' },
-								'ClearCollectedBonusesReceivingError': { name: 'Clear bonuses with "Receiving error"' },
+								'ClearAllFailedBonuses': { name: 'Clear all' },
+								'ClearCollectedBonusesLimitError': { name: 'Clear "Limit errors"' },
+								'ClearCollectedBonusesReceivingError': { name: 'Clear "Receiving errors"' },
 							}
 	},
 	
 	'FailedGifts':	{	name: 'Failed gifts',
 							submenu: {
 								'ClearAllFailedRequests': { name: 'Clear everything' },
-								'ClearCollectedRequestsLimitError': { name: 'Clear gifts with "Limit error"' },
-								'ClearCollectedRequestsReceivingError': { name: 'Clear gifts with "Receiving error"' },
+								'ClearCollectedRequestsLimitError': { name: 'Clear "Limit errors"' },
+								'ClearCollectedRequestsReceivingError': { name: 'Clear "Receiving errors"' },
 							}
 	},
 	
 	'BonusesPending': 	{	name: 'Bonuses (<span>?</span>)',
 							submenu: {
-										'ReceivePendingBonuses': { name: 'Receive all bonuses' },
-										'ClearPendingBonuses': 	{ name: 'Clear all bonuses' },
-										'ClearPendingBonusesOtherError': { name: 'Clear bonuses with "Other error"' },
+										'ReceivePendingBonuses': { name: 'Receive all' },
+										'ClearPendingBonuses': 	{ name: 'Clear all' },
+										'ReceiveVisibleBonuses': { name: 'Receive visible' },
+										'ClearVisibleBonuses': 	{ name: 'Clear visible' },
+										'ClearPendingBonusesOtherError': { name: 'Clear "Other errors"' },
 									}
 						},
 	'ManualBonuses':	{	name: 'Items requiring action (<span>?</span>)',
 							submenu: {
-										'ClearManualBonuses': { name: 'Clear all bonuses' },
+										'ClearManualBonuses': { name: 'Clear all' },
 									}
 						},
 	'BonusesHistory': 	{	name: 'Collected bonuses',
@@ -770,8 +772,10 @@ FGS.submenuButtons =
 						},
 	'RequestsPending':	{	name: 'Gifts (<span>?</span>)',
 							submenu: {
-										'ReceivePendingRequests': { name: 'Receive all gifts' },
-										'ClearPendingRequests': 	{ name: 'Clear all gifts' },
+										'ReceivePendingRequests': { name: 'Receive all' },
+										'ClearPendingRequests': 	{ name: 'Clear all' },
+										'ReceiveVisibleGifts': { name: 'Receive visible' },
+										'ClearVisibleGifts': 	{ name: 'Clear visible' },
 									}
 						}, 
 	'RequestsHistory':	{	name: 'Collected gifts',

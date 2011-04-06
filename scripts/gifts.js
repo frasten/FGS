@@ -1169,7 +1169,7 @@ FGS.sendGift = function(params, retry)
 							gameID: params.gameID,
 							friend: params.sendToName,
 							time: curTime,
-							friendID: id
+							friendID: params.sendTo[0]
 						};
 						
 						FGS.database.addFreegift(params.gameID, params.sendToName, params.gift, curTime, typeof(params.thankYou));

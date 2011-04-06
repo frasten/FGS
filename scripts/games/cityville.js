@@ -68,70 +68,6 @@ FGS.cityville.Freegifts =
 		});
 	},
 	
-	ClickForm: function(params, retry)
-	{
-		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
-
-		$.ajax({
-			type: "POST",
-			url: params.step1url+addAntiBot,
-			data: params.step1params,
-			dataType: 'text',
-			success: function(dataStr)
-			{
-				try
-				{
-					var src = FGS.findIframeAfterId('#app_content_291549705119', dataStr);
-					if(src == '') throw {message:'No iframe found'}
-					
-					params.step2url = src;
-					
-					FGS.cityville.Freegifts.Click2(params);
-				}
-				catch(err)
-				{
-					FGS.dump(err);
-					FGS.dump(err.message);
-					if(typeof(retry) == 'undefined')
-					{
-						retryThis(params, true);
-					}
-					else
-					{
-						if(typeof(params.sendTo) == 'undefined')
-						{
-							FGS.sendView('updateNeighbors', false, params.gameID);
-						}
-						else
-						{
-							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-						}
-					}
-				}
-			},
-			error: function()
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					retryThis(params, true);
-				}
-				else
-				{
-					if(typeof(params.sendTo) == 'undefined')
-					{
-						FGS.sendView('updateNeighbors', false, params.gameID);
-					}
-					else
-					{
-						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
-					}
-				}
-			}
-		});
-	},
-	
 	Click2: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -153,7 +89,7 @@ FGS.cityville.Freegifts =
 					
 					var nextUrl = 'http://'+params.domain+'/';			
 
-					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '').replace("ZYFrameManager.navigateTo('invite.php", '');
 					
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
@@ -173,6 +109,8 @@ FGS.cityville.Freegifts =
 					var pos2 = dataStr.indexOf('},', pos1)+1;
 					
 					var zyParam = JSON.parse(dataStr.slice(pos1,pos2));
+					
+					zyParam.snapi_auth = zyParam.zyAuthHash;
 					
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
 					params.domain = params.step1url.match(re)[1].toString();
@@ -229,8 +167,9 @@ FGS.cityville.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
 		
 		$.ajax({
-			type: "GET",
-			url: 'http://'+params.domain+'/gifts.php?action=chooseRecipient&gift='+params.gift+'&view=app&ref=&'+params.zyParam+''+addAntiBot,
+			type: "POST",
+			url: 'http://'+params.domain+'/gifts.php?action=chooseRecipient&view=app&ref=&'+params.zyParam+''+addAntiBot,
+			data: 'giftRecipient=&gift='+params.gift+'&ref=&'+params.zyParam,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -578,7 +517,7 @@ FGS.cityville.Requests =
 					
 					var nextUrl = URL.slice(pos1,pos2);
 					
-					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '').replace("ZYFrameManager.navigateTo('invite.php", '');
 
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
@@ -875,7 +814,7 @@ FGS.cityville.Bonuses =
 					
 					var nextUrl = URL.slice(pos1,pos2);
 					
-					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '');
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '').replace("ZYFrameManager.navigateTo('invite.php", '');
 
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
