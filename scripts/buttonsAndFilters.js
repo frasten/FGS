@@ -1,7 +1,8 @@
 FGS.gamesData = 
 {
 	201278444497: 	{ 	
-						name: 'FrontierVille',	systemName: 'frontierville', link: 'http://apps.facebook.com/frontierville/',
+						name: 'FrontierVille',	systemName: 'frontierville', link: 'http://apps.facebook.com/frontierville/', 
+						hasDailyLimits: true,
 						filter:		
 						{	
 							bonuses: ['Go see my gift', 'Go Play FrontierVille', 'Go to FrontierVille', 'Send items'],		
@@ -25,11 +26,13 @@ FGS.gamesData =
 						]
 					},
 	102452128776: 	{ 	
-						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/',
+						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/', 
+						hasDailyLimits: true,
 						filter:
 						{	
 							bonuses: ['Play Farmville Now'],
-							bonusesNewWindow: ['Fertilize their crops', 'Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle', 'Send Baby Bottles', 'Lend a Hand'],
+							bonusesNewWindow: ['Fertilize their crops', 'Help them out','Send Watering Cans','Send Building Parts', 'Send a Bushel', 'Sent Doggie Treats', 'Send Materials', 'Send a Turkey', 'Send puppy kibble', 'Claim your Truffle', 'Send Baby Bottles', 'Lend a Hand', 'Send Parts', 'Send Luck', 'Give item to (.*)', 'Send Shovels'],
+							
 							requests: ['Toolbar_Install', 'sendcredits'],
 							requestsNewWindow: [],
 						},
@@ -506,6 +509,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],

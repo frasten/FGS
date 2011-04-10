@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.16" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.16" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.17" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.17" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.16"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.17"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.16"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.16"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.16"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.17"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.17"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.17"></script>
 
 
 <script type="text/javascript">
@@ -221,7 +221,7 @@ function addDataToScreenLocked(callback, id, data)
 		{
 			var thankText = '';
 		}		
-		return  '<div class="freegiftHistory updateTimeAgo" title="'+v.friend+'" alt="'+v.friend+'" time="'+v.time+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><br /><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+v.gift+'.png"><div style="font-size: 11px;">'+v.friend+''+thankText+'</div></div>'
+		return  '<div class="freegiftHistory updateTimeAgo" title="'+v.friend+'" alt="'+v.friend+'" time="'+v.time+'"><span class="timeAgo">'+format_time_ago(v.time)+'</span><br /><img  style="width: 32px; height: 32px;margin:2px auto;" src="http://fgs.rzadki.eu/reqs/'+game+'/'+v.gift+'.png"><div style="font-size: 11px;">'+v.friend+thankText+'</div></div>'
 	}
 	
 	function checkIfBonusIsManual(gameID, typeText)
@@ -1315,89 +1315,6 @@ function addDataToScreenLocked(callback, id, data)
 		return s;
 	}
 
-	/*
-
-	function switchEnabled(gameID, reload)
-	{
-		var game = bkP.gamesData[gameID].systemName;
-		var enabled  = bkP.options.games[gameID].enabled;
-		var e =  bkP.options.games[gameID];
-
-		var el = $('.badgeGames', 'label[for="'+gameID+'Selected"]');
-		
-		if(enabled == false)
-		{
-			if(gameID == bkP.options.defaultGame)
-			{
-				bkP.options.defaultGame = 0;
-				bkP.saveOptions();
-			}
-			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').attr('disabled', 'disabled');			
-			$(el).addClass('hide');
-			$('img', 'label[for="'+gameID+'Selected"]').attr('src', 'icons/menu/'+game+'-bw.png');
-			$('div.content', 		$('#'+game+'Game')).addClass('hide');
-			$('div.notEnabledInfo', $('#'+game+'Game')).removeClass('hide');
-			
-			if(typeof(reload) != 'undefined')
-			{
-				bkP.database.clearByGameID(gameID);
-				bkP.options.games[gameID] = bkP.defaultGameOptions;
-				delete bkP.bonusLoadingProgress[gameID];
-				$('div.bonusItem, div.requestItem, div.freegiftHistory, div.manualItem', $('#'+game+'Game')).remove();
-				updateCount();
-				bkP.stopBonusesForGame(gameID);
-			}
-		}
-		else
-		{
-			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
-			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
-			
-			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-			
-			if(gameID == bkP.options.defaultGame)
-			{
-				$('.gameDefaultBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-			}
-
-			if(e.likeBonus)
-			{
-				$('.gameLikeBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-			}
-			
-			if(e.sendbackGift)
-			{
-				$('.gameSendbackGiftBox[gameID="'+gameID+'"]').attr('checked', 'checked');			
-			}
-			
-			if(e.hideFromFeed)
-			{
-				$('.gameHideFromFeedBox[gameID="'+gameID+'"]').attr('checked', 'checked');			
-			}
-			
-			
-			if(e.autoAcceptBonus)
-			{
-				$('.gameAutoAcceptBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-			}
-
-			$(el).removeClass('hide');
-			$('img', 'label[for="'+gameID+'Selected"]').attr('src', 'icons/menu/'+game+'.png');
-			$('div.content', 		$('#'+game+'Game')).removeClass('hide');
-			$('div.notEnabledInfo', $('#'+game+'Game')).addClass('hide');
-			
-			
-			if(typeof(reload) != 'undefined')
-			{
-				selectFirstTab(gameID);
-				loadBonuses(gameID);
-				bkP.startBonusesForGame(gameID);
-				showSearchGames([gameID]);				
-			}			
-		}
-	}
-	
-	*/
 	
 	function updateCount(gameID)
 	{
@@ -1726,7 +1643,7 @@ function addIconToOptionsMenu(gameID)
 	var d =  bkP.gamesData[gameID];
 	var e =  bkP.options.games[gameID];
 	
-	var addSpecOpt = '<br style="line-height: 19px;" />';
+	var addSpecOpt = '<br style="line-height: 22px;" />';
 	
 	if(gameID == '102452128776')
 	{
@@ -1738,7 +1655,8 @@ function addIconToOptionsMenu(gameID)
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(gameID == bkP.options.defaultGame ? 'checked="checked"':'')+' class="gameDefaultBox" gameID="'+gameID+'" /> <label>Go to this game on FGS startup</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.likeBonus ? 'checked="checked"':'')+' class="gameLikeBonusBox" gameID="'+gameID+'" /> <label>Auto like bonuses</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.sendbackGift ? 'checked="checked"':'')+' class="gameSendbackGiftBox" gameID="'+gameID+'" /> <label>Send thank you gift</label><br />'
-	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses on Facebook</label><br />'
+	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses from FB feed</label><br />'
+	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeedLimitError ? 'checked="checked"':'')+' class="gameHideFromFeedLimitErrorBox" gameID="'+gameID+'" /> <label>Hide "limit errors" from FB feed</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.listOnSearch? 'checked="checked"':'')+'  class="gameListOnNeighborsSearch" gameID="'+gameID+'" /> <label>List me on neighbors search</label><br />'
 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.autoAcceptBonus? 'checked="checked"':'')+'  class="gameAutoAcceptBonusBox" gameID="'+gameID+'" /> <label>Automatically accept bonuses</label><br />'
 	+ addSpecOpt
@@ -1994,6 +1912,12 @@ function processGameAutoAcceptBonusInput(el)
 function processGameHideFromFeedInput(el)
 {
 	bkP.options.games[$(el).attr('gameID')].hideFromFeed = $(el).is(':checked') ? true : false;
+	bkP.saveOptions();
+}
+
+function processGameHideFromFeedLimitErrorInput(el)
+{
+	bkP.options.games[$(el).attr('gameID')].hideFromFeedLimitError = $(el).is(':checked') ? true : false;
 	bkP.saveOptions();
 }
 
@@ -2394,6 +2318,8 @@ function updateTimeAgo(target)
 				return processGameHideFromFeedInput(el);
 			else if(el.hasClass('gameAutoAcceptBonusBox'))
 				return processGameAutoAcceptBonusInput(el);
+			else if(el.hasClass('gameHideFromFeedLimitErrorBox'))
+				return processGameHideFromFeedLimitErrorInput(el);
 			else if(el.hasClass('gameListOnNeighborsSearch'))
 				return processGameListOnNeighborsSearch(el);
 			else if(el.hasClass('gameUseRandomTimeoutOnBonuses'))
@@ -2853,8 +2779,8 @@ function updateTimeAgo(target)
 		
 		$('#exportSettings').click(function()
 		{
-			var set = bkP.options;
-			var cleanSet = {}
+			var set = jQuery.extend(true,{},bkP.options);
+			var cleanSet = {};
 			
 			for(var id in set)
 			{
@@ -2910,16 +2836,6 @@ function updateTimeAgo(target)
 		$('#queueItemsCount').text((bkP.xhrQueue.length+bkP.xhrFarmQueue.length));
 	}
 
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
 	function processSelectNeighborToSend(e)
 	{
 		var gameID = $(e).attr('gameID');
@@ -2927,11 +2843,6 @@ function updateTimeAgo(target)
 		var opt = 'SendFreeGiftsList';
 
 		var count = parseInt($('input[name="neighArr[]"]:checked', 'div#'+game+opt).length);
-
-		if(e.altKey === undefined)
-		{
-			count++;
-		}
 
 		if(count > 25)
 		{

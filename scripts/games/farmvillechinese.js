@@ -4,7 +4,7 @@ FGS.farmvillechinese.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -75,11 +75,11 @@ FGS.farmvillechinese.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
 		$.ajax({
 			type: "POST",
-			url: params.click2url+''+addAntiBot,
+			url: params.click2url+addAntiBot,
 			data: params.click2params,
 			dataType: 'text',
 			success: function(dataStr)
@@ -141,11 +141,11 @@ FGS.farmvillechinese.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
-			url: 'http://'+params.domain+'/gifts_send.php?gift='+params.gift+'&view=farmville&src=direct&aff=&crt=&sendkey=&'+params.zyParam+'&overlayed=true&'+addAntiBot+''+Math.round(new Date().getTime() / 1000)+'#overlay',
+			url: 'http://'+params.domain+'/gifts_send.php?gift='+params.gift+'&view=farmville&src=direct&aff=&crt=&sendkey=&'+params.zyParam+'&overlayed=true&'+addAntiBot+Math.round(new Date().getTime() / 1000)+'#overlay',
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -378,7 +378,7 @@ FGS.farmvillechinese.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -390,7 +390,7 @@ FGS.farmvillechinese.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -453,7 +453,7 @@ FGS.farmvillechinese.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -465,7 +465,7 @@ FGS.farmvillechinese.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -611,7 +611,7 @@ FGS.farmvillechinese.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -623,7 +623,7 @@ FGS.farmvillechinese.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{

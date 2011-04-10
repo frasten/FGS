@@ -4,7 +4,7 @@ FGS.ravenwood.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -76,11 +76,11 @@ FGS.ravenwood.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "POST",
-			url: params.step2url+''+addAntiBot,
+			url: params.step2url+addAntiBot,
 			data: params.step2params,
 			dataType: 'text',
 			success: function(dataStr)
@@ -139,7 +139,7 @@ FGS.ravenwood.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -202,11 +202,11 @@ FGS.ravenwood.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "POST",
-			url: params.step3url+''+addAntiBot,
+			url: params.step3url+addAntiBot,
 			data: params.step3params,
 			dataType: 'text',
 			success: function(dataStr)
@@ -379,7 +379,7 @@ FGS.ravenwood.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -391,7 +391,7 @@ FGS.ravenwood.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{

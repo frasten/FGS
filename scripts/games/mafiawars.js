@@ -4,7 +4,7 @@ FGS.mafiawars.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -74,11 +74,11 @@ FGS.mafiawars.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "POST",
-			url: params.click2url+''+addAntiBot,
+			url: params.click2url+addAntiBot,
 			data: params.click2param,
 			dataType: 'text',
 			success: function(dataStr)
@@ -185,11 +185,11 @@ FGS.mafiawars.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "POST",
-			url: params.click3url+''+addAntiBot,
+			url: params.click3url+addAntiBot,
 			data: params.click3param,
 			dataType: 'text',
 			success: function(dataStr)
@@ -312,7 +312,7 @@ FGS.mafiawars.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -324,7 +324,7 @@ FGS.mafiawars.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -393,7 +393,7 @@ FGS.mafiawars.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -405,7 +405,7 @@ FGS.mafiawars.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -581,7 +581,7 @@ FGS.mafiawars.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, isBoost, true);
+						retryThis(currentType, id, currentURL, currentParams, isBoost, true);
 					}
 					else
 					{
@@ -593,7 +593,7 @@ FGS.mafiawars.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, isBoost, true);
+					retryThis(currentType, id, currentURL, currentParams, isBoost, true);
 				}
 				else
 				{
@@ -656,7 +656,7 @@ FGS.mafiawars.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -668,7 +668,7 @@ FGS.mafiawars.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -734,7 +734,7 @@ FGS.mafiawars.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -746,7 +746,7 @@ FGS.mafiawars.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -969,7 +969,7 @@ FGS.mafiawars.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, true);
+						retryThis(currentType, id, currentURL, currentParams, true);
 					}
 					else
 					{
@@ -981,7 +981,7 @@ FGS.mafiawars.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', currentParams, true);
+					retryThis(currentType, id, currentURL, currentParams, true);
 				}
 				else
 				{

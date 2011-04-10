@@ -4,7 +4,7 @@ FGS.zooworld.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
 		if(!params.zooAppId	)
 		{
@@ -108,7 +108,7 @@ FGS.zooworld.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -327,7 +327,7 @@ FGS.zooworld.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -339,7 +339,7 @@ FGS.zooworld.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -425,7 +425,7 @@ FGS.zooworld.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -437,7 +437,7 @@ FGS.zooworld.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -525,7 +525,7 @@ FGS.zooworld.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -537,7 +537,7 @@ FGS.zooworld.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -650,7 +650,7 @@ FGS.zooworld.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -662,7 +662,7 @@ FGS.zooworld.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{

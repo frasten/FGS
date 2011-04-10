@@ -65,24 +65,27 @@ FGS.giftsArray = {
 	'102452128776': // farmville
 	{
 		"mysterygift": { name: 'Mystery Gift'},
-		"consume_lucky_penny" : { name: 'Lucky Penny'},
-		
-		"stpattysbasket2011_gold_4": { name: 'Gold Harp'},
-		"stpattysbasket2011_gold_1": { name: 'Gold Bar'},
-		"stpattysbasket2011_gold_2": { name: 'Gold Chunk'},
-		"stpattysbasket2011_gold_5": { name: 'Gold Coin'},
-		"stpattysbasket2011_gold_3": { name: 'Gold Nugget'},
-		"fuelFifth": { name: 'Small Can of Fuel'},
-		
 		
 		"socialplumbingmysterygift": { name: 'Special Delivery'},
+		"consume_lucky_penny": { name: 'Lucky Penny'},
 		"shovel_item_01": { name: '2 Shovels'},
 		"wateringcan": { name: 'Watering Can'},
-		"valentinesbasket2011_valentine_2": { name: 'Rose Vase'},
-		"valentinesbasket2011_valentine_3": { name: 'Baby\'s Breath'},
-		"valentinesbasket2011_valentine_4": { name: 'Valentine Chocolates'},
-		"valentinesbasket2011_valentine_1": { name: 'Stuffed Cow'},
-		"valentinesbasket2011_valentine_5": { name: 'Love Letters'},
+		"springbasket2011_flower_3": { name: 'Daffodil'},
+		"springbasket2011_flower_5": { name: 'Forget-me-not'},
+		"springbasket2011_flower_4": { name: 'Foxglove'},
+		"springbasket2011_flower_1": { name: 'Alstroemeria Lily'},
+		"springbasket2011_flower_2": { name: 'Day Lily'},
+		"walnut": { name: 'Walnut Tree'},
+		"cashew": { name: 'Cashew Tree'},
+		"breadfruit": { name: 'Breadfruit Tree'},
+		"stpattysbasket2011_gold_5": { name: 'Gold Coin'},
+		"stpattysbasket2011_gold_4": { name: 'Gold Harp'},
+		"stpattysbasket2011_gold_1": { name: 'Gold Bar'},
+		"jackfruit": { name: 'Jackfruit Tree'},
+		"stpattysbasket2011_gold_3": { name: 'Gold Nugget'},
+		"stpattysbasket2011_gold_2": { name: 'Gold Chunk'},
+		
+		
 		"vehiclepart": { name: 'Vehicle Part'},
 		"woodenboard": { name: 'Wooden Board'},
 		"nail": { name: 'Nail'},
@@ -300,30 +303,21 @@ FGS.giftsArray = {
 	},
 	10979261223:  // mafia wars
 	{
-		"440": { name: 'Raw Meat'},
-		"439": { name: 'Hollow Warrior'},
-		"405": { name: 'Mystery Shipment'},
-		"422": { name: 'Exotic Animal Feed'},
-		"420": { name: 'Feeding Trough'},
-		"419": { name: 'Bird Cage'},
-		"438": { name: '+2 Mafia Members'},
-		"210": { name: 'Satchel of Lira'},
-		"100": { name: 'Mystery Bag'},
-		"151": { name: 'Mystery Animal'},
-		"189": { name: 'Special Part'},
-		"401": { name: 'Italian Hardwood'},
-		"402": { name: 'Marble Slab'},
-		"164": { name: 'Construction Tool'},
-		"171": { name: 'Deposit Box'},
-		
-		
-		/*
-		"527": { name: 'Mystery bag'} ,
-		"736": { name: 'Red mystery bag' },
-		"2602": { name: 'Stone Column' },
-		"1581": { name: 'Poker Table' },
-		*/
-		
+		"463": { name: 'FALSE IDENTITY'},
+		"462": { name: 'BRAZIL CASH'},
+		"457": { name: 'GAS CAN'},
+		"458": { name: 'BUTTON CAMERA'},
+		"456": { name: 'LOCAL INFORMANT'},
+		"405": { name: 'MYSTERY SHIPMENT'},
+		"100": { name: 'MYSTERY BAG'},
+		"422": { name: 'EXOTIC ANIMAL FEED'},
+		"420": { name: 'FEEDING TROUGH'},
+		"438": { name: '+2 MAFIA MEMBERS'},
+		"419": { name: 'BIRD CAGE'},
+		"214": { name: 'AMMUNITION'},
+		"210": { name: 'SATCHEL OF LIRA'},
+		"151": { name: 'MYSTERY ANIMAL'},
+		"189": { name: 'SPECIAL PART'},		
 	},
 	120563477996213: // ravenwood fair
 	{
@@ -456,9 +450,6 @@ FGS.giftsArray = {
 	
 	167746316127: // zoo world
 	{
-		"1074": { name: 'Rose Petals'},
-		"1075": { name: 'Grooming Supplies'},
-		"1077": { name: 'Valentine Cards'},
 		"564": { name: 'Red Rose'},
 		"566": { name: 'White Rose'},
 		"565": { name: 'Yellow Rose'},
@@ -468,12 +459,16 @@ FGS.giftsArray = {
 		"560": { name: 'Planting Pot'},
 		"325": { name: 'Frog Sculpture'},
 		"308": { name: 'Pear Tree'},
+		"1592": { name: 'Arrow Headband'},
+		"1590": { name: 'Chattering Mouth'},
+		"1591": { name: 'Squirting Flower'},
+		"11": { name: 'African Elephant'},
+		"1": { name: 'Bonobo'},
 		"4": { name: 'Giant Panda'},
+		"24": { name: 'Siberian Tiger'},
 		"3": { name: 'Tortoise'},
 		"15": { name: 'Tree Frog'},
-		"11": { name: 'African Elephant'},
 		"9": { name: 'Bison'},
-		"1": { name: 'Bonobo'},
 		"16": { name: 'Camel'},
 		"23": { name: 'Caribbean Flamingo'},
 		"6": { name: 'Caribou'},
@@ -486,141 +481,13 @@ FGS.giftsArray = {
 		"18": { name: 'Koala'},
 		"12": { name: 'Lion'},
 		"13": { name: 'Monkey'},
+		"8": { name: 'Otter'},
+		"5": { name: 'Polar Bear'},
+		"144": { name: 'Pot-bellied Pig'},
+		"17": { name: 'Rattlesnake'},
+		"21": { name: 'Rhinoceros'},
+		"22": { name: 'Zebra'},
 	},
-	2405948328: // zoo world
-	{
-		"1074": { name: 'Rose Petals'},
-		"1075": { name: 'Grooming Supplies'},
-		"1077": { name: 'Valentine Cards'},
-		"564": { name: 'Red Rose'},
-		"566": { name: 'White Rose'},
-		"565": { name: 'Yellow Rose'},
-		"563": { name: 'Blue Rose'},
-		"562": { name: 'Glass Panel'},
-		"559": { name: 'Glass Pillar'},
-		"560": { name: 'Planting Pot'},
-		"325": { name: 'Frog Sculpture'},
-		"308": { name: 'Pear Tree'},
-		"4": { name: 'Giant Panda'},
-		"3": { name: 'Tortoise'},
-		"15": { name: 'Tree Frog'},
-		"11": { name: 'African Elephant'},
-		"9": { name: 'Bison'},
-		"1": { name: 'Bonobo'},
-		"16": { name: 'Camel'},
-		"23": { name: 'Caribbean Flamingo'},
-		"6": { name: 'Caribou'},
-		"7": { name: 'Emperor Penguin'},
-		"19": { name: 'Gazelle'},
-		"10": { name: 'Giraffe'},
-		"2": { name: 'Hippopotamus'},
-		"14": { name: 'Jaguar'},
-		"20": { name: 'Kangaroo'},
-		"18": { name: 'Koala'},
-		"12": { name: 'Lion'},
-		"13": { name: 'Monkey'},
-	},
-	2345673396: // zoo world
-	{
-		"1074": { name: 'Rose Petals'},
-		"1075": { name: 'Grooming Supplies'},
-		"1077": { name: 'Valentine Cards'},
-		"564": { name: 'Red Rose'},
-		"566": { name: 'White Rose'},
-		"565": { name: 'Yellow Rose'},
-		"563": { name: 'Blue Rose'},
-		"562": { name: 'Glass Panel'},
-		"559": { name: 'Glass Pillar'},
-		"560": { name: 'Planting Pot'},
-		"325": { name: 'Frog Sculpture'},
-		"308": { name: 'Pear Tree'},
-		"4": { name: 'Giant Panda'},
-		"3": { name: 'Tortoise'},
-		"15": { name: 'Tree Frog'},
-		"11": { name: 'African Elephant'},
-		"9": { name: 'Bison'},
-		"1": { name: 'Bonobo'},
-		"16": { name: 'Camel'},
-		"23": { name: 'Caribbean Flamingo'},
-		"6": { name: 'Caribou'},
-		"7": { name: 'Emperor Penguin'},
-		"19": { name: 'Gazelle'},
-		"10": { name: 'Giraffe'},
-		"2": { name: 'Hippopotamus'},
-		"14": { name: 'Jaguar'},
-		"20": { name: 'Kangaroo'},
-		"18": { name: 'Koala'},
-		"12": { name: 'Lion'},
-		"13": { name: 'Monkey'},
-	},
-	2339854854: // zoo world
-	{
-		"1074": { name: 'Rose Petals'},
-		"1075": { name: 'Grooming Supplies'},
-		"1077": { name: 'Valentine Cards'},
-		"564": { name: 'Red Rose'},
-		"566": { name: 'White Rose'},
-		"565": { name: 'Yellow Rose'},
-		"563": { name: 'Blue Rose'},
-		"562": { name: 'Glass Panel'},
-		"559": { name: 'Glass Pillar'},
-		"560": { name: 'Planting Pot'},
-		"325": { name: 'Frog Sculpture'},
-		"308": { name: 'Pear Tree'},
-		"4": { name: 'Giant Panda'},
-		"3": { name: 'Tortoise'},
-		"15": { name: 'Tree Frog'},
-		"11": { name: 'African Elephant'},
-		"9": { name: 'Bison'},
-		"1": { name: 'Bonobo'},
-		"16": { name: 'Camel'},
-		"23": { name: 'Caribbean Flamingo'},
-		"6": { name: 'Caribou'},
-		"7": { name: 'Emperor Penguin'},
-		"19": { name: 'Gazelle'},
-		"10": { name: 'Giraffe'},
-		"2": { name: 'Hippopotamus'},
-		"14": { name: 'Jaguar'},
-		"20": { name: 'Kangaroo'},
-		"18": { name: 'Koala'},
-		"12": { name: 'Lion'},
-		"13": { name: 'Monkey'},
-	},
-	14852940614: // zoo world
-	{
-		"1074": { name: 'Rose Petals'},
-		"1075": { name: 'Grooming Supplies'},
-		"1077": { name: 'Valentine Cards'},
-		"564": { name: 'Red Rose'},
-		"566": { name: 'White Rose'},
-		"565": { name: 'Yellow Rose'},
-		"563": { name: 'Blue Rose'},
-		"562": { name: 'Glass Panel'},
-		"559": { name: 'Glass Pillar'},
-		"560": { name: 'Planting Pot'},
-		"325": { name: 'Frog Sculpture'},
-		"308": { name: 'Pear Tree'},
-		"4": { name: 'Giant Panda'},
-		"3": { name: 'Tortoise'},
-		"15": { name: 'Tree Frog'},
-		"11": { name: 'African Elephant'},
-		"9": { name: 'Bison'},
-		"1": { name: 'Bonobo'},
-		"16": { name: 'Camel'},
-		"23": { name: 'Caribbean Flamingo'},
-		"6": { name: 'Caribou'},
-		"7": { name: 'Emperor Penguin'},
-		"19": { name: 'Gazelle'},
-		"10": { name: 'Giraffe'},
-		"2": { name: 'Hippopotamus'},
-		"14": { name: 'Jaguar'},
-		"20": { name: 'Kangaroo'},
-		"18": { name: 'Koala'},
-		"12": { name: 'Lion'},
-		"13": { name: 'Monkey'},
-	},
-	
-	
 	2389801228: // poker
 	{
 		"chips": { name: "Chips" }
@@ -789,18 +656,21 @@ FGS.giftsArray = {
 		"tamarind": { name: '羅望子樹'},
 		"date": { name: '棗樹'},
 	},
-	21526880407:
+	21526880407: // yoville
 	{
-		"40601": { name: 'Japanese Bowl'},
-		"40603": { name: 'Japanese Scroll Painting'},
-		"40305": { name: 'Paris Mystery Box'},
-		"40646": { name: 'Mardi Gras Flowers'},
-		"38964": { name: 'Nightclub Mystery Gift'},
-		"34399": { name: 'Collections Mystery Box'},
+	
+		"37520": { name: 'Special delivery box' }, // static
+	
+		"41392": { name: 'Special Gift Pack'},
+		"41394": { name: 'Hawaiian Small Palm Tree'},
+		"41493": { name: 'Hawaiian Mystery box'},
+		"32745": { name: 'Silver Mystery Chest'},
 		"38133": { name: 'Yellow Fall Mystery Box'},
 		"38963": { name: 'Night Club Mystery Box'},
+		"38964": { name: 'Nightclub Mystery Gift'},
 		"34090": { name: 'Espresso - lvl 20'},
 		"34091": { name: 'Cappuccino - lvl 10'},
+		"34399": { name: 'Collections Mystery Box'},
 		"31830": { name: 'Red Mystery Chest'},
 		"31829": { name: 'Blue Mystery Chest'},
 	},
@@ -808,7 +678,34 @@ FGS.giftsArray = {
 	102518706469143: //wild west town
 	{
 		"parts": { name: 'Send parts'}
-	}
+	},
+	
+	213518941553: //fantasy
+	{
+		"1105": { name: 'Festival Balloon'},
+		"1080": { name: 'Hay Bale'},
+		"1102": { name: 'Small Blue Flowerbox'},
+		"1103": { name: 'Small Red Flowerbox'},
+		"1104": { name: 'Small Yellow Flowerbox'},
+		"1122": { name: 'Festival Banner'},
+		"618": { name: 'Blue Dragon Scale'},
+		"619": { name: 'Copper Ore'},
+		"721": { name: 'Forged Key'},
+		"718": { name: 'Garden Herbs'},
+		"719": { name: 'Phoenix Fire'},
+		"720": { name: 'Vial of Stardust'},
+		"449": { name: 'Crabapple Tree'},
+		"513": { name: 'Dark Metal Lightpost'},
+		"467": { name: 'Frankincense Tree'},
+		"621": { name: 'Mystery Gift'},
+		"511": { name: 'Purple Toadstool Chair'},
+		"454": { name: 'Spider Milkweed Bush'},
+		"538": { name: 'Stepping Stone, Large'},
+		"505": { name: 'Striped Cat'},
+		"521": { name: 'Swamp Gum Tree'},
+		"503": { name: 'Swamp Wood Tree'},
+		"347": { name: 'Wood Bench'},
+	},
 };
 
 FGS.freeGiftForGame =
@@ -828,7 +725,7 @@ FGS.freeGiftForGame =
 	163576248142: '5215',
 	25287267406: '439',
 	156383461049284: 'brick',
-	21526880407: '37394',
+	21526880407: '37520', //'37394',
 	
 	167746316127: '562',
 	2405948328: '562',
@@ -837,7 +734,12 @@ FGS.freeGiftForGame =
 	14852940614: '562',
 	
 	102518706469143: 'parts',
-}
+	
+	213518941553: '1105',
+};
+
+
+FGS.giftsArray['2405948328'] = FGS.giftsArray['2345673396'] = FGS.giftsArray['2339854854'] = FGS.giftsArray['14852940614'] = FGS.giftsArray['167746316127'];
 
 
 FGS.getFBML = function(params, retry)
@@ -975,7 +877,7 @@ FGS.getFBML = function(params, retry)
 						cafeParams += 'ids[]='+v+'&';
 				});
 				
-				if(params.gameID != '25287267406')
+				if(params.gameID != '25287267406' && params.gameID != '213518941553')
 					sendGiftParams += 'cmfs_typeahead_'+reqData.form_id+'=start';
 				
 				if(params.gameID == '10979261223')
@@ -993,9 +895,13 @@ FGS.getFBML = function(params, retry)
 					sendGiftParams += '&'+ $('form[type="Ravenwood Fair"]', data).find('input[name="item_id"],input[name="timestamp"]').serialize();
 				}
 				
-				if(params.gameID == '129547877091100')
+				if(params.gameID == '129547877091100' || params.gameID == '213518941553')
 				{
 					sendGiftParams += '&'+$('form[type]', data).serialize();
+				}
+				if(params.gameID == '213518941553')
+				{
+					params.finalMethod = 'get';
 				}
 				
 				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
@@ -1071,7 +977,7 @@ FGS.sendGift = function(params, retry)
 				return;
 			}
 			
-			if(typeof(params.cafeUrl) != 'undefined')
+			if(typeof(params.cafeUrl) != 'undefined' || typeof(params.finalMethod) != 'undefined')
 			{
 				var reqMethod = 'GET';
 			}

@@ -4,7 +4,7 @@ FGS.frontierville.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
@@ -77,7 +77,7 @@ FGS.frontierville.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "POST",
@@ -154,11 +154,11 @@ FGS.frontierville.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
-			url: 'http://fb-0.frontier.zynga.com/gifts_send.php?gift='+params.gift+'&view=farmville&src=direct&aff=&crt=&sendkey=&'+params.zyParam+'&overlayed=true&'+Math.round(new Date().getTime() / 1000)+''+addAntiBot+'#overlay',
+			url: 'http://fb-0.frontier.zynga.com/gifts_send.php?gift='+params.gift+'&view=farmville&src=direct&aff=&crt=&sendkey=&'+params.zyParam+'&overlayed=true&'+Math.round(new Date().getTime() / 1000)+addAntiBot+'#overlay',
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -273,7 +273,7 @@ FGS.frontierville.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -285,7 +285,7 @@ FGS.frontierville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -391,7 +391,7 @@ FGS.frontierville.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -403,7 +403,7 @@ FGS.frontierville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -464,7 +464,7 @@ FGS.frontierville.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -476,7 +476,7 @@ FGS.frontierville.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -521,7 +521,7 @@ FGS.frontierville.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -533,7 +533,7 @@ FGS.frontierville.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{
@@ -591,7 +591,7 @@ FGS.frontierville.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -603,7 +603,7 @@ FGS.frontierville.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -699,7 +699,7 @@ FGS.frontierville.Bonuses =
 							{
 								if(typeof(retry) == 'undefined')
 								{
-									retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+									retryThis(currentType, id, currentURL, true);
 								}
 								else
 								{
@@ -719,7 +719,7 @@ FGS.frontierville.Bonuses =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -731,7 +731,7 @@ FGS.frontierville.Bonuses =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{

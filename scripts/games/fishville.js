@@ -4,7 +4,7 @@ FGS.fishville.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
 		$.ajax({
 			type: "GET",
@@ -79,11 +79,11 @@ FGS.fishville.Freegifts =
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;		
-		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '&_fb_noscript=1');
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
 			type: "GET",
-			url: 'http://facebook.fishville.zynga.com/public/gifts_send.php?gift='+params.gift+'&view=fishville&appRef=preload_gifts&secAppRef=&reqType=gift&partial=true&'+params.step2params+''+addAntiBot,
+			url: 'http://facebook.fishville.zynga.com/public/gifts_send.php?gift='+params.gift+'&view=fishville&appRef=preload_gifts&secAppRef=&reqType=gift&partial=true&'+params.step2params+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -199,7 +199,7 @@ FGS.fishville.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+						retryThis(currentType, id, currentURL, true);
 					}
 					else
 					{
@@ -211,7 +211,7 @@ FGS.fishville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', true);
+					retryThis(currentType, id, currentURL, true);
 				}
 				else
 				{
@@ -302,7 +302,7 @@ FGS.fishville.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -314,7 +314,7 @@ FGS.fishville.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL+'&_fb_noscript=1', params, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{

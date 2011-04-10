@@ -2,7 +2,7 @@
 	
 	function loadNeighborsStats(gameID, data)
 	{
-		bkP.database.db.transaction(function(tx)
+		bkP.database.db.readTransaction(function(tx)
 		{
 			tx.executeSql("SELECT * FROM neighborStats where gameID = ?", [gameID], function(tx, res)
 			{

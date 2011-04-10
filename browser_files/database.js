@@ -25,7 +25,7 @@ FGS.database.createTable = function()
 	
 		tx.executeSql('CREATE TABLE IF NOT EXISTS options (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, option LONGTEXT)', [],  FGS.database.onSuccess, FGS.database.onError);
 
-		tx.executeSql('INSERT OR IGNORE INTO options VALUES(1,?)', ['{}'],  FGS.database.onSuccess, FGS.database.onError);
+		tx.executeSql('INSERT OR IGNORE INTO options VALUES(?,?)', [1, '{}'],  FGS.database.onSuccess, FGS.database.onError);
 		
 		tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
                   'bonuses (id TEXT PRIMARY KEY ASC, gameID INTEGER, status INTEGER, error TEXT, title TEXT, text TEXT, image TEXT, url TEXT, time INTEGER, feedback TEXT, link_data TEXT, like_bonus INTEGER, comment_bonus INTEGER, resend_gift TEXT, error_text TEXT)', [],  FGS.database.onSuccess, FGS.database.onError);

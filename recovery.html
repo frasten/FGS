@@ -7,7 +7,7 @@
 
 	function appendDB(gameID, num, name)
 	{
-		bkP.database.db.transaction(function(tx)
+		bkP.database.db.readTransaction(function(tx)
 		{
 			if(gameID == null)
 			{
@@ -29,7 +29,7 @@
 	
 	function listDb()
 	{
-		bkP.database.db.transaction(function(tx)
+		bkP.database.db.readTransaction(function(tx)
 		{
 			tx.executeSql("SELECT * FROM sqlite_master where type = 'table'", [], function(tx, res)
 			{
