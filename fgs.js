@@ -1,6 +1,8 @@
 var FGS = {
 	alreadyOpened: false,
 	
+	formExclusionString: '[action*="www\\.facebook\\.com\\/connect\\/connect.php"],[action*="custom_ads\\/islandAd\\.php"]',
+	
 	initializeDefaults: function ()
 	{
 		FGS.giftlistFocus = false;
@@ -817,8 +819,6 @@ var FGS = {
 			var url = $(FGS.HTMLParser('<p class="link" href="'+text+'">abc</p>')).find('p.link');
 			var ret = url.attr('href');
 			
-			FGS.dump(ret);
-			
 			return ret;
 		}
 		catch(err)
@@ -904,15 +904,25 @@ var FGS = {
 	
 	checkForNotFound: function(url)
 	{
-		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home', '/cafeworld/?ref=requests', '/cityofwonder/gift/?track=bookmark'];
+		var errorsArr = ['gifterror=notfound', 'countrylife/play', 'apps.facebook.com/ravenwoodfair/home', '/cafeworld/?ref=requests', '/cityofwonder/gift/?track=bookmark', '/myshopsgame/?ref=received_gift_failed'];
 		
-		// tutaj regexp jescze np. http://apps.facebook.com/cafeworld/
+		var errorsFullArr = ['http://apps.facebook.com/cafeworld'];
+		
 		
 		var ret = false;
 		
 		FGS.jQuery(errorsArr).each(function(k,v)
 		{
 			if(url.indexOf(v) != -1)
+			{
+				ret = true;
+				return false;				
+			}		
+		});
+		
+		FGS.jQuery(errorsFullArr).each(function(k,v)
+		{
+			if(url == v)
 			{
 				ret = true;
 				return false;				
@@ -1461,8 +1471,6 @@ var FGS = {
 						return true;
 					}
 					
-					
-					
 					var data = JSON.parse(str).onload.toString();
 
 					var i0 = data.indexOf('"#app_stories"');
@@ -1503,7 +1511,12 @@ var FGS = {
 						
 						var bonusData = JSON.parse(data);
 						
-						var bonusTimeTmp = new Date(el.find('abbr').attr('data-date')).getTime();					
+						var tmpDateStr = el.find('abbr').attr('data-date');
+						
+						if(typeof(tmpDateStr) == 'undefined')
+							return;
+						
+						var bonusTimeTmp = new Date(tmpDateStr).getTime();					
 						var bonusTime = Math.round(bonusTimeTmp / 1000);
 						
 						var diff = now-bonusTimeTmp;
@@ -1546,7 +1559,15 @@ var FGS = {
 						
 						var ret = false;
 						
-						var bTitle = jQuery.trim(el.find('.UIActionLinks_bottom > a:last').text().replace(/'/gi, ''));
+						var testLink = el.find('.UIActionLinks_bottom > a:last');
+						if(testLink.length == 0)
+						{
+							var testLink = el.find('.uiAttachmentTitle').find('a').length;
+							if(testLink.length == 0)
+								return;
+						}
+						
+						var bTitle = jQuery.trim(testLink.text().replace(/'/gi, ''));
 
 						$(FGS.gamesData[appID].filter.bonuses).each(function(k,v)
 						{
@@ -1581,6 +1602,13 @@ var FGS = {
 						//koniec filtry usera
 						
 						var link = el.find('.UIActionLinks_bottom > a:last').attr('href');
+						
+						if(link == undefined)
+						{
+							var link = el.find('.uiAttachmentTitle').find('a').attr('href');
+							if(link == undefined)
+								return;							
+						}						
 						
 						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
 						

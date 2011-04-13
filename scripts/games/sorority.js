@@ -34,6 +34,12 @@ FGS.sorority.Requests =
 				
 				try 
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
 					if($('#app8630423715_claimGift', dataHTML).length > 0)
 					{
 						var el = $('#app8630423715_claimGift', dataHTML);

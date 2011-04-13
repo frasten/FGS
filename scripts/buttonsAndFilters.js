@@ -456,6 +456,40 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	121763384533823:	{ 	name: 'Country Life (lite)',	systemName: 'countrylifelite', link: 'http://apps.facebook.com/countrylife_lite/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: ['be my friend']
+						},
+						buttons: [
+							'RequestsPending',
+							'ManualBonuses',
+							'RequestsHistory',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	130402594779:	{ 	name: 'Kingdoms of Camelot',	systemName: 'kingdomsofcamelot', link: 'http://apps.facebook.com/kingdomsofcamelot/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'RequestsPending',
+							'ManualBonuses',
+							'RequestsHistory',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	372268249833:	{ 	name: 'Evony',		systemName: 'evony', link: 'http://apps.facebook.com/evonyoffical/',
 						filter:	
 						{
@@ -696,8 +730,24 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-					/*
 	137827210650:	{ 	name: 'Ninja Saga',	systemName: 'ninjasaga', link: 'http://apps.facebook.com/ninjasaga/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Play Ninja Saga'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'FailedBonuses',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	112775362105084:	{ 	name: 'Animal Party',	systemName: 'animalparty', link: 'http://apps.facebook.com/rescue_party/',
 						filter:	
 						{
 							bonuses: [],
@@ -707,13 +757,56 @@ FGS.gamesData =
 						},
 						buttons: [
 							'BonusesPending',
+							'RequestsPending',
 							'ManualBonuses',
 							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-					*/
+	105557406133988:	{ 	name: 'Lucky Train',	systemName: 'luckytrain', link: 'http://apps.facebook.com/luckytrain/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	123837014322698:	{ 	name: 'My Shops',	systemName: 'myshops', link: 'http://apps.facebook.com/myshopsgame/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Send Collectables', 'Play My Shops', 'Send free deliveries'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	102518706469143:	{ 	name: 'Wild West Town',	systemName: 'wildwesttown', link: 'http://apps.facebook.com/wildwesttown/',
 						filter:	
 						{

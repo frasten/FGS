@@ -15,16 +15,16 @@ FGS.poker.Freegifts =
 				try
 				{
 					var pos1 = dataStr.indexOf('app_2389801228.context');
-					var pos2 = dataStr.indexOf('\\"', pos1);
-					var pos3 = dataStr.indexOf('\\"', pos2+2);
+					var pos2 = dataStr.indexOf('\\\\\\"', pos1);
+					var pos3 = dataStr.indexOf('\\\\\\"', pos2+3);
 					
-					var fb_mock_hash = dataStr.slice(pos2+2,pos3);
+					var fb_mock_hash = dataStr.slice(pos2+4,pos3);
 					
 					var pos1 = dataStr.indexOf('app_2389801228.contextd', pos1);
-					var pos2 = dataStr.indexOf('\\"', pos1);
-					var pos3 = dataStr.indexOf('}\\"', pos2+5);
+					var pos2 = dataStr.indexOf('\\\\\\"', pos1);
+					var pos3 = dataStr.indexOf('}\\\\\\"', pos2+3);
 					
-					var fb_mock = dataStr.slice(pos2+2,pos3+1).replace(/\\/g, '').replace(/\\/g, '');
+					var fb_mock = dataStr.slice(pos2+4,pos3+1).replace(/\\/g, '').replace(/\\/g, '');
 					
 					params.postData =
 					{
@@ -266,6 +266,13 @@ FGS.poker.Requests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;						
 					}
+					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);	
+					
 
 					var el = $('.acceptedGift', dataHTML);
 					

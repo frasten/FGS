@@ -1,9 +1,9 @@
-FGS.puzzledhearts.Bonuses = 
+FGS.luckytrain.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
 		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
+		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
@@ -28,7 +28,7 @@ FGS.puzzledhearts.Bonuses =
 					return;
 				}
 				
-				try 
+				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
 					var pos1 = dataStr.indexOf('>"}', pos0);
@@ -36,19 +36,18 @@ FGS.puzzledhearts.Bonuses =
 					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);		
 
-
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_105557406133988', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.puzzledhearts.Bonuses.Click2(currentType, id, url, params);
-				} 
+					FGS.luckytrain.Requests.Click2(currentType, id, url, params);
+				}
 				catch(err)
 				{
 					FGS.dump(err);
@@ -77,10 +76,11 @@ FGS.puzzledhearts.Bonuses =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, params, retry)
+	
+	Click2: function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
+		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
@@ -90,67 +90,48 @@ FGS.puzzledhearts.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-				
-				
 				try
 				{
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					
-					if(dataStr.indexOf('You have already received this mystery gift') != -1)
+					if(dataStr.indexOf('You have already collected this bonus') != -1)
 					{
-						var error_text = 'You have already received this gift';
+						var error_text = 'You have already collected this bonus!';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if(dataStr.indexOf('You have already sent the') != -1)
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var tst = new RegExp(/<fb:serverfbml[^>]*?>[\s\S]*?<fb:fbml[^>]*?>([\s\S]*?)<\/fb:fbml>[\s\S]*?<\/fb:serverfbml>/m).exec(dataStr);
+					if(tst != null)
 					{
-						var error_text = 'You have already sent this gift';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
+						var dataHTML = FGS.HTMLParser('<div>'+tst[1]+'</div>');	
 					}
 					
-					
-					if($('.ui-icon-info', dataHTML).length > 0)
-					{ 
-						var txt = $.trim($('.ui-icon-info', dataHTML).parent().text());
+					if($('.gift_table', dataHTML).length > 0)
+					{
+						var tmp = $.trim($('.gift_table', dataHTML).find('h2:first').text());
 						
-						info.text = txt;
-						
-						if(txt.indexOf('You have just accepted') != -1)
-						{
-							info.title = 'New heart';
-						}
-						else if(txt.indexOf('You have just sent') != -1)
-						{
-							info.title = 'Heart sent';
-						}
-						
-						var pos1 = dataStr.indexOf('$(function () {');
+						var pos1 = tmp.indexOf('You have accepted th');
+						var title = '';
 						
 						if(pos1 != -1)
 						{
-							var pos2 = dataStr.indexOf('var url = "', pos1);
-							if(pos2 != -1)
-							{
-								pos2+=11;
-								var pos3 = dataStr.indexOf('"', pos2);
-								
-								var url = dataStr.slice(pos2,pos3)+new Date().getTime();
-								$.getJSON(url);
-							}
+							var pos2 = tmp.indexOf('!', pos1);							
+							var title = tmp.slice(pos1+23, pos2);
 						}
-						info.image = 'gfx/90px-check.png';
-						info.time = Math.round(new Date().getTime() / 1000);
-						FGS.endWithSuccess(currentType, id, info);
 						
-						//var error_text = $.trim($('.streamRewardAllRewardsClaimed', dataHTML).text());
-						//FGS.endWithError('limit', currentType, id, error_text);
+						info.title = title;
+						info.image = $('.gift_image', dataHTML).children('img').attr('src');
+						info.time  = Math.round(new Date().getTime() / 1000);
+						info.text  = tmp;						
+						
+						FGS.endWithSuccess(currentType, id, info);
 					}
 					else
 					{
-						throw {message: 'error'}
+						throw {message: dataStr}
 					}
 				}
 				catch(err)
@@ -179,10 +160,10 @@ FGS.puzzledhearts.Bonuses =
 				}
 			}
 		});
-	},
+	}
 };
 
-FGS.puzzledhearts.Requests = 
+FGS.luckytrain.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -201,7 +182,11 @@ FGS.puzzledhearts.Requests =
 				
 				if(redirectUrl != false)
 				{
-					if(typeof(retry) == 'undefined')
+					if(FGS.checkForNotFound(redirectUrl) === true)
+					{
+						FGS.endWithError('not found', currentType, id);
+					}
+					else if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, redirectUrl, true);
 					}
@@ -211,7 +196,7 @@ FGS.puzzledhearts.Requests =
 					}
 					return;
 				}
-				
+					
 				try 
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
@@ -220,18 +205,17 @@ FGS.puzzledhearts.Requests =
 					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);		
 
-
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_105557406133988', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.puzzledhearts.Requests.Click2(currentType, id, url, params);
+					FGS.luckytrain.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -261,10 +245,10 @@ FGS.puzzledhearts.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, params, retry)
+	Click2: function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
+		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
@@ -274,70 +258,45 @@ FGS.puzzledhearts.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-
 				try
 				{
-					if(dataStr.indexOf('You have already received this mystery gift') != -1)
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					if(dataStr.indexOf('You have already collected this bonus') != -1)
 					{
-						var error_text = 'You have already received this gift';
+						var error_text = 'You have already collected this bonus!';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if(dataStr.indexOf('You have already sent the') != -1)
-					{
-						var error_text = 'You have already sent this gift';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
-					}
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					if(dataStr.indexOf('but this gift cannot be accepted because it is too old') != -1)
+					if($('.accept_table', dataHTML).length > 0)
 					{
-						var error_text = 'This gift cannot be accepted because it is too old';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
-					}
-					
-					if($('.ui-icon-info', dataHTML).length > 0)
-					{ 
-						var txt = $.trim($('.ui-icon-info:first', dataHTML).parent().text());
+						var tmp = $.trim($('.accept_table', dataHTML).find('h2:first').text());
 						
-						info.text = txt;
-						
-						if(txt.indexOf('You have just accepted') != -1)
-						{
-							info.title = 'New heart';
-						}
-						else if(txt.indexOf('You have just sent') != -1)
-						{
-							info.title = 'Heart sent';
-						}
-						
-						var pos1 = dataStr.indexOf('$(function () {');
+						var pos1 = tmp.indexOf('granted a');
+						var title = '';
 						
 						if(pos1 != -1)
 						{
-							var pos2 = dataStr.indexOf('var url = "', pos1);
-							if(pos2 != -1)
-							{
-								pos2+=11;
-								var pos3 = dataStr.indexOf('"', pos2);
-								
-								var url = dataStr.slice(pos2,pos3)+new Date().getTime();
-								$.getJSON(url);
-							}
+							var pos2 = tmp.indexOf('!', pos1);
+							
+							var title = tmp.slice(pos1+10, pos2);
 						}
-						info.image = 'gfx/90px-check.png';
-						info.time = Math.round(new Date().getTime() / 1000);
-						FGS.endWithSuccess(currentType, id, info);
 						
-						//var error_text = $.trim($('.streamRewardAllRewardsClaimed', dataHTML).text());
-						//FGS.endWithError('limit', currentType, id, error_text);
+						info.title = title;
+						info.image = 'gfx/90px-check.png';
+						info.time  = Math.round(new Date().getTime() / 1000);
+
+						info.text  = tmp;
+						
+						
+						FGS.endWithSuccess(currentType, id, info);
 					}
 					else
 					{
-						throw {message: 'error'}
+						throw {message: 'no form'}
 					}
 				}
 				catch(err)
@@ -366,5 +325,5 @@ FGS.puzzledhearts.Requests =
 				}
 			}
 		});
-	},
+	}
 };

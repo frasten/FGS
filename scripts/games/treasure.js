@@ -14,10 +14,14 @@ FGS.treasure.Freegifts =
 			{
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);
 
-					var url = $('form[target]', dataHTML).attr('action');
-					var params2 = $('form[target]', dataHTML).serialize();
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params2 = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url) throw {message: 'fail'}
 					
@@ -250,7 +254,12 @@ FGS.treasure.Requests =
 				
 				try
 				{
-
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+				
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length == 0)
 					{
 						if(dataStr.indexOf('Great! You helped the ') != -1)
@@ -362,10 +371,15 @@ FGS.treasure.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length > 0)
 					{
 						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
@@ -442,6 +456,12 @@ FGS.treasure.Bonuses =
 				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
 					if(dataStr.indexOf('<h1>Oh no!</h1>') != -1)
 					{
 						var error_text = $('h2', dataHTML).text();
@@ -495,10 +515,14 @@ FGS.treasure.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);						
+					
 					if(dataStr.indexOf('<h1>Oh no!</h1>') != -1)
 					{
 						var error_text = $('h2', dataHTML).text();

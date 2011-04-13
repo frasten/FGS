@@ -35,8 +35,15 @@ FGS.paradiselife.Requests =
 				
 				try
 				{
-					var url = $('form[target]:first', dataHTML).attr('action');
-					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
+
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -129,7 +136,7 @@ FGS.paradiselife.Requests =
 						var i6 = dataStr.indexOf('"', i5);
 						
 						info.image = dataStr.slice(i5, i6);
-						info.text  = ' ';
+						info.text  = '';
 						info.title = dataStr.slice(pos2, i3);
 						info.time = Math.round(new Date().getTime() / 1000);
 						
@@ -202,8 +209,15 @@ FGS.paradiselife.Bonuses =
 								
 				try 
 				{
-					var url = $('form[target]:first', dataHTML).attr('action');
-					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
+
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{

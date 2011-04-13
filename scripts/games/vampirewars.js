@@ -14,10 +14,81 @@ FGS.vampirewars.Freegifts =
 			{
 				try
 				{
-					var dataHTML = FGS.HTMLParser(dataStr);
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
 					
-					var url = $('form[target]:first', dataHTML).attr('action');
-					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					params.step1url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					params.step1params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					
+					FGS.vampirewars.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Login:	function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "GET",
+			url: params.loginUrl,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -35,6 +106,7 @@ FGS.vampirewars.Freegifts =
 					params.domain = url.match(re)[1].toString();
 					var pos1 = url.lastIndexOf('?')+1;
 					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5source=normal&'+url.slice(pos1);
+					
 					
 					FGS.vampirewars.Freegifts.Click3(params);
 				}
@@ -88,30 +160,22 @@ FGS.vampirewars.Freegifts =
 
 		$.ajax({
 			type: "POST",
-			url: 'http://'+params.domain+'/send_gifts.php?ajax=1',
-			data: params.step2param+'&next=send_gifts.php&action=recruit_gift_friends&giftId='+params.gift+'&skipLink=index.php'+addAntiBot,
+			url: params.step1url,
+			data: params.step1params+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
-					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
-					if(tst == null) throw {message: 'no fb.init'}
-					
-					var app_key = tst[1];
-					var channel_url = tst[2];
-					
-	
-					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml=';
-					
-					params.nextParams = paramsStr;
-					
-					var pos1 = dataStr.indexOf('send_gifts_mfs.php?');
-					var pos2 = dataStr.indexOf('")', pos1);
-					
-					params.step3param = dataStr.slice(pos1,pos2).replace('"+mfsID+"', 5);
-					
-					FGS.vampirewars.Freegifts.Click3(params);
+					var pos1 = dataStr.indexOf('top.location.href = "');
+					if(pos1 != -1)
+					{
+						var pos2 = dataStr.indexOf('"', pos1+28);
+						params.loginUrl = dataStr.slice(pos1+21, pos2);
+						FGS.vampirewars.Freegifts.Login(params);
+						return;
+					}
+					throw {message: dataStr}
 				}
 				catch(err)
 				{
@@ -240,6 +304,7 @@ FGS.vampirewars.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
+				
 				try
 				{
 					var pos1 = dataStr.indexOf('top.location.href = "');
@@ -315,8 +380,15 @@ FGS.vampirewars.Requests =
 				
 				try
 				{
-					var url = $('form[target]', dataHTML).attr('action');
-					var params = $('form[target]', dataHTML).serialize();
+					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -387,6 +459,33 @@ FGS.vampirewars.Requests =
 						return;
 					}
 					
+					var pos1 = dataStr.indexOf('top.location.href = "');
+					if(pos1 != -1)
+					{
+						var pos2 = dataStr.indexOf('"', pos1+28);
+						var url = dataStr.slice(pos1+21, pos2);
+						FGS.vampirewars.Requests.Login(currentType, id, url);
+						return;
+					}
+					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);		
+						
+						var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+						var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+						
+						retryThis(currentType, id, url, params, retry);						
+						return;
+					}
+					
+					
+					
 					
 					if($('div.title', dataHTML).text().indexOf('You must accept gifts within') != -1)
 					{
@@ -394,6 +493,14 @@ FGS.vampirewars.Requests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
+					
+					if($('div.title', dataHTML).text().indexOf('You have already accepted this gift') != -1)
+					{
+						var error_text = $.trim($('div.title', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
 					
 					info.image = $('img:first', dataHTML).attr('src');
 					info.title = $('img:first', dataHTML).attr('title');

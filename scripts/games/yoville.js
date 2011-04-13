@@ -2,8 +2,211 @@ FGS.yoville.Freegifts =
 {
 	Click: function(params, retry)
 	{
-		params.customUrl = 'http://apps.facebook.com/yoville/send_gift.php?view=yoville&fb_force_mode=fbml&id='+params.gift;
-		FGS.getFBML(params);
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/yoville/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					params.step2url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					params.step2params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					
+					FGS.yoville.Freegifts.Click2(params);					
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step2url,
+			data: params.step2params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+					params.domain = params.step2url.match(re)[1].toString();
+					
+					
+					var pos0 = dataStr.indexOf('var clientAuth =');
+					var pos1 = dataStr.indexOf("'", pos0);
+					var pos2 = dataStr.indexOf("'", pos1+1);
+					
+					params.step3params = dataStr.slice(pos1+1, pos2);
+					
+					FGS.yoville.Freegifts.Click3(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click3: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://'+params.domain+'/fb/send_free_gift_social.php',
+			data: 'mode=game&game=45&id='+params.gift+'&type=overlay&pre_selected=false&uids=&backtgt=2'+params.step3params+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tst = new RegExp(/FB[.]init\('(.*)'.*'(.*)'/g).exec(dataStr);
+					if(tst == null) throw {message: 'no fb.init'}
+					
+					var app_key = tst[1];
+					var channel_url = tst[2];
+					
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
+					
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
 	}
 };
 
@@ -44,6 +247,12 @@ FGS.yoville.Requests =
 				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);			
+					
 					if(dataStr.indexOf('seem to have already accepted this request') != -1)
 					{
 						var error_text = 'Sorry, you seem to have already accepted this request from the Message Center';

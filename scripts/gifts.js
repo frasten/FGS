@@ -774,6 +774,16 @@ FGS.getFBML = function(params, retry)
 		data: params.nextParams,
 		success: function(dataStr)
 		{
+			var dataCheck = dataStr;
+			
+			if(typeof(params.cafeUrl) != 'undefined' || typeof(params.bakinglifeUrl) != 'undefined' || typeof(params.customUrl) != 'undefined')
+			{
+				var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+				var pos1 = dataStr.indexOf('>"}', pos0);
+			
+				var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+			}
+			
 			var data = FGS.HTMLParser(dataStr);
 			
 			try
@@ -804,31 +814,36 @@ FGS.getFBML = function(params, retry)
 				
 				reqData.content = tst[1];
 				reqData.prefill = true;
-
-				
-				var dataCheck = dataStr;
 				
 				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
 				{
-					dataCheck = dataStr.slice(dataStr.lastIndexOf('var items='));
+					dataCheck = dataCheck.slice(dataCheck.lastIndexOf('var items='));
 				}
 				
-				var tst = new RegExp(/var items=({.*});/gm).exec(dataCheck);
+				var tst = new RegExp(/var items=({.*});/g).exec(dataCheck);
 				if(tst == null) throw {message:'no items'}
 				
 				var tst = tst[1];
 				
 				
-				var tst = tst.match(/("[0-9]+":{"name":\s*["][^"]+[^}]})/g);
-				if(tst == null) throw {message:'no friends'}
+				if(typeof(params.cafeUrl) != 'undefined' || typeof(params.bakinglifeUrl) != 'undefined' || typeof(params.customUrl) != 'undefined')
+				{
+					var tst = tst.match(/(\\"[0-9]+\\":{\\"name\\":\\\s*["][^"]+[^}]})/g);
+					if(tst == null) throw {message:'no friends'}
+				}
+				else
+				{
+					var tst = tst.match(/("[0-9]+":{"name":\s*["][^"]+[^}]})/g);
+					if(tst == null) throw {message:'no friends'}
+				}
 				
 				var arr = [];
 				$(tst).each(function(k,v)
 				{
+					var v = v.replace(/\\\"/g, '"');
 					arr.push(JSON.parse('{'+v+'}'));
 				});
-		
-
+			
 				if(typeof(params.cafeUrl) != 'undefined')
 				{
 					var cafeParams = '';

@@ -22,10 +22,14 @@ FGS.zooworld.Freegifts =
 			{
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					var url = $('form[target]:first', dataHTML).attr('action');
-					var paramTmp = $('form[target]:first', dataHTML).serialize();
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -119,11 +123,8 @@ FGS.zooworld.Freegifts =
 			{
 				try
 				{
-					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
-					if(tst == null) throw {message: 'no fb.init'}
-					
-					var app_key = tst[1];
-					var channel_url = tst[2];
+					var app_key = params.gameID;
+					var channel_url = './channel.html';
 					
 					
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/mg).exec(dataStr);					
@@ -227,6 +228,12 @@ FGS.zooworld.Requests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
+					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
 				
 					if($('#app_content_2405948328', dataHTML).length > 0)
 					{
@@ -383,8 +390,14 @@ FGS.zooworld.Bonuses =
 				
 				try
 				{
-					var url = $('form[target]:first', dataHTML).attr('action');
-					var params = $('form[target]:first', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{

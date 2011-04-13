@@ -14,10 +14,14 @@ FGS.frontierville.Freegifts =
 			{
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);
 
-					var url = $('form[target]', dataHTML).attr('action');
-					var params2 = $('form[target]', dataHTML).serialize();
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params2 = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -255,8 +259,15 @@ FGS.frontierville.Requests =
 				
 				try
 				{
-					var url = $('form[target]', dataHTML).attr('action');
-					var params = $('form[target]', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -446,8 +457,14 @@ FGS.frontierville.Bonuses =
 				
 				try
 				{
-					var url = $('form[target]', dataHTML).attr('action');
-					var params = $('form[target]', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!url)
 					{
@@ -573,8 +590,15 @@ FGS.frontierville.Bonuses =
 				
 				try
 				{
-					var url = $('form[target]', dataHTML).attr('action');
-					var params = $('form[target]', dataHTML).serialize();
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 
 					if(!url)
 					{

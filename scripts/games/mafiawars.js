@@ -14,10 +14,14 @@ FGS.mafiawars.Freegifts =
 			{
 				try
 				{
-					var dataHTML = FGS.HTMLParser(dataStr);					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
 					
-					var src = $('form[target]', dataHTML).attr('action');
-					var paramsTmp = $('form[target]', dataHTML).serialize();
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
+					var src = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramsTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!src)
 					{
@@ -292,11 +296,15 @@ FGS.mafiawars.Requests =
 				
 				try
 				{
-				
-					var dataHTML = FGS.HTMLParser(dataStr);					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
 					
-					var src = $('form[target]', dataHTML).attr('action');
-					var paramsTmp = $('form[target]', dataHTML).serialize();
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
+
+					var src = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramsTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!src)
 					{
@@ -637,10 +645,15 @@ FGS.mafiawars.Bonuses =
 				
 				try
 				{
-					var dataHTML = FGS.HTMLParser(dataStr);					
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
 					
-					var src = $('form[target]', dataHTML).attr('action');
-					var paramsTmp = $('form[target]', dataHTML).serialize();
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+
+
+					var src = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var paramsTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					if(!src)
 					{

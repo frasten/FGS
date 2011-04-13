@@ -14,7 +14,13 @@ FGS.cafeworld.Freegifts =
 			{
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
 					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					
 					var nextUrl = $('#app101539264719_frmGifts', dataHTML).attr('action');
 					var formParam = $('#app101539264719_frmGifts', dataHTML).serialize();
 					var tempUrl = nextUrl+'?'+formParam;
@@ -113,24 +119,31 @@ FGS.cafeworld.Requests =
 					return;
 				}
 				
-				if($('form[action*="request_v2_landing_page.php"]', dataHTML).length > 0)
-				{
-					var url 	= $('form[action*="request_v2_landing_page.php"]', dataHTML).attr('action');
-					var params2 = $('form[action*="request_v2_landing_page.php"]', dataHTML).serialize();
-					
-					retryThis(currentType, id, [url, params2]);
-					return;
-				}
-				
-				if(dataStr.indexOf('/me/apprequests') != -1)
-				{
-					FGS.getAppAccessToken(currentType, id, currentURL, 'api_key=101539264719&app_id=101539264719&channel=http://fb-0.cafe.zynga.com/current//channel/custom_channel.html', FGS.cafeworld.Requests.ParseAppRequests);
-					return;
-				}
 				
 				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					if($('form[action*="request_v2_landing_page.php"]', dataHTML).length > 0)
+					{
+						var url 	= $('form[action*="request_v2_landing_page.php"]', dataHTML).attr('action');
+						var params2 = $('form[action*="request_v2_landing_page.php"]', dataHTML).serialize();
+						
+						retryThis(currentType, id, [url, params2]);
+						return;
+					}
+					
+					if(dataStr.indexOf('/me/apprequests') != -1)
+					{
+						FGS.getAppAccessToken(currentType, id, currentURL, 'api_key=101539264719&app_id=101539264719&channel=http://fb-0.cafe.zynga.com/current//channel/custom_channel.html', FGS.cafeworld.Requests.ParseAppRequests);
+						return;
+					}
+
 					if(dataStr.indexOf('There is a problem in the kitchen') != -1)
 					{
 						var error_text = 'There was problem receiving this gift. You have probably already accepted it';
@@ -189,6 +202,13 @@ FGS.cafeworld.Requests =
 							var pos1 = titleX.indexOf(' from ');
 							var gift = titleX.slice(0,pos1)+' from';
 							var from = titleX.slice(pos1+6);
+						}
+						else if(titleX.indexOf('You just gave this ') != -1)
+						{
+							titleX = titleX.replace('You just gave this ','').replace('!','');
+							var pos1 = titleX.indexOf(' to ');
+							var gift = titleX.slice(0,pos1);
+							var from = ' sent to '+titleX.slice(pos1+4);
 						}
 						else if(titleX.indexOf('You just sent this ') != -1)
 						{
@@ -472,6 +492,12 @@ FGS.cafeworld.Bonuses =
 				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);					
+					
 					if(dataStr.indexOf('please pick a mystery gift as a thank you') != -1)
 					{
 						var newUrl = $('.lotto-container', dataHTML).children('a:first').attr('href');

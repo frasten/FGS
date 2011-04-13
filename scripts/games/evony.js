@@ -34,6 +34,13 @@ FGS.evony.Requests =
 					
 				try 
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					
 					if(dataStr.indexOf('You have accepted this Gift') != -1)
 					{
 						var error_text = 'You have already accepted this Gift.';
@@ -113,10 +120,15 @@ FGS.evony.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-					
 				try 
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					
 					info.image = $('.shop', dataHTML).find('img:first').attr('src');
 					info.title = $('.shop', dataHTML).find('h2:first').text();
 					info.text  = $('.shop', dataHTML).next('div').find('h2:first').text();
@@ -189,6 +201,13 @@ FGS.evony.Bonuses =
 					
 				try 
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);		
+					
+					
 					if(dataStr.indexOf('You have already completed this event') != -1)
 					{
 						var error_text = 'You have already completed this event';

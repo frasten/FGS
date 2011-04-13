@@ -34,6 +34,12 @@ FGS.restaurant.Requests =
 				
 				try
 				{
+					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					var dataHTML = FGS.HTMLParser(dataStr);
+
 					if(dataStr.indexOf('have already accepted this gift or it has expired') != -1)
 					{
 						var error_text = 'You have already accepted this gift or it has expired.';					
@@ -49,11 +55,12 @@ FGS.restaurant.Requests =
 					}
 					
 					
+					
 					var tempText = $('#app43016202276_gift_text', dataHTML).text();
 					
 					if(!tempText || tempText == '')
 					{
-						tempText = $('app43016202276_request_text', dataHTML).text();
+						tempText = $('#app43016202276_request_text', dataHTML).text();
 					}
 					
 					info.text = tempText;
@@ -77,7 +84,7 @@ FGS.restaurant.Requests =
 						var pos2 = tempText.indexOf('to ', pos11);
 						if(pos2 != -1)
 						{
-							info.title = tempText.slice(pos1+14,pos2);
+							info.title = tempText.slice(pos11+14,pos2);
 						}
 						else
 						{
@@ -89,8 +96,11 @@ FGS.restaurant.Requests =
 						info.title = tempText;
 					}
 					
+					if($('#app43016202276_gift_img', dataHTML).length > 0)
+						info.image = $('#app43016202276_gift_img', dataHTML).children('img').attr('src');
+					else
+						info.image = $('#app43016202276_request_img', dataHTML).children('img').attr('src');
 					
-					info.image = $('#app43016202276_gift_img', dataHTML).children('img').attr('src');
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					FGS.endWithSuccess(currentType, id, info);					

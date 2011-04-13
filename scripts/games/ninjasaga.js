@@ -1,4 +1,4 @@
-FGS.islandparadise.Requests = 
+FGS.ninjasaga.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -31,8 +31,8 @@ FGS.islandparadise.Requests =
 					}
 					return;
 				}
-				
-				try
+					
+				try 
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
 					var pos1 = dataStr.indexOf('>"}', pos0);
@@ -46,12 +46,12 @@ FGS.islandparadise.Requests =
 					
 					if(!url)
 					{
-						var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
+						var paramTmp = FGS.findIframeAfterId('#app_content_201278444497', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
 					}
 					
-					FGS.islandparadise.Requests.Click2(currentType, id, url, params);
+					FGS.ninjasaga.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -81,56 +81,74 @@ FGS.islandparadise.Requests =
 		});
 	},
 	
-	Click2:	function(currentType, id, currentURL, params, retry)
+	Click2: function(currentType, id, currentURL, params, retry)
 	{
 		var $ = FGS.jQuery;
-		var retryThis 	= arguments.callee;
+		var retryThis 	= arguments.callee;		
 		var info = {}
 		
 		$.ajax({
 			type: "POST",
-			data: params,
 			url: currentURL,
+			data: params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
-				
 				try
 				{
-					var pos1 = dataStr.indexOf("top.location.href='");
-					if(pos1 != -1)
+					if(dataStr.indexOf('You have already received this reward') != -1)
 					{
-						var pos2 = dataStr.indexOf("'", pos1+26);
-						var url = dataStr.slice(pos1+19, pos2);
-						FGS.islandparadise.Requests.Click(currentType, id, url, true);
+						var error_text = 'You have already received this reward!';
+						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
-					if (src == '')
+					if(dataStr.indexOf('All rewards here have already been claimed') != -1)
 					{
-						if($('#view_gift_accept', dataHTML).length > 0)
+						var error_text = 'All rewards here have already been claimed.';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					var el = [];
+					
+					$(dataHTML).each(function()
+					{
+						if($(this).attr('id') == 'total_container')
 						{
-							info.image = $('#view_gift_accept', dataHTML).find('.item').find('img:first').attr('src');
-							info.title = '';
-							info.text =$('#view_gift_accept', dataHTML).find('.item').text();
+							el = $(this);
+							return false;
+						}
+					});
+					
+					if(el.length > 0)
+					{
+						var tmpText = el.children('div:contains("Congratulations"):first').text();
+						
+						var pos1 = tmpText.indexOf('You got');
+						
+						if(pos1 != -1)
+						{
+							var pos2 = tmpText.indexOf('!', pos1);
+							info.title = tmpText.slice(pos1+8, pos2);
 						}
 						else
 						{
-							throw {message: 'error'}
+							info.title = 'New item';
 						}
+						
+						info.image = el.find('img:first').attr('src');
+						info.time = Math.round(new Date().getTime() / 1000);
+						info.text = el.children('div:contains("Congratulations"):first').text();
+						
+						FGS.endWithSuccess(currentType, id, info);
 					}
 					else
 					{
-						FGS.islandparadise.Requests.Click2(currentType, id, src, true);
-						return;
+						throw {message: 'no form'}
 					}
-					
-
-					info.time = Math.round(new Date().getTime() / 1000);
-					
-					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
@@ -158,5 +176,5 @@ FGS.islandparadise.Requests =
 				}
 			}
 		});
-	},
+	}
 };
