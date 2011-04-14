@@ -15,9 +15,11 @@ FGS.cafeworld.Freegifts =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					}
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
 					
@@ -124,11 +126,13 @@ FGS.cafeworld.Requests =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);
-					
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
+						
 					if($('form[action*="request_v2_landing_page.php"]', dataHTML).length > 0)
 					{
 						var url 	= $('form[action*="request_v2_landing_page.php"]', dataHTML).attr('action');
@@ -493,10 +497,12 @@ FGS.cafeworld.Bonuses =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);					
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 					
 					if(dataStr.indexOf('please pick a mystery gift as a thank you') != -1)
 					{

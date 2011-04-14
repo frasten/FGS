@@ -35,10 +35,12 @@ FGS.myshops.Requests =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);	
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);	
+					}
 				
 					info.image 	= $('#app123837014322698_giftImage',dataHTML).children('img:first').attr('src');
 					info.title 	= $.trim($('#app123837014322698_giftText',dataHTML).text());
@@ -111,14 +113,15 @@ FGS.myshops.Bonuses =
 					return;
 				}
 				
-				
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);	
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);	
+					}
 					
 					
 					if(dataStr.indexOf('this reward is either expired or invalid') != -1)

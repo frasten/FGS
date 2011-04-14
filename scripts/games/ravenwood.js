@@ -15,9 +15,11 @@ FGS.ravenwood.Freegifts =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					}
 					var dataHTML = FGS.HTMLParser(dataStr);		
 
 
@@ -308,10 +310,12 @@ FGS.ravenwood.Requests =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);		
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 					
 					
 					var el = $('#app_content_120563477996213 > div > div > div > div > div', dataHTML);

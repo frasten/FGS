@@ -1592,7 +1592,7 @@ var FGS = {
 						{
 							var re = new RegExp(v, "i") ;
 							
-							if(re.test(bTitle))
+							if($.trim(v) != '' && re.test(bTitle))
 							{
 								FGS.dump('Filtering: '+bTitle);
 								ret = true;

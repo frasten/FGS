@@ -23,9 +23,11 @@ FGS.zooworld.Freegifts =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					}
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
@@ -230,10 +232,12 @@ FGS.zooworld.Requests =
 					}
 					
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 				
 					if($('#app_content_2405948328', dataHTML).length > 0)
 					{
@@ -391,10 +395,12 @@ FGS.zooworld.Bonuses =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();

@@ -776,12 +776,18 @@ FGS.getFBML = function(params, retry)
 		{
 			var dataCheck = dataStr;
 			
+			var isNewLayout = false;
+			
 			if(typeof(params.cafeUrl) != 'undefined' || typeof(params.bakinglifeUrl) != 'undefined' || typeof(params.customUrl) != 'undefined')
 			{
 				var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-				var pos1 = dataStr.indexOf('>"}', pos0);
-			
-				var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+				
+				if(pos0 != -1)
+				{
+					var pos1 = dataStr.indexOf('>"}', pos0);
+					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					isNewLayout = true;
+				}
 			}
 			
 			var data = FGS.HTMLParser(dataStr);
@@ -826,7 +832,7 @@ FGS.getFBML = function(params, retry)
 				var tst = tst[1];
 				
 				
-				if(typeof(params.cafeUrl) != 'undefined' || typeof(params.bakinglifeUrl) != 'undefined' || typeof(params.customUrl) != 'undefined')
+				if( (typeof(params.cafeUrl) != 'undefined' || typeof(params.bakinglifeUrl) != 'undefined' || typeof(params.customUrl) != 'undefined') && isNewLayout)
 				{
 					var tst = tst.match(/(\\"[0-9]+\\":{\\"name\\":\\\s*["][^"]+[^}]})/g);
 					if(tst == null) throw {message:'no friends'}

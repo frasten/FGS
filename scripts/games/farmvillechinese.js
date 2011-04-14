@@ -15,9 +15,11 @@ FGS.farmvillechinese.Freegifts =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
-					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+					}
 					var dataHTML = FGS.HTMLParser(dataStr);
 
 					var url = $('form[target="flashAppIframe"]', dataHTML).attr('action');
@@ -266,10 +268,13 @@ FGS.farmvillechinese.Requests =
 				{
 
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);
 					var newUrl = $('form[target="flashAppIframe"]', dataHTML).attr('action');
 					var newParams = $('form[target="flashAppIframe"]', dataHTML).serialize();
 					
@@ -527,10 +532,13 @@ FGS.farmvillechinese.Bonuses =
 				try
 				{
 					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					var pos1 = dataStr.indexOf('>"}', pos0);
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('>"}', pos0);
+						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
+						var dataHTML = FGS.HTMLParser(dataStr);
+					}
 					
-					var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					var dataHTML = FGS.HTMLParser(dataStr);
 					if($('.inputsubmit[value="確定"]',dataHTML).length > 0)
 					{
 						var stop = false;
