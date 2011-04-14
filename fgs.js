@@ -1562,11 +1562,12 @@ var FGS = {
 						var testLink = el.find('.UIActionLinks_bottom > a:last');
 						if(testLink.length == 0)
 						{
-							var testLink = el.find('.uiAttachmentTitle').find('a').length;
+							var testLink = el.find('.uiAttachmentTitle').find('a');
 							if(testLink.length == 0)
 								return;
 						}
-						
+						var testLink = testLink.first();
+												
 						var bTitle = jQuery.trim(testLink.text().replace(/'/gi, ''));
 
 						$(FGS.gamesData[appID].filter.bonuses).each(function(k,v)
