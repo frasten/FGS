@@ -1,9 +1,9 @@
 Index: giftlist.html
 ===================================================================
---- giftlist.html	(revisione 134)
+--- giftlist.html	(revisione 264)
 +++ giftlist.html	(copia locale)
-@@ -354,6 +354,11 @@
- 		}
+@@ -380,6 +380,11 @@
+ 		processSwitchItemsDisplay();
  		
  		updateCount(gameID);
 +		
@@ -13,37 +13,16 @@ Index: giftlist.html
 +		}
  	}
  	
- 	function processBonusClick(e)
-@@ -1195,7 +1200,7 @@
- 		else
- 		{
- 			$('.gameEnabledBox[gameID="'+gameID+'"]').parent().siblings('label').children('input').removeAttr('disabled');
--			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"]').removeAttr('checked');
-+			$('.gameDefaultBox[gameID="'+gameID+'"], .gameLikeBonusBox[gameID="'+gameID+'"], .gameCommentBonusBox[gameID="'+gameID+'"], .gameSendbackGiftBox[gameID="'+gameID+'"], .gameHideFromFeedBox[gameID="'+gameID+'"], .gameAutoAcceptBonusBox[gameID="'+gameID+'"]').removeAttr('checked');
- 			
- 			$('.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', 'checked');
- 			
-@@ -1220,6 +1225,11 @@
- 			}
- 			
- 			
-+			if(e.autoAcceptBonus)
-+			{
-+				$('.gameAutoAcceptBonusBox[gameID="'+gameID+'"]').attr('checked', 'checked');
-+			}
-+
- 			$(el).removeClass('hide');
- 			$('img', 'label[for="'+gameID+'Selected"]').attr('src', 'icons/menu/'+game+'.png');
- 			$('div.content', 		$('#'+game+'Game')).removeClass('hide');
-@@ -1550,6 +1560,7 @@
- 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.sendbackGift ? 'checked="checked"':'')+' class="gameSendbackGiftBox" gameID="'+gameID+'" /> <label>Send thank you gift</label><br />'
- 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses on Facebook</label><br />'
+ 	function processBonusClick(el)
+@@ -1653,6 +1658,7 @@
+ 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeed ? 'checked="checked"':'')+' class="gameHideFromFeedBox" gameID="'+gameID+'" /> <label>Hide collected bonuses from FB feed</label><br />'
+ 	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+'  '+(e.hideFromFeedLimitError ? 'checked="checked"':'')+' class="gameHideFromFeedLimitErrorBox" gameID="'+gameID+'" /> <label>Hide "limit errors" from FB feed</label><br />'
  	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.listOnSearch? 'checked="checked"':'')+'  class="gameListOnNeighborsSearch" gameID="'+gameID+'" /> <label>List me on neighbors search</label><br />'
 +	+ '<input type="checkbox" '+(!e.enabled ? 'disabled="disabled"':'')+' '+(e.autoAcceptBonus? 'checked="checked"':'')+'  class="gameAutoAcceptBonusBox" gameID="'+gameID+'" /> <label>Automatically accept bonuses</label><br />'
+ 	+ addSpecOpt
  	+ '</span></div>');
  
- 	var gs = $('#gameOptionsTab');	
-@@ -1793,6 +1804,12 @@
+@@ -1897,6 +1903,12 @@
  	bkP.saveOptions();
  }
  
@@ -56,25 +35,40 @@ Index: giftlist.html
  function processGameHideFromFeedInput(el)
  {
  	bkP.options.games[$(el).attr('gameID')].hideFromFeed = $(el).is(':checked') ? true : false;
-@@ -2118,6 +2135,8 @@
+@@ -2304,6 +2316,8 @@
  				return processGameSendbackGiftInput(el);
  			else if(el.hasClass('gameHideFromFeedBox'))
  				return processGameHideFromFeedInput(el);
 +			else if(el.hasClass('gameAutoAcceptBonusBox'))
 +				return processGameAutoAcceptBonusInput(el);
+ 			else if(el.hasClass('gameHideFromFeedLimitErrorBox'))
+ 				return processGameHideFromFeedLimitErrorInput(el);
  			else if(el.hasClass('gameListOnNeighborsSearch'))
- 				return processGameListOnNeighborsSearch(el);
- 			else if(el.hasClass('deleteComment'))
+@@ -3173,6 +3187,7 @@
+ 					<!---
+ 					<h4>Gifts check timeout</h4>
+ 						<select id="checkRequestsTimeout">
++							<option value="15">15 seconds</option>
+ 							<option value="30">30 seconds</option>
+ 							<option value="60">1 minute</option>
+ 							<option value="120">2 minutes</option>
+@@ -3327,4 +3342,4 @@
+ 		<li class="goToGame"><a href="#goToGame"><strong>Go to this game!</strong></a></li>
+ 	</ul>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
 Index: fgs.js
 ===================================================================
---- fgs.js	(revisione 134)
+--- fgs.js	(revisione 264)
 +++ fgs.js	(copia locale)
-@@ -31,7 +31,7 @@
+@@ -34,7 +34,7 @@
  			collectXbonusesAtTheSameTime: 2,
  		}
  
--		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, hideFromFeed: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false };
-+		FGS.defaultGameOptions = { enabled: false,	clearOlderID:	0, likeBonus: false, sendbackGift: false, hideFromFeed: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, autoAcceptBonus: false };
+-		FGS.defaultGameOptions = { enabled: false,	lastBonusTime: 0, likeBonus: false, sendbackGift: false, hideFromFeed: false, hideFromFeedLimitError: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, useRandomTimeoutOnBonuses: false };
++		FGS.defaultGameOptions = { enabled: false,	lastBonusTime: 0, likeBonus: false, sendbackGift: false, hideFromFeed: false, hideFromFeedLimitError: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, useRandomTimeoutOnBonuses: false, autoAcceptBonus: false };
  
  		for(var idd in FGS.gamesData)
  		{
