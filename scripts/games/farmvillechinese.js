@@ -566,30 +566,6 @@ FGS.farmvillechinese.Bonuses =
 					}
 					else if($('.main_giftConfirm_cont', dataHTML).length > 0)
 					{
-						var newUrl = '';
-						
-						if($('.inner_giftConfirm_cont > form', dataHTML).length > 0)
-						{
-							var pos1 = dataStr.indexOf('media="handheld" href="');
-							if(pos1 != -1)
-							{
-								var pos2 = dataStr.indexOf('"', pos1+23);
-								newUrl = dataStr.slice(pos1+23,pos2);
-							}		
-						}
-
-						if(newUrl == '')
-						{
-							newUrl = unescape(newUrl);
-							newUrl = newUrl.substr(newUrl.indexOf('next')+5);
-
-							var giftReceiveUrl = 'http://apps.facebook.com/onthefarm/'+newUrl;
-						}
-						else
-						{
-							var giftReceiveUrl = newUrl.replace(/&amp;/g,'&');;
-						}
-						
 						var num = 1;
 
 						var giftReceivePost = $('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').serialize()+'&'+escape($('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').find('input[type="submit"]').attr('name'))+'='+$('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').find('input[type="submit"]').attr('value');
@@ -602,7 +578,7 @@ FGS.farmvillechinese.Bonuses =
 						$.ajax({
 							type: "POST",
 							data: giftReceivePost,
-							url: giftReceiveUrl,
+							url: currentURL,
 							success: function(d)
 							{
 								info.time = Math.round(new Date().getTime() / 1000);
