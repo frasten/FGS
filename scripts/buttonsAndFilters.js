@@ -105,7 +105,7 @@ FGS.gamesData =
 	291549705119: 	{ 	name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
 						filter:		
 						{
-							bonuses: ['Start your business', 'Send collectables', 'Send collectibles', 'iAbre tu negocio', 'Visit CityVille', 'Collectable wanted'],
+							bonuses: ['Start your business', 'Start your business!', 'Send collectables', 'Send collectables!', 'Send collectibles', 'iAbre tu negocio', 'Visit CityVille', 'Collectable wanted'],
 							bonusesNewWindow: [],
 							requests: [],
 							requestsNewWindow: []

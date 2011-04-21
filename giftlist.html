@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.20" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.20" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.21" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.21" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.20"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.21"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.20"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.20"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.20"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.21"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.21"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.21"></script>
 
 
 <script type="text/javascript">
@@ -1498,7 +1498,7 @@ function addDataToScreenLocked(callback, id, data)
 					favCnt++;
 					favArr.push([
 						'<img src="icons/favourite.png" gameID="'+gameID+'" neighID="'+id+'" class="toggleFavourite">',
-						v.name,
+						'<a href="http://www.facebook.com/profile.php?id='+id+'" target="_blank">'+v.name+'</a>',
 						'<span class="hide">0</span>never',
 						'<span class="hide">0</span>never',
 						'<span class="hide">0</span>never',
@@ -1515,7 +1515,7 @@ function addDataToScreenLocked(callback, id, data)
 					
 					norArr.push([
 						'<img src="icons/favourite-bw.png" gameID="'+gameID+'" neighID="'+id+'" class="toggleFavourite">', 
-						v.name,
+						'<a href="http://www.facebook.com/profile.php?id='+id+'" target="_blank">'+v.name+'</a>',
 						'<span class="hide">0</span>never',
 						'<span class="hide">0</span>never',
 						'<span class="hide">0</span>never',
@@ -2302,7 +2302,20 @@ function updateTimeAgo(target)
 		{
 			var el = $(e.srcElement || e.target);
 			
-			if(e.which != 1) return;
+			/*
+			if(e.which == 2)
+			{
+				if(el.closest('div').hasClass('processBonusClick') && el.closest('div').hasClass('hasContextMenu'))
+				{
+					bkP.openURI(el.closest('div').attr('url'), true);
+					processSingleBonusRemove(el.closest('div'));
+					
+				}
+				return true;
+			}
+			*/
+			
+			if(e.which != 1) return true;
 			
 			if(el.hasClass('gameSelectorInput'))
 				return processGameSelectorInput(el);

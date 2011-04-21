@@ -604,6 +604,63 @@ var FGS = {
 		});
 	},
 	
+	prepareLinkForGameStep2: function(url, game, id, dataPost, newWindow, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {};
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: url,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var pos1 = data.indexOf('document.location.replace("');
+					if(pos1 == -1) throw {message: 'a'}
+					var pos2 = data.indexOf('"', pos1+27);
+					var text = data.slice(pos1+27,pos2);
+					text = text.replace(/\\u0025/g, '%');
+					text = text.replace(/\\/g,'');
+					var url = $(FGS.HTMLParser('<p class="link" href="'+text+'">abc</p>')).find('p.link');
+					var URI = url.attr('href');							
+				
+					if(newWindow)
+						FGS.openURI(URI, true);
+					else
+						FGS[game].Requests.Click("request", id, URI);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(url, game, id, dataPost, newWindow, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(url, game, id, dataPost, newWindow, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
 	prepareLinkForGame: function(game, id, dataPost, newWindow, retry)
 	{
 		var $ = FGS.jQuery;
@@ -632,20 +689,32 @@ var FGS = {
 					
 					var pos1 = parseStr.indexOf('goURI');
 					if(pos1 == -1) throw {message:"no URI"}
-					
-					var pos2 = parseStr.indexOf(');',pos1);
-					parseStr = '{"abc":"'+parseStr.slice(pos1+8,pos2-2)+'"}';
 
+					var pos2 = parseStr.indexOf(');',pos1);
+					var parseStr = '{"abc":"'+parseStr.slice(pos1+8,pos2-2)+'"}';
 					var parseStr = JSON.parse(parseStr);
 					
-					var parseStr = parseStr.abc.replace(/\\u0025/g, '%');
+					var url2 = parseStr.abc.toString();
 					
-					var URI = JSON.parse('"'+parseStr+'"');
-					
-					if(newWindow)
-						FGS.openURI(URI, true);
+					if(url2.indexOf('l.php') == 2)
+					{
+						var parseStr = '{"abc":"'+url2+'"}';
+						var parseStr = JSON.parse(parseStr);
+						var newStr = 'http://www.facebook.com'+parseStr.abc;
+						
+						FGS.prepareLinkForGameStep2(newStr, game, id, dataPost, newWindow);
+					}
 					else
-						FGS[game].Requests.Click("request", id, URI);
+					{
+						var parseStr = parseStr.abc.replace(/\\u0025/g, '%');
+						
+						var URI = JSON.parse('"'+parseStr+'"');
+						
+						if(newWindow)
+							FGS.openURI(URI, true);
+						else
+							FGS[game].Requests.Click("request", id, URI);
+					}
 				}
 				catch(err)
 				{
