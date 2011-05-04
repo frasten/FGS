@@ -1,4 +1,4 @@
-FGS.puzzledhearts.Bonuses = 
+FGS.charmedgems.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -43,12 +43,12 @@ FGS.puzzledhearts.Bonuses =
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_216230855057280', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.puzzledhearts.Bonuses.Click2(currentType, id, url, params);
+					FGS.charmedgems.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -150,7 +150,7 @@ FGS.puzzledhearts.Bonuses =
 						var pos0 = dataStr.indexOf('; send_w2w_notify_gift(');
 						if(pos0 != -1)
 						{
-							FGS.puzzledhearts.Bonuses.TryToPost(dataStr);
+							FGS.charmedgems.Bonuses.TryToPost(dataStr);
 						}
 						
 						//var error_text = $.trim($('.streamRewardAllRewardsClaimed', dataHTML).text());
@@ -225,21 +225,21 @@ FGS.puzzledhearts.Bonuses =
 					params.post_form_id = FGS.post_form_id;
 					params.preview = 0;
 					params['_path'] = 'stream.publish';
-					params.app_id = 166309140062981;
-					params.api_key = 166309140062981;
+					params.app_id = 216230855057280;
+					params.api_key = 216230855057280;
 					params.locale = 'en_US';
 					params.sdk = 'joey';
 					params.from_post = 1;
 					params.feedform_user_message = '';
 					params.publish = 'Publish';
 					params.display = 'iframe';
-					params.channel = 'http://8.17.172.90/ph/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
-					params.redirect_uri = 'http://8.17.172.90/ph/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
-					params.channel_url = 'http://8.17.172.90/ph/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
+					params.channel = 'http://charmedgems.com/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
+					params.redirect_uri = 'http://charmedgems.com/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
+					params.channel_url = 'http://charmedgems.com/ajax/channel.html?result=%22xxRESULTTOKENxx%22';
 					
 					delete(params.method);
 					
-					FGS.getAppAccessToken2('api_key=166309140062981&app_id=166309140062981&channel=http://8.17.172.90/ph/ajax/channel.html', params, FGS.puzzledhearts.Bonuses.FinishPost);
+					FGS.getAppAccessToken2('api_key=216230855057280&app_id=216230855057280&channel=http://charmedgems.com/ajax/channel.html', params, FGS.charmedgems.Bonuses.FinishPost);
 				});
 			}
 		}
@@ -264,7 +264,7 @@ FGS.puzzledhearts.Bonuses =
 	},
 };
 
-FGS.puzzledhearts.Requests = 
+FGS.charmedgems.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -309,12 +309,12 @@ FGS.puzzledhearts.Requests =
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_166309140062981', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_216230855057280', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.puzzledhearts.Requests.Click2(currentType, id, url, params);
+					FGS.charmedgems.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{

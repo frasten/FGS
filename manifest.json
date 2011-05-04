@@ -1,9 +1,9 @@
 {
 	"update_url": "http://rzadki.eu:81/projects/fgs/updates.xml",
 	"name": "Friendly Gaming Simplifier",
-    "version": "1.1.0.21",
+    "version": "1.1.0.22",
 	"description": "This extension allows you to collect bonuses and request from many Facebook games.",
-	"permissions": ["cookies", "tabs", "http://*.ravenwoodfair.com/*", "http://*.mafiawars.com/*", "http://*.farmville.com/*",  "http://*.frontier.zynga.com/*", "https://*.frontier.zynga.com/*", "http://*.treasure.zynga.com/*", "http://*.yoville.com/*", "https://*.treasure.zynga.com/*", "http://*.playdom.com/*", "http://*.rockyou.com/*", "http://*.fishville.zynga.com/*",  "http://*.zynga.com/*", "http://*.playcrafter.com/*", "http://*.facebook.com/*", "https://*.facebook.com/*",  "http://*.amazonaws.com/*", "http://*.icebreakgames.com/*", "http://*.meteorgames.com/*", "http://*.cloudapp.net/*", "http://*.farmvillechinese.com/*", "http://*.thepotfarmgame.com/*", "http://rzadki.eu/*", "http://*.fbcdn.net/*", "http://8.17.172.90/*", "http://*.tbxing.com/*", "http://*.ninjasaga.com/*", "http://*.abitlucky.com/*", "http://*.kingdomsofcamelot.com/*", "notifications", "unlimitedStorage" ],
+	"permissions": ["cookies", "tabs", "http://*.ravenwoodfair.com/*", "http://*.mafiawars.com/*", "http://*.farmville.com/*",  "http://*.frontier.zynga.com/*", "https://*.frontier.zynga.com/*", "http://*.treasure.zynga.com/*", "http://*.yoville.com/*", "https://*.treasure.zynga.com/*", "http://*.playdom.com/*", "http://*.rockyou.com/*", "http://*.fishville.zynga.com/*",  "http://*.zynga.com/*", "http://*.playcrafter.com/*", "http://*.facebook.com/*", "https://*.facebook.com/*",  "http://*.amazonaws.com/*", "http://*.icebreakgames.com/*", "http://*.meteorgames.com/*", "http://*.cloudapp.net/*", "http://*.farmvillechinese.com/*", "http://*.thepotfarmgame.com/*", "http://rzadki.eu/*", "http://*.fbcdn.net/*", "http://8.17.172.90/*", "http://*.tbxing.com/*", "http://*.ninjasaga.com/*", "http://*.abitlucky.com/*", "http://*.kingdomsofcamelot.com/*", "http://*.digitalchocolate.com/*", "http://*.charmedgems.com/*", "notifications", "unlimitedStorage" ],
 	"background_page": "background.html",
 	"icons": {
 		"16": "gfx/favicon.png",

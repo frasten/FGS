@@ -32,6 +32,9 @@ var FGS = {
 			displayXbonuses: 300,
 			showDescriptionsOnStartup: 0,
 			collectXbonusesAtTheSameTime: 2,
+			breakStartupLoadingOption: 0,
+			breakStartupLoadingCount: 300,
+			breakStartupLoadingTime: 300
 		}
 
 		FGS.defaultGameOptions = { enabled: false,	lastBonusTime: 0, likeBonus: false, sendbackGift: false, hideFromFeed: false, hideFromFeedLimitError: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, useRandomTimeoutOnBonuses: false, autoAcceptBonus: false };
@@ -546,6 +549,43 @@ var FGS = {
 		});
 	},
 	
+	getAppAccessToken2: function(params, params2, callback)
+	{
+		var $ = FGS.jQuery;
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
+			data: params,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+
+					var pos1 = parseStr.indexOf('var config = {');
+					if(pos1 == -1) throw {message:"no URI"}
+					
+					var pos2 = parseStr.indexOf('};',pos1);
+					
+					parseStr = parseStr.slice(pos1+13,pos2+1);
+					var parseStr = JSON.parse(parseStr);
+					
+					params2.access_token = parseStr.session.access_token;
+					
+					callback(params2);			
+				}
+				catch(err)
+				{
+				}
+			},
+			error: function()
+			{
+			}
+		});
+	},
+	
 	getAppAccessToken: function(currentType, id, currentURL, params, callback, retry)
 	{
 		var $ = FGS.jQuery;
@@ -1047,7 +1087,7 @@ var FGS = {
 	
 	getRandomTimeout: function()
 	{
-		var secs = Math.floor((Math.random()*121)+45);
+		var secs = Math.floor((Math.random()*25)+5);
 		
 		FGS.dump('Next bonus starts in: '+ secs);
 		
@@ -1490,7 +1530,7 @@ var FGS = {
 		}
 	},
 	
-	checkBonuses: function(appID)
+	checkBonuses: function(appID, params, retry)
 	{
 		var $ = jQuery = FGS.jQuery;
 		
@@ -1502,28 +1542,35 @@ var FGS = {
 		if(typeof(FGS.bonusLoadingProgress[appID]) == 'undefined')
 		{
 			FGS.bonusLoadingProgress[appID] =
-				{
-					loaded: false
-				};
+			{
+				loaded: false
+			};
 		}
-
+		
 		if(FGS.bonusLoadingProgress[appID].loaded == false)
 		{
-			var number = 300;
+			var number = 75;
 		}
 		else
 		{
 			var number = FGS.timeoutToNumber();
-		}		
+		}
 		
-		var downAppID = appID;
-		
-		FGS.dump(FGS.getCurrentTime()+'[B] Starting. Checking for '+number+' bonuses for game '+appID);
+		if(typeof(params) == 'undefined')
+		{
+			var params = {};
+			
+			params.items = [];
+			params.time = Math.floor(new Date().getTime()/1000);
+			params.first = 0;
+			
+			FGS.dump(FGS.getCurrentTime()+'[B] Starting. Checking for bonuses for game '+appID);
+		}
 		
 		$.ajax({
 			type: "GET",
 			url: 'http://www.facebook.com/ajax/apps/app_stories.php',
-			data: '__a=1&is_game=1&app_ids='+downAppID+'&max_stories='+number+'&user_action=1',		
+			data: '__a=1&is_game=1&app_ids='+appID+'&max_stories='+number+'&user_action=0&is_game=1&show_hidden=false&ignore_self=false&oldest='+params.time,
 			dataType: 'text',
 			timeout: 180000,
 			success: function(str)
@@ -1562,15 +1609,19 @@ var FGS = {
 					var lastBonusTime = FGS.options.games[appID].lastBonusTime;
 					
 					// brak zdarzen
-					if(tmpData.html.indexOf('uiBoxLightblue') != -1)
+					if(data.indexOf('uiBoxLightblue') != -1)
 					{
 						FGS.sendView('hiddenFeed', appID);		
 						throw {message: 'no feed'}
 					}
 					
-					var bonusArr = [];
+					var finishCollecting = false;
+					var oldest = params.time;
 					
-					var curBonusTime = 0;
+					if($('li.uiStreamStory', htmlData).length == 0)
+					{
+						throw {message: 'empty'}
+					}
 					
 					$('li.uiStreamStory', htmlData).each(function()
 					{
@@ -1594,14 +1645,17 @@ var FGS = {
 						var elID = bonusData.target_fbid;
 						var actr = bonusData.actor;
 						
-						if(curBonusTime == 0)
+						if(params.first == 0)
 						{
-							curBonusTime = bonusTimeTmp+1;
+							params.first = bonusTimeTmp+1;
 						}
+						
+						oldest = bonusTime;
 						
 						if(bonusTimeTmp < lastBonusTime)
 						{
-							return;
+							finishCollecting = true;
+							return false;
 						}
 						
 						var targets = bonusData.target_profile_id;
@@ -1610,14 +1664,34 @@ var FGS = {
 						{
 							if(FGS.userID != targets)
 							{
-								return;
+								return true;
 							}
 						}
 						
+						if(FGS.options.breakStartupLoadingOption == 0)
+						{
+							if(params.items.length >= parseInt(FGS.options.breakStartupLoadingCount))
+							{
+								finishCollecting = true;
+								return false;
+							}
+						}
+						else
+						{
+							if(secs >= parseInt(FGS.options.breakStartupLoadingTime))
+							{
+								finishCollecting = true;
+								return false;
+							}
+						}
+						
+						/*
 						if(secs > FGS.options.deleteOlderThan && FGS.options.deleteOlderThan != 0)
 						{
-							return;
+							finishCollecting = true;
+							return false;
 						}
+						*/
 
 						if(actr == FGS.userID)	
 						{
@@ -1682,39 +1756,402 @@ var FGS = {
 						
 						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
 						
-						bonusArr.push(bonus);
+						params.items.push(bonus);
+						
+						if(params.items.length >= 2500)
+						{
+							finishCollecting = true;
+							return false;
+						}
 					});
 					
-					if(curBonusTime > 0)
+					if(finishCollecting)
 					{
-						FGS.options.games[appID].lastBonusTime = curBonusTime;
-					}					
-					
-					if(bonusArr.length > 0)
-					{
-						FGS.database.addBonus(bonusArr);
+						if(params.first > 0)
+						{
+							FGS.options.games[appID].lastBonusTime = params.first;
+						}
+						
+						if(params.items.length > 0)
+						{
+							FGS.database.addBonus(params.items);
+						}
+						
+						if(!FGS.bonusLoadingProgress[appID].loaded)
+						{
+							FGS.bonusLoadingProgress[appID].loaded = true;
+						}
+						
+						FGS.saveOptions();
+						
+						FGS.setTimeoutOnBonuses(appID);
+						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
 					}
-					FGS.saveOptions();
+					else
+					{
+						params.time = oldest;
+						FGS.checkBonuses(appID, params);
+						
+						//setTimeout(function() {  }, 100);
+					}
+				}
+				catch(e)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						if(e.message == 'empty')
+						{
+							params.time = oldest;
+						}
+						FGS.checkBonuses(appID, params, true);
+					}
+					else
+					{
+						if(params.first > 0)
+						{
+							FGS.options.games[appID].lastBonusTime = params.first;
+						}
+						
+						if(params.items.length > 0)
+						{
+							FGS.database.addBonus(params.items);
+						}
+						
+						if(!FGS.bonusLoadingProgress[appID].loaded)
+						{
+							FGS.bonusLoadingProgress[appID].loaded = true;
+						}
+						
+						FGS.saveOptions();
+						
+						FGS.setTimeoutOnBonuses(appID);
+						
+						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
+					}
+				}
+			},
+			error: function(e)
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					FGS.checkBonuses(appID, params, true);
+				}
+				else
+				{
+					if(params.first > 0)
+					{
+						FGS.options.games[appID].lastBonusTime = params.first;
+					}
 					
+					if(params.items.length > 0)
+					{
+						FGS.database.addBonus(params.items);
+					}
 					
 					if(!FGS.bonusLoadingProgress[appID].loaded)
 					{
 						FGS.bonusLoadingProgress[appID].loaded = true;
 					}
 					
+					FGS.saveOptions();
+					
 					FGS.setTimeoutOnBonuses(appID);
+					
 					FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
+				}
+			}
+		});
+	},
+	
+	checkBonusesNew: function(appID, params, retry)
+	{
+		var $ = jQuery = FGS.jQuery;
+		
+		if(typeof(FGS.iBonusTimeout[appID]) == 'undefined' || FGS.FBloginError !== false)
+		{
+			return;
+		}
+		
+		if(typeof(params) == 'undefined')
+		{
+			var params = {};
+			
+			params.items = [];
+			params.time = Math.floor(new Date().getTime()/1000);
+			params.first = 0;
+			params.scroll = 1;
+			
+			FGS.dump(FGS.getCurrentTime()+'[B] Starting. Checking for bonuses for game '+appID);
+		}		
+		
+		$.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/pagelet/generic.php/pagelet/home/morestories.php',
+			data: '__a='+(params.scroll+8)+'&data={%22filter%22:%22appm_'+appID+'%22,%22scroll_count%22:'+params.scroll+',%22last_seen_time%22:'+Math.floor(params.first/1000)+',%22oldest%22:'+params.time+'}',	
+			dataType: 'text',
+			timeout: 180000,
+			success: function(str)
+			{
+				try
+				{
+					var str = str.substring(9);
+					var error = JSON.parse(str).error;
+
+					if(typeof(error) != 'undefined')
+					{
+						FGS.dump(FGS.getCurrentTime()+'[B] Error: logged out');
+						FGS.stopAll();
+						return true;
+					}
+					
+					var data = JSON.parse(str).payload;
+
+					var htmlData = FGS.HTMLParser(data);					
+					
+					var now = new Date().getTime();
+					
+					var lastBonusTime = FGS.options.games[appID].lastBonusTime;
+					
+					// brak zdarzen
+					if(data.indexOf('uiBoxLightblue') != -1)
+					{
+						FGS.sendView('hiddenFeed', appID);		
+						throw {message: 'no feed'}
+					}
+					
+					var finishCollecting = false;
+					
+					var oldest = params.time;
+					
+					if($('li.uiStreamStory', htmlData).length == 0)
+					{
+						throw {message: 'empty'}
+					}
+					
+					
+					
+					$('li.uiStreamStory', htmlData).each(function()
+					{
+						var el = $(this);
+
+						var data = el.find('input[name="feedback_params"]').val();
+						
+						var bonusData = JSON.parse(data);
+						
+						var tmpDateStr = el.find('abbr').attr('data-date');
+						
+						if(typeof(tmpDateStr) == 'undefined')
+							return;
+						
+						var bonusTimeTmp = new Date(tmpDateStr).getTime();					
+						var bonusTime = Math.round(bonusTimeTmp / 1000);
+						
+						var diff = now-bonusTimeTmp;
+						var secs = Math.floor(diff.valueOf()/1000);
+						
+						var elID = bonusData.target_fbid;
+						var actr = bonusData.actor;
+						
+						if(params.first == 0)
+						{
+							params.first = bonusTimeTmp;
+						}
+						
+						oldest = bonusTime;
+
+						if(bonusTimeTmp < lastBonusTime)
+						{
+							finishCollecting = true;
+							return false;
+						}
+						
+						var targets = bonusData.target_profile_id;
+						
+						if(actr != targets)
+						{
+							if(FGS.userID != targets)
+							{
+								return true;
+							}
+						}
+						
+						if(FGS.options.breakStartupLoadingOption == 0)
+						{
+							if(params.items.length >= parseInt(FGS.options.breakStartupLoadingCount))
+							{
+								finishCollecting = true;
+								return false;
+							}
+						}
+						else
+						{
+							if(secs >= parseInt(FGS.options.breakStartupLoadingTime))
+							{
+								finishCollecting = true;
+								return false;
+							}
+						}
+						
+						/*
+						if(secs > FGS.options.deleteOlderThan && FGS.options.deleteOlderThan != 0)
+						{
+							finishCollecting = true;
+							return false;
+						}
+						*/
+
+						if(actr == FGS.userID)	
+						{
+							if(appID.toString() != '166309140062981') // wlasny bonus w puzzle hearts
+								return;
+						}
+						
+						
+						var ret = false;
+						
+						var testLink = el.find('.UIActionLinks_bottom > a:last');
+						if(testLink.length == 0)
+						{
+							var testLink = el.find('.uiAttachmentTitle').find('a');
+							if(testLink.length == 0)
+								return;
+						}
+						var testLink = testLink.first();
+												
+						var bTitle = jQuery.trim(testLink.text().replace(/'/gi, ''));
+
+						$(FGS.gamesData[appID].filter.bonuses).each(function(k,v)
+						{
+							var re = new RegExp(v, "i");
+							
+							if(re.test(bTitle))
+							{
+								ret = true;
+								return false;
+							}
+						});
+						
+						if(ret) return;
+
+						var feedback = el.find('input[name="feedback_params"]').val();
+						var link_data = el.attr('data-ft');			
+
+						//sprawdzanie filtrow usera
+						var ret = false;
+						$(FGS.options.games[appID].filter).each(function(k,v)
+						{
+							var re = new RegExp(v, "i") ;
+							
+							if($.trim(v) != '' && re.test(bTitle))
+							{
+								FGS.dump('Filtering: '+bTitle);
+								ret = true;
+								return false;
+							}
+						});
+						if(ret) return;
+						//koniec filtry usera
+						
+						var link = el.find('.UIActionLinks_bottom > a:last').attr('href');
+						
+						if(link == undefined)
+						{
+							var link = el.find('.uiAttachmentTitle').find('a').attr('href');
+							if(link == undefined)
+								return;							
+						}						
+						
+						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
+						
+						params.items.push(bonus);
+						
+						if(params.items.length >= 2500)
+						{
+							finishCollecting = true;
+							return false;
+						}
+					});
+
+					if(finishCollecting)
+					{
+						if(params.first > 0)
+						{
+							FGS.options.games[appID].lastBonusTime = params.first;
+						}
+						
+						if(params.items.length > 0)
+						{
+							FGS.database.addBonus(params.items);
+						}
+						FGS.saveOptions();
+						
+						FGS.setTimeoutOnBonuses(appID);
+						
+						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
+					}
+					else
+					{
+						params.time = oldest;
+						params.scroll++;
+						
+						FGS.checkBonusesNew(appID, params);
+						
+						//setTimeout(function() {  }, 100);
+					}
 				}
 				catch(e)
 				{
-					FGS.setTimeoutOnBonuses(appID);
-					FGS.dump(e.message);
+					if(typeof(retry) == 'undefined')
+					{
+						if(e.message == 'empty')
+						{
+							params.time = oldest;
+							params.scroll++;
+						}
+						FGS.checkBonusesNew(appID, params, true);
+					}
+					else
+					{
+						if(params.first > 0)
+						{
+							FGS.options.games[appID].lastBonusTime = params.first;
+						}
+						
+						if(params.items.length > 0)
+						{
+							FGS.database.addBonus(params.items);
+						}
+						FGS.saveOptions();
+						
+						FGS.setTimeoutOnBonuses(appID);
+						
+						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
+					}
 				}
 			},
 			error: function(e)
 			{
-				FGS.setTimeoutOnBonuses(appID);
-				FGS.dump(FGS.getCurrentTime()+'[B] There was a connection error. Setting up new update in 10 seconds');
+				if(typeof(retry) == 'undefined')
+				{
+					FGS.checkBonusesNew(appID, params, true);
+				}
+				else
+				{
+					if(params.first > 0)
+					{
+						FGS.options.games[appID].lastBonusTime = params.first;
+					}
+					
+					if(params.items.length > 0)
+					{
+						FGS.database.addBonus(params.items);
+					}
+					FGS.saveOptions();
+					
+					FGS.setTimeoutOnBonuses(appID);
+					
+					FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
+				}
 			}
 		});
 	},

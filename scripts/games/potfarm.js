@@ -8,6 +8,8 @@ FGS.potfarm.Requests =
 		
 		
 		currentURL = currentURL.replace('http://www.thepotfarmgame.com/', 'http://apps.facebook.com/mypotfarm/');
+		currentURL = currentURL.replace('http://thepotfarmgame.com/potfarm/', 'http://apps.facebook.com/mypotfarm/');
+		currentURL = currentURL.replace('http://www.thepotfarmgame.com/potfarm/', 'http://apps.facebook.com/mypotfarm/');
 		
 		$.ajax({
 			type: "GET",
@@ -127,7 +129,7 @@ FGS.potfarm.Requests =
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -139,7 +141,7 @@ FGS.potfarm.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{

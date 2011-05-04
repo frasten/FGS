@@ -1,4 +1,4 @@
-FGS.animalparty.Requests = 
+FGS.zombielane.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -44,12 +44,12 @@ FGS.animalparty.Requests =
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_112775362105084', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_169557846404284', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.animalparty.Requests.Click2(currentType, id, url, params);
+					FGS.zombielane.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -96,54 +96,63 @@ FGS.animalparty.Requests =
 				try
 				{
 					var dataHTML = FGS.HTMLParser(dataStr);
-					
-					if(dataStr.indexOf('You have already claimed this reward') != -1)
+
+					if(dataStr.indexOf('Oops! Something went wrong...') != -1)
 					{
-						var error_text = 'You have already claimed this reward!';
+						var error_text = 'This has expired or have been already claimed!';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if(dataStr.indexOf('All rewards here have already been claimed') != -1)
-					{
-						var error_text = 'All rewards here have already been claimed.';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
-					}
+					var pos0 = dataStr.indexOf('var flashvars');
+					if(pos0 == -1) throw {message: 'no flashvars'}
 					
-					var dataHTML = FGS.HTMLParser('<html><body>'+dataStr+'</body></html>');
-					
-					if($('.accept_gift_mid', dataHTML).length > 0)
+					if(dataStr.indexOf('You Just Accepted a New Neighbor') != -1)
 					{
-						info.title = $.trim($('.gift_name', dataHTML).text());
 						
-						info.image = $('.gift_image', dataHTML).children('img:first').attr('src');
-						info.time  = Math.round(new Date().getTime() / 1000);
-						
-						if(dataStr.indexOf('has been sent to') != -1)
-							info.text  = 'sent to: ' + $.trim($('.person_name_container', dataHTML).text());
-						else
-							info.text  = $.trim($('.person_name_container', dataHTML).text());
+						var pos1 = dataStr.indexOf('Text_Description:', pos0);
+						if(pos1 == -1) throw {message: 'no flashvars'}
+						var pos1 = dataStr.indexOf('"', pos1);
+						var pos1b = dataStr.indexOf('"', pos1+1);
+						var title = dataStr.slice(pos1+1, pos1b);
 						
 						
-						FGS.endWithSuccess(currentType, id, info);
-					}
-					else if($('.accept_gift_mid', dataHTML).length == 0 && $('.person_image_bg', dataHTML).length > 0)
-					{
-						info.title = $.trim($('.person_name_container', dataHTML).text());
+						var from = 'New neighbor';
 						
-						info.image = $('.person_image_bg', dataHTML).children('img:first').attr('src');
-						info.time  = Math.round(new Date().getTime() / 1000);
-						
-						info.text  = 'New neighbor';
-						
-						
-						FGS.endWithSuccess(currentType, id, info);
+						var pos1 = dataStr.indexOf('Item_1:', pos0);
+						if(pos1 == -1) throw {message: 'no flashvars'}
+						var pos1 = dataStr.indexOf('"', pos1);
+						var pos1b = dataStr.indexOf('"', pos1+1);
+						var image = dataStr.slice(pos1+1, pos1b);
 					}
 					else
 					{
-						throw {message: dataStr}
+						var pos1 = dataStr.indexOf('Text_Description:', pos0);
+						if(pos1 == -1) throw {message: 'no flashvars'}
+						var pos1 = dataStr.indexOf('"', pos1);
+						var pos1b = dataStr.indexOf('"', pos1+1);
+						var title = dataStr.slice(pos1+1, pos1b);
+						
+						var pos1 = dataStr.indexOf('Text_Description_2:', pos0);
+						if(pos1 == -1) throw {message: 'no flashvars'}
+						var pos1 = dataStr.indexOf('"', pos1);
+						var pos1b = dataStr.indexOf('"', pos1+1);
+						var from = dataStr.slice(pos1+1, pos1b);
+						
+						var pos1 = dataStr.indexOf('Item_1:', pos0);
+						if(pos1 == -1) throw {message: 'no flashvars'}
+						var pos1 = dataStr.indexOf('"', pos1);
+						var pos1b = dataStr.indexOf('"', pos1+1);
+						var image = dataStr.slice(pos1+1, pos1b);
 					}
+					
+					info.title = title;						
+					info.image = image;
+					info.time  = Math.round(new Date().getTime() / 1000);
+					info.text  = from;
+						
+						
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{
@@ -174,7 +183,7 @@ FGS.animalparty.Requests =
 	}
 };
 
-FGS.animalparty.Bonuses = 
+FGS.zombielane.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -223,12 +232,12 @@ FGS.animalparty.Bonuses =
 					
 					if(!url)
 					{
-						var paramTmp = FGS.findIframeAfterId('#app_content_112775362105084', dataStr);
+						var paramTmp = FGS.findIframeAfterId('#app_content_169557846404284', dataStr);
 						if(paramTmp == '') throw {message: 'no iframe'}
 						var url = paramTmp;
 					}
 					
-					FGS.animalparty.Bonuses.Click2(currentType, id, url, params);
+					FGS.zombielane.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -273,48 +282,44 @@ FGS.animalparty.Bonuses =
 			{
 				try
 				{
-					if(dataStr.indexOf('You have already claimed this reward') != -1)
+					var dataHTML = FGS.HTMLParser(dataStr);
+					
+					if(dataStr.indexOf('Stream reward already collected') != -1)
 					{
-						var error_text = 'You have already claimed this reward!';
+						var error_text = 'Stream reward already collected!';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if(dataStr.indexOf('already help this person out today') != -1)
+					if(dataStr.indexOf('Oops! Something went wrong...') != -1)
 					{
-						var error_text = 'You have already help this person out today!';
+						var error_text = 'Stream post has been expired!';
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
 					
-					if(dataStr.indexOf('All rewards here have already been claimed') != -1)
-					{
-						var error_text = 'All rewards here have already been claimed.';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
-					}
+					var pos0 = dataStr.indexOf('var flashvars');
+					if(pos0 == -1) throw {message: 'no flashvars'}
 					
-					var dataHTML = FGS.HTMLParser('<html><body>'+dataStr+'</body></html>');
+					var pos1 = dataStr.indexOf('Text_Title:', pos0);
+					if(pos1 == -1) throw {message: 'no flashvars'}
+					var pos1 = dataStr.indexOf('"', pos1);
+					var pos1b = dataStr.indexOf('"', pos1+1);
+					var title = dataStr.slice(pos1+1, pos1b);
 					
-					if($('.gift_name', dataHTML).length > 0)
-					{
-						info.title = $.trim($('.gift_name', dataHTML).text());
+					var pos1 = dataStr.indexOf('Text_Description:', pos0);
+					if(pos1 == -1) throw {message: 'no flashvars'}
+					var pos1 = dataStr.indexOf('"', pos1);
+					var pos1b = dataStr.indexOf('"', pos1+1);
+					var text = dataStr.slice(pos1+1, pos1b);
+					
+					info.title = title;						
+					info.image = 'gfx/90px-check.png';
+					info.time  = Math.round(new Date().getTime() / 1000);
+					info.text  = text;
 						
-						info.image = $('.gift_image', dataHTML).children('img:first').attr('src');
-						info.time  = Math.round(new Date().getTime() / 1000);
 						
-						if(dataStr.indexOf('has been sent to') != -1)
-							info.text  = 'sent to: ' + $.trim($('.person_name_container', dataHTML).text());
-						else
-							info.text  = $.trim($('.person_name_container', dataHTML).text());
-						
-						
-						FGS.endWithSuccess(currentType, id, info);
-					}
-					else
-					{
-						throw {message: 'no form'}
-					}
+					FGS.endWithSuccess(currentType, id, info);
 				}
 				catch(err)
 				{

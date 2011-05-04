@@ -8,7 +8,7 @@ FGS.yoville.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/yoville/'+addAntiBot,
+			url: 'http://apps.facebook.com/yoville/gifts/free_gifts.php?gi=1&giftskip=1'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -154,7 +154,12 @@ FGS.yoville.Freegifts =
 				try
 				{
 					var tst = new RegExp(/FB[.]init\('(.*)'.*'(.*)'/g).exec(dataStr);
-					if(tst == null) throw {message: 'no fb.init'}
+					if(tst == null)
+					{
+						params.customUrl = 'http://apps.facebook.com/yoville/send_gift.php?view=yoville&fb_force_mode=fbml&id='+params.gift;
+						FGS.getFBML(params);
+						return;
+					}
 					
 					var app_key = tst[1];
 					var channel_url = tst[2];

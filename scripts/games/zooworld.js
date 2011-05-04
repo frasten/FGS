@@ -127,8 +127,7 @@ FGS.zooworld.Freegifts =
 				{
 					var app_key = params.gameID;
 					var channel_url = './channel.html';
-					
-					
+
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/mg).exec(dataStr);					
 					if(tst == null) throw {message:'no fbml tag'}
 					var fbml = tst[1];

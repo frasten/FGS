@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.21" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.21" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.22" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.22" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.21"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.22"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.21"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.21"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.21"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.22"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.22"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.22"></script>
 
 
 <script type="text/javascript">
@@ -266,7 +266,7 @@ function addDataToScreenLocked(callback, id, data)
 
 		var newUrl = v.url;
 		
-		return '<div id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span><span class="deleteIcon" title="Click to delete"></span></div>';
+		return '<div onmousedown="onMouseDownTest(event)" id="'+v.id+'" gameID="'+gameID+'" search-title= "'+title+'" title="'+v.text+'" time="'+v.time+'" url="'+newUrl+'" class="bonusItem showContext updateTimeAgo processBonusClick"><span class="timeAgo">'+format_time_ago(v.time)+'</span><span class="bonusError"></span><img NOsrc="'+v.image+'"><span class="title">'+v.title+'</span><span class="description hide">'+v.text+'</span><span class="deleteIcon" title="Click to delete"></span></div>';
 	}
 	
 	function getNewRequestRow(gameID, v)
@@ -348,7 +348,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(addNewBonus, '', data2);
+			addDataToScreenLocked('addNewBonus', '', data2);
 			return;
 		}
 		
@@ -359,8 +359,17 @@ function addDataToScreenLocked(callback, id, data)
 		var html = '';
 		var htmlManual = '';
 			
+		var ids = [];
+		
 		$(data2).each(function(ind,data)
 		{
+			var itID = data[0];
+			
+			if($.inArray(itID, ids) != -1 || $('#'+itID).length > 0)
+				return;
+			ids.push(itID);
+			
+			
 			var v = {	id: data[0],	title: data[2],	text: data[3],	image: data[4],	url: data[5],	time: data[6]	}
 			
 					
@@ -523,7 +532,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(bonusErrorFinish, id, data);
+			addDataToScreenLocked('bonusErrorFinish', id, data);
 		}
 		else
 		{
@@ -579,7 +588,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(bonusSuccessFinish, id, data);
+			addDataToScreenLocked('bonusSuccessFinish', id, data);
 		}
 		else
 		{
@@ -670,13 +679,13 @@ function addDataToScreenLocked(callback, id, data)
 			}
 			else
 			{
-				var img3 = 'gfx/sendback-off.png';
+				var img3 = 'gfx/23check.png';
 				var enabled = 'false';
 				var cursor = '';
 				var className = '';
-				var desc = 'You already sent gift back';
+				var desc = 'Thank you gift was sent successfully';
 			}
-			sendBackHtml = '<img src="'+img3+'" class="'+className+'" isEnabled="'+enabled+'" title="" style="'+cursor+'"><span style="display: none">'+sendBack+'</span>';
+			sendBackHtml = '<img src="'+img3+'" class="'+className+'" isEnabled="'+enabled+'" title="'+desc+'" style="'+cursor+'"><span style="display: none">'+sendBack+'</span>';
 		}
 		
 		if(typeof(isRequest) != 'undefined')
@@ -729,7 +738,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(requestErrorFinish, id, data);
+			addDataToScreenLocked('requestErrorFinish', id, data);
 		}
 		else
 		{
@@ -781,7 +790,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(requestSuccessFinish, id, data);
+			addDataToScreenLocked('requestSuccessFinish', id, data);
 		}
 		else
 		{
@@ -1266,12 +1275,21 @@ function addDataToScreenLocked(callback, id, data)
 		
 		if(isScreenLocked)
 		{
-			addDataToScreenLocked(addNewRequest, '', data2);
+			addDataToScreenLocked('addNewRequest', '', data2);
 			return;
 		}
 		
+		var ids = [];
+		
 		$(data2).each(function(ind,data)
 		{
+			var itID = data[0];
+			
+			if($.inArray(itID, ids) != -1 || $('#'+itID).length > 0)
+				return;
+			
+			ids.push(itID);
+			
 			var v = {	id: data[0],	title: data[2],	text: data[3],	image: data[4], post: data[5],	time: data[6]	}
 			
 			var gameID = data[1];
@@ -1643,7 +1661,7 @@ function addIconToOptionsMenu(gameID)
 	var d =  bkP.gamesData[gameID];
 	var e =  bkP.options.games[gameID];
 	
-	var addSpecOpt = '<br style="line-height: 22px;" />';
+	var addSpecOpt = '<br style="line-height: 19px;" />';
 	
 	if(gameID == '102452128776')
 	{
@@ -2097,7 +2115,7 @@ function processSwitchItemsDisplay()
 
 	var showDesc = $('input.ShowDescriptions', elSub).button().is(':checked');
 	var textFilter = $('input.filterBonusText', elSub).val();
-	var filterType = $('select.searchWhat option:selected', elSub).val();
+	var filterType = parseInt($('select.searchWhat option:selected', elSub).val());
 	el.children('div').addClass('hide');
 	
 	
@@ -2108,29 +2126,41 @@ function processSwitchItemsDisplay()
 	else
 	{
 		var found = 0;
+		
 		var matchingItems = el.children('div').filter(function()
 		{
-			var tstTitle = $('.title:Contains("'+textFilter+'")', this).length > 0;
-			var tstDesc  = $('.description:Contains("'+textFilter+'")', this).length > 0;
+			var tstTitle = $('.title:Contains("'+textFilter+'")', this).length > 0 ? true : false;
+			var tstDesc  = $('.description:Contains("'+textFilter+'")', this).length > 0 ? true : false;
 			
-			if(filterType == 0)
-				if(tstTitle || tstDesc)
-				{
-					found++;
-					return true;
-				}
-			else if(filterType == 1)
-				if(tstTitle)
-				{
-					found++;
-					return true;
-				}
-			else
-				if(tstDesc)
-				{
-					found++;
-					return true;
-				}
+			switch(filterType)
+			{
+				case 0:
+					if(tstTitle || tstDesc)
+					{
+						found++;
+						return true;
+					}
+					return false;
+				break;
+				
+				case 1:
+					if(tstTitle)
+					{
+						found++;
+						return true;
+					}
+					return false;
+				break;
+				
+				case 2:
+					if(tstDesc)
+					{
+						found++;
+						return true;
+					}
+					return false;
+				break;
+			}
 			return false;
 		});
 	}
@@ -2279,6 +2309,30 @@ function updateTimeAgo(target)
 	});
 }
 
+function onMouseDownTest(e)
+{
+	var el = $(e.srcElement || e.target);
+
+	if(e.which == 2)
+	{
+		if(el.closest('div').hasClass('processBonusClick') && el.closest('div').hasClass('hasContextMenu')  && !el.closest('div').hasClass('inProgress'))
+		{
+			bkP.openURI(el.closest('div').attr('url'), true);
+			processSingleBonusRemove(el.closest('div'));
+			
+		}
+		e = e ? e : window.event;
+		if(e.stopPropagation)
+			e.stopPropagation();
+		if(e.preventDefault)
+			e.preventDefault();
+		e.cancelBubble = true;
+		e.cancel = true;
+		e.returnValue = false;
+		return false;
+	}
+}
+
 	$(function()
 	{
 		startup();
@@ -2401,6 +2455,47 @@ function updateTimeAgo(target)
 			bkP.options.checkChatTimeout = $('option:selected', this).val();
 			bkP.saveOptions();
 		});
+		
+		
+		$('#breakStartupLoadingOption > option[value="'+bkP.options.breakStartupLoadingOption+'"]').attr('selected', 'selected');
+		$('#breakStartupLoadingCount > option[value="'+bkP.options.breakStartupLoadingCount+'"]').attr('selected', 'selected');
+		$('#breakStartupLoadingTime > option[value="'+bkP.options.breakStartupLoadingTime+'"]').attr('selected', 'selected');
+		
+		if(bkP.options.breakStartupLoadingOption == 0)
+			$('#breakStartupLoadingCount').css('display', 'block');
+		else
+			$('#breakStartupLoadingTime').css('display', 'block');
+
+		$('#breakStartupLoadingCount').change(function()
+		{
+			bkP.options.breakStartupLoadingCount = $('option:selected', this).val();
+			bkP.saveOptions();
+		});
+		
+		$('#breakStartupLoadingTime').change(function()
+		{
+			bkP.options.breakStartupLoadingTime = $('option:selected', this).val();
+			bkP.saveOptions();
+		});
+		
+		$('#breakStartupLoadingOption').change(function()
+		{
+			bkP.options.breakStartupLoadingOption = $('option:selected', this).val();
+			
+			if($('option:selected', this).val() == 0)
+			{
+				$('#breakStartupLoadingTime').css('display', 'none');
+				$('#breakStartupLoadingCount').css('display', 'block');
+			}
+			else
+			{
+				$('#breakStartupLoadingCount').css('display', 'none');
+				$('#breakStartupLoadingTime').css('display', 'block');
+			}
+			bkP.saveOptions();
+		});
+		
+		
 		
 		$('#deleteOlderThan > option[value="'+bkP.options.deleteOlderThan+'"]').attr('selected', 'selected');
 		$('#deleteOlderThan').change(function()
@@ -2739,9 +2834,9 @@ function updateTimeAgo(target)
 				$(procArr).each(function(k,v)
 				{
 					if(v.id == '')
-						v.callback(v.data);
+						window[v.callback](v.data);
 					else
-						v.callback(v.id, v.data);					
+						window[v.callback](v.id, v.data);					
 				});
 			}
 		});
@@ -2980,15 +3075,19 @@ function updateTimeAgo(target)
 		}
 	}
 	
-	function updateSendback(bonusID, success)
+	function updateSendback(bonusID, success, isDailyLimit)
 	{
 		if(success)
 		{
-			$('img.sendBack', '#'+bonusID).addClass('disabledSendback').removeClass('sendBack').attr('src', 'gfx/sendback-off.png').css('cursor', 'default').attr('title', 'You already sent gift back');
+			$('img.sendBack', '#'+bonusID).addClass('disabledSendback').removeClass('sendBack').attr('src', 'gfx/23check.png').css('cursor', 'default').attr('title', 'Thank you gift was sent successfully');
+		}
+		else if(isDailyLimit)
+		{
+			$('img.sendBack', '#'+bonusID).addClass('disabledSendback').removeClass('sendBack').attr('src', 'gfx/23error.png').css('cursor', 'default').attr('title', 'You have already sent thank you gift today to this person!');
 		}
 		else
 		{
-			$('img.sendBack', '#'+bonusID).removeClass('disabledSendback').attr('src', 'gfx/sendback.png');
+			$('img.sendBack', '#'+bonusID).removeClass('disabledSendback').attr('src', 'gfx/23error.png').attr('title', 'There was an error sending thank you gift')
 		}
 	}
 	
@@ -3163,95 +3262,145 @@ function compareTime(itemTime, olderThan)
 			</div>
 			<div id="optionTab-2">
 				<p>
-					<h4>How many bonuses to COLLECT at the same time (don't set it high unless you know what you're doing, change it only if you have very fast connection)</h4>
-						<select id="collectXbonusesAtTheSameTime">
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							<option value="10">10</option>
-							<option value="15">15</option>
-							<option value="25">25</option>
-							<option value="30">30</option>
-						</select>
 					
-					<h4>Show descriptions on FGS startup</h4>
-						<select id="showDescriptionsOnStartup">
-							<option value="0">No</option>
-							<option value="1">Yes</option>
-						</select>
+					<div style="float: left;width: 45%;">
+						<h1>Main work settings</h1>					
+						
+						<h4>Delete bonuses older than</h4>
+							<select id="deleteOlderThan">
+								<option value="0">Don't</option>
+								<option value="1800">30 minutes</option>
+								<option value="3600">1 hour</option>
+								<option value="7200">2 hours</option>
+								<option value="10800">3 hours</option>
+								<option value="21600">6 hours</option>
+								<option value="43200">12 hours</option>
+								<option value="86400">1 day</option>
+								<option value="172800">2 days</option>
+								<option value="259200">3 days</option>
+								<option value="604800">7 days</option>
+								<option value="1209600">14 days</option>
+								<option value="2592000">30 days</option>
+							</select>
+						
+						<h4>Delete history older than</h4>
+							<select id="deleteHistoryOlderThan">
+								<option value="0">Don't</option>
+								<option value="1800">30 minutes</option>
+								<option value="3600">1 hour</option>
+								<option value="7200">2 hours</option>
+								<option value="10800">3 hours</option>
+								<option value="21600">6 hours</option>
+								<option value="43200">12 hours</option>
+								<option value="86400">1 day</option>
+								<option value="172800">2 days</option>
+								<option value="259200">3 days</option>		
+								<option value="604800">7 days</option>
+								<option value="1209600">14 days</option>
+								<option value="2592000">30 days</option>
+							</select>
 					
 
-					<h4>Bonuses check timeout</h4>
-						<select id="checkBonusesTimeout">
-							<option value="15">15 seconds</option>
-							<option value="30">30 seconds</option>
-							<option value="60">1 minute</option>
-							<option value="120">2 minutes</option>
-							<option value="180">3 minutes</option>
-							<option value="300">5 minutes</option>
-							<option value="600">10 minutes</option>
-							<option value="900">15 minutes</option>
-							<option value="1800">30 minutes</option>
-							<option value="3600">60 minutes</option>
-							<option value="10800">180 minutes</option>
-						</select>
-					<!---
-					<h4>Gifts check timeout</h4>
-						<select id="checkRequestsTimeout">
-							<option value="15">15 seconds</option>
-							<option value="30">30 seconds</option>
-							<option value="60">1 minute</option>
-							<option value="120">2 minutes</option>
-							<option value="300">5 minutes</option>
-							<option value="600">10 minutes</option>
-						</select>
-					-->
-					<h4>Chat check timeout</h4>
-						<select id="checkChatTimeout">
-							<option value="15">15 seconds</option>
-							<option value="30">30 seconds</option>
-							<option value="60">1 minute</option>
-							<option value="120">2 minutes</option>
-						</select>
-					<h4>Delete bonuses older than</h4>
-						<select id="deleteOlderThan">
-							<option value="0">Don't</option>
-							<option value="1800">30 minutes</option>
-							<option value="3600">1 hour</option>
-							<option value="7200">2 hours</option>
-							<option value="10800">3 hours</option>
-							<option value="21600">6 hours</option>
-							<option value="43200">12 hours</option>
-							<option value="86400">1 day</option>
-							<option value="172800">2 days</option>
-							<option value="259200">3 days</option>
-							<option value="604800">7 days</option>
-							<option value="1209600">14 days</option>
-							<option value="2592000">30 days</option>
-						</select>
-					<h4>Delete history older than</h4>
-						<select id="deleteHistoryOlderThan">
-							<option value="0">Don't</option>
-							<option value="1800">30 minutes</option>
-							<option value="3600">1 hour</option>
-							<option value="7200">2 hours</option>
-							<option value="10800">3 hours</option>
-							<option value="21600">6 hours</option>
-							<option value="43200">12 hours</option>
-							<option value="86400">1 day</option>
-							<option value="172800">2 days</option>
-							<option value="259200">3 days</option>		
-							<option value="604800">7 days</option>
-							<option value="1209600">14 days</option>
-							<option value="2592000">30 days</option>
-						</select>
 					
-					<br /><br /><br /><br />
-					<h4>Default Comments Messages</h4>
-					<div id="defaultCommentsMessages"></div>					
-				
+						
+						<h4>How many bonuses to COLLECT at the same time (don't set it high unless you know what you're doing, change it only if you have very fast connection)</h4>
+							<select id="collectXbonusesAtTheSameTime">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="10">10</option>
+								<option value="15">15</option>
+								<option value="25">25</option>
+								<option value="30">30</option>
+							</select>
+						
+						<h4>Show descriptions on FGS startup</h4>
+							<select id="showDescriptionsOnStartup">
+								<option value="0">No</option>
+								<option value="1">Yes</option>
+							</select>
+						
+
+						<h4>Bonuses check timeout</h4>
+							<select id="checkBonusesTimeout">
+								<option value="15">15 seconds</option>
+								<option value="30">30 seconds</option>
+								<option value="60">1 minute</option>
+								<option value="120">2 minutes</option>
+								<option value="180">3 minutes</option>
+								<option value="300">5 minutes</option>
+								<option value="600">10 minutes</option>
+								<option value="900">15 minutes</option>
+								<option value="1800">30 minutes</option>
+								<option value="3600">60 minutes</option>
+								<option value="10800">180 minutes</option>
+							</select>
+						
+						<!---
+						<h4>Gifts check timeout</h4>
+							<select id="checkRequestsTimeout">
+								<option value="30">30 seconds</option>
+								<option value="60">1 minute</option>
+								<option value="120">2 minutes</option>
+								<option value="300">5 minutes</option>
+								<option value="600">10 minutes</option>
+							</select>
+						-->
+						
+						<h4>Chat check timeout</h4>
+							<select id="checkChatTimeout">
+								<option value="15">15 seconds</option>
+								<option value="30">30 seconds</option>
+								<option value="60">1 minute</option>
+								<option value="120">2 minutes</option>
+							</select>
+						
+						<br /><br /><br /><br />
+						<h4>Default Comments Messages</h4>
+						<div id="defaultCommentsMessages"></div>
+					</div>
+					
+					<div style="float: right;width: 45%;">
+						<h1>Startup collecting settings (advanced)</h1>
+						
+						<h2 style="color: red">Read this before changing anything in this section:</h2>
+						
+						Changing this settings RECKLESSLY might cause your FGS to stop working (or increase startup loading process up to 30-60 minutes). This settings are only meant for advanced users (and with high speed connections). Keep in mind that FGS won't allow you to get at once more than 2500 bonuses (it's coded maximum and switching settings won't increae it).<br /><br />
+						What I mean is: even if you set it to collect bonuses up to 1 day old, FGS will stop after 2500th bonus was found.<br /><br />
+						FGS will also stop, if it finds bonus that is/was already on your list.<br /><br />
+						
+						<h3>When should FGS stop processing feeds:</h3>
+						
+							<select id="breakStartupLoadingOption">
+								<option value="0">after certain amount of bonuses was found</option>
+								<option value="1">after bonuses are older then specific time</option>
+							</select>
+						
+							<select id="breakStartupLoadingCount" style="display: none">
+								<option value="100">100 items</option>
+								<option value="200">200 items</option>
+								<option value="300">300 items</option>
+								<option value="500">500 items</option>
+								<option value="1000">1000 items</option>
+								<option value="1500">1500 items</option>
+								<option value="2500">2500 items</option>
+							</select>
+							
+							<select id="breakStartupLoadingTime" style="display: none">
+								<option value="1800">older than 30 minutes</option>
+								<option value="3600">older than 1 hour</option>
+								<option value="7200">older than 2 hours</option>
+								<option value="10800">older than 3 hours</option>
+								<option value="21600">older than 6 hours</option>
+								<option value="43200">older than 12 hours</option>
+								<option value="86400">older than 1 day</option>
+							</select>
+					
+					</div>
+
+					<br style="clear: both" />
 				</p>
 			</div>
 			<div id="optionTab-3">

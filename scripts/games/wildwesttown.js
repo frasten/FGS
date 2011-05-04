@@ -510,6 +510,23 @@ FGS.wildwesttown.Bonuses =
 				{
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
+					
+					if(dataStr.indexOf('Cannot accept a position with this person') != -1)
+					{
+						var error_text = 'Cannot accept a position with this person, you already have a job with them.';
+						FGS.endWithError('limit', currentType, id, error_text);					
+						return;
+					}
+					
+					
+					if(dataStr.indexOf('Position not accepted, this building is already fully staffed') != -1)
+					{
+						var error_text = 'Position not accepted, this building is already fully staffed';
+						FGS.endWithError('limit', currentType, id, error_text);					
+						return;
+					}
+					
+					
 					if(dataStr.indexOf('You have already clicked on this link') != -1)
 					{
 						var error_text = 'You have already clicked on this link, or sent them this item in the last 24 hours';
@@ -534,6 +551,16 @@ FGS.wildwesttown.Bonuses =
 							info.title = found.attr('title');
 							info.image = found.attr('src');
 							info.text = $("td:contains('You also received'):last", dataHTML).text();
+							info.time = Math.round(new Date().getTime() / 1000);
+
+							FGS.endWithSuccess(currentType, id, info);
+						}
+						else if(dataStr.indexOf('You have accepted a position in ') != -1)
+						{
+							info.title = $.trim($("div:contains('You have accepted a position in'):last", dataHTML).text());
+							info.text = $.trim($("td:contains('You received a'):last", dataHTML).text());
+							info.image = 'gfx/90px-check.png';
+							
 							info.time = Math.round(new Date().getTime() / 1000);
 
 							FGS.endWithSuccess(currentType, id, info);

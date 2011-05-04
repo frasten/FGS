@@ -283,8 +283,8 @@ FGS.treasure.Requests =
 						else
 						{
 							info.image = '';
-							info.title = '';
-							info.text  = 'New neighbour';
+							info.title = 'New neighbour';
+							info.text  = '';
 							info.time = Math.round(new Date().getTime() / 1000);
 						}
 						

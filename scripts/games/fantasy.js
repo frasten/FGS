@@ -8,7 +8,7 @@ FGS.fantasy.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/fantasykingdoms/FreeGifts'+addAntiBot,
+			url: 'http://apps.facebook.com/fantasykingdoms/FreeGiftsFacebook'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -102,8 +102,8 @@ FGS.fantasy.Freegifts =
 					{
 						giftName = FGS.giftsArray['213518941553'][params.gift].name;
 					}
-					
-					params.step3url = 'http://fantasykingdoms.cloudapp.net/Facebook/SendGifts?v=1.0&storeItemId='+params.gift+'&userId='+$('#UserId', dataHTML).val()+'&giftName='+giftName;
+					params.giftName2 = giftName;
+					params.step3url = 'http://fantasykingdoms.cloudapp.net/FK/Kingdoms/GetGiftString?storeItemId='+params.gift+'&userId='+$('#UserId', dataHTML).val();
 					
 					FGS.fantasy.Freegifts.Click3(params);
 				}
@@ -156,35 +156,24 @@ FGS.fantasy.Freegifts =
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 
 		$.ajax({
-			type: "POST",
+			type: "GET",
 			url: params.step3url,
-			data: params.step1params,
+			//data: params.step1params,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
-					var dataHTML = FGS.HTMLParser(dataStr);
+					var giftStr = $.trim(dataStr);
 					
+					var reqData = {};
 					
-					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
-					if(tst == null) throw {message: 'no fb.init'}
+					reqData.data = giftStr
+					reqData.message = 'Here is '+params.giftName2+' for your Kingdom in Fantasy Kingdoms. Could you help me by sending a gift back?';
 					
-					var app_key = tst[1];
-					var channel_url = tst[2];
+					params.reqData = reqData;
 					
-					var pos0 = dataStr.indexOf('id="kingdomsFriends"');
-					var testStr = dataStr.slice(pos0);
-					
-					var tst = new RegExp(/<fb:serverfbml[^>]*?>[\s\S]*?<script[^>]*?>([\s\S]*?)<\/script>[\s\S]*?<\/fb:serverfbml>/mg).exec(testStr);					
-					if(tst == null) throw {message:'no fbml tag'}
-					var fbml = tst[1];
-					
-					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
-					
-					params.nextParams = paramsStr;
-					
-					FGS.getFBML(params);
+					FGS.fantasy.Freegifts.ClickRequest(params);
 				}
 				catch(err)
 				{
@@ -226,7 +215,20 @@ FGS.fantasy.Freegifts =
 				}
 			}
 		});
-	}
+	},
+	
+	ClickRequest: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		var channel = 'http://fantasykingdoms.cloudapp.net/FK/Kingdoms/channel.html';
+		
+		params.getToken = 'api_key=213518941553&app_id=213518941553&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
+		
+		FGS.getAppAccessTokenForSending(params, function(){});
+	},
 };
 
 
@@ -237,6 +239,14 @@ FGS.fantasy.Requests =
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var info = {}
+		
+		if(currentURL.indexOf('request_ids=') != -1)
+		{
+			var pos0 = currentURL.lastIndexOf('/');
+			var rid = FGS.Gup('request_ids', currentURL);
+			
+			var currentURL = currentURL.slice(0, pos0+1)+'AcceptGift?request_ids='+rid+'&v=1.0';
+		}
 		
 		$.ajax({
 			type: "GET",
@@ -356,6 +366,9 @@ FGS.fantasy.Requests =
 						
 						for(var gift in FGS.giftsArray['213518941553'])
 						{
+							if(tst == null)
+								break;
+							
 							if(FGS.giftsArray['213518941553'][gift].name == info.title)
 							{
 								var tmpStr = tst[1];

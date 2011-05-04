@@ -333,7 +333,7 @@ FGS.sendView = function (msg, data, data2, data3)
 			{
 				if(data2 != '')
 				{
-					view.updateSendback(data2, false);
+					view.updateSendback(data2, false, (typeof(data3) == 'undefined' ? false : true));
 				}
 				else
 				{

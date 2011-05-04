@@ -318,69 +318,69 @@ FGS.ravenwood.Requests =
 					}
 					
 					
+					if(dataStr.indexOf('You just accepted a neighbor request') != -1)
+					{
+						info.image = '';
+						info.title = 'New neighbour';
+						info.text  = '';
+						info.time = Math.round(new Date().getTime() / 1000);
+						FGS.endWithSuccess(currentType, id, info);
+						return;
+					}
+					
 					var el = $('#app_content_120563477996213 > div > div > div > div > div', dataHTML);
 					if($(el).length > 0)
 					{
-						if($(el).text().indexOf('You just accepted a neighbor request') != -1)
+						var sendInfo = '';
+						
+						var tmpStr = unescape(currentURL);
+						
+						var pos1 = tmpStr.indexOf('?item_id=');
+						if(pos1 == -1)
 						{
-							info.image = '';
-							info.title = 'New neighbour';
-							info.text  = $(el).text();
-							info.time = Math.round(new Date().getTime() / 1000);
+							pos1 = tmpStr.indexOf('&item_id=');
+						}
+						if(pos1 != -1)
+						{
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftName = tmpStr.slice(pos1+9,pos2);
+							
+							var pos1 = tmpStr.indexOf('&sender_id=');
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+							
+							var giftRecipient = tmpStr.slice(pos1+11,pos2);			
+								
+							sendInfo = {
+								gift: giftName,
+								destInt: giftRecipient,
+								destName: "Can't say"
+								}
+						}
+						
+						info.thanks = sendInfo;
+						
+						
+						
+						var oldEl = el;
+						
+						var el = $('div:contains("You just accepted this"):last', dataHTML);							
+						
+						if(el.length > 0)
+						{
+							var pos2 = el.text().indexOf(' from ');
+							info.title = el.text().slice(22, pos2);
+							info.image = el.find('img').attr("src");
 						}
 						else
 						{
-							var sendInfo = '';
-							
-							var tmpStr = unescape(currentURL);
-							
-							var pos1 = tmpStr.indexOf('?item_id=');
-							if(pos1 == -1)
-							{
-								pos1 = tmpStr.indexOf('&item_id=');
-							}
-							if(pos1 != -1)
-							{
-								var pos2 = tmpStr.indexOf('&', pos1+1);
-								
-								var giftName = tmpStr.slice(pos1+9,pos2);
-								
-								var pos1 = tmpStr.indexOf('&sender_id=');
-								var pos2 = tmpStr.indexOf('&', pos1+1);
-								
-								var giftRecipient = tmpStr.slice(pos1+11,pos2);			
-									
-								sendInfo = {
-									gift: giftName,
-									destInt: giftRecipient,
-									destName: "Can't say"
-									}
-							}
-							
-							info.thanks = sendInfo;
-							
-							
-							
-							var oldEl = el;
-							
-							var el = $('div:contains("You just accepted this"):last', dataHTML);							
-							
-							if(el.length > 0)
-							{
-								var pos2 = el.text().indexOf(' from ');
-								info.title = el.text().slice(22, pos2);
-								info.image = el.find('img').attr("src");
-							}
-							else
-							{
-								info.title = oldEL.text();	
-								info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
-							}
-							
-							
-							info.text  = $(el).text();
-							info.time = Math.round(new Date().getTime() / 1000);
+							info.title = oldEL.text();	
+							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
 						}
+						
+						
+						info.text  = $(el).text();
+						info.time = Math.round(new Date().getTime() / 1000);
 						
 						FGS.endWithSuccess(currentType, id, info);
 					}
