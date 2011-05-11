@@ -28,16 +28,11 @@ FGS.puzzledhearts.Bonuses =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try 
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
@@ -259,7 +254,7 @@ FGS.puzzledhearts.Bonuses =
 		}
 		catch(e)
 		{
-			console.log(e);
+			//console.log(e);
 		}
 	},
 };
@@ -278,7 +273,6 @@ FGS.puzzledhearts.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -294,16 +288,11 @@ FGS.puzzledhearts.Requests =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try 
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);		
-					}
-
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					

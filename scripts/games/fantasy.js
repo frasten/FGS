@@ -12,16 +12,11 @@ FGS.fantasy.Freegifts =
 			dataType: 'text',
 			success: function(dataStr)
 			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					}
-					var dataHTML = FGS.HTMLParser(dataStr);		
-					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params2 = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
@@ -168,7 +163,7 @@ FGS.fantasy.Freegifts =
 					
 					var reqData = {};
 					
-					reqData.data = giftStr
+					reqData.data = giftStr;
 					reqData.message = 'Here is '+params.giftName2+' for your Kingdom in Fantasy Kingdoms. Could you help me by sending a gift back?';
 					
 					params.reqData = reqData;
@@ -254,7 +249,6 @@ FGS.fantasy.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -274,16 +268,11 @@ FGS.fantasy.Requests =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);		
-					}
-					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
@@ -352,43 +341,44 @@ FGS.fantasy.Requests =
 					var tst = new RegExp(/<fb:serverfbml[^>]*?>[\s\S]*?<script[^>]*?>([\s\S]*?)<\/script>[\s\S]*?<\/fb:serverfbml>/m).exec(dataStr);
 					if(tst != null)
 					{
-						var dataHTML = FGS.HTMLParser(tst[1]);	
+						var dataStr = tst[1];
+						var dataHTML = FGS.HTMLParser(dataStr);	
 					}
 					
 					var el = $('#giftbox', dataHTML);
 					
 					if(el.length > 0)
 					{
-						info.image = $(el).find('img:first').attr('src');
-						info.title = $(el).find('.giftname:first').text();
-						info.text  = $(el).find('.textbold:last').text();
+						info.image = el.find('img:first').attr('src');
+						info.title = el.find('.giftname:first').text();
+						info.text  = el.find('.textbold:last').text();
 						info.time = Math.round(new Date().getTime() / 1000);
 						
-						for(var gift in FGS.giftsArray['213518941553'])
+						var pos0 = dataStr.indexOf("var toUserId = '");
+						if(pos0 != -1)
 						{
-							if(tst == null)
-								break;
 							
-							if(FGS.giftsArray['213518941553'][gift].name == info.title)
+							for(var gift in FGS.giftsArray['213518941553'])
 							{
-								var tmpStr = tst[1];
-								
-								var pos1 = tmpStr.indexOf('uid="');
-								var pos2 = tmpStr.indexOf('"', pos1+5);
-								var giftRecipient = tmpStr.slice(pos1+5,pos2);
-
-								var destName = $('#giftbox', dataHTML).children('div:last').children().children('div:last').text();
-								
-								info.thanks = 
+								if(FGS.giftsArray['213518941553'][gift].name == info.title)
 								{
-									gift: gift,
-									destInt: giftRecipient,
-									destName: destName,
+									pos0 += 16;
+									pos0a = dataStr.indexOf("'", pos0);
+									
+									var giftRecipient = dataStr.slice(pos0, pos0a);									
+									var destName = $('#giftbox', dataHTML).children('div:last').children().children('div:last').text();
+									
+									info.thanks = 
+									{
+										gift: gift,
+										destInt: giftRecipient,
+										destName: destName,
+									}
+									break;
 								}
-								break;
 							}
 						}
-					
+						
 						FGS.endWithSuccess(currentType, id, info);
 					}
 					else
@@ -439,7 +429,6 @@ FGS.fantasy.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -459,16 +448,11 @@ FGS.fantasy.Bonuses =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					

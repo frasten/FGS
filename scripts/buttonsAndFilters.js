@@ -25,6 +25,30 @@ FGS.gamesData =
 							'GameOptionsTab'
 						]
 					},
+	176611639027113: 	{ 	
+						name: 'RewardVille',	systemName: 'rewardville', link: 'http://apps.facebook.com/zyngarv/',
+						filter:		
+						{	
+							bonuses: [],		
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: [],
+						},
+						buttons:
+						[
+						//	'BonusesPending',
+							'RequestsPending',
+						//	'ManualBonuses',
+						//	'BonusesHistory',
+							'RequestsHistory',
+						//	'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						]
+					},
 	102452128776: 	{ 	
 						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/', 
 						hasDailyLimits: true,

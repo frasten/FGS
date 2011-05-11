@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.22" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.22" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.23" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.23" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.22"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.23"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.22"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.22"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.22"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.23"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.23"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.23"></script>
 
 
 <script type="text/javascript">
@@ -852,62 +852,83 @@ function addDataToScreenLocked(callback, id, data)
 		}, 1000);
 	}
 	
-	function ClearManualBonuses(gameID)
+	function ClearManualBonuses(gameID, onlyVisible)
 	{
 		var game = bkP.gamesData[gameID].systemName;
 		
+		if(onlyVisible != undefined)
+			var addParam = ':visible';
+		else
+			var addParam = '';
 		
-		var delReqArr = delBonArr = [];
+		$('#dialog-confirm').dialog({
+			buttons:
+			{
+				"Delete all items": function()
+				{
+					var delReqArr = delBonArr = [];
 
-		$('#'+game+'ManualBonusesList').children('div').each(function()
-		{
-			var elID = $(this).attr('id');
-			if($(this).hasClass('manualRequest'))
-			{
-				var postData = $(this).attr('postData');
-				var pos1 = postData.indexOf('&actions%5B');
-				
-				var postData = postData.slice(0,pos1);
-				postData += '&actions[reject]=Ignore';
-				bkP.emptyUnwantedGifts(postData);
-				
-				delReqArr.push(elID);
-			}
-			else
-			{
-				delBonArr.push(elID);
-			}
-			
-			$(this).remove();
-		});
-		
-		processSwitchItemsDisplay();
-		updateCount(gameID);
-		
-		while(delReqArr.length > 0)
-		{
-			var tmpArr = delReqArr.slice(0,500);
-			
-			var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
-			bkP.database.deleteItemArray('requests', gameID, str, 0);
-			
-			delReqArr = delReqArr.slice(500);						
-		}
-		
-		while(delBonArr.length > 0)
-		{
-			var tmpArr = delBonArr.slice(0,500);
-			
-			var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
-			bkP.database.deleteItemArray('bonuses', gameID, str, 0);
-			
-			delBonArr = delBonArr.slice(500);						
-		}
+					$('#'+game+'ManualBonusesList').children('div'+addParam).each(function()
+					{
+						var elID = $(this).attr('id');
+						if($(this).hasClass('manualRequest'))
+						{
+							var postData = $(this).attr('postData');
+							var pos1 = postData.indexOf('&actions%5B');
+							
+							var postData = postData.slice(0,pos1);
+							postData += '&actions[reject]=Ignore';
+							bkP.emptyUnwantedGifts(postData);
+							
+							delReqArr.push(elID);
+						}
+						else
+						{
+							delBonArr.push(elID);
+						}
+						
+						$(this).remove();
+					});
+					
+					processSwitchItemsDisplay();
+					updateCount(gameID);
+					
+					while(delReqArr.length > 0)
+					{
+						var tmpArr = delReqArr.slice(0,500);
+						
+						var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
+						bkP.database.deleteItemArray('requests', gameID, str, 0);
+						
+						delReqArr = delReqArr.slice(500);						
+					}
+					
+					while(delBonArr.length > 0)
+					{
+						var tmpArr = delBonArr.slice(0,500);
+						
+						var str = ' where id = "'+tmpArr.join('" or id = "')+'" ';
+						bkP.database.deleteItemArray('bonuses', gameID, str, 0);
+						
+						delBonArr = delBonArr.slice(500);						
+					}					
+					
+					$( this ).dialog( "close" );
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+		}});
 	}
 	
 	function ClearVisibleBonuses(gameID)
 	{
 		ClearPendingBonuses(gameID, true);
+	}
+	
+	function ClearVisibleManualBonuses(gameID)
+	{
+		ClearManualBonuses(gameID, true);
 	}
 	
 	function ClearPendingBonuses(gameID, onlyVisible)
@@ -2131,6 +2152,7 @@ function processSwitchItemsDisplay()
 		{
 			var tstTitle = $('.title:Contains("'+textFilter+'")', this).length > 0 ? true : false;
 			var tstDesc  = $('.description:Contains("'+textFilter+'")', this).length > 0 ? true : false;
+			
 			
 			switch(filterType)
 			{

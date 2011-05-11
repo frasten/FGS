@@ -21,6 +21,15 @@ FGS.HTMLParser = function (aHTMLString)
 	return html;
 };
 
+FGS.GetCookieToken = function(params, callback)
+{
+	chrome.cookies.get(params.cookieToGet, function(c)
+	{
+		params.cookieValue = c.value;
+		callback(params);
+	});
+};
+
 FGS.copyLink = function(msg)
 {
 	FGS.jQuery('body').append('<textarea id="ta"></textarea>');

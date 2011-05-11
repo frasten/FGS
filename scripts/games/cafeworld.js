@@ -12,17 +12,11 @@ FGS.cafeworld.Freegifts =
 			dataType: 'text',
 			success: function(dataStr)
 			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					}
-					var dataHTML = FGS.HTMLParser(dataStr);
-					
-					
 					var nextUrl = $('#app101539264719_frmGifts', dataHTML).attr('action');
 					var formParam = $('#app101539264719_frmGifts', dataHTML).serialize();
 					var tempUrl = nextUrl+'?'+formParam;
@@ -101,7 +95,6 @@ FGS.cafeworld.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -121,18 +114,11 @@ FGS.cafeworld.Requests =
 					return;
 				}
 				
-				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-						
 					if($('form[action*="request_v2_landing_page.php"]', dataHTML).length > 0)
 					{
 						var url 	= $('form[action*="request_v2_landing_page.php"]', dataHTML).attr('action');
@@ -449,7 +435,6 @@ FGS.cafeworld.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -492,18 +477,11 @@ FGS.cafeworld.Bonuses =
 				
 				if(isLimit) return;
 				
-				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-					
 					if(dataStr.indexOf('please pick a mystery gift as a thank you') != -1)
 					{
 						var newUrl = $('.lotto-container', dataHTML).children('a:first').attr('href');

@@ -12,17 +12,11 @@ FGS.farmville.Freegifts =
 			dataType: 'text',
 			success: function(dataStr)
 			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-					}
-					var dataHTML = FGS.HTMLParser(dataStr);
-					
-					
 					var url = $('form[target="flashAppIframe"]', dataHTML).attr('action');
 					params.click2params = $('form[target="flashAppIframe"]', dataHTML).serialize();
 					params.click2url = url;
@@ -233,7 +227,6 @@ FGS.farmville.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				var pos1 = currentURL.indexOf('addneighbo');
@@ -264,6 +257,9 @@ FGS.farmville.Requests =
 					}
 					return;
 				}
+				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
 				
 				try
 				{
@@ -297,15 +293,6 @@ FGS.farmville.Requests =
 				// <h3>Thanks for helping Matan survey their land!<br /><br />Matan has helped you survey as well. Be sure to claim your England farm and expand it!</h3>
 				
 				
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-					
-					
 					var newUrl = $('form[target="flashAppIframe"]', dataHTML).attr('action');
 					var newParams = $('form[target="flashAppIframe"]', dataHTML).serialize();
 					
@@ -540,7 +527,6 @@ FGS.farmville.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -557,16 +543,11 @@ FGS.farmville.Bonuses =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);
-					}
-					
 					if($('.inputsubmit[value="OK"]',dataHTML).length > 0)
 					{
 						var stop = false;

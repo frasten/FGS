@@ -12,7 +12,6 @@ FGS.myshops.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -32,16 +31,11 @@ FGS.myshops.Requests =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);	
-					}
-				
 					info.image 	= $('#app123837014322698_giftImage',dataHTML).children('img:first').attr('src');
 					info.title 	= $.trim($('#app123837014322698_giftText',dataHTML).text());
 					info.text  	=  $('#app123837014322698_senderText',dataHTML).text();
@@ -93,7 +87,6 @@ FGS.myshops.Bonuses =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
@@ -113,17 +106,11 @@ FGS.myshops.Bonuses =
 					return;
 				}
 				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
 				try
 				{
-					var pos0 = dataStr.indexOf('"content":{"pagelet_canvas_content":');
-					if(pos0 != -1)
-					{
-						var pos1 = dataStr.indexOf('>"}', pos0);
-						var dataStr = JSON.parse(dataStr.slice(pos0+10, pos1+3)).pagelet_canvas_content;
-						var dataHTML = FGS.HTMLParser(dataStr);	
-					}
-					
-					
 					if(dataStr.indexOf('this reward is either expired or invalid') != -1)
 					{
 						var error_text = 'This reward has already been claimed or expired.';

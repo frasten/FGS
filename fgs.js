@@ -392,7 +392,7 @@ var FGS = {
 							{
 								var id = i;
 							}
-							var v = val[id];					
+							var v = val[id];				
 							
 							if($.inArray(id, params.sendTo) > -1)
 							{
@@ -425,7 +425,7 @@ var FGS = {
 								gameID: params.gameID,
 								friend: params.sendToName,
 								time: curTime,
-								friendID: id
+								friendID: params.sendTo[0]
 							};
 							
 							FGS.database.addFreegift(params.gameID, params.sendToName, params.gift, curTime, typeof(params.thankYou));
@@ -582,6 +582,140 @@ var FGS = {
 			},
 			error: function()
 			{
+			}
+		});
+	},
+	
+	getAppAuthInfo: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
+			data: params.app_info,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+
+					var pos1 = parseStr.indexOf('var config = {');
+					if(pos1 == -1) throw {message:"no URI"}
+					
+					var pos2 = parseStr.indexOf('};',pos1);
+					
+					parseStr = parseStr.slice(pos1+13,pos2+1);
+					var parseStr = JSON.parse(parseStr);
+					
+					params.auth_info = parseStr;
+					
+					callback(params);
+				}
+				catch(err)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},	getAppAuthInfo: function(params, callback, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
+			data: params.app_info,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+
+					var pos1 = parseStr.indexOf('var config = {');
+					if(pos1 == -1) throw {message:"no URI"}
+					
+					var pos2 = parseStr.indexOf('};',pos1);
+					
+					parseStr = parseStr.slice(pos1+13,pos2+1);
+					var parseStr = JSON.parse(parseStr);
+					
+					params.auth_info = parseStr;
+					
+					callback(params);
+				}
+				catch(err)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, callback, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, callback, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
 			}
 		});
 	},
@@ -1242,13 +1376,12 @@ var FGS = {
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: urlIK,
+			dataType: 'text',
 			timeout: 180000,
 			success: function(data)
 			{
 				if(typeof(apps) == 'undefined')
 					FGS.checkRequests(true);
-				
-				
 				
 				if(data.indexOf('"content":{"pagelet_requests":"') != -1)
 				{
@@ -1275,14 +1408,13 @@ var FGS = {
 					data = tempD.pagelet_requests;	
 				}
 				
-				FGS.dump('gifts work fine');
-				
-				var data = FGS.HTMLParser(data);	
+				data = data.replace(/ src=\"/gi, ' notsrc="');
 
+				var data = FGS.HTMLParser(data);
+				
 				var $ = FGS.jQuery;
 				
-				
-				var FBdata = $('input[name="params\[app_id\]"]',data).parent('form:first');
+				var FBdata = $('input[name="params\[app_id\]"]', data).parent('form:first');
 				
 				if(FGS.post_form_id == '')
 				{
@@ -1321,11 +1453,11 @@ var FGS = {
 					if($(this).attr('action') == '/ajax/games/apprequest/apprequest.php')
 					{
 						var dataPost = 
-							'charset_test='			+$(el).children('input[name=charset_test]').val() +
-							'&id='					+$(el).children('input[name=id]').val() +							
-							'&params[from_id]='		+$(el).find('input[name="params\[from_id\]"]').val() +
+							'charset_test='			+el.children('input[name=charset_test]').val() +
+							'&id='					+el.children('input[name=id]').val() +							
+							'&params[from_id]='		+el.find('input[name="params\[from_id\]"]').val() +
 							'&params[app_id]='		+ APPID +
-							'&div_id='		+$(el).children('input[name=div_id]').val()	+
+							'&div_id='		+el.children('input[name=div_id]').val()	+
 							'&nctr[_mod]=pagelet_requests' +
 							'&lsd=' +
 							'&actions[accept]=Akceptuj' +
@@ -1336,18 +1468,18 @@ var FGS = {
 					else
 					{
 						var dataPost = 
-							'charset_test='			+$(el).children('input[name=charset_test]').val() +
-							'&id='					+$(el).children('input[name=id]').val() +
-							'&type='				+$(el).children('input[name=type]').val() +
-							'&status_div_id='		+$(el).children('input[name=status_div_id]').val()	+
-							'&params[from_id]='		+$(el).find('input[name="params\[from_id\]"]').val() +
+							'charset_test='			+el.children('input[name=charset_test]').val() +
+							'&id='					+el.children('input[name=id]').val() +
+							'&type='				+el.children('input[name=type]').val() +
+							'&status_div_id='		+el.children('input[name=status_div_id]').val()	+
+							'&params[from_id]='		+el.find('input[name="params\[from_id\]"]').val() +
 							'&params[app_id]='		+ APPID +
-							'&params[req_type]='	+$(el).find('input[name="params\[req_type\]"]').val() +
-							'&params[is_invite]='	+$(el).find('input[name="params\[is_invite\]"]').val() +
+							'&params[req_type]='	+el.find('input[name="params\[req_type\]"]').val() +
+							'&params[is_invite]='	+el.find('input[name="params\[is_invite\]"]').val() +
 							'&lsd' +
 							'&post_form_id_source=AsyncRequest';
 							
-						var typeText = $(el).find('input[type="submit"]').attr('name');
+						var typeText = el.find('input[type="submit"]').attr('name');
 						
 						var ret = false;
 						
@@ -1366,11 +1498,10 @@ var FGS = {
 						
 						if(ret) return;
 						
-						dataPost += '&'+escape($(el).find('input[type="submit"]:first').attr('name'))+'='+$(el).find('input[type="submit"]:first').attr('value');
+						dataPost += '&'+escape(el.find('input[type="submit"]:first').attr('name'))+'='+el.find('input[type="submit"]:first').attr('value');
 					}
 
-					var elID = $(el).children('input[name=id]').val();
-
+					var elID = el.children('input[name=id]').val();
 					if(el.find('.appRequestBodyNewA').length > 0)
 					{
 						var testEl = el.find('.appRequestBodyNewA:first');
@@ -1389,7 +1520,7 @@ var FGS = {
 					}
 					else
 					{
-						var testEl = $(el).find('.UIImageBlock_ICON_Content:first');
+						var testEl = el.find('.UIImageBlock_ICON_Content:first');
 						
 						if(testEl.children().length > 1)
 						{
@@ -1408,7 +1539,7 @@ var FGS = {
 					
 					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1 || newText.indexOf('as my new neighbor') != -1)
 					{
-						var type =  $(el).find('.UIImageBlock_SMALL_Image').find('img').attr('src');				
+						var type =  el.find('.UIImageBlock_SMALL_Image').find('img').attr('notsrc');				
 					}
 					else
 					{
@@ -1466,9 +1597,9 @@ var FGS = {
 					
 					
 					
-					var bTitle = $(el).find('.UIImageBlock_SMALL_Content').find('a:first').text().replace(/'/gi, '');		
+					var bTitle = el.find('.UIImageBlock_SMALL_Content').find('a:first').text().replace(/'/gi, '');		
 					
-					var fromUser = $(el).find('input[name="params\[from_id\]"]').val();
+					var fromUser = el.find('input[name="params\[from_id\]"]').val();
 					
 					if(fromUser != undefined)
 					{
@@ -1534,6 +1665,21 @@ var FGS = {
 	{
 		var $ = jQuery = FGS.jQuery;
 		
+		if(appID == '176611639027113')
+		{
+			FGS.rewardville.Freegifts.Click({onlyLogin: true});
+			
+			if(FGS.options.games[appID].enabled)
+			{
+				FGS.iBonusTimeout[appID] = setTimeout('FGS.checkBonuses("'+appID+'");', 180000);
+			}
+			else
+			{
+				FGS.stopBonusesForGame(appID);
+			}
+			return;
+		}
+		
 		if(typeof(FGS.iBonusTimeout[appID]) == 'undefined' || FGS.FBloginError !== false)
 		{
 			return;
@@ -1547,9 +1693,13 @@ var FGS = {
 			};
 		}
 		
+		var number = 150;
+		
 		if(FGS.bonusLoadingProgress[appID].loaded == false)
 		{
-			var number = 75;
+			if(FGS.options.breakStartupLoadingOption === 0)
+				if(FGS.options.breakStartupLoadingCount > 500)
+					var number = 300;
 		}
 		else
 		{
@@ -1561,16 +1711,21 @@ var FGS = {
 			var params = {};
 			
 			params.items = [];
-			params.time = Math.floor(new Date().getTime()/1000);
+			params.time = 0;
 			params.first = 0;
+			var paramsStr = '';
 			
 			FGS.dump(FGS.getCurrentTime()+'[B] Starting. Checking for bonuses for game '+appID);
+		}
+		else
+		{
+			var paramsStr = '&show_hidden=false&ignore_self=false&oldest='+params.time;
 		}
 		
 		$.ajax({
 			type: "GET",
 			url: 'http://www.facebook.com/ajax/apps/app_stories.php',
-			data: '__a=1&is_game=1&app_ids='+appID+'&max_stories='+number+'&user_action=0&is_game=1&show_hidden=false&ignore_self=false&oldest='+params.time,
+			data: '__a=1&is_game=1&app_ids='+appID+'&max_stories='+number+'&user_action=0'+paramsStr,
 			dataType: 'text',
 			timeout: 180000,
 			success: function(str)
@@ -1599,7 +1754,7 @@ var FGS = {
 					
 					if(tmpData.html == "")
 					{
-						throw {message: FGS.getCurrentTime()+'[B] No new bonuses. Skipping'};
+						throw {message: 'empty'};
 					}
 				
 					var htmlData = FGS.HTMLParser(tmpData.html);					
@@ -1608,15 +1763,15 @@ var FGS = {
 					
 					var lastBonusTime = FGS.options.games[appID].lastBonusTime;
 					
-					// brak zdarzen
+					var finishCollecting = false;
+					var oldest = 0;
+					
+					
 					if(data.indexOf('uiBoxLightblue') != -1)
 					{
-						FGS.sendView('hiddenFeed', appID);		
+						FGS.sendView('hiddenFeed', appID);
 						throw {message: 'no feed'}
 					}
-					
-					var finishCollecting = false;
-					var oldest = params.time;
 					
 					if($('li.uiStreamStory', htmlData).length == 0)
 					{
@@ -1655,7 +1810,7 @@ var FGS = {
 						if(bonusTimeTmp < lastBonusTime)
 						{
 							finishCollecting = true;
-							return false;
+							return true;
 						}
 						
 						var targets = bonusData.target_profile_id;
@@ -1684,22 +1839,13 @@ var FGS = {
 								return false;
 							}
 						}
-						
-						/*
-						if(secs > FGS.options.deleteOlderThan && FGS.options.deleteOlderThan != 0)
-						{
-							finishCollecting = true;
-							return false;
-						}
-						*/
 
 						if(actr == FGS.userID)	
 						{
-							if(appID.toString() != '166309140062981') // wlasny bonus w puzzle hearts
-								return;
+							if(appID.toString() != '166309140062981' && appID.toString() != '216230855057280') // wlasny bonus w puzzle hearts i charmed gems
+								return true;
 						}
-						
-						
+
 						var ret = false;
 						
 						var testLink = el.find('.UIActionLinks_bottom > a:last');
@@ -1710,7 +1856,7 @@ var FGS = {
 								return;
 						}
 						var testLink = testLink.first();
-												
+						
 						var bTitle = jQuery.trim(testLink.text().replace(/'/gi, ''));
 
 						$(FGS.gamesData[appID].filter.bonuses).each(function(k,v)
@@ -1727,7 +1873,10 @@ var FGS = {
 						if(ret) return;
 
 						var feedback = el.find('input[name="feedback_params"]').val();
-						var link_data = el.attr('data-ft');			
+						var link_data = el.attr('data-ft');
+						
+						if(typeof(link_data) == 'undefined' || link_data == null)
+							return;
 
 						//sprawdzanie filtrow usera
 						var ret = false;
@@ -1768,64 +1917,55 @@ var FGS = {
 					if(finishCollecting)
 					{
 						if(params.first > 0)
-						{
 							FGS.options.games[appID].lastBonusTime = params.first;
-						}
 						
 						if(params.items.length > 0)
-						{
 							FGS.database.addBonus(params.items);
-						}
 						
 						if(!FGS.bonusLoadingProgress[appID].loaded)
-						{
 							FGS.bonusLoadingProgress[appID].loaded = true;
-						}
 						
-						FGS.saveOptions();
-						
+						FGS.saveOptions();						
 						FGS.setTimeoutOnBonuses(appID);
 						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
 					}
 					else
 					{
-						params.time = oldest;
+						if(oldest > 0)
+							params.time = oldest;
 						FGS.checkBonuses(appID, params);
-						
-						//setTimeout(function() {  }, 100);
 					}
 				}
 				catch(e)
 				{
 					if(typeof(retry) == 'undefined')
 					{
-						if(e.message == 'empty')
+						if(oldest == 0 && params.items.length == 0)
 						{
-							params.time = oldest;
+							FGS.checkBonuses(appID, undefined, true);
+							return;
+						}
+						
+						if(e.message == 'empty')
+						{	
+							if(oldest > 0)
+								params.time = oldest;
 						}
 						FGS.checkBonuses(appID, params, true);
 					}
 					else
 					{
 						if(params.first > 0)
-						{
 							FGS.options.games[appID].lastBonusTime = params.first;
-						}
 						
 						if(params.items.length > 0)
-						{
 							FGS.database.addBonus(params.items);
-						}
 						
 						if(!FGS.bonusLoadingProgress[appID].loaded)
-						{
 							FGS.bonusLoadingProgress[appID].loaded = true;
-						}
 						
 						FGS.saveOptions();
-						
 						FGS.setTimeoutOnBonuses(appID);
-						
 						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
 					}
 				}
@@ -1839,317 +1979,16 @@ var FGS = {
 				else
 				{
 					if(params.first > 0)
-					{
 						FGS.options.games[appID].lastBonusTime = params.first;
-					}
 					
 					if(params.items.length > 0)
-					{
 						FGS.database.addBonus(params.items);
-					}
 					
 					if(!FGS.bonusLoadingProgress[appID].loaded)
-					{
 						FGS.bonusLoadingProgress[appID].loaded = true;
-					}
 					
-					FGS.saveOptions();
-					
-					FGS.setTimeoutOnBonuses(appID);
-					
-					FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
-				}
-			}
-		});
-	},
-	
-	checkBonusesNew: function(appID, params, retry)
-	{
-		var $ = jQuery = FGS.jQuery;
-		
-		if(typeof(FGS.iBonusTimeout[appID]) == 'undefined' || FGS.FBloginError !== false)
-		{
-			return;
-		}
-		
-		if(typeof(params) == 'undefined')
-		{
-			var params = {};
-			
-			params.items = [];
-			params.time = Math.floor(new Date().getTime()/1000);
-			params.first = 0;
-			params.scroll = 1;
-			
-			FGS.dump(FGS.getCurrentTime()+'[B] Starting. Checking for bonuses for game '+appID);
-		}		
-		
-		$.ajax({
-			type: "GET",
-			url: 'http://www.facebook.com/pagelet/generic.php/pagelet/home/morestories.php',
-			data: '__a='+(params.scroll+8)+'&data={%22filter%22:%22appm_'+appID+'%22,%22scroll_count%22:'+params.scroll+',%22last_seen_time%22:'+Math.floor(params.first/1000)+',%22oldest%22:'+params.time+'}',	
-			dataType: 'text',
-			timeout: 180000,
-			success: function(str)
-			{
-				try
-				{
-					var str = str.substring(9);
-					var error = JSON.parse(str).error;
-
-					if(typeof(error) != 'undefined')
-					{
-						FGS.dump(FGS.getCurrentTime()+'[B] Error: logged out');
-						FGS.stopAll();
-						return true;
-					}
-					
-					var data = JSON.parse(str).payload;
-
-					var htmlData = FGS.HTMLParser(data);					
-					
-					var now = new Date().getTime();
-					
-					var lastBonusTime = FGS.options.games[appID].lastBonusTime;
-					
-					// brak zdarzen
-					if(data.indexOf('uiBoxLightblue') != -1)
-					{
-						FGS.sendView('hiddenFeed', appID);		
-						throw {message: 'no feed'}
-					}
-					
-					var finishCollecting = false;
-					
-					var oldest = params.time;
-					
-					if($('li.uiStreamStory', htmlData).length == 0)
-					{
-						throw {message: 'empty'}
-					}
-					
-					
-					
-					$('li.uiStreamStory', htmlData).each(function()
-					{
-						var el = $(this);
-
-						var data = el.find('input[name="feedback_params"]').val();
-						
-						var bonusData = JSON.parse(data);
-						
-						var tmpDateStr = el.find('abbr').attr('data-date');
-						
-						if(typeof(tmpDateStr) == 'undefined')
-							return;
-						
-						var bonusTimeTmp = new Date(tmpDateStr).getTime();					
-						var bonusTime = Math.round(bonusTimeTmp / 1000);
-						
-						var diff = now-bonusTimeTmp;
-						var secs = Math.floor(diff.valueOf()/1000);
-						
-						var elID = bonusData.target_fbid;
-						var actr = bonusData.actor;
-						
-						if(params.first == 0)
-						{
-							params.first = bonusTimeTmp;
-						}
-						
-						oldest = bonusTime;
-
-						if(bonusTimeTmp < lastBonusTime)
-						{
-							finishCollecting = true;
-							return false;
-						}
-						
-						var targets = bonusData.target_profile_id;
-						
-						if(actr != targets)
-						{
-							if(FGS.userID != targets)
-							{
-								return true;
-							}
-						}
-						
-						if(FGS.options.breakStartupLoadingOption == 0)
-						{
-							if(params.items.length >= parseInt(FGS.options.breakStartupLoadingCount))
-							{
-								finishCollecting = true;
-								return false;
-							}
-						}
-						else
-						{
-							if(secs >= parseInt(FGS.options.breakStartupLoadingTime))
-							{
-								finishCollecting = true;
-								return false;
-							}
-						}
-						
-						/*
-						if(secs > FGS.options.deleteOlderThan && FGS.options.deleteOlderThan != 0)
-						{
-							finishCollecting = true;
-							return false;
-						}
-						*/
-
-						if(actr == FGS.userID)	
-						{
-							if(appID.toString() != '166309140062981') // wlasny bonus w puzzle hearts
-								return;
-						}
-						
-						
-						var ret = false;
-						
-						var testLink = el.find('.UIActionLinks_bottom > a:last');
-						if(testLink.length == 0)
-						{
-							var testLink = el.find('.uiAttachmentTitle').find('a');
-							if(testLink.length == 0)
-								return;
-						}
-						var testLink = testLink.first();
-												
-						var bTitle = jQuery.trim(testLink.text().replace(/'/gi, ''));
-
-						$(FGS.gamesData[appID].filter.bonuses).each(function(k,v)
-						{
-							var re = new RegExp(v, "i");
-							
-							if(re.test(bTitle))
-							{
-								ret = true;
-								return false;
-							}
-						});
-						
-						if(ret) return;
-
-						var feedback = el.find('input[name="feedback_params"]').val();
-						var link_data = el.attr('data-ft');			
-
-						//sprawdzanie filtrow usera
-						var ret = false;
-						$(FGS.options.games[appID].filter).each(function(k,v)
-						{
-							var re = new RegExp(v, "i") ;
-							
-							if($.trim(v) != '' && re.test(bTitle))
-							{
-								FGS.dump('Filtering: '+bTitle);
-								ret = true;
-								return false;
-							}
-						});
-						if(ret) return;
-						//koniec filtry usera
-						
-						var link = el.find('.UIActionLinks_bottom > a:last').attr('href');
-						
-						if(link == undefined)
-						{
-							var link = el.find('.uiAttachmentTitle').find('a').attr('href');
-							if(link == undefined)
-								return;							
-						}						
-						
-						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
-						
-						params.items.push(bonus);
-						
-						if(params.items.length >= 2500)
-						{
-							finishCollecting = true;
-							return false;
-						}
-					});
-
-					if(finishCollecting)
-					{
-						if(params.first > 0)
-						{
-							FGS.options.games[appID].lastBonusTime = params.first;
-						}
-						
-						if(params.items.length > 0)
-						{
-							FGS.database.addBonus(params.items);
-						}
-						FGS.saveOptions();
-						
-						FGS.setTimeoutOnBonuses(appID);
-						
-						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
-					}
-					else
-					{
-						params.time = oldest;
-						params.scroll++;
-						
-						FGS.checkBonusesNew(appID, params);
-						
-						//setTimeout(function() {  }, 100);
-					}
-				}
-				catch(e)
-				{
-					if(typeof(retry) == 'undefined')
-					{
-						if(e.message == 'empty')
-						{
-							params.time = oldest;
-							params.scroll++;
-						}
-						FGS.checkBonusesNew(appID, params, true);
-					}
-					else
-					{
-						if(params.first > 0)
-						{
-							FGS.options.games[appID].lastBonusTime = params.first;
-						}
-						
-						if(params.items.length > 0)
-						{
-							FGS.database.addBonus(params.items);
-						}
-						FGS.saveOptions();
-						
-						FGS.setTimeoutOnBonuses(appID);
-						
-						FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
-					}
-				}
-			},
-			error: function(e)
-			{
-				if(typeof(retry) == 'undefined')
-				{
-					FGS.checkBonusesNew(appID, params, true);
-				}
-				else
-				{
-					if(params.first > 0)
-					{
-						FGS.options.games[appID].lastBonusTime = params.first;
-					}
-					
-					if(params.items.length > 0)
-					{
-						FGS.database.addBonus(params.items);
-					}
-					FGS.saveOptions();
-					
-					FGS.setTimeoutOnBonuses(appID);
-					
+					FGS.saveOptions();					
+					FGS.setTimeoutOnBonuses(appID);					
 					FGS.dump(FGS.getCurrentTime()+'[B] Setting up new update in '+FGS.options.checkBonusesTimeout+' seconds');
 				}
 			}
@@ -2167,6 +2006,44 @@ var FGS = {
 		if (s.length == 1) s = "0" + s;
 
 		return h+':'+m+':'+s;
+	},
+	
+	processPageletOnFacebook: function(dataStr)
+	{
+		var pos0 = dataStr.indexOf('"content":{"pagelet');
+		if(pos0 != -1)
+		{
+			var pos0 = 0;
+			var dataStr2 = '';
+			
+			while(true)
+			{
+				var pos0a = dataStr.indexOf('"content":{"pagelet', pos0);
+				if(pos0a == -1) break;
+				
+				var pos0c = dataStr.indexOf('":',  pos0a+10);
+				var pos0b = dataStr.indexOf('>"}', pos0a);
+				if(pos0b == -1)
+				{
+					pos0 = pos0a+15;
+					continue;
+				}
+				try
+				{
+					dataStr2 += JSON.parse(dataStr.slice(pos0a+10, pos0b+3))[dataStr.slice(pos0a+12, pos0c)];
+				}
+				catch(e)
+				{
+					pos0 = pos0a+15;
+					continue;
+				}
+				
+				pos0 = pos0b;
+			}
+			
+			var dataStr = dataStr2;
+		}
+		return dataStr;
 	},
 	
 	searchForNeighbors:
