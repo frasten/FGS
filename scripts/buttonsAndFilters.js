@@ -945,6 +945,7 @@ FGS.submenuButtons =
 	'ManualBonuses':	{	name: 'Items requiring action (<span>?</span>)',
 							submenu: {
 										'ClearManualBonuses': { name: 'Clear all' },
+										'ClearVisibleManualBonuses': 	{ name: 'Clear visible' },
 									}
 						},
 	'BonusesHistory': 	{	name: 'Collected bonuses',
