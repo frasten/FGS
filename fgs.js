@@ -2015,6 +2015,7 @@ var FGS = {
 		{
 			var pos0 = 0;
 			var dataStr2 = '';
+			var tmpObj = {};
 			
 			while(true)
 			{
@@ -2028,9 +2029,34 @@ var FGS = {
 					pos0 = pos0a+15;
 					continue;
 				}
+				
+				var objName = dataStr.slice(pos0a+12, pos0c);
+									
 				try
 				{
-					dataStr2 += JSON.parse(dataStr.slice(pos0a+10, pos0b+3))[dataStr.slice(pos0a+12, pos0c)];
+					// tmpObj[objName]
+					var tmpStr = JSON.parse(dataStr.slice(pos0a+10, pos0b+3))[objName];
+					var added = false;
+					
+					for(var h in tmpObj)
+					{
+						var str = tmpObj[h];
+						
+						var i1 = str.indexOf('id="'+objName+'"');
+						
+						if(i1 != -1)
+						{
+							var i2 = str.indexOf('>', i1)+1;
+							tmpObj[h] = str.substr(0, i2)+tmpStr+str.substr(i2);
+							added = true;
+							break;
+						}
+					}
+					
+					if(!added)
+					{
+						tmpObj[objName] = tmpStr;
+					}
 				}
 				catch(e)
 				{
@@ -2040,6 +2066,40 @@ var FGS = {
 				
 				pos0 = pos0b;
 			}
+			
+			for(var h in tmpObj)
+			{
+				var tmpStr = tmpObj[h];
+				var added = false;
+				
+				for(var h2 in tmpObj)
+				{
+					var str = tmpObj[h2];
+					var i1 = str.indexOf('id="'+h+'"');
+					
+					if(i1 != -1)
+					{
+						var i2 = str.indexOf('>', i1)+1;
+						tmpObj[h2] = str.substr(0, i2)+tmpStr+str.substr(i2);
+						added = h2;
+						break;
+					}
+				}
+				
+				if(added !== false)
+				{
+					delete tmpObj[added];
+				}
+			}
+			
+			var dataStr2 = '';
+			
+			for(var h in tmpObj)
+			{
+				dataStr2 += tmpObj[h];
+			}
+			
+			console.log(FGS.jQuery(dataStr2));
 			
 			var dataStr = dataStr2;
 		}

@@ -355,18 +355,17 @@ FGS.ravenwood.Requests =
 						
 						if(el.length > 0)
 						{
-							var pos2 = el.text().indexOf(' from ');
-							info.title = el.text().slice(22, pos2);
+							var pos2 = $.trim(el.text()).indexOf(' from ');
+							info.title = $.trim(el.text()).slice(22, pos2);
 							info.image = el.find('img').attr("src");
 						}
 						else
 						{
-							info.title = oldEL.text();	
+							info.title = $.trim(oldEL.text());	
 							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
 						}
 						
-						
-						info.text  = $(el).text();
+						info.text  = $.trim(el.text());
 						info.time = Math.round(new Date().getTime() / 1000);
 						
 						FGS.endWithSuccess(currentType, id, info);
