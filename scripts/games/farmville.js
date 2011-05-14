@@ -263,7 +263,13 @@ FGS.farmville.Requests =
 				
 				try
 				{
-				
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					var limitArr = [
 						{ search: 'seem to send that gift to your friend right now', error: 'Sorry, farmer. We can\'t seem to send that gift to your friend right now.' },
 						{ search: 'duckling has already been helped.', error: 'Sorry, farmer. Looks like duckling has already been helped.' },
@@ -545,9 +551,16 @@ FGS.farmville.Bonuses =
 				
 				var dataStr = FGS.processPageletOnFacebook(dataStr);
 				var dataHTML = FGS.HTMLParser(dataStr);
-				
+
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+				
 					if($('.inputsubmit[value="OK"]',dataHTML).length > 0)
 					{
 						var stop = false;

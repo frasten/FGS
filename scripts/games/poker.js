@@ -262,6 +262,13 @@ FGS.poker.Requests =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					if(dataStr.indexOf('This gift is old and expired! Make sure to accept your gifts as soon as possible next time') != -1 || dataStr.indexOf('This gift has expired! Make sure to accept your gifts as soon as possible next time') != -1)
 					{
 						var error_text = 'This gift is old and expired! Make sure to accept your gifts as soon as possible next time.';

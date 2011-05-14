@@ -119,6 +119,14 @@ FGS.cafeworld.Requests =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
+					
 					if($('form[action*="request_v2_landing_page.php"]', dataHTML).length > 0)
 					{
 						var url 	= $('form[action*="request_v2_landing_page.php"]', dataHTML).attr('action');
@@ -482,6 +490,14 @@ FGS.cafeworld.Bonuses =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
+					
 					if(dataStr.indexOf('please pick a mystery gift as a thank you') != -1)
 					{
 						var newUrl = $('.lotto-container', dataHTML).children('a:first').attr('href');

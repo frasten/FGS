@@ -258,6 +258,13 @@ FGS.frontierville.Requests =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
@@ -451,6 +458,13 @@ FGS.frontierville.Bonuses =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					

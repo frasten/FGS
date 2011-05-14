@@ -295,6 +295,14 @@ FGS.mafiawars.Requests =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
+					
 					var src = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramsTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
@@ -640,6 +648,13 @@ FGS.mafiawars.Bonuses =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					var src = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramsTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					

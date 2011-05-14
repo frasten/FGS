@@ -253,6 +253,13 @@ FGS.treasure.Requests =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length == 0)
 					{
 						if(dataStr.indexOf('Great! You helped the ') != -1)
@@ -448,6 +455,13 @@ FGS.treasure.Bonuses =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					if(dataStr.indexOf('<h1>Oh no!</h1>') != -1)
 					{
 						var error_text = $('h2', dataHTML).text();

@@ -462,8 +462,15 @@ FGS.vampirewars.Requests =
 					
 					if(pos0 != -1)
 					{
-				var dataStr = FGS.processPageletOnFacebook(dataStr);
-				var dataHTML = FGS.HTMLParser(dataStr);
+						var dataStr = FGS.processPageletOnFacebook(dataStr);
+						var dataHTML = FGS.HTMLParser(dataStr);
+						
+						var redirectUrl2 = FGS.checkForGoURI(dataStr);
+						if(redirectUrl2 != false)
+						{
+							retryThis(currentType, id, redirectUrl2, params, retry);
+							return;
+						}
 						
 						var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 						var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();

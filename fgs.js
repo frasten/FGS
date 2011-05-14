@@ -803,9 +803,9 @@ var FGS = {
 					var URI = url.attr('href');							
 				
 					if(newWindow)
-						FGS.openURI(URI, true);
+						FGS.openURI(unescape(URI), true);
 					else
-						FGS[game].Requests.Click("request", id, URI);
+						FGS[game].Requests.Click("request", id, unescape(URI));
 				}
 				catch(err)
 				{
@@ -885,9 +885,9 @@ var FGS = {
 						var URI = JSON.parse('"'+parseStr+'"');
 						
 						if(newWindow)
-							FGS.openURI(URI, true);
+							FGS.openURI(unescape(URI), true);
 						else
-							FGS[game].Requests.Click("request", id, URI);
+							FGS[game].Requests.Click("request", id, unescape(URI));
 					}
 				}
 				catch(err)
@@ -1067,6 +1067,32 @@ var FGS = {
 		catch(err)
 		{
 			FGS.dump('checkForLocationReload'+err);
+			return false;
+		}
+	},
+	
+	checkForGoURI: function(dataStr)
+	{
+		try
+		{
+			var t0   = dataStr.indexOf("goURI('");
+			if(t0 != -1)
+			{
+				t0 += 7;
+				var t1 = dataStr.indexOf("'", t0)
+				var redUrl = dataStr.slice(t0, t1);
+				redUrl = redUrl.replace(/\\x/g, '\\u00');
+				
+				var parseStr = '{"abc":"'+redUrl+'"}';
+				var parseStr = JSON.parse(parseStr);
+				var redirectUrl = parseStr.abc.toString();
+				
+				return redirectUrl;
+			}
+			return false;			
+		}
+		catch(err)
+		{
 			return false;
 		}
 	},
@@ -2099,9 +2125,9 @@ var FGS = {
 				dataStr2 += tmpObj[h];
 			}
 			
-			console.log(FGS.jQuery(dataStr2));
-			
 			var dataStr = dataStr2;
+			
+			FGS.dump(FGS.jQuery(dataStr));
 		}
 		return dataStr;
 	},

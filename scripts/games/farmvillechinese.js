@@ -263,6 +263,13 @@ FGS.farmvillechinese.Requests =
 
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					var newUrl = $('form[target="flashAppIframe"]', dataHTML).attr('action');
 					var newParams = $('form[target="flashAppIframe"]', dataHTML).serialize();
 					
@@ -521,6 +528,13 @@ FGS.farmvillechinese.Bonuses =
 				
 				try
 				{
+					var redirectUrl2 = FGS.checkForGoURI(dataStr);
+					if(redirectUrl2 != false)
+					{
+						retryThis(currentType, id, redirectUrl2, true);
+						return;
+					}
+					
 					if($('.inputsubmit[value="確定"]',dataHTML).length > 0)
 					{
 						var stop = false;
