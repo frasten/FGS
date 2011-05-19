@@ -41,15 +41,15 @@ FGS.rewardville.Freegifts =
 				{
 					if(dataStr.indexOf('update_session.php?nextURL') != -1)
 					{
-						if(retry > 2) throw {}
+						if(retry > 2) throw {message: 'update_session'}
 						
 						FGS.rewardville.Freegifts.UpdateZyngaSession(params, FGS.rewardville.Freegifts.Click);
 						return;
 					}
 					
-					if(dataStr.indexOf('Having trouble logging in') != -1)
+					if(dataStr.indexOf("zid: '-") != -1)
 					{
-						if(retry > 2) throw {}
+						if(retry > 2) throw {message: 'zid Plus'}
 						
 						var channel = 'http://rewards.zynga.com/channel.html';
 						

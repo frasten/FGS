@@ -803,9 +803,9 @@ var FGS = {
 					var URI = url.attr('href');							
 				
 					if(newWindow)
-						FGS.openURI(unescape(URI), true);
+						FGS.openURI(URI, true);
 					else
-						FGS[game].Requests.Click("request", id, unescape(URI));
+						FGS[game].Requests.Click("request", id, URI);
 				}
 				catch(err)
 				{
@@ -885,9 +885,9 @@ var FGS = {
 						var URI = JSON.parse('"'+parseStr+'"');
 						
 						if(newWindow)
-							FGS.openURI(unescape(URI), true);
+							FGS.openURI(URI, true);
 						else
-							FGS[game].Requests.Click("request", id, unescape(URI));
+							FGS[game].Requests.Click("request", id, URI);
 					}
 				}
 				catch(err)
@@ -2126,8 +2126,6 @@ var FGS = {
 			}
 			
 			var dataStr = dataStr2;
-			
-			FGS.dump(FGS.jQuery(dataStr));
 		}
 		return dataStr;
 	},
