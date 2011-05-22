@@ -47,7 +47,7 @@ FGS.rewardville.Freegifts =
 						return;
 					}
 					
-					if(dataStr.indexOf("zid: '-") != -1)
+					if(dataStr.indexOf('"zid":"-') != -1)
 					{
 						if(retry > 2) throw {message: 'zid Plus'}
 						
@@ -300,14 +300,14 @@ FGS.rewardville.Requests =
 					var pos0us = dataStr.indexOf('user: {');
 					if(pos0us == -1) throw {}
 					
-					if(dataStr.indexOf("mbShareResult: [],", pos0mb) != -1)
-					{
-						var error_text = 'No reward. Maybe daily limit.';
-						FGS.endWithError('limit', currentType, id, error_text);
-						return;
-					}
+					//if(dataStr.indexOf('"mbShareResult":{"result":-', pos0mb) != -1)
+					//{
+					//	var error_text = 'No reward. Maybe daily limit.';
+					//	FGS.endWithError('limit', currentType, id, error_text);
+					//	return;
+					//}
 
-					var pos1a 	= dataStr.indexOf("mbShareResult: {", pos0mb)+15;
+					var pos1a 	= dataStr.indexOf('"mbShareResult":{"result":', pos0mb)+16;
 					var pos1b 	= dataStr.indexOf("}", pos1a)+1;
 					var data = JSON.parse(dataStr.slice(pos1a, pos1b));
 					
@@ -318,8 +318,8 @@ FGS.rewardville.Requests =
 						return;
 					}
 					
-					var pos1a 	= dataStr.indexOf("canRegift: '", pos0mb)+12;
-					var pos1b 	= dataStr.indexOf("'", pos1a);
+					var pos1a 	= dataStr.indexOf('"canRegift":', pos0mb)+12;
+					var pos1b 	= dataStr.indexOf(',', pos1a);
 					
 					var sendInfo = '';		
 					
