@@ -149,7 +149,7 @@ FGS.crimecity.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://prod-cc-app-lb-1877943370.us-east-1.elb.amazonaws.com/crimetown/index.php/frame/gift_frame/'+addAntiBot,
+			url: 'http://50.17.195.217/crimetown/index.php/frame/gift_frame/'+addAntiBot,
 			data: params.step1params+'&'+$.param({gift_id: params.gift, cc_fbuid: params.cc_fbuid, token: params.token}),
 			dataType: 'text',
 			success: function(dataStr)
@@ -218,7 +218,7 @@ FGS.crimecity.Freegifts =
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
-		var channel = 'http://prod-cc-app-lb-1877943370.us-east-1.elb.amazonaws.com/crimetown/index.php/requestchannel';
+		var channel = 'http://50.17.195.217/crimetown/index.php/requestchannel';
 		
 		params.getToken = 'api_key=129547877091100&app_id=129547877091100&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
 		
