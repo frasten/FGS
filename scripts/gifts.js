@@ -1,6 +1,14 @@
 FGS.giftsArray = {
 	'201278444497': // frontierville
 	{
+		"sourcherryfront": { name: 'Sour Cherry Tree'},
+		"greenapplefront": { name: 'Green Apple Tree'},
+		"whitepeachfront": { name: 'White Peach Tree'},
+		"saloon_drink_iced_tea": { name: 'Iced Tea'},
+		"saloon_drink_granny_5": { name: 'Granny\'s No. 5'},
+		"beans": { name: 'Beans'},
+		
+		
 		"doctor_office_syringe": { name: "Syringe"},
 		"beans": { name: "Beans"},
 		"carepackages": { name: "Care package"},
@@ -71,7 +79,19 @@ FGS.giftsArray = {
 		"mysterygift": { name: 'Mystery Gift'},
 		
 		"socialplumbingmysterygift": { name: 'Special Delivery'},
+
+		"bottle": { name: 'Bottle'},
+		"haypink": { name: 'Pink Heart Hay'},
+		"socialplumbingmysterygift": { name: 'Special Delivery'},
 		"consume_lucky_penny": { name: 'Lucky Penny'},
+		"uni_chromeblackrosebed": { name: 'Black Roses Bed'},
+		"unineonpinkfence": { name: 'Neon Pink Fence'},
+		"haybalechrome": { name: 'Chrome Hay Bale'},
+		"crafting_twine": { name: 'Spool of Twine'},
+		"hammer": { name: 'Hammer'},
+		"concrete": { name: 'Concrete'},
+		"woodenboard": { name: 'Wooden Board'},
+		"brick": { name: 'Brick'},
 		"shovel_item_01": { name: '2 Shovels'},
 		"wateringcan": { name: 'Watering Can'},
 
@@ -298,20 +318,20 @@ FGS.giftsArray = {
 	10979261223:  // mafia wars
 	{
 		"100": { name: 'BLUE MYSTERY BAG'},
-		"471": { name: 'I\'LL BE BACK'},
-		"472": { name: 'JUNGLE STRIKE'},
-		"440": { name: 'RAW MEAT'},
-		"438": { name: '+2 MAFIA MEMBERS'},
+		"477": { name: 'HOLLOW POINT'},
+		"478": { name: 'A19 RIOT SHIELD'},
+		"476": { name: 'MAGNETO\'S MAGNETISM'},
+		"475": { name: 'FROST\'S DIAMOND FORM'},
+		"462": { name: 'BRAZIL CASH'},
 		"456": { name: 'LOCAL INFORMANT'},
 		"457": { name: 'GAS CAN'},
 		"458": { name: 'BUTTON CAMERA'},
 		"405": { name: 'MYSTERY SHIPMENT'},
-		"422": { name: 'EXOTIC ANIMAL FEED'},
+		"438": { name: '+2 MAFIA MEMBERS'},
 		"420": { name: 'FEEDING TROUGH'},
 		"419": { name: 'BIRD CAGE'},
-		"151": { name: 'MYSTERY ANIMAL'},
-		"189": { name: 'SPECIAL PART'},
-		"401": { name: 'ITALIAN HARDWOOD'},
+		"422": { name: 'EXOTIC ANIMAL FEED'},
+		"210": { name: 'SATCHEL OF LIRA'},
 	},
 	120563477996213: // ravenwood fair
 	{
@@ -754,6 +774,9 @@ FGS.getFBML = function(params, retry)
 		var thisUrl = 'http://www.connect.facebook.com/widgets/serverfbml.php';
 		var thisMethod = 'post';
 	}
+	
+	params.nextParams.lazy = 1;
+	params.nextParams.stale_ok = 1;
 
 	$.ajax({
 		type: thisMethod,
@@ -998,9 +1021,12 @@ FGS.sendGift = function(params, retry)
 {
 	var $ = FGS.jQuery;
 	
+	params.promptParams.lazy = 1;
+	params.promptParams.stale_ok = 1;
+	
 	$.ajax({
 		type: "POST",
-		url: 'http://apps.facebook.com/fbml/ajax/prompt_send.php?__a=1',
+		url: 'http://apps.facebook.com/fbml/ajax/prompt_send.php?__a=1&lazy=1&stale_ok=1',
 		cache: false,
 		dataType: 'text',
 		data: params.promptParams,

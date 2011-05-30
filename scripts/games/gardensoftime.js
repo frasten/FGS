@@ -133,7 +133,7 @@ FGS.gardensoftime.Requests =
 					}
 					else
 					{
-						var tst = new RegExp(/<fb:serverfbml[^>]*?>[\s\S]*?<script[^>]*?>([\s\S]*?)<\/script>[\s\S]*?<\/fb:serverfbml>/m).exec(dataStr);
+						var tst = new RegExp(/<script[^>]*?>[\s\S]*?<fb:fbml[^>]*?>([\s\S]*?)<\/fb:fbml>[\s\S]*?<\/script>/m).exec(dataStr);
 						if(tst == null)
 							var data = dataStr;
 						else
@@ -182,20 +182,12 @@ FGS.gardensoftime.Requests =
 							return;	
 						}
 						
-						var tmpImg = $('#gift_inner', dataHTML).css('background-image');
-						tmpImg = tmpImg.replace('url(','').replace(')', '');
+						var tmpImg = $('#gift_box', dataHTML).children('img').attr('src');
 						
 						info.image = tmpImg;
 						
-						
-						var txt = $('#desc', dataHTML).text();
-
-						txt = txt.replace('You just accepted ','');
-						var pos2 = txt.indexOf(' from ');
-						txt = txt.slice(0, pos2);
-						
-						info.title = txt;
-						info.text  = $('#desc', dataHTML).text();
+						info.title = '';
+						info.text  = $('#giftName', dataHTML).val();
 						
 						info.time = Math.round(new Date().getTime() / 1000);
 						

@@ -92,7 +92,9 @@ FGS.hideFromFeed = function(bonusID, limit)
 				'source': 'home',
 				'nctr[_mod]': 'pagelet_home_stream',
 				'lsd':	'',
-				'post_form_id_source':'AsyncRequest'
+				'post_form_id_source':'AsyncRequest',
+				'lazy': 1,
+				'stale_ok': 1
 			};
 			
 			var postData = FGS.jQuery.param(postData).replace(/%5B/g,'[').replace(/%5D/g,']');
@@ -128,7 +130,9 @@ FGS.commentBonus = function(bonusID, comment)
 				'link_data': v.link_data,
 				'nctr[_mod]': 'pagelet_home_stream',
 				'lsd':	'',
-				'post_form_id_source':'AsyncRequest'	
+				'post_form_id_source':'AsyncRequest',
+				'lazy': 1,
+				'stale_ok': 1
 			};
 
 			var postData = FGS.jQuery.param(postData).replace(/%5B/g,'[').replace(/%5D/g,']');
@@ -185,7 +189,9 @@ FGS.likeBonus = function (bonusID, autolike)
 				'link_data': v.link_data,
 				'nctr[_mod]': 'pagelet_home_stream',
 				'lsd':	'',
-				'post_form_id_source':'AsyncRequest'	
+				'post_form_id_source':'AsyncRequest',
+				'lazy': 1,
+				'stale_ok': 1
 			};
 			
 			var postData = FGS.jQuery.param(postData).replace(/%5B/g,'[').replace(/%5D/g,']');

@@ -77,32 +77,32 @@ FGS.rewardville.Freegifts =
 					var tmpStr = {};
 					var tmpStr2 = {};
 					
-					var pos1a 	= dataStr.indexOf("ts: '", pos0mb)+5;
-					var pos1b 	= dataStr.indexOf("'", pos1a);
+					var pos1a 	= dataStr.indexOf('"ts":', pos0mb)+5;
+					var pos1b 	= dataStr.indexOf(',', pos1a);
 					tmpStr.ts 	= dataStr.slice(pos1a,pos1b);
 					tmpStr2.ts 	= dataStr.slice(pos1a,pos1b);
 					
-					var pos1a = dataStr.indexOf("rewardId: '", pos0mb)+11;
-					var pos1b = dataStr.indexOf("'", pos1a);
+					var pos1a = dataStr.indexOf('"rewardId":', pos0mb)+11;
+					var pos1b = dataStr.indexOf(',', pos1a);
 					tmpStr.rewardId = dataStr.slice(pos1a,pos1b);
 					tmpStr2.rp = dataStr.slice(pos1a,pos1b);
 					
-					var pos1a = dataStr.indexOf("mbSendKey: '", pos0mb)+12;
-					var pos1b = dataStr.indexOf("'", pos1a);
+					var pos1a = dataStr.indexOf('"mbSendKey":"', pos0mb)+13;
+					var pos1b = dataStr.indexOf('"', pos1a);
 					tmpStr.sendkey = dataStr.slice(pos1a,pos1b);
 					tmpStr2.sendkey = escape(dataStr.slice(pos1a,pos1b));
 					
-					var pos1a = dataStr.indexOf("mbKey: '", pos0mb)+8;
-					var pos1b = dataStr.indexOf("'", pos1a);
+					var pos1a = dataStr.indexOf('"mbKey":"', pos0mb)+9;
+					var pos1b = dataStr.indexOf('"', pos1a);
 					tmpStr.key = dataStr.slice(pos1a,pos1b);
 					tmpStr2.key = dataStr.slice(pos1a,pos1b);
 					
-					var pos1a = dataStr.indexOf("fname: '", pos0us)+8;
-					var pos1b = dataStr.indexOf("'", pos1a);
+					var pos1a = dataStr.indexOf('"fname":"', pos0us)+9;
+					var pos1b = dataStr.indexOf('"', pos1a);
 					var formUser = dataStr.slice(pos1a,pos1b);
 					
-					var pos1a = dataStr.indexOf("zid: '", pos0us)+6;
-					var pos1b = dataStr.indexOf("'", pos1a);
+					var pos1a = dataStr.indexOf('"zid":"', pos0us)+7;
+					var pos1b = dataStr.indexOf('"', pos1a);
 					tmpStr2.r = dataStr.slice(pos1a,pos1b);
 					
 					tmpStr.mfs = true;
