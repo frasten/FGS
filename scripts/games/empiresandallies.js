@@ -1,4 +1,4 @@
-FGS.cityville.Freegifts = 
+FGS.empiresandallies.Freegifts = 
 {
 	Click: function(params, retry)
 	{
@@ -8,7 +8,7 @@ FGS.cityville.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/cityville/'+addAntiBot,
+			url: 'http://apps.facebook.com/empiresandallies/'+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -25,7 +25,7 @@ FGS.cityville.Freegifts =
 					params.step1url = url;
 					params.step1params = params2;
 					
-					FGS.cityville.Freegifts.Click2(params);
+					FGS.empiresandallies.Freegifts.Click2(params);
 				}
 				catch(err)
 				{
@@ -117,7 +117,7 @@ FGS.cityville.Freegifts =
 					params.domain = params.step1url.match(re)[1].toString();
 					params.zyParam = FGS.jQuery.param(zyParam);
 					
-					FGS.cityville.Freegifts.Click3(params);
+					FGS.empiresandallies.Freegifts.Click3(params);
 				}
 				catch(err)
 				{
@@ -169,7 +169,7 @@ FGS.cityville.Freegifts =
 		
 		$.ajax({
 			type: "POST",
-			url: 'http://'+params.domain+'/gifts.php?action=chooseRecipient&view=app&ref=&'+params.zyParam+addAntiBot,
+			url: 'http://'+params.domain+'/gifts.php?action=chooseRecipient&view=empires&ref=&'+params.zyParam+addAntiBot,
 			data: 'giftRecipient=&gift='+params.gift+'&ref=&'+params.zyParam,
 			dataType: 'text',
 			success: function(dataStr)
@@ -229,7 +229,7 @@ FGS.cityville.Freegifts =
 					
 					var contentAttr = FGS.encodeHtmlEntities(contentTmp);
 
-					outStr += '<fbGood_request-form invite="'+inviteAttr+'" action="'+actionAttr+'" method="'+methodAttr+'" type="'+typeAttr+'" content="'+contentAttr+'"><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="EXCLUDE_ARRAY_LIST" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.FGS.cityville.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form>';
+					outStr += '<fbGood_request-form invite="'+inviteAttr+'" action="'+actionAttr+'" method="'+methodAttr+'" type="'+typeAttr+'" content="'+contentAttr+'"><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="EXCLUDE_ARRAY_LIST" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.FGS.empiresandallies.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form>';
 					
 					outStr += '</div>';
 					
@@ -267,7 +267,7 @@ FGS.cityville.Freegifts =
 						method: 'getSNUIDs',
 						params:	'[['+str+'],"1"]',
 						cmd_id:	cmd_id,
-						app_id:	'75',
+						app_id:	'81',
 						authHash: FGS.Gup('zyAuthHash', params.zyParam),
 						zid:	zy_user,
 						snid:	1,
@@ -278,11 +278,13 @@ FGS.cityville.Freegifts =
 					params.excludeCity = exclude;
 					
 					params.outStr = outStr;
-					
+
 					if(exclude == '')
-						FGS.cityville.Freegifts.Finish(params);
+						FGS.empiresandallies.Freegifts.Finish(params);
 					else					
-						FGS.cityville.Freegifts.Click4(params);
+						FGS.empiresandallies.Freegifts.Click4(params);
+						
+				
 					
 				}
 				catch(err)
@@ -342,7 +344,7 @@ FGS.cityville.Freegifts =
 					
 		$.ajax({
 			type: "POST",
-			url: 'http://fb-client-0.cityville.zynga.com/snapi_proxy.php',
+			url: 'http://fb-client-0.empire.zynga.com/snapi_proxy.php',
 			data: postData,
 			dataType: 'text',
 			success: function(dataStr)
@@ -365,7 +367,7 @@ FGS.cityville.Freegifts =
 						params.sendTo[0] = info.body[params.sendTo[0]];
 					}
 					
-					FGS.cityville.Freegifts.Finish(params);					
+					FGS.empiresandallies.Freegifts.Finish(params);					
 				}
 				catch(err)
 				{
@@ -426,7 +428,7 @@ FGS.cityville.Freegifts =
 		str = str.replace('/fb:req-choice', '/fb:req');
 		
 		var fbml = '<fb:fbml>'+str+'</fb:fbml>';
-		var nextParams = 'api_key=291549705119&locale=en_US&sdk=joey&fbml='+encodeURIComponent(fbml);
+		var nextParams = 'api_key=164285363593426&locale=en_US&sdk=joey&fbml='+encodeURIComponent(fbml);
 		
 		params.nextParams = nextParams;
 
@@ -435,7 +437,7 @@ FGS.cityville.Freegifts =
 };
 
 
-FGS.cityville.Requests =
+FGS.empiresandallies.Requests =
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -479,7 +481,7 @@ FGS.cityville.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					FGS.cityville.Requests.Click2(currentType, id, url, params);
+					FGS.empiresandallies.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
 				{
@@ -533,7 +535,7 @@ FGS.cityville.Requests =
 					
 					var nextUrl = URL.slice(pos1,pos2);
 					
-					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '').replace("ZYFrameManager.navigateTo('invite.php", '');
+					dataStr = dataStr.replace(/window\.ZYFrameManager/g, '').replace("ZYFrameManager.navigateTo('i2nvite.php", '');
 
 					var pos1 = dataStr.indexOf("ZYFrameManager.navigateTo('");
 					
@@ -546,7 +548,7 @@ FGS.cityville.Requests =
 					
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 
-					FGS.cityville.Requests.Click3(currentType, id, nextUrl);
+					FGS.empiresandallies.Requests.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{
@@ -593,7 +595,7 @@ FGS.cityville.Requests =
 				
 				try
 				{
-					if($('.errorMessage', dataHTML).length > 0 || $('.giftLimit', dataHTML).length > 0 || dataStr.indexOf('Always accept requests as soon as possible') != -1 || dataStr.indexOf('You are already neighbors with this person') != -1)
+					if($('.errorMessage', dataHTML).length > 0 || $('.giftLimit', dataHTML).length > 0 || dataStr.indexOf('Always accept requests as soon as possible') != -1 || dataStr.indexOf('You are already neighbors with this person') != -1 || $('.main_crewError_cont	', dataHTML).length > 0)
 					{
 						if($('.errorMessage', dataHTML).length > 0)
 						{
@@ -602,7 +604,11 @@ FGS.cityville.Requests =
 						else if($('.giftLimit', dataHTML).length > 0)
 						{
 							var error_text = $.trim($('.giftLimit', dataHTML).text());
-						}						
+						}			
+						else if($('.main_crewError_cont	', dataHTML).length > 0)
+						{
+							var error_text = $.trim($('.main_crewError_cont', dataHTML).text());
+						}					
 						else if(dataStr.indexOf('Always accept requests as soon as possible') != -1)
 						{
 							var error_text = $.trim($('.message', dataHTML).text());
@@ -623,7 +629,7 @@ FGS.cityville.Requests =
 					info.title = $(".giftConfirm_name",dataHTML).children().text();
 					info.time = Math.round(new Date().getTime() / 1000);
 
-					if($('h3.gift_title', dataHTML).text().indexOf('are now neighbors') != -1)
+					if(dataStr.indexOf('You are now neighbors with') != -1)
 					{
 						info.image = $(".giftFrom_img",dataHTML).children().attr("src");
 						info.title = 'New neighbour';
@@ -633,15 +639,6 @@ FGS.cityville.Requests =
 						FGS.endWithSuccess(currentType, id, info);
 						return;
 						
-					}
-					else if($('.train_message', dataHTML).length > 0)
-					{
-						info.image = 'http://fb-client-0.cityville.zynga.com/'+$(".train_reward_icon",dataHTML).children().attr("src");
-						info.title = 'Coin bonus';
-						info.text  = $(".train_message",dataHTML).children().text();
-						
-						FGS.endWithSuccess(currentType, id, info);
-						return;
 					}
 					else if($('.message', dataHTML).text().indexOf('You have adopted') != -1)
 					{
@@ -741,7 +738,7 @@ FGS.cityville.Requests =
 	},
 };
 
-FGS.cityville.Bonuses = 
+FGS.empiresandallies.Bonuses = 
 {	
 	Click: function(currentType, id, currentURL, retry)
 	{
@@ -785,7 +782,7 @@ FGS.cityville.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					FGS.cityville.Requests.Click2(currentType, id, url, params);
+					FGS.empiresandallies.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -853,7 +850,7 @@ FGS.cityville.Bonuses =
 					nextUrl = nextUrl+nextUrl2+'&overlayed=true&'+new Date().getTime()+'#overlay';
 					
 					
-					FGS.cityville.Bonuses.Click3(currentType, id, nextUrl);
+					FGS.empiresandallies.Bonuses.Click3(currentType, id, nextUrl);
 				}
 				catch(err)
 				{

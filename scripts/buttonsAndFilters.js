@@ -126,6 +126,28 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	164285363593426:	{ 	name: 'Empire and Allies',	systemName: 'empiresandallies', 	link: 'http://apps.facebook.com/empiresandallies/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Start your business', 'Start your business!', 'Send collectables', 'Send collectables!', 'Send collectibles', 'iAbre tu negocio', 'Visit CityVille', 'Collectable wanted', '¡Envía coleccionables', 'Enviar colecionáveis', 'Envoie des collections', 'Invia collezionabili', 'Kirim barang koleksi', 'Send collectables', 'Sende Sammlerstücke', 'Start your business', '¡Abre tu negocio', 'Démarre ton activité', 'Eröffne dein Geschäft', 'Start your business', 'Comece um negócio', '"Start your business"'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	291549705119: 	{ 	name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
 						filter:		
 						{
@@ -669,6 +691,28 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	1677463161271: 	{ 	name: 'Zoo World 2',		systemName: 'zooworld2', link: 'http://apps.facebook.com/playzoo/zoo/landingZoo2.php',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Claim Juice and Share', 'Send the material', 'Claim and share', '^Send', 'Start Team Race'],
+							requests: [],
+							requestsNewWindow: ['(.*)']
+						},
+						buttons: [
+							'BonusesPending',
+							//'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							//'RequestsHistory',
+							'FailedBonuses',
+							//'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	2405948328: { 	name: 'Likeness',	systemName: 'likeness', link: 'http://apps.facebook.com/likeness/',
 						filter:	
 						{
@@ -851,6 +895,26 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	174582889219848:	{ 	name: 'Army Attack',	systemName: 'armyattack', link: 'http://apps.facebook.com/armyattack/',
+						filter:	
+						{
+							bonuses: ['Play Army Attack'],
+							bonusesNewWindow: [],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	169557846404284:	{ 	name: 'Zombie Lane',	systemName: 'zombielane', link: 'http://apps.facebook.com/zombielane/',
 						filter:	
 						{
@@ -867,6 +931,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],

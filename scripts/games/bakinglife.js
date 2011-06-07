@@ -3,7 +3,6 @@ FGS.bakinglife.Freegifts =
 	Click: function(params, retry)
 	{
 		params.bakinglifeUrl = 'http://apps.facebook.com/bakinglife/sendGift.php?gift='+params.gift+'&fb_force_mode=fbml&friends=app';
-		
 		FGS.getFBML(params);
 	},
 };
@@ -291,6 +290,19 @@ FGS.bakinglife.Bonuses =
 				
 				try
 				{
+				
+					var pos0 = dataStr.indexOf('parent.location.href="');
+					if(pos0 != -1)
+					{
+						pos0+=22;
+						pos1 = dataStr.indexOf('"', pos0);
+						
+						var newURL = dataStr.slice(pos0, pos1);
+						FGS.bakinglife.Bonuses.Click(currentType, id, newURL, params, true);
+						return;
+					}
+				
+				
 					var out = $.trim($('td.boxPadding', dataHTML).find('p:first').text());
 					var out2 = $.trim($('td.boxPadding', dataHTML).find('h1:first').text());
 					

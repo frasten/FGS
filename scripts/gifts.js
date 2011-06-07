@@ -403,6 +403,11 @@ FGS.giftsArray = {
 		"greenBubbleCoral": { name: 'Green Bubble Coral'},
 	},
 	
+	164285363593426:
+	{
+		"energy01": { name: '+1 Energy'}
+	},
+	
 	291549705119: // cityville
 	{
 		"mysterygift_v1": { name: 'Mystery Gift'},
@@ -434,6 +439,11 @@ FGS.giftsArray = {
 		"Animal_pig1": { name: 'Pig'},
 		"Animal_Rabbit1": { name: 'White Bunny'},
 		"parking_lot_gift": { name: 'Parking Lot'},
+	},
+	
+	1677463161271: // zoo world 2
+	{
+		"297": { name: 'Bolt of Energy'},
 	},
 	
 	167746316127: // zoo world
@@ -725,6 +735,7 @@ FGS.freeGiftForGame =
 	10979261223:  '189',
 	120563477996213: '329',
 	151044809337: 'mysterybox',
+	164285363593426: 'energy01',
 	291549705119: 'energy_1',
 	2389801228: 'chips',
 	338051018849: 'Stanchion',
@@ -736,6 +747,7 @@ FGS.freeGiftForGame =
 	21526880407: '37520', //'37394',
 	
 	167746316127: '562',
+	1677463161271: '297',
 	2405948328: '562',
 	2345673396: '562',
 	2339854854: '562',
@@ -775,6 +787,11 @@ FGS.getFBML = function(params, retry)
 		var thisMethod = 'post';
 	}
 	
+	if(typeof params.nextParams == 'undefined')
+	{
+		params.nextParams = {};
+	}
+
 	params.nextParams.lazy = 1;
 	params.nextParams.stale_ok = 1;
 
@@ -791,6 +808,8 @@ FGS.getFBML = function(params, retry)
 			{
 				var dataStr = FGS.processPageletOnFacebook(dataStr);
 			}
+			
+			console.log($(dataStr));
 			
 			var data = FGS.HTMLParser(dataStr);
 			
@@ -823,7 +842,7 @@ FGS.getFBML = function(params, retry)
 				reqData.content = tst[1];
 				reqData.prefill = true;
 				
-				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
+				if(params.gameID == '167746316127' || params.gameID == '1677463161271' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
 				{
 					dataCheck = dataCheck.slice(dataCheck.lastIndexOf('var items='));
 				}
@@ -966,9 +985,14 @@ FGS.getFBML = function(params, retry)
 					params.finalMethod = 'get';
 				}
 				
-				if(params.gameID == '167746316127' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
+				if(params.gameID == '167746316127' || params.gameID == '1677463161271' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
 				{
 					sendGiftParams += '&giftId='+params.gift;
+				}
+				
+				if(params.gameID == '1677463161271')
+				{
+						sendGiftParams += '&senderId='+FGS.userID+'&signed_request='+params.click2param;
 				}
 				
 				params.promptParams = reqData;
@@ -1026,7 +1050,7 @@ FGS.sendGift = function(params, retry)
 	
 	$.ajax({
 		type: "POST",
-		url: 'http://apps.facebook.com/fbml/ajax/prompt_send.php?__a=1&lazy=1&stale_ok=1',
+		url: 'http://apps.facebook.com/fbml/ajax/prompt_send.php?__a=1',
 		cache: false,
 		dataType: 'text',
 		data: params.promptParams,
