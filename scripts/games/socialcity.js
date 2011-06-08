@@ -208,6 +208,12 @@ FGS.socialcity.Requests =
 						info.text  = $('.landing-msg', dataHTML).text();
 						info.image = $('.landing-gift-pic', dataHTML).children().attr('src');
 					}
+					else if($('#infoText', dataHTML).length > 0)
+					{
+						info.title = $('.highlight', dataHTML).text();
+						info.text  = $('#infoText', dataHTML).text();
+						info.image = $('#topLeftImage', dataHTML).attr('src');
+					}
 					else
 					{
 						throw {message: dataStr}

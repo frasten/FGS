@@ -10,8 +10,8 @@
 <link type="text/css" href="css/demo_page.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table.css" rel="stylesheet" />
 <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
-<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.29" rel="stylesheet" />
-<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.29" rel="stylesheet" />
+<link type="text/css" href="css/jquery.contextMenu.css?version=1.1.0.30" rel="stylesheet" />
+<link type="text/css" href="css/jquery.tooltip.css?version=1.1.0.30" rel="stylesheet" />
 
 <script type="text/javascript" src="scripts/jquery-1.5.1.min.js"></script>
 <script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
@@ -19,12 +19,12 @@
 
 
 <script type="text/javascript" src="scripts/jquery.utils.js"></script>
-<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.29"></script>
+<script type="text/javascript" src="scripts/jquery.contextMenu.js?version=1.1.0.30"></script>
 <script type="text/javascript" src="scripts/jquery.dataTables.min.js"></script>
 
-<script type="text/javascript" src="scripts/time.js?version=1.1.0.29"></script>
-<script type="text/javascript" src="scripts/notices.js?version=1.1.0.29"></script>
-<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.29"></script>
+<script type="text/javascript" src="scripts/time.js?version=1.1.0.30"></script>
+<script type="text/javascript" src="scripts/notices.js?version=1.1.0.30"></script>
+<script type="text/javascript" src="browser_files/browser.js?version=1.1.0.30"></script>
 
 
 <script type="text/javascript">
@@ -363,7 +363,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		$(data2).each(function(ind,data)
 		{
-			var itID = data[0];
+			var itID = parseInt(data[0]);
 			
 			if($.inArray(itID, ids) != -1 || $('#'+itID).length > 0)
 				return;
@@ -1306,7 +1306,7 @@ function addDataToScreenLocked(callback, id, data)
 		
 		$(data2).each(function(ind,data)
 		{
-			var itID = data[0];
+			var itID = parseInt(data[0]);
 			
 			if($.inArray(itID, ids) != -1 || $('#'+itID).length > 0)
 				return;
@@ -1782,6 +1782,10 @@ function addGameMenu(gameID)
 		
 		if(id == 'BonusesPending' || id == 'ManualBonuses' || id == 'RequestsPending')
 		{
+			if(id == 'BonusesPending')
+				if(bkP.gamesData[gameID].bonusNotice != undefined)
+					curEl.prepend('<div style="font-size: 1.5em; font-weight:bolder;text-align: center;color: red;padding: 5px; border: 1px dotted red;margin-bottom: 10px;">'+bkP.gamesData[gameID].bonusNotice+'</div>');
+
 			var addSearch = '<h3>Simple filter</h3> <input type="text" class="filterBonusText" /> <select class="searchWhat"><option value="1">Only title</option><option value="2">Only description</option><option value="0" selected="selected">Both</option>';
 		
 			curEl.find('.submenu').css('margin', '0 300px').append('<div style="float: left;position: absolute; left: 15px; width: 290px;" class="showAllButtonDiv"><span class="showAllText"></span><input type="checkbox" id="'+game+'ShowAll'+id+'" gameID="'+gameID+'" class="ShowAllItems" /><label for="'+game+'ShowAll'+id+'">Show all</label> <input type="checkbox" id="'+game+'ShowDescriptions'+id+'" gameID="'+gameID+'" class="ShowDescriptions" '+ ( bkP.options.showDescriptionsOnStartup == 1 ? ' checked="checked"' : '')+' /><label for="'+game+'ShowDescriptions'+id+'">Show descriptions</label><br />'+addSearch+'<br /></div>');

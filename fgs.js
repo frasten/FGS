@@ -149,6 +149,57 @@ var FGS = {
 		});
 	},
 	
+	getSingleGameRequest: function(currentType, id, currentURL, params, callback, params2, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {}
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'https://graph.facebook.com/'+params2.single,
+			data: params,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					callback(currentType, id, currentURL, [params, data, params2]);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL, params, callback, params2, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function(e)
+			{
+				if(e.status == 400)
+				{
+					FGS.endWithError('limit', currentType, id, 'Already received!');
+					return;
+				}
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL, params, callback, params2, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
 	getSendingForm: function(params, callback, retry)
 	{
 		var $ = FGS.jQuery;
@@ -159,7 +210,7 @@ var FGS = {
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: 'https://www.facebook.com/dialog/apprequests',
-			data: $.param(params.reqData)+'&'+$.param(params.access)+'&'+params.getToken+'&sdk=joey&display=iframe&locale=en_US&lazy=1&stale_ok=1',
+			data: $.param(params.reqData)+'&'+$.param(params.access)+'&'+params.getToken+'&sdk=joey&display=iframe&locale=en_US',
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -259,13 +310,9 @@ var FGS = {
 		var currentType	= 'request';
 		var info = {}
 		
-		params.requestPost.lazy = 1;
-		params.requestPost.stale_ok = 1;
-
-		
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'https://www.facebook.com/ajax/typeahead/first_degree.php?__a=1&lazy=1&stale_ok=1',
+			url: 'https://www.facebook.com/ajax/typeahead/apprequest/first_degree.php?__a=1&viewer='+FGS.userID+'&app_id='+params.gameID+'&token=v6',
 			data: params.requestPost,
 			dataType: 'text',
 			success: function(dataStr)
@@ -345,8 +392,8 @@ var FGS = {
 		
 		FGS.jQuery.ajax({
 			type: "POST",
-			url: 'https://www.facebook.com/ajax/chooser/list/friends/app_user/?__a=1&lazy=1&stale_ok=1&app_id='+params.gameID,
-			data: 'post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&lsd&post_form_id_source=AsyncRequest&lazy=1&stale_ok=1',
+			url: 'https://www.facebook.com/ajax/chooser/list/friends/app_user/?__a=1&app_id='+params.gameID,
+			data: 'post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&lsd&post_form_id_source=AsyncRequest',
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -381,7 +428,7 @@ var FGS = {
 						return;
 					}
 					
-					$.post(params.formUrl, params.formParam+'&ok_clicked=Send%20Requests&lazy=1&stale_ok=1', function(dataStr2)
+					$.post(params.formUrl, params.formParam+'&ok_clicked=Send%20Requests', function(dataStr2)
 					{
 						var curTime = Math.round(new Date().getTime() / 1000);
 
@@ -490,7 +537,7 @@ var FGS = {
 					
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0&lazy=1&stale_ok=1',
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
 			data: params.getToken,
 			dataType: 'text',
 			success: function(data)
@@ -559,7 +606,7 @@ var FGS = {
 		
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0&lazy=1&stale_ok=1',
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
 			data: params,
 			dataType: 'text',
 			success: function(data)
@@ -597,7 +644,7 @@ var FGS = {
 		
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0&lazy=1&stale_ok=1',
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
 			data: params.app_info,
 			dataType: 'text',
 			success: function(data)
@@ -663,7 +710,7 @@ var FGS = {
 		
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0&lazy=1&stale_ok=1',
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
 			data: params.app_info,
 			dataType: 'text',
 			success: function(data)
@@ -724,7 +771,7 @@ var FGS = {
 		});
 	},
 	
-	getAppAccessToken: function(currentType, id, currentURL, params, callback, retry)
+	getAppAccessToken: function(currentType, id, currentURL, params, callback, params2, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
@@ -733,7 +780,7 @@ var FGS = {
 		
 		FGS.jQuery.ajax({
 			type: "GET",
-			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0&lazy=1&stale_ok=1',
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
 			data: params,
 			dataType: 'text',
 			success: function(data)
@@ -752,7 +799,10 @@ var FGS = {
 					
 					var access = {access_token: parseStr.session.access_token};
 					
-					FGS.getGameRequests(currentType, id, currentURL, access, callback);
+					if(!params2.single)
+						FGS.getGameRequests(currentType, id, currentURL, access, callback);
+					else
+						FGS.getSingleGameRequest(currentType, id, currentURL, access, callback, params2);
 				}
 				catch(err)
 				{
@@ -760,7 +810,7 @@ var FGS = {
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL, params, callback, true);
+						retryThis(currentType, id, currentURL, params, callback, params2, true);
 					}
 					else
 					{
@@ -772,7 +822,7 @@ var FGS = {
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL, params, callback, true);
+					retryThis(currentType, id, currentURL, params, callback, params2, true);
 				}
 				else
 				{
@@ -792,7 +842,6 @@ var FGS = {
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: url,
-			data: 'lazy=1&stale_ok=1',
 			dataType: 'text',
 			success: function(data)
 			{
@@ -848,11 +897,11 @@ var FGS = {
 		var info = {}
 		
 		if(FGS.Gup('secondLink', dataPost) == 1)
-			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1&lazy=1&stale_ok=1'
+			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
 		else
-			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1&lazy=1&stale_ok=1';
+			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
 		
-		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests&lazy=1&stale_ok=1';
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests';
 		
 		
 		FGS.jQuery.ajax({
@@ -926,11 +975,11 @@ var FGS = {
 	emptyUnwantedGifts: function(dataPost)
 	{
 		if(FGS.Gup('secondLink', dataPost) == 1)
-			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1&lazy=1&stale_ok=1'
+			var url = 'http://www.facebook.com/ajax/games/apprequest/apprequest.php?__a=1'
 		else
-			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1&lazy=1&stale_ok=1';
+			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
 		
-		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests&lazy=1&stale_ok=1';
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests';
 		
 		
 		FGS.jQuery.ajax({
@@ -1025,7 +1074,6 @@ var FGS = {
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: 'http://www.facebook.com/help/',
-			data: 'lazy=1&stale_ok=1',
 			dataType: 'text',
 			timeout: 30000,
 			success: function(data2)
@@ -1408,7 +1456,6 @@ var FGS = {
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: urlIK,
-			data: 'lazy=1&stale_ok=1',
 			dataType: 'text',
 			timeout: 180000,
 			success: function(data)
@@ -1484,18 +1531,22 @@ var FGS = {
 
 					var el = $(this);
 					
+					var elID = el.children('input[name="request_id"]').val();
+					if(typeof elID == 'undefined')
+						elID = el.children('input[name="id"]').val();
+					
 					if($(this).attr('action') == '/ajax/games/apprequest/apprequest.php')
 					{
 						var dataPost = 
 							'charset_test='			+el.children('input[name=charset_test]').val() +
-							'&id='					+el.children('input[name=id]').val() +							
+							'&id='					+elID +		
+							'&request_id='			+elID +
 							'&params[from_id]='		+el.find('input[name="params\[from_id\]"]').val() +
 							'&params[app_id]='		+ APPID +
 							'&div_id='		+el.children('input[name=div_id]').val()	+
-							'&nctr[_mod]=pagelet_requests' +
 							'&lsd=' +
-							'&actions[accept]=Akceptuj' +
-							'&post_form_id_source=AsyncRequest&secondLink=1&lazy=1&stale_ok=1';
+							'&actions[accept]=Akceptuj'+
+							'&post_form_id_source=AsyncRequest&secondLink=1';
 						
 						var typeText = '';
 					}
@@ -1503,7 +1554,8 @@ var FGS = {
 					{
 						var dataPost = 
 							'charset_test='			+el.children('input[name=charset_test]').val() +
-							'&id='					+el.children('input[name=id]').val() +
+							'&id='					+elID +
+							'&request_id='			+elID +
 							'&type='				+el.children('input[name=type]').val() +
 							'&status_div_id='		+el.children('input[name=status_div_id]').val()	+
 							'&params[from_id]='		+el.find('input[name="params\[from_id\]"]').val() +
@@ -1511,7 +1563,7 @@ var FGS = {
 							'&params[req_type]='	+el.find('input[name="params\[req_type\]"]').val() +
 							'&params[is_invite]='	+el.find('input[name="params\[is_invite\]"]').val() +
 							'&lsd' +
-							'&post_form_id_source=AsyncRequest&lazy=1&stale_ok=1';
+							'&post_form_id_source=AsyncRequest';
 							
 						var typeText = el.find('input[type="submit"]').attr('name');
 						
@@ -1535,9 +1587,6 @@ var FGS = {
 						dataPost += '&'+escape(el.find('input[type="submit"]:first').attr('name'))+'='+el.find('input[type="submit"]:first').attr('value');
 					}
 					
-					var elID = el.children('input[name="request_id"]').val();
-					if(typeof elID == 'undefined')
-						elID = el.children('input[name="id"]').val();
 					if(el.find('.appRequestBodyNewA').length > 0)
 					{
 						var testEl = el.find('.appRequestBodyNewA:first');
@@ -1777,7 +1826,7 @@ var FGS = {
 		$.ajax({
 			type: "GET",
 			url: 'http://www.facebook.com/ajax/apps/app_stories.php',
-			data: '__a=1&is_game=1&app_ids='+collectID+'&max_stories='+number+'&user_action=0&lazy=1&stale_ok=1'+paramsStr,
+			data: '__a=1&is_game=1&app_ids='+collectID+'&max_stories='+number+'&user_action=0'+paramsStr,
 			dataType: 'text',
 			timeout: 180000,
 			success: function(str)
@@ -2175,7 +2224,6 @@ var FGS = {
 			FGS.jQuery.ajax({
 				url: 'https://developers.facebook.com/docs/api',
 				method: 'GET',
-				data: 'lazy=1&stale_ok=1',
 				dataType: 'text',
 				success: function(d)
 				{
@@ -2200,7 +2248,6 @@ var FGS = {
 			FGS.jQuery.ajax({
 				url: 'https://graph.facebook.com/me/friends?'+access,
 				method: 'GET',
-				data: 'lazy=1&stale_ok=1',
 				dataType: 'text',
 				success:function(obj)
 				{

@@ -82,12 +82,13 @@ FGS.yoville.Freegifts =
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
 					params.domain = params.step2url.match(re)[1].toString();
 					
+					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					var pos0 = dataStr.indexOf('var clientAuth =');
-					var pos1 = dataStr.indexOf("'", pos0);
-					var pos2 = dataStr.indexOf("'", pos1+1);
-					
-					params.step3params = dataStr.slice(pos1+1, pos2);
+					var gups = $('.button-send-gift:first', dataHTML).children('a').attr('href');
+					var pos0 = gups.indexOf('?')+1;
+					var gups = gups.slice(pos0);
+
+					params.step3params = '&type='+FGS.Gup('type', gups)+'&yo_t='+FGS.Gup('yo_t', gups)+'&yo_u='+FGS.Gup('yo_u', gups)+'&fb_sig_user='+FGS.Gup('fb_sig_user', gups)+'&fb_sig_session_key='+FGS.Gup('fb_sig_session_key', gups);
 					
 					FGS.yoville.Freegifts.Click3(params);
 				}

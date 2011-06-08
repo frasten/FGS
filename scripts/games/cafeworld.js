@@ -138,7 +138,7 @@ FGS.cafeworld.Requests =
 					
 					if(dataStr.indexOf('/me/apprequests') != -1)
 					{
-						FGS.getAppAccessToken(currentType, id, currentURL, 'api_key=101539264719&app_id=101539264719&channel=http://fb-0.cafe.zynga.com/current//channel/custom_channel.html', FGS.cafeworld.Requests.ParseAppRequests);
+						FGS.getAppAccessToken(currentType, id, currentURL, 'api_key=101539264719&app_id=101539264719&channel=http://fb-0.cafe.zynga.com/current//channel/custom_channel.html', FGS.cafeworld.Requests.ParseAppRequests, {});
 						return;
 					}
 

@@ -783,7 +783,7 @@ FGS.getFBML = function(params, retry)
 	}
 	else
 	{
-		var thisUrl = 'http://www.connect.facebook.com/widgets/serverfbml.php';
+		var thisUrl = 'http://www.connect.facebook.com/widgets/serverfbml.php'; // http://www.facebook.com/plugins/serverfbml.php
 		var thisMethod = 'post';
 	}
 	
@@ -808,8 +808,6 @@ FGS.getFBML = function(params, retry)
 			{
 				var dataStr = FGS.processPageletOnFacebook(dataStr);
 			}
-			
-			console.log($(dataStr));
 			
 			var data = FGS.HTMLParser(dataStr);
 			
@@ -984,6 +982,13 @@ FGS.getFBML = function(params, retry)
 				{
 					params.finalMethod = 'get';
 				}
+				
+				
+				if(params.gameID == '21526880407')
+				{
+					sendGiftParams += '&'+$('form[type]', data).serialize();
+				}
+				
 				
 				if(params.gameID == '167746316127' || params.gameID == '1677463161271' || params.gameID == '2405948328' || params.gameID == '2345673396' || params.gameID == '2339854854' || params.gameID == '14852940614')
 				{

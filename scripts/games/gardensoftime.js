@@ -152,7 +152,7 @@ FGS.gardensoftime.Requests =
 						
 						if(data.indexOf('You are now neighbors') != -1)
 						{
-							info.image = '';
+							info.image = $('#sender', dataHTML).children('img').attr('src');
 							info.title = '';
 							info.text  = 'New neighbour';
 							info.time = Math.round(new Date().getTime() / 1000);

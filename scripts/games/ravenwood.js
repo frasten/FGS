@@ -361,7 +361,7 @@ FGS.ravenwood.Requests =
 						}
 						else
 						{
-							info.title = $.trim(oldEL.text());	
+							info.title = $.trim(oldEl.text());	
 							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
 						}
 						

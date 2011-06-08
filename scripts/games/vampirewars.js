@@ -99,7 +99,7 @@ FGS.vampirewars.Freegifts =
 					var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
 					params.domain = url.match(re)[1].toString();
 					var pos1 = url.lastIndexOf('?')+1;
-					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5source=normal&'+url.slice(pos1);
+					params.step3param = 'send_gifts_mfs.php?ajax=1&noredirect=1&giftId='+params.gift+'&mfsID=5&source=normal&'+url.slice(pos1);
 					
 					
 					FGS.vampirewars.Freegifts.Click3(params);

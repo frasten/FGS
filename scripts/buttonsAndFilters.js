@@ -147,6 +147,7 @@ FGS.gamesData =
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
+						bonusNotice: 'YOU CAN ONLY ACCEPT BONUSES FROM YOUR "IN-GAME NEIGHBORS" - NOT FRIENDS. IF YOU TRY TO RECEIVE FROM SOMEONE WHO ISN\'T YOUR NEIGHBOR - YOU WILL GET "RECEIVING ERROR"!!!',
 					},
 	291549705119: 	{ 	name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
 						filter:		
@@ -394,18 +395,16 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['Accept Promotion'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['(.*)']
 						},
 						buttons: [
 							'BonusesPending',
-							'RequestsPending',
 							'ManualBonuses',
+							//'RequestsPending',
 							'BonusesHistory',
-							'RequestsHistory',
 							'FailedBonuses',
-							'FailedGifts',	
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -618,13 +617,10 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['(.*)'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['(.*)']
 						},
 						buttons: [
-							'RequestsPending',
 							'ManualBonuses',
-							'RequestsHistory',
-							'FailedGifts',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -875,6 +871,26 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	115301331874715:	{ 	name: 'Pyramidville',	systemName: 'pyramidville', link: 'http://apps.facebook.com/pyramidville/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Aiuta (.*)', 'Help (.*)', 'Ayudar a (.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	123837014322698:	{ 	name: 'My Shops',	systemName: 'myshops', link: 'http://apps.facebook.com/myshopsgame/',
 						filter:	
 						{
@@ -963,7 +979,7 @@ FGS.gamesData =
 							bonuses: [],
 							bonusesNewWindow: ['^Send Parts', 'Accept Help', 'Send Pieces'],
 							requests: [],
-							requestsNewWindow: []
+							requestsNewWindow: ['could really use']
 						},
 						buttons: [
 							'BonusesPending',
