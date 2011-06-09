@@ -239,6 +239,75 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
+	127148832824: 	{ 
+						name: 'Happy Pets',		systemName: 'happypets', link: 'http://apps.facebook.com/happy-pets/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							//'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							//'BonusesHistory',
+							'RequestsHistory',
+							//'FailedBonuses',
+							'FailedGifts',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	134920244184: 	{ 
+						name: 'Happy Aquarium',		systemName: 'happyaquarium', link: 'http://apps.facebook.com/happy-aquarium/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							//'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							//'BonusesHistory',
+							'RequestsHistory',
+							//'FailedBonuses',
+							'FailedGifts',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	157470434271574: 	{ 
+						name: 'Monopoly Millionaires',		systemName: 'monopoly', link: 'http://apps.facebook.com/monopolymillionaires/',
+						filter:		
+						{
+							bonuses: [],
+							bonusesNewWindow: ['Roll on my board'],
+							requests: [],
+							requestsNewWindow: ['Will you invest in my Hotel(.*)']
+						},
+						buttons: [
+							'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							'BonusesHistory',
+							'RequestsHistory',
+							'FailedBonuses',
+							'FailedGifts',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
 	120563477996213: 	{ 
 						name: 'Ravenwood Fair',		systemName: 'ravenwood', link: 'http://apps.facebook.com/ravenwoodfair/',
 						filter:		
