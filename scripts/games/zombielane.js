@@ -105,7 +105,17 @@ FGS.zombielane.Freegifts =
 					var pos1b = dataStr.indexOf('"', pos1+1);
 					var sig = dataStr.slice(pos1+1, pos1b);
 					
-					params.click3param = 'uid='+uid+'&sig='+sig+'&_='+Math.round(new Date().getTime()/1000);
+					// unique tracking id
+					var date = new Date();
+					var time = "" + date.getTime();
+					var utid = time.substring(time.length-5, time.length);
+					for(var i = 0; i < 11; i++) {
+						utid +=  Math.ceil(9*Math.random());
+					}
+
+					params.utid = utid;					
+					
+					params.click3param = 'gid='+params.gift+'&utid='+utid+'&uid='+uid+'&sender='+uid+'&sig='+sig+'&ref=&product_detail=Default&src=vir_sendgift_'+params.gift;
 					
 					FGS.zombielane.Freegifts.Click3(params);
 				}
@@ -159,18 +169,22 @@ FGS.zombielane.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://'+params.domain+'/dead/gifts',
+			url: 'http://'+params.domain+'/dead/send_gift',
 			data: params.click3param,
 			dataType: 'text',
 			success: function(dataStr)
 			{
 				try
 				{
-					var tst = new RegExp(/FB[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
+					var tst = new RegExp(/FB[.]Facebook[.]init\("(.*)".*"(.*)"/g).exec(dataStr);
 					if(tst == null) throw {message: 'no fb.init'}
 					
 					var app_key = tst[1];
 					var channel_url = tst[2];
+					
+					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					dataStr = dataStr.replace(tst[1], '');
 					
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
 					if(tst == null) throw {message:'no fbml tag'}

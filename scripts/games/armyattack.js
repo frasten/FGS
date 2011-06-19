@@ -1,3 +1,247 @@
+FGS.armyattack.Freegifts = 
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/armyattack/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params2 = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_129547877091100', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					params.step1url = url;
+					params.step1params = params2;
+					
+					FGS.armyattack.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tst = new RegExp(/crm_sig: "(.*)"/).exec(dataStr);
+					if(tst == null) throw {message:'no cc_fbuid tag'}
+					
+					params.crm_sig = tst[1];
+					
+					// unique tracking id
+					var date = new Date();
+					var time = "" + date.getTime();
+					var utid = time.substring(time.length-5, time.length);
+					for(var i = 0; i < 11; i++) {
+						utid +=  Math.ceil(9*Math.random());
+					}
+					
+					params.utid = utid;
+					
+					
+					FGS.armyattack.Freegifts.Click3(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click3: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: params.step1url+'send_gift',
+			data: 'gid='+params.gift+'&uid='+FGS.userID+'&sender='+FGS.userID+'&sig='+params.crm_sig+'&ref=&src=vir_gift_sent&recipient=-1&utid='+params.utid,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{	
+					var reqData = {};
+
+					reqData.data = 'GIFT,vir_gift_sent,'+params.utid;
+					
+					var tst = new RegExp(/message: "(.*)"/).exec(dataStr);
+					if(tst == null) throw {message:'no message tag'}
+					reqData.message = tst[1];
+					
+					params.reqData = reqData;
+					
+					FGS.armyattack.Freegifts.ClickRequest(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	ClickRequest: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		params.channel = 'http://armyattack.digitalchocolate.com/Army_server/channel.html';
+		
+		FGS.getAppAccessTokenForSending(params, function(params, d)
+		{
+			var pos0 = d.indexOf('&result=')+8;
+			var pos1 = d.indexOf('"', pos0);
+			
+			var str = d.slice(pos0, pos1);
+			var arr = JSON.parse(decodeURIComponent(JSON.parse('{"abc": "'+str+'"}').abc)).request_ids;
+			
+			var str = arr.join(',');
+			
+			$.get('http://armyattack.digitalchocolate.com/Army_server/GiftSentCallback?gid='+params.gift+'&sender='+FGS.userID+'&request_ids='+str+'&src=vir_gift_sent&utid='+params.utid);		
+		
+		});
+	},
+};
+
 FGS.armyattack.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
@@ -288,6 +532,13 @@ FGS.armyattack.Bonuses =
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
 					if(dataStr.indexOf('seems like the feed you clicked is expired') != -1)
+					{
+						var error_text = 'Stream reward already collected!';
+						FGS.endWithError('limit', currentType, id, error_text);
+						return;
+					}
+					
+					if(dataStr.indexOf('rewards have run out') != -1)
 					{
 						var error_text = 'Stream reward already collected!';
 						FGS.endWithError('limit', currentType, id, error_text);

@@ -31,9 +31,9 @@
 					
 					if(typeof(arrInd) != 'undefined')
 					{
-						var lastBonus = (res.rows.item(i).lastBonus == 0 ? 'never' : format_time_ago(res.rows.item(i).lastBonus));
-						var lastGift  = (res.rows.item(i).lastGift == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGift));
-						var lastGiftSent  = (res.rows.item(i).lastGiftSent == 0 ? 'never' : format_time_ago(res.rows.item(i).lastGiftSent));
+						var lastBonus = (res.rows.item(i).lastBonus == 0 ? bkP.getMsg('Never') : format_time_ago(res.rows.item(i).lastBonus));
+						var lastGift  = (res.rows.item(i).lastGift == 0 ? bkP.getMsg('Never') : format_time_ago(res.rows.item(i).lastGift));
+						var lastGiftSent  = (res.rows.item(i).lastGiftSent == 0 ? bkP.getMsg('Never') : format_time_ago(res.rows.item(i).lastGiftSent));
 						
 						data[array][arrInd][2] = '<span class="hide">'+res.rows.item(i).lastBonus+'</span>'+lastBonus;
 						data[array][arrInd][3] = '<span class="hide">'+res.rows.item(i).lastGift+'</span>'+lastGift;
@@ -51,42 +51,42 @@
 				$('.neighborsTable', 'div#'+game+opt).dataTable( {
 					"aaData": data.norArr,
 					"aoColumns": [
-						{ "sTitle": "Fav.", "bSortable": false },
-						{ "sTitle": "Name" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last bonus" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift sent" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total bonuses" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts sent" },
-						{ "sTitle": "Select", "bSortable": false }
+						{ "sTitle": bkP.getMsg('ToggleFavourite'), "bSortable": false },
+						{ "sTitle": bkP.getMsg('Name') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastBonus') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastGift') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastGiftSent') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalBonuses') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalGifts') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalGiftsSent') },
+						{ "sTitle": bkP.getMsg('Select'), "bSortable": false }
 					],
 					"aaSorting": [[ 1, "asc" ]],
 					"iDisplayLength": 100,
 					"oSearch": {"sSearch": ""},
 					"bJQueryUI": true,
-					"aLengthMenu": [[100, -1], [100, "All"]],
+					"aLengthMenu": [[100, -1], [100, bkP.getMsg('All')]],
 					"sPaginationType": "full_numbers"
 				});
 				
 				$('.favouritesTable', 'div#'+game+opt).dataTable( {
 					"aaData": data.favArr,
 					"aoColumns": [
-						{ "sTitle": "Fav.", "bSortable": false },
-						{ "sTitle": "Name" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last bonus" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Last gift sent" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total bonuses" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts" },
-						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": "Total gifts sent" },
-						{ "sTitle": "Select", "bSortable": false }
+						{ "sTitle": bkP.getMsg('ToggleFavourite'), "bSortable": false },
+						{ "sTitle": bkP.getMsg('Name') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastBonus') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastGift') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('LastGiftSent') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalBonuses') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalGifts') },
+						{ "sSortDataType": "dom-text", "sType": "numeric", "sTitle": bkP.getMsg('TotalGiftsSent') },
+						{ "sTitle": bkP.getMsg('Select'), "bSortable": false }
 					],
 					"aaSorting": [[ 1, "asc" ]],
 					"iDisplayLength": 100,
 					"oSearch": {"sSearch": ""},
 					"bJQueryUI": true,
-					"aLengthMenu": [[100, -1], [100, "All"]],
+					"aLengthMenu": [[100, -1], [100, bkP.getMsg('All')]],
 					"sPaginationType": "full_numbers"
 				});
 				
@@ -253,7 +253,7 @@
 					$('div#'+game+'BonusesHistoryList').prepend(htmls[tmp]);
 					$('div#'+game+'FailedBonusesList').prepend(htmlsError[tmp]);	
 					
-					$('div#'+game+'FailedBonusesList').children('div.processManualBonusClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
+					$('div#'+game+'FailedBonusesList').children('div.processManualBonusClick').css('cursor', 'pointer !important').attr('title', bkP.getMsg('ClickToOpenThisItemInNewTab'));
 					
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');								
 					$('div#'+game+'BonusesHistoryList').children('div.noErrorClass').removeClass('noErrorClass');
@@ -298,7 +298,7 @@
 					$('div#'+game+'RequestsHistoryList').prepend(htmls[tmp]);
 					$('div#'+game+'FailedGiftsList').prepend(htmlsError[tmp]);
 					
-					$('div#'+game+'FailedGiftsList').children('div.processManualRequestClick').css('cursor', 'pointer !important').attr('title', 'Click to manually receive');
+					$('div#'+game+'FailedGiftsList').children('div.processManualRequestClick').css('cursor', 'pointer !important').attr('title', bkP.getMsg('ClickToOpenThisItemInNewTab'));
 					
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').find('.bonusError').css('height', '23px');
 					$('div#'+game+'RequestsHistoryList').children('div.noErrorClass').removeClass('noErrorClass');

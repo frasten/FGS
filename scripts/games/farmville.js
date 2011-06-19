@@ -568,21 +568,17 @@ FGS.farmville.Bonuses =
 						{
 							var arr = otherLimits[checkStr];
 							
-							try
+							if($(".main_giftConfirm_cont", dataHTML).find('h3').text().indexOf(checkStr) != -1)
 							{
-								if($(".main_giftConfirm_cont", dataHTML).find('h3').text().indexOf(checkStr) != -1)
-								{
-									var error_text = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
-									
-									FGS.setNewFarmvilleBonus();
-									FGS.endWithError('other', currentType, id, error_text);
-									stop = true;
-									break;
-								}
+								var error_text = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
+								
+								FGS.setNewFarmvilleBonus();
+								FGS.endWithError('other', currentType, id, error_text);
+								stop = true;
+								break;
 							}
-							catch(e){}			
 						}
-						if(stop) return;			
+						if(stop) return;
 						
 						var error_text = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
 						

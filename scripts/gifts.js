@@ -403,9 +403,34 @@ FGS.giftsArray = {
 		"greenBubbleCoral": { name: 'Green Bubble Coral'},
 	},
 	
-	164285363593426:
+	164285363593426: // Empires & Allies
 	{
-		"energy01": { name: '+1 Energy'}
+		"energy01": { name: '+1 Energy'},
+		"energy02": { name: '+2 Energy'},
+		"energy03": { name: '+3 Energy'},
+		"expansionkey01": { name: 'Liberty Bond'},
+		"coins": { name: 'Coins'},
+		"wood": { name: 'Wood'},
+		"oil": { name: 'Oil'},
+		"gold": { name: 'Gold'},
+		"Rubberband+Ball": { name: 'Rubber Band Ball'},
+		"Statue+Cat": { name: 'Cat Statue'},
+		"Arch": { name: 'Arch'},
+		"FlyingSaucer": { name: 'Flying Saucer'},
+		"Statue+Muffler+Guy": { name: 'Muffler Guy Statue'},
+		"Column+01": { name: 'Column'},
+		"statue02": { name: 'Pole 1'},
+		"statue03": { name: 'Pole 2'},
+		"statue01": { name: 'Flagpole'},
+		"Totem": { name: 'Totem'},
+		"Mail+Box+Blue": { name: 'Mailbox'},
+		"statue04": { name: 'Statue'},
+		"statue05": { name: 'Obelisk'},
+		"Statue+Viking": { name: 'Viking Statue'},
+		"Statue+Dinosaur+Skeleton": { name: 'Dinosaur Skeleton Statue'},
+		"Statue+Elephant+02": { name: 'Elephant Statue'},
+		"Statue+Elephant+01": { name: 'Seated Elephant Statue'},
+		"BirdBath": { name: 'Bird Bath'},
 	},
 	
 	291549705119: // cityville
@@ -723,6 +748,36 @@ FGS.giftsArray = {
 		"503": { name: 'Swamp Wood Tree'},
 		"347": { name: 'Wood Bench'},
 	},
+	
+	174582889219848: //army attack
+	{
+		"Energy": { name: 'Energy' }	
+	},
+	
+	26947445683://country life
+	{
+		"16": {name: "Wheat"}
+	},
+	
+	121763384533823: //country life lite
+	{
+		"16": {name: "Wheat"}
+	},
+	
+	175251882520655:
+	{
+		"0": {name: "Mystery Gift"}
+	},
+	
+	123837014322698:
+	{
+		"220": {name: "Wooden Window"}
+	},
+	
+	169557846404284: // zombie lane
+	{
+		"EnergyCola": {name: "Energy Cola"}
+	}
 };
 
 FGS.freeGiftForGame =
@@ -756,6 +811,16 @@ FGS.freeGiftForGame =
 	102518706469143: 'parts',
 	
 	213518941553: '347',
+	174582889219848: 'Energy',
+	
+	26947445683: "16",
+	121763384533823: "16",
+	
+	175251882520655: "0",
+	
+	123837014322698: "220",
+	
+	169557846404284: "EnergyCola"
 };
 
 
@@ -791,6 +856,9 @@ FGS.getFBML = function(params, retry)
 	{
 		params.nextParams = {};
 	}
+	
+	if(typeof params.overrideMethod != 'undefined')
+		thisMethod = params.overrideMethod;
 
 	params.nextParams.lazy = 1;
 	params.nextParams.stale_ok = 1;
@@ -826,13 +894,26 @@ FGS.getFBML = function(params, retry)
 					lsd: ''
 				}
 			
-				var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(dataStr);
-				if(tst == null) throw {message:'no api_key tag'}
-				var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
-				
-				$.extend(reqData, reqData2);
-				reqData.form_id = reqData2.request_form;
-				delete(reqData.request_form);
+				if(params.gameID != '166309140062981')
+				{
+					var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(dataStr);
+					if(tst == null) throw {message:'no api_key tag'}
+					var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
+					
+					$.extend(reqData, reqData2);
+					reqData.form_id = reqData2.request_form;
+					delete(reqData.request_form);
+				}
+				else
+				{
+					reqData.form_id = $('form[type]', data).attr('id');
+					reqData.app_id = params.gameID;
+					reqData.request_type = 'A Heart Accept';
+					reqData.invite = false
+					reqData.is_multi = true;
+					reqData.is_in_canvas = false;
+					reqData.include_ci = false;
+				}
 				
 				var tst = new RegExp(/<form[^>].*content=\s*["]([^"]+)[^>]*>/gm).exec(dataStr);
 				if(tst == null) throw {message:'no content'}
@@ -869,9 +950,16 @@ FGS.getFBML = function(params, retry)
 				{
 					var v = v.replace(/\\\"/g, '"');
 					var di = JSON.parse('{'+v+'}');
-					arr.push(di);
 					for(var id in di)
-						neiObj[id] = true;
+					{
+						var nid = id;
+						var t = di[nid].name;
+					}
+					di[nid].name = JSON.parse('{"abc": "'+t+'"}').abc;
+					arr.push(di);
+					
+					neiObj[nid] = true;
+					
 				});
 				
 				if(typeof(params.cafeUrl) != 'undefined')
@@ -907,47 +995,13 @@ FGS.getFBML = function(params, retry)
 				{
 					FGS.sendView('updateNeighbors', arr, params.gameID);
 					return;
-				}
-				
-				
-				
-				/*
-					// test czy nie jest spoza listy
-					if(typeof(params.sendTo) != 'undefined' && typeof(params.thankYou) != 'undefined')
-					{
-						var newArr = [];
-						$(params.sendTo).each(function(k,v)
-						{
-							if(typeof neiObj[v] != 'undefined')
-								newArr.push(v);
-						});
-
-						params.sendTo = newArr;
-
-						if(params.sendTo.length == 0)
-						{
-							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : ''), true);
-							return;
-						}
-					}
-					// test czy nie jest spoza listy - koniec
-				*/
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				}				
 				
 				$(params.sendTo).each(function(k,v)
 				{
 					reqData['to_ids['+k+']'] = v;
 					
-					if(params.gameID == '120563477996213')
+					if(params.gameID == '120563477996213' || params.gameID == '166309140062981')
 						sendGiftParams += 'ids[]='+v+'&';
 					else
 						sendGiftParams += 'ids%5B%5D='+v+'&';
@@ -962,6 +1016,17 @@ FGS.getFBML = function(params, retry)
 				if(params.gameID == '10979261223')
 				{
 					sendGiftParams += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
+				}
+				
+				if(params.gameID == '175251882520655')
+				{
+					sendGiftParams += '&hash='+params.gHash+'&key='+params.gift+'&type='+params.gType+'&track=invite-gift-maingiftpage-'+params.gTitle+'&st='+Math.round(new Date().getTime()/1000)+'&giftName='+params.gTitle;
+				}
+				
+				
+				if(params.gameID == '166309140062981')
+				{
+					sendGiftParams += '&'+$('form[type]', data).find('input[name="unid"]').serialize()+'&'+$('form[type]', data).find('input[name="vary"]').serialize();
 				}
 				
 				if(params.gameID == '25287267406')
@@ -983,6 +1048,10 @@ FGS.getFBML = function(params, retry)
 					params.finalMethod = 'get';
 				}
 				
+				if(params.gameID == '123837014322698')
+				{
+					sendGiftParams += '&'+$('form[type]', data).find('input[name="token"]').serialize();
+				}
 				
 				if(params.gameID == '21526880407')
 				{

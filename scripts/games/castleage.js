@@ -142,40 +142,19 @@ FGS.castleage.Freegifts =
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
-		var channel = 'http://web.castleagegame.com/castle/channel.html';
-		
-		params.getToken = 'api_key=46755028429&app_id=46755028429&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
+		params.channel = 'http://web.castleagegame.com/castle/';
 		
 		
-		FGS.getAppAccessTokenForSending(params, function(params, d){
-		
-		
-
-			var arr = [];
+		FGS.getAppAccessTokenForSending(params, function(params, d)
+		{
+			var pos0 = d.indexOf('&result=')+8;
+			var pos1 = d.indexOf('"', pos0);
 			
-			var pos0 = 0;
-console.log(d);			
-			while(true)
-			{
-				pos0 = d.indexOf('request_ids', pos0);
-				
-				if(pos0 == -1) break;
-				
-				pos0 = d.indexOf('=', pos0)+1;
-				pos1a = d.indexOf('&', pos0);
-				if(pos1a == -1)
-					pos1a = d.indexOf('"', pos0);
-					
-				arr.push(d.slice(pos0, pos1a));
-				pos0 = pos1a;
-			}
+			var str = d.slice(pos0, pos1);
+			var arr = JSON.parse(decodeURIComponent(JSON.parse('{"abc": "'+str+'"}').abc)).request_ids;
 			
 			var str = arr.join(',');
 			$.post('http://web.castleagegame.com/castle/request_handler.php?act=create&gift='+params.gift+'&request_ids='+str, params.click2param+'&ajax=1');
-		
-		
-		
-		
 		});
 	},
 };

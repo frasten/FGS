@@ -126,11 +126,11 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	164285363593426:	{ 	name: 'Empire and Allies',	systemName: 'empiresandallies', 	link: 'http://apps.facebook.com/empiresandallies/',
+	164285363593426:	{ 	name: 'Empires and Allies',	systemName: 'empiresandallies', 	link: 'http://apps.facebook.com/empiresandallies/',
 						filter:		
 						{
 							bonuses: [],
-							bonusesNewWindow: ['Start your business', 'Start your business!', 'Send collectables', 'Send collectables!', 'Send collectibles', 'iAbre tu negocio', 'Visit CityVille', 'Collectable wanted', '¡Envía coleccionables', 'Enviar colecionáveis', 'Envoie des collections', 'Invia collezionabili', 'Kirim barang koleksi', 'Send collectables', 'Sende Sammlerstücke', 'Start your business', '¡Abre tu negocio', 'Démarre ton activité', 'Eröffne dein Geschäft', 'Start your business', 'Comece um negócio', '"Start your business"'],
+							bonusesNewWindow: ['Visit market', 'Visita mercato', 'Visiter le marché', 'Send collectables', 'Send collectables!', 'Send collectibles', 'iAbre tu negocio', 'Collectable wanted', '¡Envía coleccionables', 'Enviar colecionáveis', 'Envoie des collections', 'Invia collezionabili', 'Kirim barang koleksi', 'Send collectables', 'Sende Sammlerstücke', 'Start your business', '¡Abre tu negocio', 'Démarre ton activité', 'Eröffne dein Geschäft', 'Start your business', 'Comece um negócio', '"Start your business"'],
 							requests: [],
 							requestsNewWindow: []
 						},
@@ -566,6 +566,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -583,6 +585,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -637,6 +641,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -710,6 +716,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -730,6 +738,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -976,6 +986,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -996,6 +1008,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -1016,8 +1030,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							//'SendFreeGifts',
-							//'SendFreeGiftsHistory',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -1038,6 +1052,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -1064,78 +1080,4 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-};
-
-FGS.submenuButtons =
-{
-	'FailedBonuses':	{	name: 'Failed bonuses',
-							submenu: {
-								'ClearAllFailedBonuses': { name: 'Clear all' },
-								'ClearCollectedBonusesLimitError': { name: 'Clear "Limit errors"' },
-								'ClearCollectedBonusesReceivingError': { name: 'Clear "Receiving errors"' },
-							}
-	},
-	
-	'FailedGifts':	{	name: 'Failed gifts',
-							submenu: {
-								'ClearAllFailedRequests': { name: 'Clear everything' },
-								'ClearCollectedRequestsLimitError': { name: 'Clear "Limit errors"' },
-								'ClearCollectedRequestsReceivingError': { name: 'Clear "Receiving errors"' },
-							}
-	},
-	
-	'BonusesPending': 	{	name: 'Bonuses (<span>?</span>)',
-							submenu: {
-										'ReceivePendingBonuses': { name: 'Receive all' },
-										'ClearPendingBonuses': 	{ name: 'Clear all' },
-										'ReceiveVisibleBonuses': { name: 'Receive visible' },
-										'ClearVisibleBonuses': 	{ name: 'Clear visible' },
-										'ClearPendingBonusesOtherError': { name: 'Clear "Other errors"' },
-									}
-						},
-	'ManualBonuses':	{	name: 'Items requiring action (<span>?</span>)',
-							submenu: {
-										'ClearManualBonuses': { name: 'Clear all' },
-										'ClearVisibleManualBonuses': 	{ name: 'Clear visible' },
-									}
-						},
-	'BonusesHistory': 	{	name: 'Collected bonuses',
-							submenu: {
-										'ClearCollectedBonuses': { name: 'Clear history' },
-									}
-						},
-	'RequestsPending':	{	name: 'Gifts (<span>?</span>)',
-							submenu: {
-										'ReceivePendingRequests': { name: 'Receive all' },
-										'ClearPendingRequests': 	{ name: 'Clear all' },
-										'ReceiveVisibleGifts': { name: 'Receive visible' },
-										'ClearVisibleGifts': 	{ name: 'Clear visible' },
-									}
-						}, 
-	'RequestsHistory':	{	name: 'Collected gifts',
-							submenu: {
-										'ClearCollectedRequests': { name: 'Clear history' },
-									}
-						}, 
-	'SendFreeGifts':	{	name: 'Send gifts',
-							submenu: {
-										'LoadNeighborsList': { name: 'Load neighbors list' },
-										'SelectFavourites': { name: 'Select favourites (max 25)' },
-										'SelectNonFavourites': { name: 'Select non-favourites (max 25)' },
-										'ClearSelection': { name: 'Clear selection' },
-										'SendGifts': { name: 'Send gifts' },
-									}
-						}, 
-	'SendFreeGiftsHistory':	{	name: 'Sent gifts history',
-							submenu: {
-										'ClearSentFreeGifts': { name: 'Clear history' },
-									}
-						},
-	'NeighborsSearch': {	name: 'Find neighbors',
-							submenu: {
-										'CheckIfNeighborsAvailable': { name: 'Find new neighbors' },
-									}
-						},
-	'GameOptionsTab':	{	name: 'Filters',
-	},
 };

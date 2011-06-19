@@ -532,17 +532,17 @@ FGS.updateIcon = function()
 	{
 		var badge = FGS.newElements == 0 ? '' : FGS.newElements;
 		
-		chrome.browserAction.setTitle({title: "FGS: Click to open bonuses and gifts list"});
+		chrome.browserAction.setTitle({title: FGS.getMsg('ClickToOpenMenu')});
 		chrome.browserAction.setBadgeText({text: badge.toString()});
 	}
 	else if(FGS.FBloginError == null)
 	{
-		chrome.browserAction.setBadgeText({text:"wait"});
-		chrome.browserAction.setTitle({title: "FGS is not yet loaded... Please wait..."});
+		chrome.browserAction.setBadgeText({text: FGS.getMsg("Wait")});
+		chrome.browserAction.setTitle({title: FGS.getMsg('NotLoadedYetPleaseWait')});
 	}
 	else
 	{
-		chrome.browserAction.setTitle({title: "FGS: Click to login to Facebook"});
+		chrome.browserAction.setTitle({title: FGS.getMsg('ClickToLoginToFacebook')});
 		chrome.browserAction.setBadgeText({text:"x"});
 	}
 };
@@ -600,20 +600,39 @@ FGS.checkVersion = function()
 	FGS.currentVersion = manifest.version;
 };
 
+FGS.getBGurl = function(file)
+{
+	return chrome.extension.getURL(file);
+}
+
 FGS.preStartup = function() 
 {
-	FGS.loadLibraries();	
+	FGS.loadLibraries();
 	
 	FGS.jQuery.ajaxSetup({
 		timeout: 120000,
 	});
 	
+	FGS.loadTranslations();
+	
 	FGS.checkVersion();
 	FGS.initializeDefaults();
 
-	chrome.browserAction.setBadgeText({text:"wait"});
-	chrome.browserAction.setTitle({title: "FGS is not yet loaded... Please wait..."});
+	chrome.browserAction.setBadgeText({text:FGS.getMsg('Wait')});
+	chrome.browserAction.setTitle({title: FGS.getMsg('NotLoadedYetPleaseWait')});
 	FGS.startup();
+};
+
+FGS.loadSubmenu = function(context)
+{
+	FGS.jQuery.ajax({
+		async: false,
+		cache: false,
+		url: chrome.extension.getURL("scripts/submenu.js"),
+		type: "GET",
+		success: function(d){},
+		dataType: 'script'
+	});	
 };
 
 FGS.loadLibraries = function(context)

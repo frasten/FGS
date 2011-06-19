@@ -218,9 +218,7 @@ FGS.crimecity.Freegifts =
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
-		var channel = 'http://50.17.195.217/crimetown/index.php/requestchannel';
-		
-		params.getToken = 'api_key=129547877091100&app_id=129547877091100&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
+		params.channel = 'http://50.17.195.217/crimetown/index.php/requestchannel';
 		
 		FGS.getAppAccessTokenForSending(params, function(){});
 	},

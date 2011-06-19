@@ -26,9 +26,16 @@
 	
 	$(function()
 	{
+		$('#wait').find('span').text(bkP.getMsg('NotLoadedYetPleaseWait'));
+		$('#giftlist').find('span').html(bkP.getMsg('OpenGiftlist')+'<span></span>');	
+		$('#panic').find('span').html(bkP.getMsg('PanicButton'));
+		$('#login').find('span').text(bkP.getMsg('ClickToLoginToFacebook'));
+		
+		
 		$("#giftlist").click(function(){
 			bkP.openGiftList();
 		});
+		
 		$("#panic").click(function(){
 			bkP.openRecovery();
 		});
@@ -36,6 +43,7 @@
 		$('#login').click(function(){
 			bkP.openFacebook();
 		});
+	
 
 		updateButton();
 	});
@@ -43,24 +51,24 @@
 </head>
 <body>
 	<div id="wait" style="display: none">
-		<div class="item" title="Wait for FGS to load">
-			<span>Wait for FGS to load</span>
+		<div class="item">
+			<span></span>
 		</div>
 	</div>
 	
 	<div id="login" style="display: none">
-		<div class="item" title="Click to login to Facebook">
-			<span>Click to login to Facebook</span>
+		<div class="item">
+			<span></span>
 		</div>
 	</div>
 	
 	<div id="menu" style="display: none">
-		<div id="giftlist" class="item" title="Open giftlist">
-			<span>Open giftlist <span></span></span>
+		<div id="giftlist" class="item">
+			<span></span>
 		</div>
 		<div id="separatorProxies" class="separator"></div>
-		<div id="panic" class="item" title="Open giftlist">
-			<span>Panic button (freezing...)</span>
+		<div id="panic" class="item">
+			<span></span>
 		</div>
 	</div>
 </body>

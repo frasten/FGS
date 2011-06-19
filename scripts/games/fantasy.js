@@ -218,9 +218,7 @@ FGS.fantasy.Freegifts =
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
 		
-		var channel = 'http://fantasykingdoms.cloudapp.net/FK/Kingdoms/channel.html';
-		
-		params.getToken = 'api_key=213518941553&app_id=213518941553&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&next='+encodeURIComponent(channel);
+		params.channel = 'http://fantasykingdoms.cloudapp.net/FK/Kingdoms/channel.html';
 		
 		FGS.getAppAccessTokenForSending(params, function(){});
 	},

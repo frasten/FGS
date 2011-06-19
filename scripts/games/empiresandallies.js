@@ -229,7 +229,7 @@ FGS.empiresandallies.Freegifts =
 					
 					var contentAttr = FGS.encodeHtmlEntities(contentTmp);
 
-					outStr += '<fbGood_request-form invite="'+inviteAttr+'" action="'+actionAttr+'" method="'+methodAttr+'" type="'+typeAttr+'" content="'+contentAttr+'"><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="EXCLUDE_ARRAY_LIST" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.FGS.empiresandallies.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form>';
+					outStr += '<fbGood_request-form invite="'+inviteAttr+'" action="'+actionAttr+'" method="'+methodAttr+'" type="'+typeAttr+'" content="'+contentAttr+'"><div><fb:multi-friend-selector cols="5" condensed="true" max="30" unselected_rows="6" selected_rows="5" email_invite="false" rows="5" exclude_ids="EXCLUDE_ARRAY_LIST" actiontext="Select a gift" import_external_friends="false"></fb:multi-friend-selector><fb:request-form-submit import_external_friends="false"></fb:request-form-submit><a style="display: none" href="http://fb-0.empiresandallies.zynga.com/flash.php?skip=1">Skip</a></div></fbGood_request-form>';
 					
 					outStr += '</div>';
 					
@@ -625,6 +625,14 @@ FGS.empiresandallies.Requests =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
+					
+					if(dataStr.indexOf('You can only collect feed rewards from your allies!') != -1)
+					{
+						var error_text = 'You can only collect feed rewards from your allies!';
+						FGS.endWithError('limit', currentType, id, error_text);	
+						return;
+					}
+					
 
 					info.title = $(".giftConfirm_name",dataHTML).children().text();
 					info.time = Math.round(new Date().getTime() / 1000);
@@ -782,7 +790,7 @@ FGS.empiresandallies.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					FGS.empiresandallies.Requests.Click2(currentType, id, url, params);
+					FGS.empiresandallies.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)
 				{
@@ -900,6 +908,13 @@ FGS.empiresandallies.Bonuses =
 					if($('.errorMessage', dataHTML).length > 0)
 					{ 
 						var error_text = $.trim($('.errorMessage', dataHTML).text());
+						FGS.endWithError('limit', currentType, id, error_text);	
+						return;
+					}
+					
+					if(dataStr.indexOf('You can only collect feed rewards from your allies!') != -1)
+					{
+						var error_text = 'You can only collect feed rewards from your allies!';
 						FGS.endWithError('limit', currentType, id, error_text);	
 						return;
 					}

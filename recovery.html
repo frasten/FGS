@@ -33,7 +33,7 @@
 		{
 			tx.executeSql("SELECT * FROM sqlite_master where type = 'table'", [], function(tx, res)
 			{
-				$('body').prepend('<table id="totals" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>Your database usage for all games</caption><thead><tr><th scope="col" class="first"></th><th scope="col">Database name</th><th scope="col">Database count</th><th scope="col" class="last">Actions</th></tr></thead><tbody></tbody></table>');
+				$('body').prepend('<table id="totals" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>'+bkP.getMsg('DatabaseUsageForAllGames')+'</caption><thead><tr><th scope="col" class="first"></th><th scope="col">'+bkP.getMsg('DatabaseName')+'</th><th scope="col">'+bkP.getMsg('DatabaseCount')+'</th><th scope="col" class="last">'+bkP.getMsg('Actions')+'</th></tr></thead><tbody></tbody></table>');
 				
 				var cnt = 0;
 				for(var i = 0; i < res.rows.length; i++)
@@ -49,7 +49,7 @@
 			
 				for(var idd in bkP.options.games)
 				{
-					$('body').append('<table id="'+idd+'" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>Your database usage for game: '+bkP.gamesData[idd].name+'</caption><thead><tr><th scope="col" class="first"></th><th scope="col">Database name</th><th scope="col">Database count</th><th scope="col" class="last">Actions</th></tr></thead><tbody></tbody></table>');
+					$('body').append('<table id="'+idd+'" style="margin: 0 auto; margin-top: 15px;" width="75%"><caption>'+bkP.getMsg('DatabaseUsageForGame')+' '+bkP.gamesData[idd].name+'</caption><thead><tr><th scope="col" class="first"></th><th scope="col">'+bkP.getMsg('DatabaseName')+'</th><th scope="col">'+bkP.getMsg('DatabaseCount')+'</th><th scope="col" class="last">'+bkP.getMsg('Actions')+'</th></tr></thead><tbody></tbody></table>');
 					var cnt = 0;
 					for(var i = 0; i < res.rows.length; i++)
 					{

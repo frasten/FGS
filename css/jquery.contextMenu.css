@@ -19,6 +19,11 @@ body
 	text-align: center;
 }
 
+.width180
+{
+	width: 180px !important;
+}
+
 .bonusItem, .requestItem, .manualItem 
 {
 	position: relative;

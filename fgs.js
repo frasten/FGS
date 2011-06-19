@@ -1,7 +1,49 @@
 var FGS = {
 	alreadyOpened: false,
+	transObj:
+	{
+		"en_US": 	{name: "English"},
+		"pl_PL": 	{name: "Polski"},
+	},
 	
-	formExclusionString: '[action*="www\\.facebook\\.com\\/connect\\/connect.php"],[action*="custom_ads\\/islandAd\\.php"]',
+	translations: {},
+	
+	loadTranslations: function()
+	{
+		for(var loc in FGS.transObj)
+		{
+			FGS.jQuery.ajax({
+				url: FGS.getBGurl('../locales/'+loc+'/messages.json'),
+				beforeSend: function(xhr)
+				{
+					if (xhr.overrideMimeType)
+					{
+						xhr.overrideMimeType("application/json");
+					}
+				},
+				dataType: 'json',
+				method: 'GET',
+				async: false,
+				success: function(lang)
+				{
+					try
+					{
+						var lang = JSON.parse(lang);
+					}
+					catch(e)
+					{
+						//console.log(e);
+					}
+					
+					if(typeof FGS.translations[loc] == 'undefined')
+					{
+						FGS.translations[loc] = lang;
+					}
+				}
+			});
+		}
+	},
+	formExclusionString: '[action*="www\\.facebook\\.com\\/connect\\/connect.php"],[action*="custom_ads\\/islandAd\\.php"],[action*="www\\.facebook\\.com\\/plugins"]',
 	
 	initializeDefaults: function ()
 	{
@@ -22,6 +64,7 @@ var FGS = {
 			defaultGame: '0',
 			games: {},
 			chatSessions: {},
+			language: 0,
 			
 			defaultCommentsMessages: [],
 			
@@ -48,6 +91,7 @@ var FGS = {
 		FGS.fb_dtsg = '';
 		FGS.charset_test = '';
 		FGS.userID				= null;
+		FGS.userLoc				= null;
 		FGS.userName			= null;
 		FGS.newElements = 0;
 		FGS.bonusLoadingProgress = {};
@@ -256,6 +300,15 @@ var FGS = {
 					
 					$('input[name="profileChooserItems"]', dataHTML).remove();
 					
+					var pos0 = dataStr.indexOf(').preloadCache({');
+					if(pos0 != -1)
+					{
+						var pos1 = dataStr.indexOf('[', pos0);
+						var pos2 = dataStr.indexOf(']', pos1)+1;
+						
+						params.custom = JSON.parse('{"abc": '+dataStr.slice(pos1, pos2)+'}').abc;
+					}
+					
 					params.formUrl = $('#uiserver_form', dataHTML).attr('action');
 					params.formParam = $('#uiserver_form', dataHTML).serialize()+parStr+'&profileChooserItems='+encodeURIComponent(JSON.stringify(tmpObj));
 					
@@ -412,6 +465,10 @@ var FGS = {
 					
 					var finalArr = [];
 					
+					if(typeof params.custom != 'undefined')
+						data.payload.ids = params.custom;
+					
+					
 					$(data.payload.ids).each(function(k, v)
 					{
 						var x = {};
@@ -534,7 +591,11 @@ var FGS = {
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
 		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
-					
+		
+		var channel = 'http://static.ak.fbcdn.net/connect/xd_proxy.php?version=3#cb=f1&origin='+encodeURIComponent(params.channel)+'%2Ff2cc&relation=parent&transport=postmessage&frame=f1&result=%22xxRESULTTOKENxx%22';
+		
+		params.getToken = 'api_key='+params.gameID+'&app_id='+params.gameID+'&channel='+encodeURIComponent(channel)+'&channel_url='+encodeURIComponent(channel)+'&redirect_uri='+encodeURIComponent(channel);
+		
 		FGS.jQuery.ajax({
 			type: "GET",
 			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
@@ -1053,7 +1114,14 @@ var FGS = {
 			var pos3 = data2.indexOf(',', pos2);
 
 			FGS.userID = data2.slice(pos2, pos3);
+
+			var pos4 = data2.indexOf('locale:', pos1)+7;
+			var pos5 = data2.indexOf(',', pos4);
+			FGS.userLoc = data2.slice(pos4+1, pos5-1).toString();
+			
 			FGS.userName = FGS.jQuery('#navAccountName', data).text();
+
+			FGS.loadSubmenu();
 		}
 		
 		if(FGS.databaseAlreadyOpen == false)
@@ -1350,6 +1418,8 @@ var FGS = {
 		var resetArr = FGS.xhrQueue.concat(FGS.xhrFarmQueue);
 		FGS.xhrQueue = [];
 		FGS.xhrFarmQueue = [];
+		FGS.xhrFarmWorking = 0;
+		FGS.xhrWorking = 0;
 		
 		return resetArr;
 	},
