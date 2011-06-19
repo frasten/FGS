@@ -474,7 +474,14 @@ var FGS = {
 						var x = {};
 						x[v] = params.tmpFriends[v];
 						if(typeof(x[v]) != 'undefined')
-							finalArr.push(x);						
+						{
+							if(typeof params.excludeUsers != 'undefined')
+							{
+								if($.inArray(v, params.excludeUsers) != -1)
+									return true;
+							}
+							finalArr.push(x);
+						}
 					});
 					
 					params.items = finalArr;

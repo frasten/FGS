@@ -1,3 +1,265 @@
+FGS.pyramidville.Freegifts = 
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/pyramidville/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var fullDataStr = dataStr;
+				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					params.step2url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					params.step2params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					
+					var pos0 = fullDataStr.indexOf("').init([");
+					if(pos0 == -1) throw {}
+					
+					pos0+=8;
+					
+					var pos1 = fullDataStr.indexOf(']', pos0);
+					var tmp = fullDataStr.slice(pos0,pos1+1).replace(/\\/g, '');
+					
+					params.pv_friends = JSON.parse('{"abc": '+tmp+'}').abc;
+					
+					FGS.pyramidville.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step2url,
+			data: params.step2params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					params.signed_user = $('input[name="signed_user"]', dataHTML).val();	
+					
+					FGS.pyramidville.Freegifts.Click3(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click3: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step2url+'/gifts/invite?id='+params.gift,
+			data: params.step2params+'&signed_user='+params.signed_user,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tmp = [];
+					var pos0 = dataStr.indexOf('parent.requests.send(');
+					pos0+=21;
+					
+					var pos1 = dataStr.indexOf('"', pos0)+1;
+					var pos1a = dataStr.indexOf('"', pos1);
+					
+					tmp.push(dataStr.slice(pos1, pos1a));
+					
+					var pos1 = dataStr.indexOf('"', pos1a)+1;
+					var pos1a = dataStr.indexOf('"', pos1);
+					
+					tmp.push(dataStr.slice(pos1, pos1a));
+					
+					var pos1 = dataStr.indexOf("'", pos1a)+1;
+					var pos1a = dataStr.indexOf("'", pos1);
+					
+					tmp.push(dataStr.slice(pos1, pos1a));
+					
+					var pos1 = dataStr.indexOf('"', pos1a)+1;
+					var pos1a = dataStr.indexOf('"', pos1);
+					
+					params.excludeUsers = dataStr.slice(pos1, pos1a).split(',');
+				
+					var reqData = {};
+					
+					reqData.data = tmp[2];
+					reqData.title = tmp[0];
+					reqData.message = tmp[1];
+					
+					//reqData.filters = JSON.stringify( [{name: 'PyramidVille Friends', user_ids: user_ids}] );
+					
+					params.reqData = reqData;					
+					
+					FGS.pyramidville.Freegifts.ClickRequest(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	ClickRequest: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		params.channel = 'http://front.pyramid.kobojo.com/request.html';
+		
+		
+		FGS.getAppAccessTokenForSending(params, function(params, d)
+		{
+			var pos0 = d.indexOf('&result=')+8;
+			var pos1 = d.indexOf('"', pos0);
+			
+			var str = d.slice(pos0, pos1);
+			var arr = JSON.parse(decodeURIComponent(JSON.parse('{"abc": "'+str+'"}').abc)).request_ids;
+			
+			console.log(params.signed_user);
+			console.log(params.signed_user.replace(/\s/g, '+'));
+			console.log(params.signed_user.toString().replace(/\s/g, '+'));
+			
+			var str = arr.join(',');
+			$.post('http://front.pyramid.kobojo.com/inbox/eat', 'ids='+str+'&signed_user='+encodeURIComponent(params.signed_user)+'&excludeKey=gifted');
+		});
+	},
+};
+
 FGS.pyramidville.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)

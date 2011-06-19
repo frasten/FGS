@@ -777,6 +777,11 @@ FGS.giftsArray = {
 	169557846404284: // zombie lane
 	{
 		"EnergyCola": {name: "Energy Cola"}
+	},
+	
+	115301331874715: 
+	{
+		"Energy_QuickLunch": {name: "Snack (+1 Energy)"}
 	}
 };
 
@@ -820,7 +825,9 @@ FGS.freeGiftForGame =
 	
 	123837014322698: "220",
 	
-	169557846404284: "EnergyCola"
+	169557846404284: "EnergyCola",
+	
+	115301331874715: "Energy_QuickLunch"
 };
 
 
