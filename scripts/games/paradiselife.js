@@ -1,3 +1,165 @@
+FGS.paradiselife.Freegifts = 
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/paradiselife/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					
+					params.step2params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					params.step2url = 'http://paradise.icebreakgames.com/island_alpha/choose_recipients.php?'+params.step2params;
+					FGS.paradiselife.Freegifts.Click2(params);
+					
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step2url+addAntiBot,
+			data: 'gift=14005',
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var tmp = JSON.parse(dataStr);
+					
+					var reqData = tmp;
+					reqData.data = JSON.stringify(reqData.data);
+					
+					reqData.filters.shift();
+					
+					reqData.filters = JSON.stringify(reqData.filters);
+					params.reqData = reqData;
+					
+					FGS.paradiselife.Freegifts.ClickRequest(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	ClickRequest: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		params.channel = 'http://paradise.icebreakgames.com/island_alpha/';
+		
+		
+		FGS.getAppAccessTokenForSending(params, function(params, d)
+		{
+			var arr = [];
+			
+			$(params.sendTo).each(function(k,v)
+			{
+				arr.push('ids['+k+']='+v);
+			});
+			
+			var str = arr.join('&');
+			
+			var data = JSON.parse(params.reqData.data);
+			
+			$.post('http://paradise.icebreakgames.com/island_alpha/choose_recipients.php?index='+data.index+'&gift_id='+data.gift_id+'&kt_ut='+data.kt_ut+'&kt_st1='+data.kt_st1+'&'+params.step2params, str);
+		});
+	},
+};
+
 FGS.paradiselife.Requests = 
 {
 	Click: function(currentType, id, currentURL, retry)

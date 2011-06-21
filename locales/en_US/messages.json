@@ -161,5 +161,6 @@
 	"AdvancedOptionsNotice": "Changing this settings RECKLESSLY might cause your FGS to stop working (or increase startup loading process up to 30-60 minutes). This settings are only meant for advanced users (and with high speed connections). Keep in mind that FGS won't allow you to get at once more than 2500 bonuses (it's coded maximum and switching settings won't increae it).\n\nWhat I mean is: even if you set it to collect bonuses up to 1 day old, FGS will stop after 2500th bonus was found.<br /><br />FGS will also stop, if it finds bonus that is/was already on your list.",
 	"SelectFGSLanguage": "Select FGS language",
 	"UseFacebookLanguage": "Use Facebook language (if possible)",
-	"LanguageChanged": "Language has been changed. Use FGS icon to open this page again."
+	"LanguageChanged": "Language has been changed. Use FGS icon to open this page again.",
+	"HowManyBonusesToCollectAtOnce": "How many bonuses should FGS collect at once? (don't set it high unless you know what you're doing, change it only if you have very fast connection)"
 }

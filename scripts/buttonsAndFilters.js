@@ -256,8 +256,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							//'FailedBonuses',
 							'FailedGifts',
-							//'SendFreeGifts',
-							//'SendFreeGiftsHistory',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -279,8 +279,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							//'FailedBonuses',
 							'FailedGifts',
-							//'SendFreeGifts',
-							//'SendFreeGiftsHistory',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -549,6 +549,8 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -682,6 +684,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',	
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -889,6 +893,8 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',
+							'SendFreeGifts',
+							'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
@@ -945,6 +951,46 @@ FGS.gamesData =
 							'BonusesHistory',
 							'RequestsHistory',
 							'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	40343401983:	{ 	name: 'Bejeweled Blitz',	systemName: 'bejeweled', link: 'http://apps.facebook.com/bejeweledblitz/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							//'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							//'BonusesHistory',
+							'RequestsHistory',
+							//'FailedBonuses',
+							'FailedGifts',
+							'NeighborsSearch',
+							'GameOptionsTab'
+						],
+					},
+	108854979142742:	{ 	name: 'Bingo Blitz',	systemName: 'bingoblitz', link: 'http://apps.facebook.com/bingoblitz/',
+						filter:	
+						{
+							bonuses: [],
+							bonusesNewWindow: ['(.*)'],
+							requests: [],
+							requestsNewWindow: []
+						},
+						buttons: [
+							//'BonusesPending',
+							'RequestsPending',
+							'ManualBonuses',
+							//'BonusesHistory',
+							'RequestsHistory',
+							//'FailedBonuses',
 							'FailedGifts',
 							'NeighborsSearch',
 							'GameOptionsTab'

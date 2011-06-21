@@ -1,3 +1,139 @@
+FGS.happypets.Freegifts =
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/happy-pets//?iid=943&view=iframe_sub&target=pick_friend_page'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+			
+				try
+				{
+					params.signed_request = $('input[name="signed_request"]', dataHTML).val();
+					
+					params.step2url = 'http://petsbbg.crowdstar.com//?filter=happy_pets_link&post_internal_redir=1&iid=943&view=iframe_sub&target=pick_friend_page&signed_request='+params.signed_request;
+					
+					FGS.happypets.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: params.step2url+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var app_key = params.gameID;
+					var channel_url = 'http://aquariumbbg.crowdstar.com/channel.html';
+					
+					var tst = new RegExp(/<fb:serverFbml[^>]*?>[\s\S]*?<script[^>]*?>([\s\S]*?)<\/script[^>]*?>[\s\S]*?<\/fb:serverFbml>/mi).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
+					
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+};
+
 FGS.happypets.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)

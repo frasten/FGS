@@ -318,20 +318,20 @@ FGS.giftsArray = {
 	10979261223:  // mafia wars
 	{
 		"100": { name: 'BLUE MYSTERY BAG'},
-		"477": { name: 'HOLLOW POINT'},
-		"478": { name: 'A19 RIOT SHIELD'},
-		"476": { name: 'MAGNETO\'S MAGNETISM'},
-		"475": { name: 'FROST\'S DIAMOND FORM'},
+		"483": { name: 'WHETSTONE'},
+		"457": { name: 'RADIO PHONE'},
+		"456": { name: 'SATCHEL CHARGE'},
+		"458": { name: 'CONSTRUCTION WORKER'},
 		"462": { name: 'BRAZIL CASH'},
-		"456": { name: 'LOCAL INFORMANT'},
-		"457": { name: 'GAS CAN'},
-		"458": { name: 'BUTTON CAMERA'},
-		"405": { name: 'MYSTERY SHIPMENT'},
+		"189": { name: 'SPECIAL PART'},
+		"422": { name: 'EXOTIC ANIMAL FEED'},
 		"438": { name: '+2 MAFIA MEMBERS'},
 		"420": { name: 'FEEDING TROUGH'},
 		"419": { name: 'BIRD CAGE'},
-		"422": { name: 'EXOTIC ANIMAL FEED'},
+		"405": { name: 'MYSTERY SHIPMENT'},
+		"151": { name: 'MYSTERY ANIMAL'},
 		"210": { name: 'SATCHEL OF LIRA'},
+		"401": { name: 'ITALIAN HARDWOOD'},
 	},
 	120563477996213: // ravenwood fair
 	{
@@ -1010,6 +1010,8 @@ FGS.getFBML = function(params, retry)
 					
 					if(params.gameID == '120563477996213' || params.gameID == '166309140062981')
 						sendGiftParams += 'ids[]='+v+'&';
+					else if(params.gameID == '94483022361')
+						sendGiftParams += 'ids['+k+']='+v+'&';
 					else
 						sendGiftParams += 'ids%5B%5D='+v+'&';
 					
@@ -1028,6 +1030,13 @@ FGS.getFBML = function(params, retry)
 				if(params.gameID == '175251882520655')
 				{
 					sendGiftParams += '&hash='+params.gHash+'&key='+params.gift+'&type='+params.gType+'&track=invite-gift-maingiftpage-'+params.gTitle+'&st='+Math.round(new Date().getTime()/1000)+'&giftName='+params.gTitle;
+				}
+				
+				if(params.gameID == '94483022361')
+				{
+					sendGiftUrl = $('form[type]', data).attr('action').replace('apps.facebook.com/myownisland', 'apps.meteorgames.com/facebook/island')+'&'+sendGiftParams;		
+					sendGiftParams = params.step2params;
+					
 				}
 				
 				
