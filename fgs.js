@@ -839,6 +839,44 @@ var FGS = {
 		});
 	},
 	
+	getAccessToken: function(params, id, callback)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var currentType	= 'request';
+		var info = {}
+		
+		FGS.jQuery.ajax({
+			type: "GET",
+			url: 'http://www.facebook.com/extern/login_status.php?locale=en_US&sdk=joey&session_version=3&display=hidden&extern=0',
+			data: params,
+			dataType: 'text',
+			success: function(data)
+			{
+				try
+				{
+					var parseStr = data;
+
+					var pos1 = parseStr.indexOf('var config = {');
+					if(pos1 == -1) throw {message:"no URI"}
+					
+					var pos2 = parseStr.indexOf('};',pos1);
+					
+					parseStr = parseStr.slice(pos1+13,pos2+1);
+					var parseStr = JSON.parse(parseStr);
+					
+					var params = {access_token: parseStr.session.access_token};
+					
+					callback(id, params);
+				}
+				catch(err)
+				{
+					console.log(err);
+				}
+			}
+		});
+	},
+	
 	getAppAccessToken: function(currentType, id, currentURL, params, callback, params2, retry)
 	{
 		var $ = FGS.jQuery;
@@ -1047,8 +1085,14 @@ var FGS = {
 		else
 			var url = 'http://www.facebook.com/ajax/reqs.php?__a=1';
 		
-		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests';
+		dataPost = dataPost.replace(/%5B/g,'[').replace(/%5D/g,']');
 		
+		var x = FGS.Gup('actions\\[(.*)\\]', dataPost);
+		var y = FGS.Gup('actions\\['+x+'\\]', dataPost);
+		
+		dataPost = dataPost.replace('&actions['+x+']='+y, '');
+		
+		var dataPost2 = dataPost + '&post_form_id='+FGS.post_form_id+'&fb_dtsg='+FGS.fb_dtsg+'&nctr[_mod]=pagelet_requests&actions[reject]=Ignore';
 		
 		FGS.jQuery.ajax({
 			type: "POST",
@@ -1655,7 +1699,6 @@ var FGS = {
 							
 							if(re.test(typeText))
 							{
-								dataPost += '&actions[reject]=Ignore';
 								FGS.emptyUnwantedGifts(dataPost);
 								ret = true;
 								return false;

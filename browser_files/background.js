@@ -232,11 +232,17 @@ FGS.sendbackGift = function (bonusID, sendbackData)
 			{	
 				return;
 			}
-			var gameID = v.gameID;			
+			var gameID = v.gameID;	
 			
 			FGS.sendView('changeSendbackState', bonusID);
 			
 			var tempData = sendbackData;
+			
+			if(typeof tempData.destInt == 'undefined' || tempData.destInt == '')
+			{
+				var postData = v.post;
+				tempData.destInt = FGS.Gup('params\\\[from_id\\\]', postData);
+			}
 			
 			var params = {
 				gift: tempData.gift,

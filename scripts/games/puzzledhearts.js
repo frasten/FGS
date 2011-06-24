@@ -81,7 +81,14 @@ FGS.puzzledhearts.Freegifts =
 			{
 				try
 				{
-					params.step3params = 'to_uid=&step=step2&gift_id=assorty&uid='+FGS.userID+'&ts='+Math.round(new Date().getTime()/1000);
+					var pos0 = dataStr.indexOf('http://8.17.172.90/ph/pages/myhearts.php');
+					var pos1 = dataStr.indexOf('&ts=', pos0);
+					var pos2 = dataStr.indexOf('"', pos1);
+					
+					var ts = dataStr.slice(pos1+4, pos2);
+				
+				
+					params.step3params = 'to_uid=&step=step2&gift_id=assorty&uid='+FGS.userID+'&ts='+ts;
 					params.step3url = 'http://8.17.172.90/ph/pages/index.php';
 					
 					FGS.puzzledhearts.Freegifts.Click3(params);

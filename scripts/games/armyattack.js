@@ -335,6 +335,18 @@ FGS.armyattack.Requests =
 				{
 					var dataHTML = FGS.HTMLParser(dataStr);
 
+					if(dataStr.indexOf('"ERROR_1",') != -1)
+					{
+						var channel = 'http://armyattack.digitalchocolate.com/Army_server/custom_channel.html';
+						var gameID = '174582889219848';
+						
+						FGS.getAccessToken('api_key='+gameID+'&app_id='+gameID+'&channel='+encodeURIComponent(channel), id, function(id, data) {
+							FGS.jQuery.get('https://graph.facebook.com/'+id, FGS.jQuery.param(data)+'&method=delete');
+						});
+						FGS.endWithError('not found', currentType, id);
+						return;
+					}
+					
 					if(dataStr.indexOf('Oops! Something went wrong...') != -1)
 					{
 						var error_text = 'This has expired or have been already claimed!';
@@ -398,13 +410,34 @@ FGS.armyattack.Requests =
 						var image = dataStr.slice(pos1+1, pos1b);
 					}
 					
-					info.title = title;						
+					info.title = title;
+
+					for(var gift in FGS.giftsArray['174582889219848'])
+					{
+						if(FGS.giftsArray['174582889219848'][gift].name == info.title)
+						{
+							info.thanks = 
+							{
+								gift: gift
+							}
+							break;
+						}
+					}
+					
 					info.image = image;
 					info.time  = Math.round(new Date().getTime() / 1000);
 					info.text  = from;
 						
 						
 					FGS.endWithSuccess(currentType, id, info);
+
+					
+					var channel = 'http://armyattack.digitalchocolate.com/Army_server/custom_channel.html';
+					var gameID = '174582889219848';
+					
+					FGS.getAccessToken('api_key='+gameID+'&app_id='+gameID+'&channel='+encodeURIComponent(channel), id, function(id, data) {
+						FGS.jQuery.get('https://graph.facebook.com/'+id, FGS.jQuery.param(data)+'&method=delete');
+					});
 				}
 				catch(err)
 				{
@@ -432,7 +465,9 @@ FGS.armyattack.Requests =
 				}
 			}
 		});
-	}
+	},
+	
+	
 };
 
 FGS.armyattack.Bonuses = 
@@ -538,7 +573,7 @@ FGS.armyattack.Bonuses =
 						return;
 					}
 					
-					if(dataStr.indexOf('rewards have run out') != -1)
+					if(dataStr.indexOf('rewards have run out') != -1 || dataStr.indexOf('just bit too late and the rewards have ran') != -1)
 					{
 						var error_text = 'Stream reward already collected!';
 						FGS.endWithError('limit', currentType, id, error_text);
@@ -565,6 +600,7 @@ FGS.armyattack.Bonuses =
 						FGS.endWithError('limit', currentType, id, error_text);
 						return;
 					}
+
 					
 					
 					
@@ -590,7 +626,7 @@ FGS.armyattack.Bonuses =
 					var pos1b = dataStr.indexOf('"', pos1+1);
 					var image = dataStr.slice(pos1+1, pos1b);
 					
-					info.title = title;						
+					info.title = title;	
 					info.image = image;
 					info.time  = Math.round(new Date().getTime() / 1000);
 					info.text  = text;

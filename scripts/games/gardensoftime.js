@@ -356,7 +356,7 @@ FGS.gardensoftime.Requests =
 						
 						if(data.indexOf('You already collected this bonus') != -1 || data.indexOf('is already complete') != -1 || data.indexOf('you cannot help now') != -1 || data.indexOf('No more bonuses to collect') != -1 || data.indexOf('already helped with') != -1 || data.indexOf('You have already helped!') != -1)
 						{
-							var error_text = 'You have collected this gift';
+							var error_text = 'You have collected this gift or mission is already completed';
 							FGS.endWithError('limit', currentType, id, error_text);
 						
 							return;

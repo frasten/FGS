@@ -8,7 +8,7 @@ FGS.cartown.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://apps.facebook.com/cartown/giftRequestPopup.jsp?g=57'+addAntiBot,
+			url: 'http://apps.facebook.com/cartown/giftRequestPopup.jsp?g='+params.gift+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -19,7 +19,7 @@ FGS.cartown.Freegifts =
 				{
 					params.signed_request = $('input[name="signed_request"]', dataHTML).val();
 					
-					params.step2url = 'http://game.cartown.com/cartown/giftRequestPopup.jsp?g=57&signed_request='+params.signed_request;
+					params.step2url = 'http://game.cartown.com/cartown/giftRequestPopup.jsp?g='+params.gift+'&signed_request='+params.signed_request;
 					
 					FGS.cartown.Freegifts.Click2(params);
 				}
@@ -148,16 +148,11 @@ FGS.cartown.Requests =
 			dataType: 'text',
 			success: function(dataStr)
 			{
-				var dataHTML = FGS.HTMLParser(dataStr);
 				var redirectUrl = FGS.checkForLocationReload(dataStr);
 				
 				if(redirectUrl != false)
 				{
-					if(FGS.checkForNotFound(redirectUrl) === true)
-					{
-						FGS.endWithError('not found', currentType, id);
-					}
-					else if(typeof(retry) == 'undefined')
+					if(typeof(retry) == 'undefined')
 					{
 						retryThis(currentType, id, redirectUrl, true);
 					}
@@ -173,7 +168,57 @@ FGS.cartown.Requests =
 				
 				try
 				{
-					var txt = $('#app256799621935_main_body', dataHTML).find('.popup').children('h2').text();
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();					
+				
+					FGS.cartown.Requests.Click2(currentType, id, url, params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
+	Click2: function(currentType, id, currentURL, params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var info = {}
+		
+		$.ajax({
+			type: "POST",
+			url: currentURL,
+			data: params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try
+				{
+					var txt = $(dataHTML).find('.popup').children('h2').text();
 					
 					if(txt.indexOf('This gift has expired') != -1)
 					{
@@ -198,19 +243,31 @@ FGS.cartown.Requests =
 					}
 					
 					
+					var sendInfo = '';
+					
+					if(FGS.Gup('g', unescape(currentURL)) != '' && currentURL.indexOf('crewAccept') == -1)
+					{
+						var giftName = FGS.Gup('g', unescape(currentURL));
+						
+						sendInfo = {
+							gift: giftName
+						}
+					}
+					
+					info.thanks = sendInfo;
+					
 					info.text  = txt;
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					FGS.endWithSuccess(currentType, id, info);
-					
-				} 
+				}
 				catch(err)
 				{
 					FGS.dump(err);
 					FGS.dump(err.message);
 					if(typeof(retry) == 'undefined')
 					{
-						retryThis(currentType, id, currentURL, true);
+						retryThis(currentType, id, currentURL, params, true);
 					}
 					else
 					{
@@ -222,7 +279,7 @@ FGS.cartown.Requests =
 			{
 				if(typeof(retry) == 'undefined')
 				{
-					retryThis(currentType, id, currentURL, true);
+					retryThis(currentType, id, currentURL, params, true);
 				}
 				else
 				{

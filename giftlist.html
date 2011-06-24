@@ -169,6 +169,7 @@ function addDataToScreenLocked(callback, id, data)
 		var giftName = $('.sendToGiftsList > div.selected','div#'+game+opt).attr('title');
 		
 		var params = {
+			giftNameName: giftName,
 			gift: gift,
 			gameID:	gameID,
 			sendTo: sendTo,
@@ -878,10 +879,6 @@ function addDataToScreenLocked(callback, id, data)
 						if($(this).hasClass('manualRequest'))
 						{
 							var postData = $(this).attr('postData');
-							var pos1 = postData.indexOf('&actions%5B');
-							
-							var postData = postData.slice(0,pos1);
-							postData += '&actions[reject]=Ignore';
 							bkP.emptyUnwantedGifts(postData);
 							
 							delReqArr.push(elID);
@@ -1017,10 +1014,6 @@ function addDataToScreenLocked(callback, id, data)
 					$('#'+game+'RequestsPendingList').children('div'+addParam).not('.inProgress').each(function()
 					{
 						var postData = $(this).attr('postData');
-						var pos1 = postData.indexOf('&actions%5B');
-						
-						var postData = postData.slice(0,pos1);
-						postData += '&actions[reject]=Ignore';
 						$(this).remove();
 						bkP.emptyUnwantedGifts(postData);
 						delArr.push($(this).attr('id'));
@@ -1952,10 +1945,12 @@ function processGameEnabledInput(el)
 {
 	var gameID = $(el).attr('gameID');
 	var chk = $(el).is(':checked');
-	
+
 	var ico = $('#gameSelector').find('input[gameID="'+gameID+'"]').next('label').find('img');
-	
+
 	$('#gameOptionsTab').find('input.gameEnabledBox[gameID="'+gameID+'"]').attr('checked', chk);
+	
+	
 	
 	if(chk)
 	{
@@ -1978,7 +1973,7 @@ function processGameEnabledInput(el)
 		ico.closest('label').addClass('hide');
 	}
 	checkIconsCountInGameSelector(true);
-		
+	
 	bkP.options.games[gameID].enabled = chk;
 	switchEnabled(gameID, true);
 	bkP.saveOptions();
@@ -2088,12 +2083,12 @@ function switchEnabled(gameID, reload)
 				beforeClose: function()
 				{
 					$(this).text(bkP.getMsg('AreYouSure'));
+					delete bkP.bonusLoadingProgress[gameID];
+					updateCount();
+					bkP.stopBonusesForGame(gameID);		
+					
 				}				
 			}).dialog( "open" );
-			
-			delete bkP.bonusLoadingProgress[gameID];
-			updateCount();
-			bkP.stopBonusesForGame(gameID);		
 		}
 	}
 	else
@@ -2680,8 +2675,7 @@ function onMouseDownTest(e)
 			bkP.options.showDescriptionsOnStartup = $('option:selected', this).val();
 			bkP.saveOptions();
 		});
-		
-		$('.filterBonusText').data('timeout', null).keyup(function()
+		$('.filterBonusText').data('timeout', null).live('keyup', function()
 		{
             clearTimeout(jQuery(this).data('timeout'));
             jQuery(this).data('timeout', setTimeout(processSwitchItemsDisplay, 500));
@@ -2809,14 +2803,11 @@ function onMouseDownTest(e)
 				else if(action == 'delete')
 				{
 					var postData = el.attr('postData');
-					var pos1 = postData.indexOf('&actions%5B');
 					
-					var postData = postData.slice(0,pos1);
-					postData += '&actions[reject]=Ignore';
 					el.remove();
 					bkP.database.deleteItem('requests', el.attr('gameID'), el.attr('id'), 0);
 					updateCount(el.attr('gameID'));
-					
+
 					bkP.emptyUnwantedGifts(postData);
 				}
 				else if(action == 'deleteSimilar')
@@ -2834,10 +2825,6 @@ function onMouseDownTest(e)
 								el.parent().find('div[search-title="'+el.attr('search-title')+'"]').not('.inProgress').each(function()
 								{
 									var postData = $(this).attr('postData');
-									var pos1 = postData.indexOf('&actions%5B');
-									
-									var postData = postData.slice(0,pos1);
-									postData += '&actions[reject]=Ignore';
 									$(this).remove();
 									bkP.emptyUnwantedGifts(postData);
 								});
@@ -3232,6 +3219,12 @@ function onMouseDownTest(e)
 			var gameID =  el.parent().parent().parent().parent().attr('gameID');
 			
 			var tempData = JSON.parse(el.next().text());
+			
+			if(typeof tempData.destInt == 'undefined' || tempData.destInt == '')
+			{
+				var postData = el.parent().parent().parent().parent().attr('postData');
+				tempData.destInt = bkP.Gup('params\\\[from_id\\\]', postData);
+			}
 			
 			var params = {
 				gift: tempData.gift,

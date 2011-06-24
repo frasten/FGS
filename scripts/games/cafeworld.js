@@ -122,7 +122,14 @@ FGS.cafeworld.Requests =
 					var redirectUrl2 = FGS.checkForGoURI(dataStr);
 					if(redirectUrl2 != false)
 					{
-						retryThis(currentType, id, redirectUrl2, true);
+						if(FGS.checkForNotFound(redirectUrl2) === true)
+						{
+							FGS.endWithError('not found', currentType, id);
+						}
+						else
+						{
+							retryThis(currentType, id, redirectUrl2, true);
+						}
 						return;
 					}
 					

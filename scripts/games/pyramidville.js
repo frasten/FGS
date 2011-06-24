@@ -187,7 +187,7 @@ FGS.pyramidville.Freegifts =
 					
 					//reqData.filters = JSON.stringify( [{name: 'PyramidVille Friends', user_ids: user_ids}] );
 					
-					params.reqData = reqData;					
+					params.reqData = reqData;
 					
 					FGS.pyramidville.Freegifts.ClickRequest(params);
 				}
@@ -249,10 +249,6 @@ FGS.pyramidville.Freegifts =
 			
 			var str = d.slice(pos0, pos1);
 			var arr = JSON.parse(decodeURIComponent(JSON.parse('{"abc": "'+str+'"}').abc)).request_ids;
-			
-			console.log(params.signed_user);
-			console.log(params.signed_user.replace(/\s/g, '+'));
-			console.log(params.signed_user.toString().replace(/\s/g, '+'));
 			
 			var str = arr.join(',');
 			$.post('http://front.pyramid.kobojo.com/inbox/eat', 'ids='+str+'&signed_user='+encodeURIComponent(params.signed_user)+'&excludeKey=gifted');
@@ -474,7 +470,7 @@ FGS.pyramidville.Requests =
 						
 					FGS.endWithSuccess(currentType, id, info);
 					
-					FGS.deleteNewRequests(id, params.access);	
+					FGS.deleteNewRequests(id, params.access);
 				}
 				catch(err)
 				{
