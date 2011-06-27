@@ -17,8 +17,82 @@ FGS.gardensoftime.Freegifts =
 				
 				try
 				{
-					params.step1params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize()+'&ref=ts&_='+new Date().getTime();
+					params.step1url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					params.step1params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 
+					FGS.gardensoftime.Freegifts.Click2pre(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+
+	Click2pre: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+		
+		$.ajax({
+			type: "POST",
+			url: params.step1url,
+			data: params.step1params,
+			dataType: 'text',
+			beforeSend: function(xhr)
+			{
+				xhr.setRequestHeader("X-Requested-With", "");
+			},
+			success: function(dataStr)
+			{
+				try
+				{
+					var pos0 = dataStr.indexOf('flashvars.queryString');
+					var pos1 = dataStr.indexOf('"', pos0)+1;
+					var pos2 = dataStr.indexOf('"', pos1);
+					
+					var str = decodeURIComponent(dataStr.slice(pos1, pos2));
+					
+					params.askey = FGS.Gup('askey', str);
+					
+					params.step1params += '&askey='+FGS.Gup('askey', str);
+					
 					FGS.gardensoftime.Freegifts.Click2(params);
 				}
 				catch(err)
@@ -62,6 +136,7 @@ FGS.gardensoftime.Freegifts =
 			}
 		});
 	},
+	
 	Click2: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -79,14 +154,7 @@ FGS.gardensoftime.Freegifts =
 				{
 					var dataHTML = FGS.HTMLParser(dataStr);
 					
-					var el = $('.request_form_submit[gkey="'+params.gift+'"]', dataHTML);
-					
-					if(typeof el == 'undefined' || el.length == 0)
-						throw {}
-
-					params.gTitle = el.attr('gtitle');
-					params.gHash = el.attr('ghash');
-					params.gType = el.attr('gtype');
+					params.reqkey = $('.request_form_submit[gTitle="'+params.gift+'"]', dataHTML).attr('reqkey');
 					
 					FGS.gardensoftime.Freegifts.Click3(params);
 				}
@@ -131,6 +199,8 @@ FGS.gardensoftime.Freegifts =
 			}
 		});
 	},
+	
+	
 	Click3: function(params, retry)
 	{
 		var $ = FGS.jQuery;
@@ -146,10 +216,8 @@ FGS.gardensoftime.Freegifts =
 			{
 				try
 				{
-					dataStr = dataStr.replace(/__GIFT_KEY__/gi, params.gift);
-					dataStr = dataStr.replace(/__GIFT_TYPE__/gi, params.gType);
-					dataStr = dataStr.replace(/__GIFT_TITLE__/gi, params.gTitle);
-					dataStr = dataStr.replace(/__GIFT_HASH__/gi, params.gHash);
+					dataStr = dataStr.replace(/__GIFT_TITLE__/gi, encodeURIComponent(params.gift));
+					dataStr = dataStr.replace(/__REQ_KEY__/gi, params.reqkey);
 					
 					
 					var tst = new RegExp(/(<fb:fbml[^>]*?[\s\S]*?<\/fb:fbml>)/m).exec(dataStr);
@@ -254,13 +322,6 @@ FGS.gardensoftime.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_175251882520655', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.gardensoftime.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
@@ -364,7 +425,7 @@ FGS.gardensoftime.Requests =
 						
 						if(data.indexOf('You are now neighbors') != -1)
 						{
-							info.image = $('#sender', dataHTML).children('img').attr('src');
+							info.image = $('#sender', dataHTML).children('img').attr('longdesc');
 							info.title = '';
 							info.text  = 'New neighbour';
 							info.time = Math.round(new Date().getTime() / 1000);
@@ -386,7 +447,6 @@ FGS.gardensoftime.Requests =
 								pos1+=23;
 								var pos2 = dataStr.indexOf("'", pos1);					
 								var link = dataStr.slice(pos1, pos2);
-								FGS.dump(link);
 								$.get(link);
 							}
 							
@@ -394,12 +454,21 @@ FGS.gardensoftime.Requests =
 							return;	
 						}
 						
-						var tmpImg = $('#gift_box', dataHTML).children('img').attr('src');
+						var tmpImg = $('#gift_box', dataHTML).children('img').attr('longdesc');
 						
 						info.image = tmpImg;
 						
 						info.title = '';
 						info.text  = $('#giftName', dataHTML).val();
+						
+						if(typeof FGS.giftsArray['175251882520655'][info.text] != 'undefined')
+						{
+							info.thanks = {	gift: $('#giftName', dataHTML).val()	}
+						}
+						if(currentURL.indexOf('invite-gift-maingiftpage-Mystery+Gift') != -1)
+						{
+							info.thanks = {	gift: "Mystery Gift"	}
+						}
 						
 						info.time = Math.round(new Date().getTime() / 1000);
 						
@@ -472,12 +541,6 @@ FGS.gardensoftime.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_175251882520655', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
 					FGS.gardensoftime.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)

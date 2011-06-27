@@ -194,13 +194,6 @@ FGS.fishville.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_151044809337', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.fishville.Requests.Click2(currentType, id, url, paramTmp);
 				}				
 				catch(err)
@@ -261,7 +254,7 @@ FGS.fishville.Requests =
 					}
 					else if($('.reqFrom_img', dataHTML).length > 0)
 					{
-						info.image = $(".reqFrom_img",dataHTML).children().attr("src");
+						info.image = $(".reqFrom_img",dataHTML).children().attr("longdesc");
 						info.title = 'New neighbour';
 						info.text  = $(".reqFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -294,7 +287,7 @@ FGS.fishville.Requests =
 						}
 						info.thanks = sendInfo;					
 						
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text  = $(".giftFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);

@@ -289,7 +289,7 @@ FGS.yoville.Requests =
 						
 						info.thanks = sendInfo;				
 						
-						info.image = $('#app21526880407_main-gift-body', dataHTML).find('div > img').attr("src");
+						info.image = $('#app21526880407_main-gift-body', dataHTML).find('div > img').attr("longdesc");
 						info.title = $('#app21526880407_main-gift-body', dataHTML).find('div > h2').text();
 						info.text  = $('#app21526880407_main-gift-body', dataHTML).find('div > b').text();
 						info.time = Math.round(new Date().getTime() / 1000);

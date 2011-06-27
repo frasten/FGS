@@ -759,17 +759,32 @@ FGS.giftsArray = {
 	
 	26947445683://country life
 	{
-		"16": {name: "Wheat"}
+		"5": { name: "Holstein Cow"},
+		"13": { name: "Corn"},
+		"14": { name: "Tomatoes"},
+		"15": { name: "Clover"},
+		"16": { name: "Wheat"},
+		"17": { name: "Milk"},
+		"46": { name: "Honey"},
+		"48": { name: "Apple Tree"},
 	},
 	
 	121763384533823: //country life lite
 	{
-		"16": {name: "Wheat"}
+		"5": { name: "Holstein Cow"},
+		"13": { name: "Corn"},
+		"14": { name: "Tomatoes"},
+		"15": { name: "Clover"},
+		"16": { name: "Wheat"},
+		"17": { name: "Milk"},
+		"46": { name: "Honey"},
+		"48": { name: "Apple Tree"},
 	},
 	
 	175251882520655:
 	{
-		"0": {name: "Mystery Gift"}
+		"Mystery Gift": {name: "Mystery Gift"},
+		"Energy +5": 	{name: "Energy +5"}
 	},
 	
 	123837014322698:
@@ -779,7 +794,9 @@ FGS.giftsArray = {
 	
 	169557846404284: // zombie lane
 	{
-		"EnergyCola": {name: "Energy Cola"}
+		"EnergyCola": {name: "Energy Cola"},
+		"Grenade": 	  {name: "Grenade"},
+		"Shoutgun":	  {name: "Shoutgun"}
 	},
 	
 	115301331874715: 
@@ -868,6 +885,94 @@ FGS.giftsArray = {
 		"letter_X": { name: "letter X"},
 		"letter_Y": { name: "letter Y"},
 	},
+	
+	166309140062981: // puzzled
+	{
+		"assorty": { name: "Assorti"},
+		"berry": { name: "Berry"},
+		"blueberry": { name: "Blueberry"},
+		"grape": { name: "Grape"},
+		"kiwi": { name: "Kiwi Fruit"},
+		"lemon": { name: "Lemon"},
+		"marmelade": { name: "Marmalade"},
+		"pomegranate": { name: "Pomegranate"},
+		"v_cake": { name: "Cake"},
+		"v_sweet": { name: "Strawberry"},
+		"v_chocolate_romance": { name: "Chocolate Romance"},
+		"v_eden": { name: "Eden"},
+		"diamond_frame": { name: "Diamond Frame"},
+		"hundred_gems": { name: "Hundred Gems"},
+		"close_gems": { name: "Close Gems"},
+		"v_elegant_rings": { name: "Elegant Rings"},
+		"g_brilliant_shape": { name: "Brilliant Shape"},
+		"g_diamond_brooch": { name: "Diamond Brooch"},
+		"g_golden_halo": { name: "Baroque"},
+		"g_ornate_gold": { name: "Ornate Gold"},
+		"g_pearl_necklace": { name: "Pearl Necklace"},
+		"g_diamond_highlight": { name: "Diamond Highlight"},
+		"g_rainbow": { name: "Rainbow"},
+		"g_red_stones": { name: "Red Stones"},
+		"g_treasure_drops": { name: "Treasure Drops"},
+		"fresh_rose": { name: "Fresh Rose"},
+		"golden_bow": { name: "Golden Bow"},
+		"remarkable_night": { name: "Remarkable Night"},
+		"ruby_edges": { name: "Ruby Edges"},
+		"silver_shine": { name: "Silver Shine"},
+		"woven_rings": { name: "Woven Rings"},
+		"beautiful_lily": { name: "Beautiful Lily"},
+		"v_cupidon": { name: "Cupidon"},
+		"v_gift": { name: "Gift"},
+		"v_in_love": { name: "In Love"},
+		"v_love": { name: "Love"},
+		"v_morning_rose": { name: "Morning Rose"},
+		"v_private_dance": { name: "Private Dance"},
+		"v_surprise": { name: "Surprise"},
+		"v_two_swans": { name: "Two Swans"},
+		"Airy_Dance": { name: "Airy Dance"},
+		"Burgundy_Red": { name: "Burgundy Red"},
+		"Crown_Jewel": { name: "Crown Jewel"},
+		"Dashing_Look": { name: "Dashing Look"},
+		"Delicate_Beauty": { name: "Delicate Beauty"},
+		"Elegant_Touch": { name: "Elegant Touch"},
+		"Golden_Flower": { name: "Golden Flower"},
+		"Laurel_Wreath": { name: "Laurel Wreath"},
+		"Noble_Sense": { name: "Noble Sense"},
+		"Pure_Gold": { name: "Pure Gold"},
+		"Ruby_Gold": { name: "Ruby Gold"},
+		"Swiss_Nuance": { name: "Swiss Nuance"},
+		"eagle": { name: "Eagle"},
+		"bunny": { name: "Bunny"},
+		"cat": { name: "Cat"},
+		"leon": { name: "Lion"},
+		"panda": { name: "Panda"},
+		"deer": { name: "Deer"},
+		"dog2": { name: "Dog"},
+		"fox": { name: "Fox"},
+		"butterfly": { name: "Butterfly"},
+		"lady_bug": { name: "Lady Bug"},
+		"bee": { name: "Bee"},
+	},
+	
+	256799621935: // car town
+	{
+		"62": { name: '1 Gallon of Fuel'},
+		"2": { name: 'Concrete Barrier'},
+		"56": { name: 'Pistons'},
+		"71": { name: 'Hood Pins'},
+		"1": { name: 'Orange Cone (Large)'},
+		"6": { name: 'Tall Red Cabinet'},
+		"50": { name: 'Garbage'},
+		"65": { name: 'Carbon Fiber'},
+		"68": { name: 'Nitrous Oxide'},
+		"11": { name: 'Red Barstool'},
+		"4": { name: 'Orange Vertical Storage'},
+		"3": { name: 'Velvet Rope'},
+		"70": { name: 'Reinforcements'},
+		"67": { name: 'Suspension Arms'},
+		"59": { name: 'Sheet Metal'},
+		"61": { name: 'Race Gauges'},
+		"58": { name: 'Gears'},
+	},
 };
 
 FGS.freeGiftForGame =
@@ -906,7 +1011,7 @@ FGS.freeGiftForGame =
 	26947445683: "16",
 	121763384533823: "16",
 	
-	175251882520655: "0",
+	175251882520655: "Mystery Gift",
 	
 	123837014322698: "220",
 	
@@ -918,7 +1023,9 @@ FGS.freeGiftForGame =
 	
 	216230855057280: "delightful_bow",
 	
+	166309140062981: "assorty",
 	
+	256799621935: "58"
 };
 
 
@@ -979,10 +1086,19 @@ FGS.getFBML = function(params, retry)
 			
 			try
 			{
+				if(typeof params.thankYou != 'undefined')
+				{
+					var addMessage = FGS.options.thankYouGiftMessage;
+				}
+				else
+				{
+					var addMessage = (params.messageToAdd ? params.messageToAdd : '');
+				}
+				
 				var reqData =
 				{
 					prefill: true,
-					message: (params.messageToAdd ? params.messageToAdd : ''),
+					message: addMessage,
 					preview: false,
 					donot_send: false,
 					__d: 1,
@@ -992,26 +1108,13 @@ FGS.getFBML = function(params, retry)
 					lsd: ''
 				}
 			
-				if(params.gameID != '166309140062981')
-				{
-					var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(dataStr);
-					if(tst == null) throw {message:'no api_key tag'}
-					var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
-					
-					$.extend(reqData, reqData2);
-					reqData.form_id = reqData2.request_form;
-					delete(reqData.request_form);
-				}
-				else
-				{
-					reqData.form_id = $('form[type]', data).attr('id');
-					reqData.app_id = params.gameID;
-					reqData.request_type = 'A Heart Accept';
-					reqData.invite = false
-					reqData.is_multi = true;
-					reqData.is_in_canvas = false;
-					reqData.include_ci = false;
-				}
+				var tst = new RegExp(/PlatformInvite.sendInvitation.*(\&#123.*.?125;)[(\(;)]/g).exec(dataStr);
+				if(tst == null) throw {message:'no api_key tag'}
+				var reqData2 = JSON.parse(tst[1].replace(/&quot;/g,'"').replace(/&#123;/g,'{').replace(/&#125;/g,'}'));
+				
+				$.extend(reqData, reqData2);
+				reqData.form_id = reqData2.request_form;
+				delete(reqData.request_form);
 				
 				var tst = new RegExp(/<form[^>].*content=\s*["]([^"]+)[^>]*>/gm).exec(dataStr);
 				if(tst == null) throw {message:'no content'}
@@ -1099,7 +1202,7 @@ FGS.getFBML = function(params, retry)
 				{
 					reqData['to_ids['+k+']'] = v;
 					
-					if(params.gameID == '120563477996213' || params.gameID == '166309140062981')
+					if(params.gameID == '120563477996213' || params.gameID == '166309140062981' || params.gameID == '175251882520655')
 						sendGiftParams += 'ids[]='+v+'&';
 					else if(params.gameID == '94483022361')
 						sendGiftParams += 'ids['+k+']='+v+'&';
@@ -1113,6 +1216,12 @@ FGS.getFBML = function(params, retry)
 				if(params.gameID != '25287267406' && params.gameID != '213518941553')
 					sendGiftParams += 'cmfs_typeahead_'+reqData.form_id+'=start';
 				
+				if(params.gameID == '105557406133988')
+				{
+					sendGiftParams += '&'+$('form[type]', data).find('input[name="ts"]').serialize()+'&'+$('form[type]', data).find('input[name="gid"]').serialize();
+				}
+				
+				
 				if(params.gameID == '10979261223')
 				{
 					sendGiftParams += '&ajax=1&sf_xw_user_id='+params.sf_xw_user_id+'&sf_xw_sig='+params.sf_xw_sig;
@@ -1120,7 +1229,7 @@ FGS.getFBML = function(params, retry)
 				
 				if(params.gameID == '175251882520655')
 				{
-					sendGiftParams += '&hash='+params.gHash+'&key='+params.gift+'&type='+params.gType+'&track=invite-gift-maingiftpage-'+params.gTitle+'&st='+Math.round(new Date().getTime()/1000)+'&giftName='+params.gTitle;
+					sendGiftParams += '&track=invite-gift-maingiftpage-'+params.gift+'&st='+Math.round(new Date().getTime()/1000)+'&giftName='+params.gift+'&req_key='+params.reqkey;
 				}
 				
 				if(params.gameID == '94483022361')

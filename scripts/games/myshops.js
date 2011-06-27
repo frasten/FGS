@@ -104,7 +104,7 @@ FGS.myshops.Requests =
 				
 				try
 				{
-					info.image 	= $('#app123837014322698_giftImage',dataHTML).children('img:first').attr('src');
+					info.image 	= $('#app123837014322698_giftImage',dataHTML).children('img:first').attr('longdesc');
 					info.title 	= $.trim($('#app123837014322698_giftText',dataHTML).text());
 					info.text  	=  $('#app123837014322698_senderText',dataHTML).text();
 					info.time 	= Math.round(new Date().getTime() / 1000);
@@ -216,7 +216,7 @@ FGS.myshops.Bonuses =
 					}
 					else if(testStr.indexOf('Would you like to accept this reward') != -1)
 					{
-						info.image  = $('#app123837014322698_rewardImage', dataHTML).children('img:first').attr('src');
+						info.image  = $('#app123837014322698_rewardImage', dataHTML).children('img:first').attr('longdesc');
 						info.title 	= $.trim($('#app123837014322698_rewardText', dataHTML).text());
 						info.text  	= $('#app123837014322698_senderText',dataHTML).text();
 						info.time 	= Math.round(new Date().getTime() / 1000);

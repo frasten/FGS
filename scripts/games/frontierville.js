@@ -350,7 +350,7 @@ FGS.frontierville.Requests =
 				
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length == 0)
 					{
-						info.image = $(".giftFrom_img",dataHTML).children().attr("src");
+						info.image = $(".giftFrom_img",dataHTML).children().attr("longdesc");
 						info.title = 'New neighbour';
 						info.text  = $(".giftFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -383,7 +383,7 @@ FGS.frontierville.Requests =
 						}
 						info.thanks = sendInfo;					
 						
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text  = $(".giftFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -675,7 +675,7 @@ FGS.frontierville.Bonuses =
 							var tempTitle = $(".giftConfirm_name",dataHTML).children().text();
 						}
 						
-						var tempImage = $(".giftConfirm_img",dataHTML).children().attr("src");
+						var tempImage = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						
 						
 						FGS.jQuery.ajax({

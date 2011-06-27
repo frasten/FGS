@@ -3,7 +3,7 @@ var FGS = {
 	transObj:
 	{
 		"en_US": 	{name: "English"},
-		"pl_PL": 	{name: "Polski"},
+		//"pl_PL": 	{name: "Polski"},
 	},
 	
 	translations: {},
@@ -66,6 +66,8 @@ var FGS = {
 			chatSessions: {},
 			language: 0,
 			
+			thankYouGiftMessage: '',
+			
 			defaultCommentsMessages: [],
 			
 			checkChatTimeout: 60,
@@ -80,7 +82,7 @@ var FGS = {
 			breakStartupLoadingTime: 300
 		}
 
-		FGS.defaultGameOptions = { enabled: false,	lastBonusTime: 0, likeBonus: false, sendbackGift: false, hideFromFeed: false, hideFromFeedLimitError: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, useRandomTimeoutOnBonuses: false, autoAcceptBonus: false };
+		FGS.defaultGameOptions = { enabled: false,	lastBonusTime: 0, likeBonus: false, likeItemsRequiringAction: false, sendbackGift: false, hideFromFeed: false, hideFromFeedLimitError: false, listOnSearch: false, filter: [], favourites: [], defaultGift: 0, hiddenIcon: false, useRandomTimeoutOnBonuses: false, autoAcceptBonus: false };
 
 		for(var idd in FGS.gamesData)
 		{
@@ -871,7 +873,7 @@ var FGS = {
 				}
 				catch(err)
 				{
-					console.log(err);
+					//console.log(err);
 				}
 			}
 		});
@@ -1611,8 +1613,6 @@ var FGS = {
 					
 					data = tempD.pagelet_requests;	
 				}
-				
-				data = data.replace(/ src=\"/gi, ' notsrc="');
 
 				var data = FGS.HTMLParser(data);
 				
@@ -1745,7 +1745,7 @@ var FGS = {
 					
 					if(newText.indexOf('to be neighbors') != -1 || newText.indexOf('join my mafia') != -1 || newText.indexOf('be neighbours in') != -1 || newText.indexOf('be neighbors in') != -1 || newText.indexOf('be my neighbor') != -1 || newText.indexOf('neighbor in YoVille') != -1 || newText.indexOf('my neighbor in') != -1 || newText.indexOf('Come be my friend') != -1 || newText.indexOf('neighbor in') != -1 || newText.indexOf('Come join me in Evony') != -1 || newText.indexOf('as my new neighbor') != -1)
 					{
-						var type =  el.find('.UIImageBlock_SMALL_Image').find('img').attr('notsrc');				
+						var type =  el.find('.UIImageBlock_SMALL_Image').find('img').attr('longdesc');				
 					}
 					else
 					{
@@ -1884,6 +1884,7 @@ var FGS = {
 		{
 			FGS.rewardville.Freegifts.Click({onlyLogin: true});
 			
+			/*
 			if(FGS.options.games[appID].enabled)
 			{
 				FGS.iBonusTimeout[appID] = setTimeout('FGS.checkBonuses2("'+appID+'");', 180000);
@@ -1893,6 +1894,7 @@ var FGS = {
 				FGS.stopBonusesForGame(appID);
 			}
 			return;
+			*/
 		}
 		
 		if(typeof(FGS.iBonusTimeout[appID]) == 'undefined' || FGS.FBloginError !== false)
@@ -2114,7 +2116,7 @@ var FGS = {
 						//koniec filtry usera
 						
 						
-						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
+						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('longdesc'), link, bonusTime, feedback, link_data];
 						
 						params.items.push(bonus);
 						
@@ -2209,6 +2211,7 @@ var FGS = {
 		{
 			FGS.rewardville.Freegifts.Click({onlyLogin: true});
 			
+			/*
 			if(FGS.options.games[appID].enabled)
 			{
 				FGS.iBonusTimeout[appID] = setTimeout('FGS.checkBonuses("'+appID+'");', 180000);
@@ -2217,7 +2220,8 @@ var FGS = {
 			{
 				FGS.stopBonusesForGame(appID);
 			}
-			return;
+			*/
+			//return;
 		}
 		
 		if(typeof(FGS.iBonusTimeout[appID]) == 'undefined' || FGS.FBloginError !== false)
@@ -2465,7 +2469,7 @@ var FGS = {
 						//koniec filtry usera
 						
 						
-						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('src'), link, bonusTime, feedback, link_data];
+						var bonus = [elID, appID, bTitle, el.find('.uiAttachmentTitle').text(), el.find('.uiStreamAttachments').find('img').attr('longdesc'), link, bonusTime, feedback, link_data];
 						
 						params.items.push(bonus);
 						

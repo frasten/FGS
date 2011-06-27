@@ -64,7 +64,7 @@ FGS.sorority.Requests =
 					}
 					else
 					{
-						info.image = $(el).find('.left:first').children('img').attr('src');
+						info.image = $(el).find('.left:first').children('img').attr('longdesc');
 						info.title = '';
 						info.text  = $(el).find('.left:last').children('span').text();
 						info.time = Math.round(new Date().getTime() / 1000);

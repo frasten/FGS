@@ -134,7 +134,7 @@ FGS.ninjasaga.Bonuses =
 							info.title = 'New item';
 						}
 						
-						info.image = el.find('img:first').attr('src');
+						info.image = el.find('img:first').attr('longdesc');
 						info.time = Math.round(new Date().getTime() / 1000);
 						info.text = el.children('div:contains("Congratulations"):first').text();
 						

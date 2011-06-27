@@ -615,7 +615,7 @@ FGS.pyramidville.Bonuses =
 					if($('.cardLoot', dataHTML).length > 0)
 					{
 						info.title = $.trim($('.card:first', dataHTML).text());
-						info.image = $('.cardLoot', dataHTML).attr('src');
+						info.image = $('.cardLoot', dataHTML).attr('longdesc');
 						info.time  = Math.round(new Date().getTime() / 1000);
 						info.text  = $.trim($('.card:last', dataHTML).text());
 						

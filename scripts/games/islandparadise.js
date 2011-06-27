@@ -179,13 +179,6 @@ FGS.islandparadise.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_94483022361', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.islandparadise.Requests.Click2(currentType, id, url, params);
 				} 
 				catch(err)
@@ -247,7 +240,7 @@ FGS.islandparadise.Requests =
 					{
 						if($('#view_gift_accept', dataHTML).length > 0)
 						{
-							info.image = $('#view_gift_accept', dataHTML).find('.item').find('img:first').attr('src');
+							info.image = $('#view_gift_accept', dataHTML).find('.item').find('img:first').attr('longdesc');
 							info.title = '';
 							info.text =$('#view_gift_accept', dataHTML).find('.item').text();
 						}

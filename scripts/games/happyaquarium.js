@@ -243,8 +243,11 @@ FGS.happyaquarium.Requests =
 					if($('#update_message', dataHTML).length > 0)
 					{
 						info.image = 'gfx/90px-check.png';
-						info.title = $('#update_message', dataHTML).text();
-						info.text  = $('#update_message', dataHTML).text();
+						info.title = $(dataHTML).filter('#update_message').text();
+						info.text  = $(dataHTML).filter('#update_message').text();
+						
+						
+						
 						info.time = Math.round(new Date().getTime() / 1000);
 						FGS.endWithSuccess(currentType, id, info);
 						return;

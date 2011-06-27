@@ -100,7 +100,7 @@ FGS.potfarm.Requests =
 				{
 					if($('#giftBox', dataHTML).length > 0)
 					{
-						info.image = 'http://thepotfarmgame.com'+$('#giftBox', dataHTML).find('img:first').attr("src");
+						info.image = 'http://thepotfarmgame.com'+$('#giftBox', dataHTML).find('img:first').attr("longdesc");
 						info.title = '';
 						
 						var txt = $('.fontIntro', dataHTML).text();

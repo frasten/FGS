@@ -88,7 +88,7 @@ FGS.puzzledhearts.Freegifts =
 					var ts = dataStr.slice(pos1+4, pos2);
 				
 				
-					params.step3params = 'to_uid=&step=step2&gift_id=assorty&uid='+FGS.userID+'&ts='+ts;
+					params.step3params = 'to_uid=&step=step2&gift_id='+params.gift+'&uid='+FGS.userID+'&ts='+ts;
 					params.step3url = 'http://8.17.172.90/ph/pages/index.php';
 					
 					FGS.puzzledhearts.Freegifts.Click3(params);
@@ -157,6 +157,7 @@ FGS.puzzledhearts.Freegifts =
 					if(tst == null) throw {message:'no fbml tag'}
 					var fbml = tst[1];
 					
+					fbml = fbml.replace('</fb:request-form>', '<fb:request-form-submit import_external_friends="false"  label="Send to %n" /></fb:request-form>');
 					fbml = fbml.replace('condensed="false"', 'condensed="true"');
 					
 					var channel_url = 'http://8.17.172.90/ph/pages/xd_receiver.htm';

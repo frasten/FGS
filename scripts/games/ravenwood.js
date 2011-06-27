@@ -357,12 +357,12 @@ FGS.ravenwood.Requests =
 						{
 							var pos2 = $.trim(el.text()).indexOf(' from ');
 							info.title = $.trim(el.text()).slice(22, pos2);
-							info.image = el.find('img').attr("src");
+							info.image = el.find('img').attr("longdesc");
 						}
 						else
 						{
 							info.title = $.trim(oldEl.text());	
-							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("src");
+							info.image = $('#app_content_120563477996213', dataHTML).find('img').attr("longdesc");
 						}
 						
 						info.text  = $.trim(el.text());

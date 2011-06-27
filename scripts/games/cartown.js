@@ -229,12 +229,12 @@ FGS.cartown.Requests =
 					
 					if($('.item-holder',dataHTML).length > 0)
 					{
-						info.image = $('.item-holder',dataHTML).find('img:first').attr('src');
+						info.image = $('.item-holder',dataHTML).find('img:first').attr('longdesc');
 						info.title = $('.item-holder',dataHTML).find('.title:first').text();
 					}
 					else if($('.popup',dataHTML).length > 0)
 					{
-						info.image = $('.popup',dataHTML).find('img:first').attr('src');
+						info.image = $('.popup',dataHTML).find('img:first').attr('longdesc');
 						info.title = txt;
 					}
 					else

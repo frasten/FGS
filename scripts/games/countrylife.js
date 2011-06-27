@@ -107,8 +107,31 @@ FGS.countrylife.Requests =
 				{
 					if($(".giftConfirm_img" ,dataHTML).length > 0)
 					{				
+						var sendInfo = '';
 						
-						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("src");
+						var tmpStr = unescape(currentURL);
+						
+						var pos1 = tmpStr.indexOf('&gift=');
+						if(pos1 != -1)
+						{
+							var pos2 = tmpStr.indexOf('&', pos1+1);
+								
+							var giftName = tmpStr.slice(pos1+6,pos2);
+							
+							var pos1 = tmpStr.indexOf('sender=');
+							var pos2 = tmpStr.indexOf('&', pos1);
+							
+							var giftRecipient = tmpStr.slice(pos1+7,pos2);						
+								
+							sendInfo = {
+								gift: giftName,
+								destInt: giftRecipient
+								}
+						}
+						info.thanks = sendInfo;	
+						
+						
+						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name" ,dataHTML).children().text();
 						info.text  = $(".giftFrom_name" ,dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);

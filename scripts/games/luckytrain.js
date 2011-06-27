@@ -1,3 +1,142 @@
+FGS.luckytrain.Freegifts =
+{
+	Click: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: 'http://apps.facebook.com/luckytrain/'+addAntiBot,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+			
+				try
+				{
+					params.step2url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					params.step2params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					
+					FGS.luckytrain.Freegifts.Click2(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;		
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "GET",
+			url: params.step2url+'gifting/friends'+addAntiBot,
+			data: 'gid=15&app_friends=1&'+params.step2params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					var app_key = params.gameID;
+					var channel_url = 'http:/trainprod.abitlucky.com/gifting/channel.html';
+					
+					var tst = new RegExp(/<fb:serverFbml[^>]*?>[\s\S]*?<script[^>]*?>([\s\S]*?)<\/script[^>]*?>[\s\S]*?<\/fb:serverFbml>/mi).exec(dataStr);
+					if(tst == null) throw {message:'no fbml tag'}
+					var fbml = tst[1];
+					
+					fbml = fbml.replace('</fb:request-form>', '<fb:request-form-submit import_external_friends="false"  label="Send to %n" /></fb:request-form>');
+					fbml = fbml.replace('email_invite="false"', 'email_invite="false" condensed="true"');
+					
+					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
+					
+					params.nextParams = paramsStr;
+					
+					FGS.getFBML(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+};
+
 FGS.luckytrain.Requests = 
 {	
 	Click: function(currentType, id, currentURL, retry)
@@ -119,9 +258,15 @@ FGS.luckytrain.Requests =
 						}
 						
 						info.title = title;
-						info.image = $('.gift_image', dataHTML).children('img').attr('src');
+						info.image = $('.gift_image', dataHTML).children('img').attr('longdesc');
 						info.time  = Math.round(new Date().getTime() / 1000);
-						info.text  = tmp;						
+						info.text  = tmp;
+
+						var a = FGS.Gup('gid', currentURL);
+						if(a != '')
+						{
+							info.thanks = {	gift: a	}
+						}
 						
 						FGS.endWithSuccess(currentType, id, info);
 					}

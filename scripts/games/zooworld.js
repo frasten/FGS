@@ -28,38 +28,19 @@ FGS.zooworld.Freegifts =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_'+params.checkID, dataStr);
-						if (src == '') throw {message:"no iframe"}
-					
-						var pos1 = src.indexOf('?');
-						src = src.slice(pos1+1);
-					}
-					else
-					{
-						src = paramTmp;
-					}
-					
-					var postParams = {}
-					
-					for(var idd in $.unparam(src))
-					{
-						if(idd.indexOf('fb_') != -1)
-						{
-							postParams[idd] = unescape($.unparam(src)[idd]);
-						}
-					}
+					var postParams = {};
 					
 					postParams['service'] 	= 'dsplygiftinvite';
 					postParams['giftId'] 	= params.gift;
 					postParams['appname']	= params.zooAppname;
 					postParams['appId'] 	= params.zooAppId;
-						
-						//postParams['straightToGift'] = '1';
 					
-					params.param2 = postParams;
-
+					var x = $.param(postParams);
+					
+					params.postParams = x;
+					params.step1url = url;
+					params.step1params = paramTmp;
+					
 					FGS.zooworld.Freegifts.Click2(params);
 				
 				}
@@ -105,7 +86,77 @@ FGS.zooworld.Freegifts =
 		});
 	},
 	
+	
 	Click2: function(params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var addAntiBot = (typeof(retry) == 'undefined' ? '' : '');
+
+		$.ajax({
+			type: "POST",
+			url: params.step1url+addAntiBot,
+			data: params.step1params+'&'+params.postParams,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				try
+				{
+					
+					var pos0 = dataStr.indexOf('var PageData');
+					if(pos0 == -1)	throw {}
+					
+					var pos1 = dataStr.indexOf('"params":"', pos0);
+					pos1+=10;
+					var pos2 = dataStr.indexOf('"', pos1);
+					
+					params.param2 = dataStr.slice(pos1, pos2)+'&'+params.postParams;
+					
+					FGS.zooworld.Freegifts.Click3(params);
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(params, true);
+					}
+					else
+					{
+						if(typeof(params.sendTo) == 'undefined')
+						{
+							FGS.sendView('updateNeighbors', false, params.gameID);
+						}
+						else
+						{
+							FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+						}
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(params, true);
+				}
+				else
+				{
+					if(typeof(params.sendTo) == 'undefined')
+					{
+						FGS.sendView('updateNeighbors', false, params.gameID);
+					}
+					else
+					{
+						FGS.sendView('errorWithSend', params.gameID, (typeof(params.thankYou) != 'undefined' ? params.bonusID : '') );
+					}
+				}
+			}
+		});
+	},
+	
+	Click3: function(params, retry)
 	{
 		var $ = FGS.jQuery;
 		var retryThis 	= arguments.callee;
@@ -129,7 +180,7 @@ FGS.zooworld.Freegifts =
 					
 					var paramsStr = 'app_key='+app_key+'&channel_url='+encodeURIComponent(channel_url)+'&fbml='+encodeURIComponent(fbml);
 
-					params.nextParams = paramsStr;
+					params.nextParams = paramsStr+'&'+params.postParams;
 					
 					FGS.getFBML(params);
 				}
@@ -250,7 +301,7 @@ FGS.zooworld.Requests =
 					
 					if(testStr.indexOf('You are now ZooMates') != -1)
 					{
-						info.image = $('.zoomaccept5-box', dataHTML).find('img:first').attr('src');
+						info.image = $('.zoomaccept5-box', dataHTML).find('img:first').attr('longdesc');
 						info.title = 'New neighbour';
 						info.text  = $('.zoomaccept5-box', dataHTML).find('img:first').attr('title');
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -312,7 +363,7 @@ FGS.zooworld.Requests =
 						info.thanks = sendInfo;				
 					
 					
-						info.image = $('.main_body', dataHTML).find('img:first').attr('src');
+						info.image = $('.main_body', dataHTML).find('img:first').attr('longdesc');
 						info.title = $('.main_body', dataHTML).find('p:first').text();
 						info.text  = $('.main_body', dataHTML).find('p:last').text();
 						info.time = Math.round(new Date().getTime() / 1000);

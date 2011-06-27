@@ -271,7 +271,7 @@ FGS.treasure.Requests =
 						}
 						else if(dataStr.indexOf('You helped train the Dragon') != -1)
 						{
-							info.image = $(".giftFrom_img",dataHTML).children().attr("src");
+							info.image = $(".giftFrom_img",dataHTML).children().attr("longdesc");
 							info.title = 'Train the Dragon';
 							info.text  = 'You helped train the Dragon!';
 							info.time = Math.round(new Date().getTime() / 1000);
@@ -312,7 +312,7 @@ FGS.treasure.Requests =
 						}
 						info.thanks = sendInfo;
 						
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_img",dataHTML).siblings('p').text();
 						info.text  = $(".giftFrom_img",dataHTML).siblings('p').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -378,7 +378,7 @@ FGS.treasure.Requests =
 				{
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length > 0)
 					{
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_img",dataHTML).siblings('p').text();
 						info.text  = $(".giftFrom_img",dataHTML).siblings('p').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -535,7 +535,7 @@ FGS.treasure.Bonuses =
 					{
 						info.title = 'Celebration';
 					}
-					info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+					info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 					info.text = '';
 					info.time = Math.round(new Date().getTime() / 1000);
 					

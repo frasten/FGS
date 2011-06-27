@@ -380,13 +380,6 @@ FGS.vampirewars.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_25287267406', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.vampirewars.Requests.Click4(currentType, id, url, params);
 				}
 				catch(err)
@@ -497,7 +490,7 @@ FGS.vampirewars.Requests =
 					}
 					
 					
-					info.image = $('img:first', dataHTML).attr('src');
+					info.image = $('img:first', dataHTML).attr('longdesc');
 					info.title = $('img:first', dataHTML).attr('title');
 					info.text = $('div.senderPic', dataHTML).parent().find('p').text();
 					

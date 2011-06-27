@@ -273,14 +273,7 @@ FGS.fantasy.Requests =
 				{
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
-					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						
-						url = src;
-					}
+
 					
 					FGS.fantasy.Requests.Click2(currentType, id, url, paramTmp);
 				} 
@@ -347,7 +340,7 @@ FGS.fantasy.Requests =
 					
 					if(el.length > 0)
 					{
-						info.image = el.find('img:first').attr('src');
+						info.image = el.find('img:first').attr('longdesc');
 						info.title = el.find('.giftname:first').text();
 						info.text  = el.find('.textbold:last').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -454,14 +447,7 @@ FGS.fantasy.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_213518941553', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						
-						url = src;
-					}
-					
+
 					FGS.fantasy.Bonuses.Click2(currentType, id, url, paramTmp);
 				} 
 				catch(err)

@@ -201,12 +201,6 @@ FGS.paradiselife.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
 					FGS.paradiselife.Requests.Click2(currentType, id, url, paramTmp);
 				}
 				catch(err)
@@ -266,7 +260,7 @@ FGS.paradiselife.Requests =
 					
 					if($('.gift_wrap', dataHTML).length > 0)
 					{
-						info.image = $('.gift_wrap', dataHTML).find('img').attr('src');
+						info.image = $('.gift_wrap', dataHTML).find('img').attr('longdesc');
 						info.title = $('.gift_wrap', dataHTML).find('p').text();
 						info.text  = ' ';
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -370,13 +364,6 @@ FGS.paradiselife.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var paramTmp = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_143547399002598', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.paradiselife.Bonuses.Click2(currentType, id, url, paramTmp);
 				}
 				catch(err)
@@ -423,7 +410,7 @@ FGS.paradiselife.Bonuses =
 				
 				try
 				{
-					var testElem = $('.title_text_pos', dataHTML).children().attr('src')
+					var testElem = $('.title_text_pos', dataHTML).children().attr('longdesc')
 					if(testElem != undefined)
 					{
 						if(testElem.indexOf('feed_expire_title') != -1)
@@ -436,7 +423,7 @@ FGS.paradiselife.Bonuses =
 					
 					if($('.gift_wrap', dataHTML).length == 0) throw {message: 'something is wrong'}
 					
-					info.image = $('.gift_wrap', dataHTML).find('img').attr('src');
+					info.image = $('.gift_wrap', dataHTML).find('img').attr('longdesc');
 					info.title = $('.gift_wrap', dataHTML).find('p').text();
 					
 					info.text  = ' ';

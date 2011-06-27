@@ -464,7 +464,7 @@ FGS.mafiawars.Requests =
 						if(data.indexOf('Mystery Bag contained') != -1 || data.indexOf('Secret Drop contained') != -1 || data.indexOf('Your Mystery Animal is') != -1 || data.indexOf('You just accepted') != -1)
 						{
 
-							var testStr = $('img:first', dataHTML).attr('src');
+							var testStr = $('img:first', dataHTML).attr('longdesc');
 							
 							if(testStr.indexOf('CRM_LP-icon-bonus.png') != -1)
 							{
@@ -475,7 +475,7 @@ FGS.mafiawars.Requests =
 							{
 								if($(this).css('height') == '75px')
 								{
-									info.image = $(this).attr('src');
+									info.image = $(this).attr('longdesc');
 									info.title = '';
 									
 									$(this).parent().children('div').each(function()
@@ -491,7 +491,7 @@ FGS.mafiawars.Requests =
 						}
 						else if(data.indexOf('a Mystery Bag item instead') != -1)
 						{
-							info.image = $('img:first', dataHTML).attr('src');
+							info.image = $('img:first', dataHTML).attr('longdesc');
 							var tmpText = $('.good:first', dataHTML).text();
 							
 							var pos1 = tmpText.indexOf(':');
@@ -514,13 +514,13 @@ FGS.mafiawars.Requests =
 							var pos1 = data.indexOf('You got an Energy Pack.');
 							var pos2 = data.indexOf('.', pos1+23);
 							
-							info.image = $('img:first', dataHTML).attr('src');
+							info.image = $('img:first', dataHTML).attr('longdesc');
 							info.title = $('img:first', dataHTML).parent().text();
 							info.text = data.slice(pos1,pos2);
 						}
 						else if(data.indexOf('Your Super Pignata contained') != -1)
 						{
-							info.image = $('img:first', dataHTML).attr('src');
+							info.image = $('img:first', dataHTML).attr('longdesc');
 							info.title = $('img:first', dataHTML).attr('title');
 						}
 						else if(data.indexOf('Requests from other Mafias') != -1)
@@ -544,7 +544,7 @@ FGS.mafiawars.Requests =
 						}
 						else
 						{
-							info.image = $('img:first', dataHTML).attr('src');
+							info.image = $('img:first', dataHTML).attr('longdesc');
 							info.title = $('img:first', dataHTML).parent().text();
 						}
 					}
@@ -880,7 +880,7 @@ FGS.mafiawars.Bonuses =
 						var pos3 = dataStr.indexOf('</div>', pos1);
 
 						info.text  = dataStr.slice(pos1,pos3);
-						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
+						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('longdesc');
 						info.title = dataStr.slice(pos1+25,pos2);
 					}
 					else if(dataStr.indexOf('You received a Liquid Courage') != -1 || dataStr.indexOf(' to celebrate his recent promotion') != -1 || dataStr.indexOf('to celebrate her recent promotion') != -1)
@@ -889,7 +889,7 @@ FGS.mafiawars.Bonuses =
 						var pos2 = dataStr.indexOf('from', pos1);
 						
 						info.text  = $('td.message_body', dataHTML).text();
-						info.image = $('td.message_body > img:nth-child(2)', dataHTML).attr('src');
+						info.image = $('td.message_body > img:nth-child(2)', dataHTML).attr('longdesc');
 						info.title = dataStr.slice(pos1+15,pos2);
 					}
 					else if(dataStr.indexOf('fight the enemy and claim a cash bounty') != -1)
@@ -916,7 +916,7 @@ FGS.mafiawars.Bonuses =
 					{
 						info.title = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('title');
 						info.text =  $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').parent().next('div').text();
-						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
+						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('longdesc');
 					}
 					else if(dataStr.indexOf('loot_confirmed=yes') != -1)
 					{
@@ -927,7 +927,7 @@ FGS.mafiawars.Bonuses =
 						
 						info.title = $('td.message_body > div:nth-child(2)', dataHTML).find('img:first').parent().next('div').text();
 						info.text =  dataStr2.slice(pos1,pos2);
-						info.image = $('td.message_body > div:nth-child(2)', dataHTML).find('img:first').attr('src');
+						info.image = $('td.message_body > div:nth-child(2)', dataHTML).find('img:first').attr('longdesc');
 						
 						var body = $('td.message_body', dataHTML).html();
 						
@@ -967,7 +967,7 @@ FGS.mafiawars.Bonuses =
 						var pos3 = dataStr.indexOf('</div>', pos1);
 
 						info.text  = dataStr.slice(pos1,pos3);
-						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('src');
+						info.image = $('td.message_body > div:nth-child(1)', dataHTML).find('img:first').attr('longdesc');
 						info.title = dataStr.slice(pos1+16,pos2);
 					}
 					else

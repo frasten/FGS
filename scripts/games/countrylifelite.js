@@ -264,6 +264,146 @@ FGS.countrylifelite.Requests =
 {
 	Click: function(currentType, id, currentURL, retry)
 	{
-		FGS.countrylife.Requests.Click(currentType, id, currentURL);
-	}
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "GET",
+			url: currentURL,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+				var redirectUrl = FGS.checkForLocationReload(dataStr);
+				
+				if(redirectUrl != false)
+				{
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, redirectUrl, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+					return;
+				}
+				
+				var dataStr = FGS.processPageletOnFacebook(dataStr);
+				var dataHTML = FGS.HTMLParser(dataStr);
+				
+				try 
+				{
+					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
+					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
+					
+					if(!url)
+					{
+						var paramTmp = FGS.findIframeAfterId('#app_content_216230855057280', dataStr);
+						if(paramTmp == '') throw {message: 'no iframe'}
+						var url = paramTmp;
+					}
+					
+					FGS.countrylifelite.Requests.Click2(currentType, id, url, params);
+				} 
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
+	
+	Click2:	function(currentType, id, currentURL, params, retry)
+	{
+		var $ = FGS.jQuery;
+		var retryThis 	= arguments.callee;
+		var info = {}
+		
+		$.ajax({
+			type: "POST",
+			url: currentURL,
+			data: params,
+			dataType: 'text',
+			success: function(dataStr)
+			{
+				var dataHTML = FGS.HTMLParser(dataStr);
+
+				try
+				{
+					if($(".giftConfirm_img" ,dataHTML).length > 0)
+					{			
+						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("longdesc");
+						info.title = $(".giftConfirm_name" ,dataHTML).text();
+						info.text  = $(".giftFrom_name" ,dataHTML).text();
+						info.time = Math.round(new Date().getTime() / 1000);
+						
+						
+						for(var gift in FGS.giftsArray['121763384533823'])
+						{
+							if(FGS.giftsArray['121763384533823'][gift].name == info.title)
+							{
+								info.thanks = 
+								{
+									gift: gift
+								}
+								break;
+							}
+						}
+						
+						FGS.endWithSuccess(currentType, id, info);
+					}
+					else
+					{
+						throw {message: dataStr}
+					}
+				}
+				catch(err)
+				{
+					FGS.dump(err);
+					FGS.dump(err.message);
+					if(typeof(retry) == 'undefined')
+					{
+						retryThis(currentType, id, currentURL, params, true);
+					}
+					else
+					{
+						FGS.endWithError('receiving', currentType, id);
+					}
+				}
+			},
+			error: function()
+			{
+				if(typeof(retry) == 'undefined')
+				{
+					retryThis(currentType, id, currentURL, params, true);
+				}
+				else
+				{
+					FGS.endWithError('connection', currentType, id);
+				}
+			}
+		});
+	},
 };

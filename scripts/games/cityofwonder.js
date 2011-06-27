@@ -42,13 +42,6 @@ FGS.cityofwonder.Requests =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
-					
 					FGS.cityofwonder.Requests.Click2(currentType, id, url, params);
 				}
 				catch(err)
@@ -120,7 +113,7 @@ FGS.cityofwonder.Requests =
 						return;
 					}
 					
-					info.image = $('.ally_accept', dataHTML).find('img:first').attr('src');
+					info.image = $('.ally_accept', dataHTML).find('img:first').attr('longdesc');
 					var txt = $('.ally_accept', dataHTML).find('h1').text();
 					
 					if(txt.indexOf('You can not accept this gift') != -1)
@@ -215,12 +208,6 @@ FGS.cityofwonder.Bonuses =
 					var url = $('form[target]', dataHTML).not(FGS.formExclusionString).first().attr('action');
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
-					if(!url)
-					{
-						var src = FGS.findIframeAfterId('#app_content_114335335255741', dataStr);
-						if (src == '') throw {message:"no iframe"}
-						url = src;
-					}
 					FGS.cityofwonder.Bonuses.Click2(currentType, id, url, params);
 				} 
 				catch(err)

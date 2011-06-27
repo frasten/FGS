@@ -625,7 +625,7 @@ FGS.cityville.Requests =
 
 					if($('h3.gift_title', dataHTML).text().indexOf('are now neighbors') != -1)
 					{
-						info.image = $(".giftFrom_img",dataHTML).children().attr("src");
+						info.image = $(".giftFrom_img",dataHTML).children().attr("longdesc");
 						info.title = 'New neighbour';
 						info.text  = $(".giftFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -636,7 +636,7 @@ FGS.cityville.Requests =
 					}
 					else if($('.train_message', dataHTML).length > 0)
 					{
-						info.image = 'http://fb-client-0.cityville.zynga.com/'+$(".train_reward_icon",dataHTML).children().attr("src");
+						info.image = 'http://fb-client-0.cityville.zynga.com/'+$(".train_reward_icon",dataHTML).children().attr("longdesc");
 						info.title = 'Coin bonus';
 						info.text  = $(".train_message",dataHTML).children().text();
 						
@@ -645,7 +645,7 @@ FGS.cityville.Requests =
 					}
 					else if($('.message', dataHTML).text().indexOf('You have adopted') != -1)
 					{
-						info.image 	= $(".img_container",dataHTML).children().attr("src");
+						info.image 	= $(".img_container",dataHTML).children().attr("longdesc");
 						info.text 	= $(".message",dataHTML).text();
 						
 						FGS.endWithSuccess(currentType, id, info);
@@ -653,7 +653,7 @@ FGS.cityville.Requests =
 					}
 					else if($('h3.gift_title', dataHTML).text().indexOf('have been made') != -1)
 					{
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						
 						var tempTitle = $(".giftConfirm_name",dataHTML).children().html();
 						var pos1 = tempTitle.indexOf('<br');
@@ -698,7 +698,7 @@ FGS.cityville.Requests =
 						}
 						info.thanks = sendInfo;
 						
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text = $(".giftFrom_name",dataHTML).children().text();
 						
@@ -916,7 +916,7 @@ FGS.cityville.Bonuses =
 					
 					info.text = $('h3.gift_title', dataHTML).text();
 					info.title = $(".giftConfirm_name",dataHTML).children().text();
-					info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+					info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 					info.time = Math.round(new Date().getTime() / 1000);
 
 					FGS.endWithSuccess(currentType, id, info);

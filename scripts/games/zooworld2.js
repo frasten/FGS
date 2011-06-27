@@ -220,7 +220,7 @@ FGS.zooworld2.Requests =
 					
 					if(testStr.indexOf('You are now ZooMates') != -1)
 					{
-						info.image = $('.zoomaccept5-box', dataHTML).find('img:first').attr('src');
+						info.image = $('.zoomaccept5-box', dataHTML).find('img:first').attr('longdesc');
 						info.title = 'New neighbour';
 						info.text  = $('.zoomaccept5-box', dataHTML).find('img:first').attr('title');
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -282,7 +282,7 @@ FGS.zooworld2.Requests =
 						info.thanks = sendInfo;				
 					
 					
-						info.image = $('.main_body', dataHTML).find('img:first').attr('src');
+						info.image = $('.main_body', dataHTML).find('img:first').attr('longdesc');
 						info.title = $('.main_body', dataHTML).find('p:first').text();
 						info.text  = $('.main_body', dataHTML).find('p:last').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -487,7 +487,7 @@ FGS.zooworld2.Bonuses =
 					
 					info.title = $.trim(el.children('li:first').text());
 					info.text = $('#zw2_feed_landing_unsuccessful', dataHTML).text();
-					info.image = $('#zw2_feed_landing_item_image', dataHTML).attr('src');					
+					info.image = $('#zw2_feed_landing_item_image', dataHTML).attr('longdesc');					
 					info.time = Math.round(new Date().getTime() / 1000);
 					
 					FGS.endWithSuccess(currentType, id, info);

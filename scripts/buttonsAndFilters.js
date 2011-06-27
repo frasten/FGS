@@ -2,7 +2,7 @@ FGS.gamesData =
 {
 	201278444497: 	{ 	
 						name: 'FrontierVille',	systemName: 'frontierville', link: 'http://apps.facebook.com/frontierville/', 
-						hasDailyLimits: true,
+						hasSendback: true,
 						filter:		
 						{	
 							bonuses: ['Go see my gift', 'Go Play FrontierVille', 'Go to FrontierVille', 'Send items'],		
@@ -27,9 +27,10 @@ FGS.gamesData =
 					},
 	176611639027113: 	{ 	
 						name: 'RewardVille',	systemName: 'rewardville', link: 'http://apps.facebook.com/zyngarv/',
+						hasSendback: true,
 						filter:		
 						{	
-							bonuses: [],		
+							bonuses: ['(.*)'],		
 							bonusesNewWindow: [],
 							requests: [],
 							requestsNewWindow: [],
@@ -38,7 +39,7 @@ FGS.gamesData =
 						[
 						//	'BonusesPending',
 							'RequestsPending',
-						//	'ManualBonuses',
+							'ManualBonuses',
 						//	'BonusesHistory',
 							'RequestsHistory',
 						//	'FailedBonuses',
@@ -51,7 +52,7 @@ FGS.gamesData =
 					},
 	102452128776: 	{ 	
 						name: 'FarmVille',		systemName: 'farmville', link: 'http://apps.facebook.com/onthefarm/', 
-						hasDailyLimits: true,
+						hasSendback: true,
 						filter:
 						{	
 							bonuses: ['Play Farmville Now'],
@@ -77,6 +78,7 @@ FGS.gamesData =
 					},
 	156383461049284: 	{ 	
 						name: 'FarmVille Chinese',		systemName: 'farmvillechinese', link: 'http://apps.facebook.com/farmvillechinese/',
+						hasSendback: true,
 						filter:
 						{	
 							bonuses: ['來玩FarmVille中文版', '來玩FarmVille中文版'], // fertilize their crops, watering cans, Send Materials, lend a helping hand, shelter cos, sendmaterial, quick look at the gift, cos z rabbitem, avatar clothes
@@ -101,6 +103,7 @@ FGS.gamesData =
 					},
 	10979261223: 	{ 	
 						name: 'Mafia Wars',		systemName: 'mafiawars', link: 'http://apps.facebook.com/inthemafia/',
+						hasSendback: true,
 						filter:		
 						{	
 							bonuses: ['Play Mafia Wars'],		
@@ -126,7 +129,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	164285363593426:	{ 	name: 'Empires and Allies',	systemName: 'empiresandallies', 	link: 'http://apps.facebook.com/empiresandallies/',
+	164285363593426:	{ 	
+						name: 'Empires and Allies',	systemName: 'empiresandallies', 	link: 'http://apps.facebook.com/empiresandallies/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -149,7 +154,9 @@ FGS.gamesData =
 						],
 						bonusNotice: 'YOU CAN ONLY ACCEPT BONUSES FROM YOUR "IN-GAME NEIGHBORS" - NOT FRIENDS. IF YOU TRY TO RECEIVE FROM SOMEONE WHO ISN\'T YOUR NEIGHBOR - YOU WILL GET "RECEIVING ERROR"!!!',
 					},
-	291549705119: 	{ 	name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
+	291549705119: 	{ 	
+						name: 'CityVille',	systemName: 'cityville', 	link: 'http://apps.facebook.com/cityville/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -172,6 +179,7 @@ FGS.gamesData =
 						],
 					},
 	163576248142:	{ 	name: 'PetVille',		systemName: 'petville', link: 'http://apps.facebook.com/petvillegame/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: ['Play Now', 'Look at my bouquet'],
@@ -195,6 +203,7 @@ FGS.gamesData =
 				},
 	234860566661: 	{ 	
 						name: 'Treasure Isle',		systemName: 'treasure', link: 'http://apps.facebook.com/treasureisle/',
+						hasSendback: true,
 						filter:		
 						{	
 							bonuses: ['Play Treasure Isle'],	
@@ -218,6 +227,7 @@ FGS.gamesData =
 					},
 	101539264719: 	{ 
 						name: 'Cafe World',		systemName: 'cafeworld', link: 'http://apps.facebook.com/cafeworld/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -241,6 +251,7 @@ FGS.gamesData =
 					},
 	127148832824: 	{ 
 						name: 'Happy Pets',		systemName: 'happypets', link: 'http://apps.facebook.com/happy-pets/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -302,14 +313,13 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							//'SendFreeGifts',
-							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
 	120563477996213: 	{ 
 						name: 'Ravenwood Fair',		systemName: 'ravenwood', link: 'http://apps.facebook.com/ravenwoodfair/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -348,6 +358,7 @@ FGS.gamesData =
 					},
 	151044809337: 	{ 
 						name: 'Fishville',		systemName: 'fishville', link: 'http://apps.facebook.com/fishville/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -368,6 +379,7 @@ FGS.gamesData =
 					},
 	21526880407: 	{ 
 						name: 'Yoville',		systemName: 'yoville', link: 'http://apps.facebook.com/yoville/',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -403,7 +415,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	25287267406: 	{ 	name: 'Vampire Wars',		systemName: 'vampirewars', link: 'http://apps.facebook.com/vampiresgame/',
+	25287267406: 	{ 	
+						name: 'Vampire Wars',		systemName: 'vampirewars', link: 'http://apps.facebook.com/vampiresgame/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -422,7 +436,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	114335335255741: { 	name: 'City of Wonder',		systemName: 'cityofwonder', link: 'http://apps.facebook.com/cityofwonder/',
+	114335335255741: { 	
+						name: 'City of Wonder',		systemName: 'cityofwonder', link: 'http://apps.facebook.com/cityofwonder/',
 						filter:		
 						{
 							bonuses: [],
@@ -439,7 +454,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 				},
-	2389801228:	{ 	name: 'Texas HoldEm Poker',		systemName: 'poker', link: 'http://apps.facebook.com/texas_holdem/',
+	2389801228:	{ 
+						name: 'Texas HoldEm Poker',		systemName: 'poker', link: 'http://apps.facebook.com/texas_holdem/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -458,7 +475,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	338051018849:	{ 	name: 'Baking life',		systemName: 'bakinglife', link: 'http://apps.facebook.com/bakinglife/',
+	338051018849:	{ 	
+						name: 'Baking life',		systemName: 'bakinglife', link: 'http://apps.facebook.com/bakinglife/',
 						filter:	
 						{
 							bonuses: [],
@@ -469,16 +487,14 @@ FGS.gamesData =
 						buttons: [
 							'BonusesPending',
 							'ManualBonuses',
-							//'RequestsPending',
 							'BonusesHistory',
 							'FailedBonuses',
-							//'SendFreeGifts',
-							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	129547877091100:	{ 	name: 'Crime City',		systemName: 'crimecity', link: 'http://apps.facebook.com/crimecitygame/',
+	129547877091100:	{ 	
+						name: 'Crime City',		systemName: 'crimecity', link: 'http://apps.facebook.com/crimecitygame/',
 						filter:	
 						{
 							bonuses: [],
@@ -533,7 +549,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	143547399002598:	{ 	name: 'Paradise Life',		systemName: 'paradiselife', link: 'http://apps.facebook.com/paradiselife/',
+	143547399002598:	{ 	
+						name: 'Paradise Life',		systemName: 'paradiselife', link: 'http://apps.facebook.com/paradiselife/',						
 						filter:	
 						{
 							bonuses: [],
@@ -549,13 +566,15 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	26947445683:	{ 	name: 'Country Life',		systemName: 'countrylife', link: 'http://apps.facebook.com/countrylife/',
+	26947445683:	{ 	
+						name: 'Country Life',		systemName: 'countrylife', link: 'http://apps.facebook.com/countrylife/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -574,7 +593,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	121763384533823:	{ 	name: 'Country Life (lite)',	systemName: 'countrylifelite', link: 'http://apps.facebook.com/countrylife_lite/',
+	121763384533823:	{ 	
+						name: 'Country Life (lite)',	systemName: 'countrylifelite', link: 'http://apps.facebook.com/countrylife_lite/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -593,7 +614,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	130402594779:	{ 	name: 'Kingdoms of Camelot',	systemName: 'kingdomsofcamelot', link: 'http://apps.facebook.com/kingdomsofcamelot/',
+	130402594779:	{ 	
+						name: 'Kingdoms of Camelot',	systemName: 'kingdomsofcamelot', link: 'http://apps.facebook.com/kingdomsofcamelot/',
 						filter:	
 						{
 							bonuses: [],
@@ -610,7 +632,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	372268249833:	{ 	name: 'Evony',		systemName: 'evony', link: 'http://apps.facebook.com/evonyoffical/',
+	372268249833:	{ 	
+						name: 'Evony',		systemName: 'evony', link: 'http://apps.facebook.com/evonyoffical/',
 						filter:	
 						{
 							bonuses: [],
@@ -630,7 +653,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	56748925791:	{ 	name: 'Farm Town',		systemName: 'farmtown', link: 'http://apps.facebook.com/farmtown/',
+	56748925791:	{ 	
+						name: 'Farm Town',		systemName: 'farmtown', link: 'http://apps.facebook.com/farmtown/',						
 						filter:	
 						{
 							bonuses: [],
@@ -643,13 +667,15 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	213518941553:	{ 	name: 'Fantasy Kingdoms',		systemName: 'fantasy', link: 'http://apps.facebook.com/fantasykingdoms/',
+	213518941553:	{ 
+						name: 'Fantasy Kingdoms',		systemName: 'fantasy', link: 'http://apps.facebook.com/fantasykingdoms/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -671,7 +697,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	94483022361:	{ 	name: 'Island Paradise',	systemName: 'islandparadise', link: 'http://apps.facebook.com/myownisland/',
+	94483022361:	{ 	
+						name: 'Island Paradise',	systemName: 'islandparadise', link: 'http://apps.facebook.com/myownisland/',						
 						filter:	
 						{
 							bonuses: [],
@@ -684,13 +711,14 @@ FGS.gamesData =
 							'ManualBonuses',
 							'RequestsHistory',
 							'FailedGifts',	
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+						//	'SendFreeGifts',
+						//	'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	272810543124:	{ 	name: 'Pot Farm',	systemName: 'potfarm', link: 'http://apps.facebook.com/mypotfarm/',
+	272810543124:	{ 
+						name: 'Pot Farm',	systemName: 'potfarm', link: 'http://apps.facebook.com/mypotfarm/',
 						filter:	
 						{
 							bonuses: [],
@@ -704,7 +732,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	166309140062981: { 	name: 'Puzzled Hearts',	systemName: 'puzzledhearts', link: 'http://apps.facebook.com/phearts/',
+	166309140062981: { 	
+						name: 'Puzzled Hearts',	systemName: 'puzzledhearts', link: 'http://apps.facebook.com/phearts/',
 						filter:	
 						{
 							bonuses: [],
@@ -726,7 +755,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	216230855057280: { 	name: 'Charmed Gems',	systemName: 'charmedgems', link: 'http://apps.facebook.com/charmedgems/',
+	216230855057280: { 	
+						name: 'Charmed Gems',	systemName: 'charmedgems', link: 'http://apps.facebook.com/charmedgems/',						
 						filter:	
 						{
 							bonuses: [],
@@ -748,7 +778,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	167746316127: 	{ 	name: 'Zoo World',		systemName: 'zooworld', link: 'http://apps.facebook.com/playzoo/zoo/home.php',
+	167746316127: 	{ 	
+						name: 'Zoo World',		systemName: 'zooworld', link: 'http://apps.facebook.com/playzoo/zoo/home.php',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -770,7 +802,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	1677463161271: 	{ 	name: 'Zoo World 2',		systemName: 'zooworld2', link: 'http://apps.facebook.com/playzoo/zoo/landingZoo2.php',
+	1677463161271: 	{ 	
+						name: 'Zoo World 2',		systemName: 'zooworld2', link: 'http://apps.facebook.com/playzoo/zoo/landingZoo2.php',
 						filter:		
 						{
 							bonuses: [],
@@ -792,7 +825,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	2405948328: { 	name: 'Likeness',	systemName: 'likeness', link: 'http://apps.facebook.com/likeness/',
+	2405948328: { 	
+						name: 'Likeness',	systemName: 'likeness', link: 'http://apps.facebook.com/likeness/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -814,7 +849,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	2345673396: 	{ 	name: 'Hug me',		systemName: 'hugme', link: 'http://apps.facebook.com/doittome/zoo/home.php',
+	2345673396: 	{ 	
+						name: 'Hug me',		systemName: 'hugme', link: 'http://apps.facebook.com/doittome/zoo/home.php',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -836,7 +873,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	2339854854: 	{ 	name: 'Horoscopes',		systemName: 'horoscopes', link: 'http://apps.facebook.com/horoscopes/zoo/home.php',
+	2339854854: 	{ 	
+						name: 'Horoscopes',		systemName: 'horoscopes', link: 'http://apps.facebook.com/horoscopes/zoo/home.php',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -858,7 +897,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	14852940614: 	{ 	name: 'Birthday Cards',		systemName: 'birthdaycards', link: 'http://apps.facebook.com/rybirthday/zoo/home.php',
+	14852940614: 	{ 	
+						name: 'Birthday Cards',		systemName: 'birthdaycards', link: 'http://apps.facebook.com/rybirthday/zoo/home.php',
+						hasSendback: true,
 						filter:		
 						{
 							bonuses: [],
@@ -880,7 +921,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	256799621935:	{ 	name: 'Car Town',	systemName: 'cartown', link: 'http://apps.facebook.com/cartown/',
+	256799621935:	{ 	
+						name: 'Car Town',	systemName: 'cartown', link: 'http://apps.facebook.com/cartown/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -899,7 +942,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	137827210650:	{ 	name: 'Ninja Saga',	systemName: 'ninjasaga', link: 'http://apps.facebook.com/ninjasaga/',
+	137827210650:	{ 	
+						name: 'Ninja Saga',	systemName: 'ninjasaga', link: 'http://apps.facebook.com/ninjasaga/',
 						filter:	
 						{
 							bonuses: [],
@@ -916,7 +960,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	112775362105084:	{ 	name: 'Animal Party',	systemName: 'animalparty', link: 'http://apps.facebook.com/rescue_party/',
+	112775362105084:	{ 	
+						name: 'Animal Party',	systemName: 'animalparty', link: 'http://apps.facebook.com/rescue_party/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -938,7 +984,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	105557406133988:	{ 	name: 'Lucky Train',	systemName: 'luckytrain', link: 'http://apps.facebook.com/luckytrain/',
+	105557406133988:	{ 	
+						name: 'Lucky Train',	systemName: 'luckytrain', link: 'http://apps.facebook.com/luckytrain/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -954,11 +1002,14 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	40343401983:	{ 	name: 'Bejeweled Blitz',	systemName: 'bejeweled', link: 'http://apps.facebook.com/bejeweledblitz/',
+	40343401983:	{ 	
+						name: 'Bejeweled Blitz',	systemName: 'bejeweled', link: 'http://apps.facebook.com/bejeweledblitz/',
 						filter:	
 						{
 							bonuses: [],
@@ -978,7 +1029,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	108854979142742:	{ 	name: 'Bingo Blitz',	systemName: 'bingoblitz', link: 'http://apps.facebook.com/bingoblitz/',
+	108854979142742:	{ 	
+						name: 'Bingo Blitz',	systemName: 'bingoblitz', link: 'http://apps.facebook.com/bingoblitz/',
 						filter:	
 						{
 							bonuses: [],
@@ -998,7 +1050,8 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	115301331874715:	{ 	name: 'Pyramidville',	systemName: 'pyramidville', link: 'http://apps.facebook.com/pyramidville/',
+	115301331874715:	{ 	
+						name: 'Pyramidville',	systemName: 'pyramidville', link: 'http://apps.facebook.com/pyramidville/',
 						filter:	
 						{
 							bonuses: [],
@@ -1014,13 +1067,14 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	123837014322698:	{ 	name: 'My Shops',	systemName: 'myshops', link: 'http://apps.facebook.com/myshopsgame/',
+	123837014322698:	{ 	
+						name: 'My Shops',	systemName: 'myshops', link: 'http://apps.facebook.com/myshopsgame/',
 						filter:	
 						{
 							bonuses: [],
@@ -1036,13 +1090,15 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	174582889219848:	{ 	name: 'Army Attack',	systemName: 'armyattack', link: 'http://apps.facebook.com/armyattack/',
+	174582889219848:	{ 	
+						name: 'Army Attack',	systemName: 'armyattack', link: 'http://apps.facebook.com/armyattack/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: ['Play Army Attack'],
@@ -1064,7 +1120,9 @@ FGS.gamesData =
 							'GameOptionsTab'
 						],
 					},
-	169557846404284:	{ 	name: 'Zombie Lane',	systemName: 'zombielane', link: 'http://apps.facebook.com/zombielane/',
+	169557846404284:	{ 
+						name: 'Zombie Lane',	systemName: 'zombielane', link: 'http://apps.facebook.com/zombielane/',
+						//hasSendback: true,
 						filter:	
 						{
 							bonuses: ['Play Zombie Lane'],
@@ -1087,6 +1145,7 @@ FGS.gamesData =
 						],
 					},
 	175251882520655:	{ 	name: 'Gardens of Time',	systemName: 'gardensoftime', link: 'http://apps.facebook.com/gardensoftime/',
+						hasSendback: true,
 						filter:	
 						{
 							bonuses: [],
@@ -1102,13 +1161,15 @@ FGS.gamesData =
 							'RequestsHistory',
 							'FailedBonuses',
 							'FailedGifts',
-							'SendFreeGifts',
-							'SendFreeGiftsHistory',
+							//'SendFreeGifts',
+							//'SendFreeGiftsHistory',
 							'NeighborsSearch',
 							'GameOptionsTab'
 						],
 					},
-	102518706469143:	{ 	name: 'Wild West Town',	systemName: 'wildwesttown', link: 'http://apps.facebook.com/wildwesttown/',
+	102518706469143:	{ 
+						name: 'Wild West Town',	systemName: 'wildwesttown', link: 'http://apps.facebook.com/wildwesttown/',
+						//hasSendback: true,
 						filter:	
 						{
 							bonuses: [],

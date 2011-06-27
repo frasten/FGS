@@ -216,7 +216,7 @@ FGS.monopoly.Requests =
 					if($(el).length > 0)
 					{
 						info.title = $.trim(el.text());
-						info.image = $('#app157470434271574_landing_image', dataHTML).children('img').attr("src");
+						info.image = $('#app157470434271574_landing_image', dataHTML).children('img').attr("longdesc");
 						info.text  = $.trim(el.text());
 						info.time = Math.round(new Date().getTime() / 1000);
 						
@@ -305,7 +305,7 @@ FGS.monopoly.Bonuses =
 					if($(el).length > 0)
 					{
 						info.title = $.trim(el.text());
-						info.image = $('#app157470434271574_landing_image', dataHTML).children('img').attr("src");
+						info.image = $('#app157470434271574_landing_image', dataHTML).children('img').attr("longdesc");
 						info.text  = $.trim(el.text());
 						info.time = Math.round(new Date().getTime() / 1000);
 						

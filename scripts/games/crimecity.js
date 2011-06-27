@@ -349,7 +349,7 @@ FGS.crimecity.Requests =
 						
 						info.thanks = sendInfo;
 						
-						info.image = $('.acceptGiftGiftBoxImage', dataHTML).children('img').attr('src');
+						info.image = $('.acceptGiftGiftBoxImage', dataHTML).children('img').attr('longdesc');
 						info.title = '';						
 						info.text  = $('.acceptGiftGiftBoxTitle', dataHTML).text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -487,7 +487,7 @@ FGS.crimecity.Bonuses =
 					}
 					
 					
-					info.image = $('.streamRewardGiftBoxImage', dataHTML).children('img').attr('src');
+					info.image = $('.streamRewardGiftBoxImage', dataHTML).children('img').attr('longdesc');
 					info.title = $('.streamRewardGiftBoxTitle', dataHTML).text();
 					info.text  = $('.streamRewardGiftBoxTitle', dataHTML).text();//$.trim($('.streamRewardBoxTitle', dataHTML).text());
 					info.time = Math.round(new Date().getTime() / 1000);

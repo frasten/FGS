@@ -282,20 +282,13 @@ FGS.poker.Requests =
 					if($(el).length > 0)
 					{
 						info.title = $('.acceptedGift', dataHTML).find('h1:first').children('span:first').text();
-						info.image = $('.acceptGiftIcon', dataHTML).children('img').attr("src");
+						info.image = $('.acceptGiftIcon', dataHTML).children('img').attr("longdesc");
 						info.text  = $('.acceptGiftFrom', dataHTML).find('img:first').attr('title');
 						info.time = Math.round(new Date().getTime() / 1000);
 					
-						var sendInfo = '';
-						
-						if($('.acceptGiftFrom', dataHTML).find('img[uid]').length > 0)
-						{
-							sendInfo = {
-								gift: 'chips',
-								destInt: $('.acceptGiftFrom', dataHTML).find('img[uid]:first').attr('uid'),
-								destName: $('.acceptGiftFrom', dataHTML).find('img[uid]:first').attr('title'),
-								}
-						}
+						var sendInfo = {
+							gift: 'chips'
+							};
 						info.thanks = sendInfo;
 						
 						FGS.endWithSuccess(currentType, id, info);				

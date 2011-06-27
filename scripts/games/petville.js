@@ -81,7 +81,7 @@ FGS.petville.Freegifts =
 
 		$.ajax({
 			type: "GET",
-			url: 'http://fb-client-0.petville.zynga.com/current/gifts_send.php?pv_session='+params.pv_session+'&giftRecipient=&ref=tab&view=petville&overlayed=true&send_gift=Proceed+to+Send+%3E%3E%3E&gift='+params.gift+addAntiBot,
+			url: 'http://zc-prod.petville.zynga.com/current/gifts_send.php?pv_session='+params.pv_session+'&giftRecipient=&ref=tab&view=petville&overlayed=true&send_gift=Proceed+to+Send+%3E%3E%3E&gift='+params.gift+addAntiBot,
 			dataType: 'text',
 			success: function(dataStr)
 			{
@@ -250,7 +250,7 @@ FGS.petville.Freegifts =
 		var outStr = params.outStr;
 		
 		
-		$.post('http://fb-client-0.petville.zynga.com/current/SNAPIProxy.php', params.postData, function(data2)
+		$.post('http://zc-prod.petville.zynga.com/current/SNAPIProxy.php', params.postData, function(data2)
 		{
 		
 			var nextParams = 'api_key=163576248142&locale=en_US&sdk=joey';
@@ -453,7 +453,7 @@ FGS.petville.Requests =
 				{
 					if($('.reqFrom_img', dataHTML).length > 0 && $(".giftConfirm_img" ,dataHTML).length == 0)
 					{
-						info.image = $(".reqFrom_img" ,dataHTML).children().attr("src");
+						info.image = $(".reqFrom_img" ,dataHTML).children().attr("longdesc");
 						info.title = 'New neighbour';
 						info.text  = $(".reqFrom_name" ,dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -486,7 +486,7 @@ FGS.petville.Requests =
 						}
 						info.thanks = sendInfo;
 						
-						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img" ,dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name" ,dataHTML).children().text();
 						info.text  = $(".giftFrom_name" ,dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -573,8 +573,6 @@ FGS.petville.Bonuses =
 					var params = $('form[target]', dataHTML).not(FGS.formExclusionString).first().serialize();
 					
 					FGS.petville.Bonuses.Click2(currentType, id, url, params);
-
-					//FGS.petville.Bonuses.Click2(currentType, id, src);
 				}
 				catch(err)
 				{

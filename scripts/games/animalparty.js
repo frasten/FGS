@@ -304,7 +304,7 @@ FGS.animalparty.Requests =
 					{
 						info.title = $.trim($('.gift_name', dataHTML).text());
 						
-						info.image = $('.gift_image', dataHTML).children('img:first').attr('src');
+						info.image = $('.gift_image', dataHTML).children('img:first').attr('longdesc');
 						info.time  = Math.round(new Date().getTime() / 1000);
 						
 						if(dataStr.indexOf('has been sent to') != -1)
@@ -332,7 +332,7 @@ FGS.animalparty.Requests =
 					{
 						info.title = $.trim($('.person_name_container', dataHTML).text());
 						
-						info.image = $('.person_image_bg', dataHTML).children('img:first').attr('src');
+						info.image = $('.person_image_bg', dataHTML).children('img:first').attr('longdesc');
 						info.time  = Math.round(new Date().getTime() / 1000);
 						
 						info.text  = 'New neighbor';
@@ -494,7 +494,7 @@ FGS.animalparty.Bonuses =
 					{
 						info.title = $.trim($('.gift_name', dataHTML).text());
 						
-						info.image = $('.gift_image', dataHTML).children('img:first').attr('src');
+						info.image = $('.gift_image', dataHTML).children('img:first').attr('longdesc');
 						info.time  = Math.round(new Date().getTime() / 1000);
 						
 						if(dataStr.indexOf('has been sent to') != -1)

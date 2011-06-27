@@ -244,6 +244,21 @@ FGS.happypets.Requests =
 						info.image = 'gfx/90px-check.png';
 						info.title = $('.gift_body', dataHTML).children(':first').text();
 						info.text  = $('.gift_body', dataHTML).children(':first').text();
+						
+						var a = FGS.Gup('crv', currentURL);
+						if(a != '')
+						{
+							if($('#radio_'+a, dataHTML).length > 0)
+							{
+								var el = $('#radio_'+a, dataHTML).closest('li');
+								
+								info.image = el.find('img').attr('longdesc');
+								info.title = el.find('.gift_title').text();
+								info.thanks = {	gift: a	}							
+							}
+						}
+						
+						
 						info.time = Math.round(new Date().getTime() / 1000);
 						FGS.endWithSuccess(currentType, id, info);
 						return;

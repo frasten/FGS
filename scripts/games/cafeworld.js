@@ -188,7 +188,7 @@ FGS.cafeworld.Requests =
 							var from = titleX.slice(pos1+6);
 						}
 					
-						info.image = el.children('p:first').children('img').attr('src');
+						info.image = el.children('p:first').children('img').attr('longdesc');
 						info.title = gift;
 						info.text  = from;
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -259,7 +259,7 @@ FGS.cafeworld.Requests =
 						info.thanks = sendInfo;	
 						
 						
-						info.image = $('#app101539264719_gift_items', dataHTML).find('img:first').attr("src");
+						info.image = $('#app101539264719_gift_items', dataHTML).find('img:first').attr("longdesc");
 						info.title = gift;
 						info.text  = from;
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -393,7 +393,7 @@ FGS.cafeworld.Requests =
 							var from = titleX.slice(pos1+6);
 						}
 					
-						info.image = el.children('p:first').children('img').attr('src');
+						info.image = el.children('p:first').children('img').attr('longdesc');
 						info.title = gift;
 						info.text  = from;
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -551,24 +551,24 @@ FGS.cafeworld.Bonuses =
 					{
 						if($('.reward-image-container', dataHTML).find('img').length > 3)
 						{
-							info.image = $('.reward-image-container-left', dataHTML).find('img:last').attr('src');
+							info.image = $('.reward-image-container-left', dataHTML).find('img:last').attr('longdesc');
 						}
 						else
 						{
-							info.image = $(".reward-image-container",dataHTML).children('img').attr("src");
+							info.image = $(".reward-image-container",dataHTML).children('img').attr("longdesc");
 						}
 					}
 					else if($(".page-title",dataHTML).find('img').length > 0)
 					{
-						info.image = $(".page-title",dataHTML).find('img').attr("src");
+						info.image = $(".page-title",dataHTML).find('img').attr("longdesc");
 					}
 					else if($("#app101539264719_item_wrapper",dataHTML).find('.left_cell').find('img').length > 0)
 					{
-						info.image = $("#app101539264719_item_wrapper",dataHTML).find('.left_cell').find('img').attr("src");
+						info.image = $("#app101539264719_item_wrapper",dataHTML).find('.left_cell').find('img').attr("longdesc");
 					}
 					else
 					{
-						info.image = $('div.cell_wrapper', dataHTML).find('img:first').attr('src');
+						info.image = $('div.cell_wrapper', dataHTML).find('img:first').attr('longdesc');
 					}					
 					
 					if($(".reward-text-contents", dataHTML).length > 0)
@@ -685,7 +685,7 @@ FGS.cafeworld.Bonuses =
 					{
 						var gift = $("#app101539264719_item_wrapper",dataHTML).children('.pad:nth-child(1)').text();
 						info.text = $("#app101539264719_item_wrapper",dataHTML).children('.pad:nth-child(2)').text();
-						info.image = $("#app101539264719_item_wrapper",dataHTML).children('.pad:nth-child(3)').children('img').attr('src');
+						info.image = $("#app101539264719_item_wrapper",dataHTML).children('.pad:nth-child(3)').children('img').attr('longdesc');
 					}
 
 					if(typeof(info.image) == 'undefined') throw {message: $("#app101539264719_item_wrapper",dataHTML).html()}

@@ -368,7 +368,7 @@ FGS.wildwesttown.Requests =
 						var found = $('img[title]', dataHTML);
 						
 						info.title = found.attr('title');
-						info.image = found.attr('src');
+						info.image = found.attr('longdesc');
 						info.text = $("div:contains('Success!'):last", dataHTML).text();
 						info.time = Math.round(new Date().getTime() / 1000);
 
@@ -533,7 +533,7 @@ FGS.wildwesttown.Bonuses =
 						if(found !== false)
 						{
 							info.title = found.attr('title');
-							info.image = found.attr('src');
+							info.image = found.attr('longdesc');
 							info.text = $("td:contains('You also received'):last", dataHTML).text();
 							info.time = Math.round(new Date().getTime() / 1000);
 

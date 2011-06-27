@@ -147,7 +147,7 @@ FGS.kingdomsofcamelot.Requests =
 						$.post(domain, params);
 						
 						info.title = el.find('.nm:first').text();
-						info.image = el.find('.giftdesc > img:first').attr('src');
+						info.image = el.find('.giftdesc > img:first').attr('longdesc');
 						info.text  = el.find('.giftmsg:first').text();
 						info.time = Math.round(new Date().getTime() / 1000);
 					
@@ -169,7 +169,7 @@ FGS.kingdomsofcamelot.Requests =
 					else if(el.find('.giftdesc').length > 0 && el.find('form').length == 0)
 					{
 						info.title = el.find('.nm:first').text();
-						info.image = el.find('.giftdesc > img:first').attr('src');
+						info.image = el.find('.giftdesc > img:first').attr('longdesc');
 						info.text  = el.find('.giftmsg:first').text();
 						info.time = Math.round(new Date().getTime() / 1000);
 					

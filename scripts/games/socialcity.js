@@ -186,7 +186,7 @@ FGS.socialcity.Requests =
 					
 					if($('#neighbor_title', dataHTML).length > 0)
 					{
-						info.image = $('#neighbor_image', dataHTML).children('img').attr('src');
+						info.image = $('#neighbor_image', dataHTML).children('img').attr('longdesc');
 						
 						var tmpTitle = $('#neighbor_title > h1', dataHTML).text();
 						var pos1 = tmpTitle.indexOf('with');
@@ -195,7 +195,7 @@ FGS.socialcity.Requests =
 					}
 					else if($('#neighbor_title', dataHTML).length > 0)
 					{
-						info.image = $('#acceptInfo', dataHTML).children('img').attr('src');
+						info.image = $('#acceptInfo', dataHTML).children('img').attr('longdesc');
 						info.title = $("#infoText > .highlight" ,dataHTML).text();
 						var txt =  $("#infoText", dataHTML).text();
 						var pos1 = txt.indexOf('from');
@@ -206,13 +206,13 @@ FGS.socialcity.Requests =
 					{
 						info.title = '';
 						info.text  = $('.landing-msg', dataHTML).text();
-						info.image = $('.landing-gift-pic', dataHTML).children().attr('src');
+						info.image = $('.landing-gift-pic', dataHTML).children().attr('longdesc');
 					}
 					else if($('#infoText', dataHTML).length > 0)
 					{
 						info.title = $('.highlight', dataHTML).text();
 						info.text  = $('#infoText', dataHTML).text();
-						info.image = $('#topLeftImage', dataHTML).attr('src');
+						info.image = $('#topLeftImage', dataHTML).attr('longdesc');
 					}
 					else
 					{

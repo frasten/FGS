@@ -308,7 +308,7 @@ FGS.farmvillechinese.Requests =
 					
 					if($('.giftFrom_img', dataHTML).length > 0 && $(".giftConfirm_img",dataHTML).length > 0)
 					{
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text  = $(".giftFrom_name",dataHTML).children().text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -364,7 +364,7 @@ FGS.farmvillechinese.Requests =
 					}
 					else if($('.giftFrom_img', dataHTML).length == 0 && $(".giftConfirm_img",dataHTML).length > 0)
 					{
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
 						info.text  = $(".padding_content",dataHTML).find('h3').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -567,7 +567,7 @@ FGS.farmvillechinese.Bonuses =
 						var giftReceivePost = $('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').serialize()+'&'+escape($('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').find('input[type="submit"]').attr('name'))+'='+$('.inner_giftConfirm_cont', dataHTML).find('form:nth-child('+num+')').find('input[type="submit"]').attr('value');
 						
 						info.title = $(".giftConfirm_name",dataHTML).children().text();
-						info.image = $(".giftConfirm_img",dataHTML).children().attr("src");
+						info.image = $(".giftConfirm_img",dataHTML).children().attr("longdesc");
 						info.text  = $(".main_giftConfirm_cont", dataHTML).find('h3').text();
 						
 						

@@ -141,7 +141,7 @@ FGS.bakinglife.Requests =
 						info.thanks = sendInfo;
 						
 						
-						info.image = $(".gift",dataHTML).children('img').attr("src");
+						info.image = $(".gift",dataHTML).children('img').attr("longdesc");
 						info.title = $(".gift",dataHTML).children('img').attr("alt");
 						info.text  = $(".friendContainer2",dataHTML).find('b:first').text();
 						info.time = Math.round(new Date().getTime() / 1000);
@@ -150,7 +150,7 @@ FGS.bakinglife.Requests =
 					}
 					else if($('td.boxPadding', dataHTML).find('h1').length > 0)
 					{
-						info.image = $('td.boxPadding', dataHTML).find('img:first').attr('src');
+						info.image = $('td.boxPadding', dataHTML).find('img:first').attr('longdesc');
 						
 						if($('td.boxPadding', dataHTML).find('.bigGreen').length > 0)
 						{
@@ -313,7 +313,7 @@ FGS.bakinglife.Bonuses =
 						return;
 					}
 					
-					info.image = $('td.boxPadding', dataHTML).find('img:first').attr('src');
+					info.image = $('td.boxPadding', dataHTML).find('img:first').attr('longdesc');
 					
 					if($('td.boxPadding', dataHTML).find('.bigGreen').length > 0)
 					{

@@ -18,6 +18,10 @@ FGS.HTMLParser = function (aHTMLString)
 	{
 		var html = '<div>'+aHTMLString+'</div>';
 	}
+	
+	html = html.replace(/ src=\"/gi, ' longdesc="');
+	html = html.replace(/ src=\'/gi, " longdesc='");
+	
 	return html;
 };
 
@@ -80,6 +84,9 @@ FGS.hideFromFeed = function(bonusID, limit)
 			}
 			
 			var tmpObj = JSON.parse(v.link_data);
+			
+			if(typeof tmpObj.targets == 'undefined')
+				tmpObj.targets = tmpObj.actrs;
 			
 			
 			var postData = { 
